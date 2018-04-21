@@ -106,7 +106,7 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 | /oauth/confirm_access | 用户授权 basic认证保护  |
 | /oauth/error          | 认证失败 无认证保护     |
 
-[查看认证过程](doc/oauth2.0认证过程.txt)
+[查看认证过程](doc/oauth2.0认证.md)
 
 ##### 6. cloud:helloworld 
     原子服务，分别调用 hello 和 world
