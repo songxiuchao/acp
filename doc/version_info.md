@@ -16,6 +16,8 @@
     13. kotlin 版本升级为 1.2.31
     14. acp-client 优化 httpclient 写法
     15. 增加 controller-aspect 配置项
+    16. 拆分 acp-core 中的 orm 自定义部分，新增 acp-core-orm 模块
+    17. 增加文档
 ##### 3.8.0
     1. cloud 下新增 acp-spring-cloud-starter-common 模块
     2. 优化 httpclient 封装

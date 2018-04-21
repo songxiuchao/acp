@@ -1,3 +1,8 @@
+# acp 
+Application Construction Platform 应用构建平台 （acp），该工程是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。
+## 官方文档
+- [Spring Boot 2.0.0.RELEASE](https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/htmlsingle/)
+- [Spring Cloud Finchley.M9](http://cloud.spring.io/spring-cloud-static/Finchley.M9/multi/multi_spring-cloud.html)
 ## 一、环境要求
 - jdk 1.8 及以上
 - gradle 4.6 及以上
@@ -143,6 +148,3 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 [点击前往](doc/version_info.md)
 ## 八、待完善内容
 [详情](doc/TODO.md)
-## 九、官方文档
-[SpringBoot](https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/htmlsingle/)
-[SpringCloud](http://cloud.spring.io/spring-cloud-static/Finchley.M9/multi/multi_spring-cloud.html)
