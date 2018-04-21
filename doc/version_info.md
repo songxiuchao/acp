@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### 4.0.0
+    1. 优化 gradle 脚本，spring cloud 版本号写入 dependencies.gradle；删除 cloud 模块下的 build.gradle
 ##### 3.9.0
     1. 升级 spring-cloud 版本为 Finchley.M9
     2. spring cloud 网关服务由 zuul 更换为 spring-cloud-gateway

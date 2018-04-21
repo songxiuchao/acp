@@ -9,7 +9,7 @@ apply plugin: "io.spring.dependency-management"
 dependencyManagement {
     imports {
         mavenBom "org.springframework.boot:spring-boot-dependencies:$versions.spring_boot"
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${cloud_version}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$versions.spring_cloud"
     }
 }
 dependencies {
