@@ -1,0 +1,36 @@
+ext {
+    println("scala version is ${scalaVersion}")
+}
+
+apply plugin: 'scala'
+
+dependencies {
+    compile project(":acp:acp-core")
+
+    compile "org.scala-lang:scala-library:${scalaVersion}"
+    compile "org.scala-lang:scala-compiler:${scalaVersion}"
+    compile "org.scala-lang:scala-reflect:${scalaVersion}"
+}
+
+task scaladocJar(type: Jar, dependsOn: scaladoc) {
+    classifier = 'scaladoc'
+    from scaladoc.destinationDir
+}
+
+compileScala {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-XDignore.symbol.file'
+    options.fork = true
+}
+
+compileTestScala {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-XDignore.symbol.file'
+    options.fork = true
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    archives scaladocJar
+}

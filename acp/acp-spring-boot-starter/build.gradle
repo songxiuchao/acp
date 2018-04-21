@@ -1,0 +1,40 @@
+versions += [
+        ftpserver: "1.1.0",
+        sftp     : "0.11.0"
+]
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
+    }
+}
+apply plugin: "io.spring.dependency-management"
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$versions.spring_boot"
+    }
+}
+dependencies {
+    compile project(":acp:acp-client")
+
+    // ftp server
+    compile "org.apache.ftpserver:ftpserver-core:$versions.ftpserver"
+
+    // sftp server
+    compile "org.apache.sshd:sshd-sftp:$versions.sftp"
+
+    // spring boot
+//    compile("org.springframework.boot:spring-boot-starter-web") {
+//        exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+//    }
+//    compile "org.springframework.boot:spring-boot-starter-jetty"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-aop"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    // Swagger2
+    compile "io.springfox:springfox-swagger2:$versions.swagger"
+    compile "io.springfox:springfox-swagger-ui:$versions.swagger"
+
+    compile "org.jolokia:jolokia-core"
+}

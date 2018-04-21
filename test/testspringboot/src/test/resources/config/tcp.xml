@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tcp-config>
+    <!-- name 服务名称，enabled 是否启用，keepAlive 是否使用长连接，idletime 连接进入空闲状态的等待时间单位毫秒，
+    port 监听端口号，isHex 接收报文是否是十六进制：true|false ，responseClass 报文接收处理类 , charset 服务使用字符集，为空或不设置则系统默认字符集 -->
+    <!--<listen name="testSocket" enabled="true" keepAlive="false" idletime="10000" port="9999" isHex="false"-->
+            <!--responseBean="TestTcpHandle" charset="gbk"/>-->
+
+    <!-- name 服务名称，enabled 是否启用，keepAlive 是否使用长连接，idletime 连接进入空闲状态的等待时间单位毫秒，
+    port 监听端口号，isHex 接收报文是否是十六进制：true|false ，responseClass 报文接收处理类 , charset 服务使用字符集，为空或不设置则系统默认字符集 -->
+    <!--<listen name="socket2" enabled="false" keepAlive="false" idletime="10000" port="9998" isHex="false"-->
+            <!--responseBean="TestTcpHandle" charset="gbk"/>-->
+</tcp-config>

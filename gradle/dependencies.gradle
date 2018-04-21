@@ -1,0 +1,26 @@
+ext {
+    versions = [:]
+}
+
+versions += [
+        jupiter         : "5.1.0",
+
+        commons_text    : "1.2",
+        commons_lang3   : "3.7",
+        dom4j           : "1.6.1",
+        bouncycastle    : "1.59",
+        slf4j           : "1.7.25",
+        logback         : "1.2.3",
+        xstream         : "1.4.9",
+        jackson_databind: "2.9.4",
+
+        tomcat_pool     : "8.5.28",
+        mysql           : "5.1.46",
+        mssqljdbc       : "6.4.0.jre8",
+        ojdbc           : "12.1.0.2",
+        postgresql      : "42.2.2",
+
+        spring_boot     : "2.0.0.RELEASE",
+        spec_version    : "1.1.1",
+        swagger         : "2.8.0"
+]

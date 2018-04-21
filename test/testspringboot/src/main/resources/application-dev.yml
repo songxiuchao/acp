@@ -1,0 +1,44 @@
+debug: false
+server:
+  port: 9090
+  tomcat:
+    max-threads: 1000
+    uri-encoding: UTF-8
+# ===============================
+# = Spring Config
+# ===============================
+spring:
+  thymeleaf:
+    cache: false
+# ===============================
+# = JPA / HIBERNATE
+# ===============================
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+# ===============================
+# = DATA SOURCE
+# ===============================
+  datasource:
+    primary:
+      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false
+      username: root
+      password: test
+      driver-class-name: com.mysql.jdbc.Driver
+      dialect: org.hibernate.dialect.MySQL55Dialect
+      scanpackage: pers.acp.test.application.entity.primary
+    pg:
+      url: jdbc:postgresql://127.0.0.1:5432/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+      username: postgres
+      password: test
+      driver-class-name: org.postgresql.Driver
+      dialect: org.hibernate.dialect.PostgreSQL9Dialect
+      scanpackage: pers.acp.test.application.entity.pg
+####################################################### 定时任务 #####################################################
+# 支持：cron字符串、none、不配置
+schedule:
+  crons:
+    task1: 0 0/1 * * * ?

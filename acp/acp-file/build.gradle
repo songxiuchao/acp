@@ -1,0 +1,50 @@
+versions += [
+        freemarker   : "2.3.26-incubating",
+        flying_saucer: "9.1.6",
+        jsoup        : "1.8.3",
+        batik        : "1.7",
+        jxl          : "2.6.12",
+        poi          : "3.9",
+        xdocreport   : "1.0.4"
+]
+
+dependencies {
+    compile project(":acp:acp-core")
+
+    // free marker
+    compile "org.freemarker:freemarker:$versions.freemarker"
+
+    // pdf
+    compile "org.xhtmlrenderer:flying-saucer-pdf-itext5:$versions.flying_saucer"
+    compile "org.jsoup:jsoup:$versions.jsoup"
+
+    // batik
+    compile "org.apache.xmlgraphics:batik-anim:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-awt-util:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-bridge:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-css:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-dom:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-ext:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-extension:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-gvt:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-parser:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-script:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-svg-dom:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-svggen:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-transcoder:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-util:$versions.batik"
+    compile "org.apache.xmlgraphics:batik-xml:$versions.batik"
+
+    // excle and doc
+    compile("net.sourceforge.jexcelapi:jxl:$versions.jxl") {
+        exclude group: 'log4j', module: 'log4j'
+    }
+    compile "org.apache.poi:poi:$versions.poi"
+    compile "org.apache.poi:poi-ooxml:$versions.poi"
+    compile "org.apache.poi:poi-ooxml-schemas:$versions.poi"
+    compile "org.apache.poi:poi-scratchpad:$versions.poi"
+
+    // docx
+    compile "fr.opensagres.xdocreport:xdocreport:$versions.xdocreport"
+
+}

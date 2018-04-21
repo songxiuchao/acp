@@ -1,0 +1,104 @@
+oauth2.0 认证过程：
+************************************** Authorization Code 可用范围：此类型可用于有服务端的应用，是最贴近老版本的方式 *************************************
+Client向Authorization Server发出申请（/oauth/authorize）：
+response_type = code
+client_id
+redirect_uri
+scope
+state
+
+Authorization Server在Resource Owner授权后给Client返回Authorization Code：
+code
+state
+
+Client向Authorization Server发出申请（/oauth/token）：
+grant_type = authorization_code
+code
+client_id
+client_secret
+redirect_uri
+
+Authorization Server在Resource Owner授权后给Client返回Access Token：
+access_token
+token_type
+expires_in
+refresh_token
+
+************************************* Implicit Grant 可用范围：此类型可用于没有服务端的应用，比如Javascript应用 **************************************
+Client向Authorization Server发出申请（/oauth/authorize）：
+response_type = token
+client_id
+redirect_uri
+scope
+state
+
+Authorization Server在Resource Owner授权后给Client返回Access Token：
+access_token
+token_type
+expires_in
+scope
+state
+
+************************************* Resource Owner Password Credentials 可用范围：不管有无服务端，此类型都可用 **************************************
+Clien向Authorization Server发出申请（/oauth/token）：
+grant_type = password
+username
+password
+scope
+
+AuthorizationServer给Client返回AccessToken：
+{
+  "access_token": "91c37cb7-1868-45c3-9edd-475a236f0c28",
+  "token_type": "bearer",
+  "expires_in": 119,
+  "scope": "ALL"，
+  "refresh_token": "3748bdd7-198c-4902-8322-0172954e0631"
+}
+
+************************************* Client Credentials 可用范围：不管有无服务端，此类型都可用 **************************************
+Client向Authorization Server发出申请（/oauth/token）：
+grant_type = client_credentials
+client_id
+client_secret
+scope
+
+Authorization Server给Client返回Access Token：
+{
+  "access_token": "91c37cb7-1868-45c3-9edd-475a236f0c28",
+  "token_type": "bearer",
+  "expires_in": 119,
+  "scope": "ALL"
+}
+
+************************************* 用Refresh Token刷新出有效的Access Token **************************************
+Client向Authorization Server发出申请（/oauth/token）：
+grant_type = refresh_token
+refresh_token
+client_id
+client_secret
+scope
+
+Authorization Server给Client返回Access Token：
+{
+  "access_token": "91c37cb7-1868-45c3-9edd-475a236f0c28",
+  "token_type": "bearer",
+  "expires_in": 119,
+  "scope": "ALL"，
+  "refresh_token": "3748bdd7-198c-4902-8322-0172954e0631"
+}
+
+************************************* 校验Access Token **************************************
+Client向Authorization Server发出申请（/oauth/check_token）：
+token
+Authorization Server给Client返回校验结果
+{
+  "scope": [
+    "ALL"
+  ],
+  "active": true,
+  "exp": 1523515998,
+  "authorities": [
+    "ROLE_ADMIN"
+  ],
+  "client_id": "test"
+}

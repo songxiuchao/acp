@@ -1,0 +1,35 @@
+debug: false
+server:
+  port: 9090
+  tomcat:
+    max-threads: 1000
+    uri-encoding: UTF-8
+# ===============================
+# = Spring Config
+# ===============================
+spring:
+  thymeleaf:
+    cache: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL55Dialect
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/acp?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false
+    username: root
+    password: test
+    driver-class-name: com.mysql.jdbc.Driver
+
+####################################################### 系统参数 #####################################################
+# 在线用户超时时间，单位毫秒，默认1小时
+system:
+  userLoginTimeOut: 3600000
+####################################################### 定时任务 #####################################################
+# 支持：cron字符串、none、不配置
+schedule:
+  crons:
+    onlineUserClean: 0 0/1 * * * ?

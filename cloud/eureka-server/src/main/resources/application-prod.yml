@@ -1,0 +1,26 @@
+debug: false
+server:
+  port: 8761
+  tomcat:
+    max-threads: 1000
+    uri-encoding: UTF-8
+# ===============================
+# = Spring Config
+# ===============================
+spring:
+  thymeleaf:
+    cache: false
+# ===============================
+# = Eureka Config
+# ===============================
+eureka:
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000
+  instance:
+    hostname: 127.0.0.1
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
