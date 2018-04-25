@@ -2,7 +2,7 @@
 Application Construction Platform 应用构建平台。该工程是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架克快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件及官方文档
 - [Spring Boot 2.0.0.RELEASE](https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/htmlsingle/)
-- [Spring Cloud Finchley.M9](http://cloud.spring.io/spring-cloud-static/Finchley.M9/multi/multi_spring-cloud.html)
+- [Spring Cloud Finchley.RC1](http://cloud.spring.io/spring-cloud-static/Finchley.RC1/multi/multi_spring-cloud.html)
 ## 一、环境要求
 - jdk 1.8 及以上
 - gradle 4.6 及以上
@@ -81,7 +81,7 @@ gradle全局参数：
 ## 五、开发 SpringCloud 应用
 引入 acp 下相应模块包，demo 位于 cloud 下
 ### （一）SpringCloud 版本
-Finchley.M9（持续更新）
+Finchley.RC1（持续更新）
 ### （二）模块说明
 cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ##### 1. cloud:acp-spring-cloud-starter-common
