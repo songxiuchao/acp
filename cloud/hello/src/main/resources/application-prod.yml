@@ -4,6 +4,11 @@ server:
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,hystrix.stream
 # ===============================
 # = Spring Config
 # ===============================
