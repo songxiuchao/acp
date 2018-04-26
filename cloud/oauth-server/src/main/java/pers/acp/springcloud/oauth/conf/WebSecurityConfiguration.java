@@ -57,7 +57,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(
                 "/error",
                 "/download",
-                "/acperror",
                 "/actuator",
                 "/actuator/**",
                 "/oauth/**").permitAll();

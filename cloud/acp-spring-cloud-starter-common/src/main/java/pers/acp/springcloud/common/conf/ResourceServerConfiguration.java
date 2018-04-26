@@ -61,7 +61,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests().antMatchers(
                 "/error",
                 "/download",
-                "/acperror",
                 "/actuator",
                 "/actuator/**",
                 "/v2/api-docs",
