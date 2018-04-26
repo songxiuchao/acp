@@ -8,7 +8,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,hystrix.stream
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 # ===============================
 # = Spring Config
 # ===============================
