@@ -1,7 +1,7 @@
 versions += [
-        mina       : "2.0.16",
+        mina       : "2.0.17",
         httpclient : "4.5.5",
-        commons_net: "3.5",
+        commons_net: "3.6",
         jsch       : "0.1.54"
 ]
 

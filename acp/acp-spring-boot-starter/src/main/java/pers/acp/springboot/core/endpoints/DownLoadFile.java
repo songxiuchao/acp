@@ -1,4 +1,4 @@
-package pers.acp.springboot.core.servlet;
+package pers.acp.springboot.core.endpoints;
 
 import org.springframework.http.MediaType;
 import pers.acp.springboot.core.base.BaseServlet;
@@ -17,8 +17,8 @@ import java.net.URLEncoder;
  * @author zhangbin by 2018-1-21 1:30
  * @since JDK1.8
  */
-@WebServlet(name = "DownLoadFileServlet", urlPatterns = "/download", initParams = {@WebInitParam(name = "encode", value = "utf-8")})
-public class DownLoadFileServlet extends BaseServlet {
+@WebServlet(name = "DownLoadFile", urlPatterns = "/download", initParams = {@WebInitParam(name = "encode", value = "utf-8")})
+public class DownLoadFile extends BaseServlet {
 
     private static final long serialVersionUID = -3420753437956874984L;
 

@@ -3,6 +3,10 @@
     1. 优化 gradle 脚本，spring cloud 版本号写入 dependencies.gradle；删除 cloud 模块下的 build.gradle
     2. 升级 spring-cloud 版本为 Finchley.RC1
     3. 优化 hystrix 断路监控
+    4. 优化 feign oauth 验证
+    5. 升级 spring-boot 版本为 2.0.1.RELEASE
+    6. 更新各依赖包版本
+    7. gateway 增加自定义断路器
 ##### 3.9.0
     1. 升级 spring-cloud 版本为 Finchley.M9
     2. spring cloud 网关服务由 zuul 更换为 spring-cloud-gateway

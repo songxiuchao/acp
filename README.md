@@ -1,8 +1,8 @@
 # acp 
 Application Construction Platform 应用构建平台。该工程是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架克快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件及官方文档
-- [Spring Boot 2.0.0.RELEASE](https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/htmlsingle/)
-- [Spring Cloud Finchley.RC1](http://cloud.spring.io/spring-cloud-static/Finchley.RC1/multi/multi_spring-cloud.html)
+- [Spring Boot 2.0.1.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Cloud Finchley.RC1](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 1.8 及以上
 - gradle 4.6 及以上

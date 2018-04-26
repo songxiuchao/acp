@@ -23,11 +23,10 @@ public class WordService {
                     return DocToHtml.convert2Html(filePath, foldPath, basePath);
                 }
                 case "docx": {
-                    return DocxToHtml.convert2Html(filePath, foldPath, basePath);
+                    throw new UnsupportedOperationException("fileType [" + ext + "] is unsupported!");
                 }
                 default:
-                    log.error("fileType [" + ext + "] is not word file!");
-                    return "";
+                    throw new UnsupportedOperationException("fileType [" + ext + "] is not word file!");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
