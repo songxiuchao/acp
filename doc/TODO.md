@@ -1,4 +1,12 @@
 ## 待完善任务项
+ - 整合统一后台管理：
+    1. 后端分离架构（后端注册到eureka统一管理，前端彻底分离通过网关调用后端服务）
+    1. 服务状态监控
+    2. 服务链路监控
+    3. 服务断路监控
+    4. 动态维护网关路由
+    5. oauth用户、客户端、角色、权限配置
+    6. 日志监控
  - oauth-server 完善：
     1. AuthorizationServerConfig 中将 token 持久化到 redis 进行存储（待官方支持）
  - gateway-server 定制开发：
