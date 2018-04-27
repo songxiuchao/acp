@@ -7,6 +7,8 @@
     5. 升级 spring-boot 版本为 2.0.1.RELEASE
     6. 更新各依赖包版本
     7. gateway 增加自定义断路器
+    8. 修改 Eureka Server 及 Client 配置，优化服务注册/发现感知度
+    9. 优化 Controller 切片日志
 ##### 3.9.0
     1. 升级 spring-cloud 版本为 Finchley.M9
     2. spring cloud 网关服务由 zuul 更换为 spring-cloud-gateway

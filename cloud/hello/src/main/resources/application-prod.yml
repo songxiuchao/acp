@@ -25,8 +25,9 @@ eureka:
   instance:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 20
+    lease-expiration-duration-in-seconds: 15
   client:
+    registry-fetch-interval-seconds: 5
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka/
 # ===============================
@@ -60,3 +61,5 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 11000
+ribbon:
+  ServerListRefreshInterval: 5000

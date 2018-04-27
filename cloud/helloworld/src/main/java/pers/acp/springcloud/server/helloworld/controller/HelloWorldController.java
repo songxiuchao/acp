@@ -3,9 +3,7 @@ package pers.acp.springcloud.server.helloworld.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pers.acp.springcloud.server.helloworld.feign.HelloServer;
 import pers.acp.springcloud.server.helloworld.feign.WorldServer;
 
@@ -26,8 +24,13 @@ public class HelloWorldController {
         this.worldServer = worldServer;
     }
 
+    @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Object> helloWorld(@RequestBody String content) {
+        return ResponseEntity.ok(helloServer.fromClient(content) + ";" + worldServer.fromClient(content));
+    }
+
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Object> helloWorld(@RequestParam String name) {
+    public ResponseEntity<Object> helloWorldGet(@RequestParam String name) {
         return ResponseEntity.ok(helloServer.fromClient(name) + ";" + worldServer.fromClient(name));
     }
 
