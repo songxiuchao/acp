@@ -25,6 +25,7 @@ eureka:
   server:
     enable-self-preservation: false
     eviction-interval-timer-in-ms: 5000
+    response-cache-auto-expiration-in-seconds: 5
   instance:
     hostname: 127.0.0.1
   client:
