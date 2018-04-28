@@ -1,6 +1,5 @@
 package pers.acp.kotlin.test
 
-import com.test.kotlin.Hello
 import org.apache.commons.text.CharacterPredicates
 import org.apache.commons.text.RandomStringGenerator
 import java.util.*
@@ -10,8 +9,6 @@ import java.util.*
  */
 fun main(args: Array<String>) {
     println("Hello World!")
-    val hello = Hello()
-    println("test=" + hello.test(5, 10))
 
     val generator: RandomStringGenerator = RandomStringGenerator.Builder()
             .withinRange(33, 126)

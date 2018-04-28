@@ -33,14 +33,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = ServerException.class)
     protected ResponseEntity<Object> handleServerException(ServerException ex) {
         log.error(ex.getMessage(), ex);
-        JsonNode json;
+        ResponseCode responseCode;
         try {
-            ResponseCode responseCode = ResponseCode.getEnum(ex.getCode());
-            json = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
+            responseCode = ResponseCode.getEnum(ex.getCode());
         } catch (EnumValueUndefinedException e) {
-            log.error(e.getMessage(), e);
-            json = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, null);
+            responseCode = ResponseCode.otherError;
         }
+        JsonNode json = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
         return ResponseEntity.ok().header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(json.toString());
     }
 
@@ -59,18 +58,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(ex.getMessage(), ex);
         JsonNode json;
         if (ex instanceof ServerException) {
+            ResponseCode responseCode;
             try {
-                ResponseCode responseCode = ResponseCode.getEnum(((ServerException) ex).getCode());
-                json = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
+                responseCode = ResponseCode.getEnum(((ServerException) ex).getCode());
             } catch (EnumValueUndefinedException e) {
-                log.error(e.getMessage(), e);
-                json = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, null);
+                responseCode = ResponseCode.otherError;
             }
+            json = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
         } else {
-            json = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, null);
+            json = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, ex.getMessage());
         }
-        headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
-        return ResponseEntity.ok().headers(headers).body(json.toString());
+        return ResponseEntity.ok().header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(json.toString());
     }
 
     /**
@@ -86,7 +84,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
         headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
-        return ResponseEntity.ok().headers(headers).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, null).toString());
+        return ResponseEntity.ok().headers(headers).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()).toString());
     }
 
     /**
@@ -102,7 +100,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
         headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
-        return ResponseEntity.ok().headers(headers).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, null).toString());
+        return ResponseEntity.ok().headers(headers).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()).toString());
     }
 
 }

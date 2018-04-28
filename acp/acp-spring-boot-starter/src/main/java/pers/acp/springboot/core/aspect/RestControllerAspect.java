@@ -27,14 +27,14 @@ import java.util.*;
 @Aspect
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class ControllerAspect {
+public class RestControllerAspect {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private final ControllerAspectConfiguration controllerAspectConfiguration;
 
     @Autowired
-    public ControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration) {
+    public RestControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration) {
         this.controllerAspectConfiguration = controllerAspectConfiguration;
     }
 
