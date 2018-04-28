@@ -2,6 +2,7 @@ package pers.acp.springboot.core.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,6 @@ public class ControllerAspectConfiguration {
         this.noLogUriRegexes = noLogUriRegexes;
     }
 
-    private List<String> noLogUriRegexes;
+    private List<String> noLogUriRegexes = new ArrayList<>();
 
 }

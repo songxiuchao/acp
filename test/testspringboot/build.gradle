@@ -41,5 +41,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "net.kaczmarzyk:specification-arg-resolver:$versions.spec_version"
 
-    testCompile("org.springframework.boot:spring-boot-test")
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'junit'
+    }
 }

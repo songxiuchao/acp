@@ -1,5 +1,6 @@
 package pers.acp.springboot.core.aspect;
 
+import com.google.common.collect.ImmutableList;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -130,15 +131,20 @@ public class RestControllerAspect {
      * @return true|false
      */
     private boolean needLog(String uri) {
-        List<String> noLogUriRegexes = controllerAspectConfiguration.getNoLogUriRegexes();
-        if (noLogUriRegexes != null) {
-            for (String regex : noLogUriRegexes) {
-                if (ServletTools.isBeIdentifiedUri(uri, regex)) {
-                    return false;
-                }
+        for (String regex : noLogUriRegexes) {
+            if (ServletTools.isBeIdentifiedUri(uri, regex)) {
+                return false;
+            }
+        }
+        List<String> noLogUriRegexesConfig = controllerAspectConfiguration.getNoLogUriRegexes();
+        for (String regex : noLogUriRegexesConfig) {
+            if (ServletTools.isBeIdentifiedUri(uri, regex)) {
+                return false;
             }
         }
         return true;
     }
+
+    private static List<String> noLogUriRegexes = ImmutableList.of("/error");
 
 }
