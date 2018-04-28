@@ -2,6 +2,7 @@ package com.test.kotlin.domain
 
 import com.test.kotlin.entity.TableOne
 import com.test.kotlin.repository.TableOneRepository
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -18,4 +19,6 @@ class TableOneDomain(private val tableOneRepository: TableOneRepository) {
     fun create(tableOne: TableOne): TableOne = tableOneRepository.save(tableOne)
 
     fun query(name: String): Optional<TableOne> = tableOneRepository.findByName(name)
+
+    fun all(specification: Specification<TableOne>?): MutableList<TableOne> = tableOneRepository.findAll(specification)
 }
