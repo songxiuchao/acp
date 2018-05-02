@@ -1,6 +1,3 @@
-import com.test.scala.java.TestJava
-import com.test.scala.scala.TestScala
-
 /**
   * Create by zhangbin on 2017-9-28 23:26
   */
@@ -17,8 +14,6 @@ object Test {
     println(ss)
 
     val totalCount = 10000000
-    val test = new TestScala
-    //    var test = new TestJava
 
     /*var start = System.currentTimeMillis()
     test.testForFunc(totalCount)

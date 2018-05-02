@@ -5,12 +5,14 @@ import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProper
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
@@ -40,7 +42,20 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
         try {
-            services.setRestTemplate(new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient())));
+            RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+            // 自定义错误处理类，所有错误放行统一交由 oauth 模块进行进出
+            restTemplate.setErrorHandler(new ResponseErrorHandler() {
+                @Override
+                public boolean hasError(ClientHttpResponse response) {
+                    return false;
+                }
+
+                @Override
+                public void handleError(ClientHttpResponse response) {
+
+                }
+            });
+            services.setRestTemplate(restTemplate);
         } catch (HttpException e) {
             log.error(e.getMessage(), e);
         }
@@ -61,7 +76,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests().antMatchers(
                 "/error",
                 "/download",
-                "/acperror",
                 "/actuator",
                 "/actuator/**",
                 "/v2/api-docs",

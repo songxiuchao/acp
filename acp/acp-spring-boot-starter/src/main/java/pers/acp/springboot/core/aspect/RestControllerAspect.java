@@ -1,5 +1,6 @@
 package pers.acp.springboot.core.aspect;
 
+import com.google.common.collect.ImmutableList;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,15 +13,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.conf.ControllerAspectConfiguration;
 import pers.acp.springboot.core.tools.ServletTools;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -30,21 +28,23 @@ import java.util.*;
 @Aspect
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class ControllerAspect {
+public class RestControllerAspect {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private final ControllerAspectConfiguration controllerAspectConfiguration;
 
     @Autowired
-    public ControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration) {
+    public RestControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration) {
         this.controllerAspectConfiguration = controllerAspectConfiguration;
     }
 
     /**
      * 定义拦截规则
      */
-    @Pointcut(value = "execution(public * *(..)) && ( " +
+    @Pointcut(value = "execution(public * *(..)) && (" +
+            "@within(org.springframework.web.bind.annotation.RestController) " +
+            "|| @within(org.springframework.stereotype.Controller)) && ( " +
             "@annotation(org.springframework.web.bind.annotation.RequestMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.GetMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PostMapping) " +
@@ -74,6 +74,7 @@ public class ControllerAspect {
             if (needLog(uri)) {
                 StringBuilder startLog = new StringBuilder("========== 请求开始, method: {}, Content-Type: {}, uri: {}\n");
                 startLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                startLog.append("target : ").append(pjp.getSignature().getDeclaringTypeName()).append("\n");
                 startLog.append("-----> request: ").append(method).append("\n");
                 Enumeration<String> headers = request.getHeaderNames();
                 if (headers.hasMoreElements()) {
@@ -83,6 +84,10 @@ public class ControllerAspect {
                     String name = headers.nextElement();
                     startLog.append("           - ").append(name).append("=").append(request.getHeader(name)).append("\n");
                 }
+                String queryString = request.getQueryString();
+                if (!CommonTools.isNullStr(queryString)) {
+                    startLog.append("      ┖---- query string: \n").append("           - ").append(queryString).append("\n");
+                }
                 Enumeration<String> params = request.getParameterNames();
                 if (params.hasMoreElements()) {
                     startLog.append("      ┖---- parameter: \n");
@@ -90,16 +95,6 @@ public class ControllerAspect {
                 while (params.hasMoreElements()) {
                     String name = params.nextElement();
                     startLog.append("           - ").append(name).append("=").append(request.getParameter(name)).append("\n");
-                }
-                if (!(request instanceof MultipartHttpServletRequest)) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(), CommonTools.getDefaultCharset()));
-                    StringBuilder sb = new StringBuilder();
-                    String temp;
-                    while ((temp = reader.readLine()) != null) {
-                        sb.append(temp);
-                    }
-                    reader.close();
-                    startLog.append("      ┖---- body: \n").append(sb.toString());
                 }
                 startLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 log.info(startLog.toString(), method, request.getContentType(), uri);
@@ -136,15 +131,24 @@ public class ControllerAspect {
      * @return true|false
      */
     private boolean needLog(String uri) {
-        List<String> noLogUriRegexes = controllerAspectConfiguration.getNoLogUriRegexes();
-        if (noLogUriRegexes != null) {
+        if (controllerAspectConfiguration.isEnabled()) {
             for (String regex : noLogUriRegexes) {
                 if (ServletTools.isBeIdentifiedUri(uri, regex)) {
                     return false;
                 }
             }
+            List<String> noLogUriRegexesConfig = controllerAspectConfiguration.getNoLogUriRegexes();
+            for (String regex : noLogUriRegexesConfig) {
+                if (ServletTools.isBeIdentifiedUri(uri, regex)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
+
+    private static List<String> noLogUriRegexes = ImmutableList.of("/error");
 
 }

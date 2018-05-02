@@ -1,11 +1,11 @@
 # acp 
-Application Construction Platform 应用构建平台 （acp），该工程是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。
-## 官方文档
-- [Spring Boot 2.0.0.RELEASE](https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/htmlsingle/)
-- [Spring Cloud Finchley.M9](http://cloud.spring.io/spring-cloud-static/Finchley.M9/multi/multi_spring-cloud.html)
+Application Construction Platform 应用构建平台。该工程是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架克快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
+## 相关组件及官方文档
+- [Spring Boot 2.0.1.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Cloud Finchley.RC1](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 1.8 及以上
-- gradle 4.6 及以上
+- gradle 4.7
 
 ## 二、gralde 配置
 ### （一）配置文件
@@ -81,7 +81,7 @@ gradle全局参数：
 ## 五、开发 SpringCloud 应用
 引入 acp 下相应模块包，demo 位于 cloud 下
 ### （一）SpringCloud 版本
-Finchley.M9（持续更新）
+Finchley.RC1（持续更新）
 ### （二）模块说明
 cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ##### 1. cloud:acp-spring-cloud-starter-common
@@ -141,10 +141,11 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置
     （4）参考 cloud:hello、cloud:world、cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
 ## 六、打包为 docker 镜像
-    （1）执行 dockerBuilder 任务，在 build/docker 目录下自动生成 Dockerfile 文件和 项目打包源文件
-    （2）执行（1）之后镜像会直接在本地 docker 中生成，可直接使用
-    （3）也可将生成好的 Dockerfile 和 xxx.jar 拷贝至有 docker 的环境中生成镜像
+    （1）参考 test:testspringboot 模块中的 gradle.build
+    （2）执行 dockerBuilder 任务，在 build/docker 目录下自动生成 Dockerfile 文件和 项目打包源文件
+    （3）执行（1）之后镜像会直接在本地 docker 中生成，可直接使用
+    （4）也可将生成好的 Dockerfile 和 xxx.jar 拷贝至有 docker 的环境中生成镜像
 ## 七、版本记录
-[点击前往](doc/version_info.md)
+[点击前往](doc/version_history.md)
 ## 八、待完善内容
 [详情](doc/TODO.md)

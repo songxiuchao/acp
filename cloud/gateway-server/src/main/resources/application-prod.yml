@@ -4,6 +4,14 @@ server:
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 # ===============================
 # = Eureka Config
 # ===============================
@@ -11,7 +19,7 @@ eureka:
   instance:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 20
+    lease-expiration-duration-in-seconds: 15
   client:
     registry-fetch-interval-seconds: 5
     service-url:
@@ -27,6 +35,7 @@ hystrix:
           thread:
             timeoutInMilliseconds: 60000
 ribbon:
+  ServerListRefreshInterval: 5000
   eager-load:
     enabled: true
     clients: server-oauth2,atomic-helloworld
@@ -48,11 +57,17 @@ spring:
         - Path=/oauth/2.0/**
         filters:
         - StripPrefix=2
-        - Hystrix=commonHystrix # 目前发生短路时返回 status=200 body=""，等待官方文档给出自定义断路器写法
+        - name: Hystrix
+          args:
+            name: commonHystrix
+            fallbackUri: forward:/hystrixhandle
       - id: atomic-helloworld
         uri: lb://atomic-helloworld
         predicates:
         - Path=/api/helloworld/**
         filters:
         - StripPrefix=2
-        - Hystrix=commonHystrix # 目前发生短路时返回 status=200 body=""，等待官方文档给出自定义断路器写法
+        - name: Hystrix
+          args:
+            name: commonHystrix
+            fallbackUri: forward:/hystrixhandle

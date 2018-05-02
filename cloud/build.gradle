@@ -1,4 +1,0 @@
-// spring cloud 版本信息
-ext {
-    cloud_version = "Finchley.M9"
-}

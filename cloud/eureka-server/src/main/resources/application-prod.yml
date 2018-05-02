@@ -4,6 +4,14 @@ server:
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 # ===============================
 # = Spring Config
 # ===============================
@@ -15,8 +23,9 @@ spring:
 # ===============================
 eureka:
   server:
-    enable-self-preservation: false
-    eviction-interval-timer-in-ms: 5000
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 3000
+    response-cache-update-interval-ms: 3000
   instance:
     hostname: 127.0.0.1
   client:

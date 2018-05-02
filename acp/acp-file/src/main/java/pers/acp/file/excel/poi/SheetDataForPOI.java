@@ -87,7 +87,7 @@ final class SheetDataForPOI {
                 }
                 Cell cell = row.createCell(cellIndex);
                 CellStyle cellStyle = createStyle(wb, titleStyle, 0);// 标题样式
-                cell.setCellType(Cell.CELL_TYPE_STRING);
+                cell.setCellType(CellType.STRING);
                 cell.setCellStyle(cellStyle);
                 cell.setCellValue(title);
 
@@ -157,20 +157,20 @@ final class SheetDataForPOI {
                     /* 设置字体颜色 */
                     font.setColor(IndexedColors.BLACK.getIndex());
                     /* 设置字体加粗 */
-                    font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+                    font.setBold(false);
                     cellStyle.setFont(font);
                     /* 设置单元格对齐方式 */
-                    cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-                    cellStyle.setAlignment(CellStyle.ALIGN_LEFT);
+                    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+                    cellStyle.setAlignment(HorizontalAlignment.LEFT);
                     /* 设置单元格自动换行 */
                     cellStyle.setWrapText(true);
                     /* 边框 */
-                    cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-                    cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-                    cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-                    cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                    cellStyle.setBorderTop(BorderStyle.THIN);
+                    cellStyle.setBorderBottom(BorderStyle.THIN);
+                    cellStyle.setBorderLeft(BorderStyle.THIN);
+                    cellStyle.setBorderRight(BorderStyle.THIN);
                 }
-                cell.setCellType(Cell.CELL_TYPE_STRING);
+                cell.setCellType(CellType.STRING);
                 cell.setCellStyle(cellStyle);
                 JsonNode jsonCell = rowData.get(aName);
                 if (jsonCell.isTextual()) {
@@ -227,7 +227,7 @@ final class SheetDataForPOI {
                     sheet.addMergedRegion(new CellRangeAddress(rowIndex + paddingrow, rowIndex + paddingrow + Integer.valueOf(rowspanConfig) - 1, cellIndex, cellIndex));
                 }
                 Cell cell = row.createCell(cellIndex);
-                cell.setCellType(Cell.CELL_TYPE_STRING);
+                cell.setCellType(CellType.STRING);
                 cell.setCellStyle(cellStyle);
                 cell.setCellValue(foot);
             }
@@ -514,15 +514,15 @@ final class SheetDataForPOI {
         String boldConfig = getConfig(style, "bold");
         if (flag == 0) {
             if (boldConfig.equals("false")) {
-                font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+                font.setBold(false);
             } else {
-                font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+                font.setBold(true);
             }
         } else {
             if (boldConfig.equals("true")) {
-                font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+                font.setBold(true);
             } else {
-                font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+                font.setBold(false);
             }
         }
         /* 设置字体下划线 */
@@ -533,24 +533,24 @@ final class SheetDataForPOI {
         cellStyle.setFont(font);
         /* 设置单元格对齐方式 */
         String alignConfig = getConfig(style, "align");
-        short align = CellStyle.ALIGN_LEFT;
+        HorizontalAlignment align = HorizontalAlignment.LEFT;
         if (flag == 0) {
-            align = CellStyle.ALIGN_CENTER;
+            align = HorizontalAlignment.CENTER;
         }
         if (!CommonTools.isNullStr(alignConfig)) {
             switch (alignConfig) {
                 case "center":
-                    align = CellStyle.ALIGN_CENTER;
+                    align = HorizontalAlignment.CENTER;
                     break;
                 case "left":
-                    align = CellStyle.ALIGN_LEFT;
+                    align = HorizontalAlignment.LEFT;
                     break;
                 case "right":
-                    align = CellStyle.ALIGN_RIGHT;
+                    align = HorizontalAlignment.RIGHT;
                     break;
             }
         }
-        cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setAlignment(align);
         /* 设置单元格自动换行 */
         cellStyle.setWrapText(true);
@@ -560,70 +560,70 @@ final class SheetDataForPOI {
             if (!CommonTools.isNullStr(borderConfig)) {
                 switch (borderConfig) {
                     case "no":
-                        cellStyle.setBorderTop(CellStyle.BORDER_NONE);
-                        cellStyle.setBorderBottom(CellStyle.BORDER_NONE);
-                        cellStyle.setBorderLeft(CellStyle.BORDER_NONE);
-                        cellStyle.setBorderRight(CellStyle.BORDER_NONE);
+                        cellStyle.setBorderTop(BorderStyle.NONE);
+                        cellStyle.setBorderBottom(BorderStyle.NONE);
+                        cellStyle.setBorderLeft(BorderStyle.NONE);
+                        cellStyle.setBorderRight(BorderStyle.NONE);
                         break;
                     case "all":
-                        cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-                        cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-                        cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-                        cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderTop(BorderStyle.THIN);
+                        cellStyle.setBorderBottom(BorderStyle.THIN);
+                        cellStyle.setBorderLeft(BorderStyle.THIN);
+                        cellStyle.setBorderRight(BorderStyle.THIN);
                         break;
                     case "top":
-                        cellStyle.setBorderTop(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderTop(BorderStyle.THIN);
                         break;
                     case "bottom":
-                        cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderBottom(BorderStyle.THIN);
                         break;
                     case "right":
-                        cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderRight(BorderStyle.THIN);
                         break;
                     case "left":
-                        cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderLeft(BorderStyle.THIN);
                         break;
                 }
             } else {
-                cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-                cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-                cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-                cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                cellStyle.setBorderTop(BorderStyle.THIN);
+                cellStyle.setBorderBottom(BorderStyle.THIN);
+                cellStyle.setBorderLeft(BorderStyle.THIN);
+                cellStyle.setBorderRight(BorderStyle.THIN);
             }
         } else {
             String borderConfig = getConfig(style, "border");
             if (!CommonTools.isNullStr(borderConfig)) {
                 switch (borderConfig) {
                     case "no":
-                        cellStyle.setBorderTop(CellStyle.BORDER_NONE);
-                        cellStyle.setBorderBottom(CellStyle.BORDER_NONE);
-                        cellStyle.setBorderLeft(CellStyle.BORDER_NONE);
-                        cellStyle.setBorderRight(CellStyle.BORDER_NONE);
+                        cellStyle.setBorderTop(BorderStyle.NONE);
+                        cellStyle.setBorderBottom(BorderStyle.NONE);
+                        cellStyle.setBorderLeft(BorderStyle.NONE);
+                        cellStyle.setBorderRight(BorderStyle.NONE);
                         break;
                     case "all":
-                        cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-                        cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-                        cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-                        cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderTop(BorderStyle.THIN);
+                        cellStyle.setBorderBottom(BorderStyle.THIN);
+                        cellStyle.setBorderLeft(BorderStyle.THIN);
+                        cellStyle.setBorderRight(BorderStyle.THIN);
                         break;
                     case "top":
-                        cellStyle.setBorderTop(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderTop(BorderStyle.THIN);
                         break;
                     case "bottom":
-                        cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderBottom(BorderStyle.THIN);
                         break;
                     case "right":
-                        cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderRight(BorderStyle.THIN);
                         break;
                     case "left":
-                        cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderLeft(BorderStyle.THIN);
                         break;
                 }
             } else {
-                cellStyle.setBorderTop(CellStyle.BORDER_NONE);
-                cellStyle.setBorderBottom(CellStyle.BORDER_NONE);
-                cellStyle.setBorderLeft(CellStyle.BORDER_NONE);
-                cellStyle.setBorderRight(CellStyle.BORDER_NONE);
+                cellStyle.setBorderTop(BorderStyle.NONE);
+                cellStyle.setBorderBottom(BorderStyle.NONE);
+                cellStyle.setBorderLeft(BorderStyle.NONE);
+                cellStyle.setBorderRight(BorderStyle.NONE);
             }
         }
         return cellStyle;
@@ -662,20 +662,20 @@ final class SheetDataForPOI {
                 /* 设置字体颜色 */
                 font.setColor(IndexedColors.BLACK.getIndex());
                 /* 设置字体加粗 */
-                font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+                font.setBold(true);
                 cellStyle.setFont(font);
                 /* 设置单元格对齐方式 */
-                cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-                cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+                cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
                 /* 设置单元格自动换行 */
                 cellStyle.setWrapText(true);
                 /* 边框 */
-                cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-                cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-                cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-                cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                cellStyle.setBorderTop(BorderStyle.THIN);
+                cellStyle.setBorderBottom(BorderStyle.THIN);
+                cellStyle.setBorderLeft(BorderStyle.THIN);
+                cellStyle.setBorderRight(BorderStyle.THIN);
             }
-            cell.setCellType(Cell.CELL_TYPE_STRING);
+            cell.setCellType(CellType.STRING);
             cell.setCellValue(headtitle);
             cell.setCellStyle(cellStyle);
         }
@@ -704,22 +704,22 @@ final class SheetDataForPOI {
         /* 设置字体颜色 */
         font.setColor(IndexedColors.BLACK.getIndex());
         /* 设置字体加粗 */
-        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        font.setBold(true);
         cellStyle.setFont(font);
         /* 设置单元格对齐方式 */
-        cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
         /* 设置单元格自动换行 */
         cellStyle.setWrapText(true);
         /* 边框 */
-        cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-        cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-        cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-        cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
         int cellindex = cellIndex;
         String[] name = StringUtils.splitPreserveAllTokens(names, ",");
         for (String aName : name) {
             Cell cell = row.createCell(cellindex);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
+            cell.setCellType(CellType.STRING);
             cell.setCellValue(aName);
             cell.setCellStyle(cellStyle);
             cellindex++;
@@ -747,25 +747,25 @@ final class SheetDataForPOI {
         int pageNumberBegin = info.indexOf("[pageNumber]");
         int pageTotalBegin = info.indexOf("[pageTotal]");
         if (pageNumberBegin > -1 && pageTotalBegin < 0) {
-            contents.append(info.substring(0, pageNumberBegin));
+            contents.append(info, 0, pageNumberBegin);
             contents.append(HSSFHeader.page());
             contents.append(info.substring(pageNumberBegin + 12));
         } else if (pageNumberBegin > -1 && pageTotalBegin > -1) {
             if (pageNumberBegin < pageTotalBegin) {
-                contents.append(info.substring(0, pageNumberBegin));
+                contents.append(info, 0, pageNumberBegin);
                 contents.append(HSSFHeader.page());
-                contents.append(info.substring(pageNumberBegin + 12, pageTotalBegin));
+                contents.append(info, pageNumberBegin + 12, pageTotalBegin);
                 contents.append(HSSFHeader.numPages());
                 contents.append(info.substring(pageTotalBegin + 11));
             } else {
-                contents.append(info.substring(0, pageTotalBegin));
+                contents.append(info, 0, pageTotalBegin);
                 contents.append(HSSFHeader.numPages());
-                contents.append(info.substring(pageTotalBegin + 11, pageNumberBegin));
+                contents.append(info, pageTotalBegin + 11, pageNumberBegin);
                 contents.append(HSSFHeader.page());
                 contents.append(info.substring(pageNumberBegin + 12));
             }
         } else if (pageNumberBegin < 0 && pageTotalBegin > -1) {
-            contents.append(info.substring(0, pageTotalBegin));
+            contents.append(info, 0, pageTotalBegin);
             contents.append(HSSFHeader.numPages());
             contents.append(info.substring(pageTotalBegin + 11));
         } else {
@@ -801,25 +801,25 @@ final class SheetDataForPOI {
         int pageNumberBegin = info.indexOf("[pageNumber]");
         int pageTotalBegin = info.indexOf("[pageTotal]");
         if (pageNumberBegin > -1 && pageTotalBegin < 0) {
-            contents.append(info.substring(0, pageNumberBegin));
+            contents.append(info, 0, pageNumberBegin);
             contents.append(HSSFFooter.page());
             contents.append(info.substring(pageNumberBegin + 12));
         } else if (pageNumberBegin > -1 && pageTotalBegin > -1) {
             if (pageNumberBegin < pageTotalBegin) {
-                contents.append(info.substring(0, pageNumberBegin));
+                contents.append(info, 0, pageNumberBegin);
                 contents.append(HSSFFooter.page());
-                contents.append(info.substring(pageNumberBegin + 12, pageTotalBegin));
+                contents.append(info, pageNumberBegin + 12, pageTotalBegin);
                 contents.append(HSSFFooter.numPages());
                 contents.append(info.substring(pageTotalBegin + 11));
             } else {
-                contents.append(info.substring(0, pageTotalBegin));
+                contents.append(info, 0, pageTotalBegin);
                 contents.append(HSSFFooter.numPages());
-                contents.append(info.substring(pageTotalBegin + 11, pageNumberBegin));
+                contents.append(info, pageTotalBegin + 11, pageNumberBegin);
                 contents.append(HSSFFooter.page());
                 contents.append(info.substring(pageNumberBegin + 12));
             }
         } else if (pageNumberBegin < 0 && pageTotalBegin > -1) {
-            contents.append(info.substring(0, pageTotalBegin));
+            contents.append(info, 0, pageTotalBegin);
             contents.append(HSSFFooter.numPages());
             contents.append(info.substring(pageTotalBegin + 11));
         } else {

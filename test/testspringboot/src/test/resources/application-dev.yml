@@ -4,6 +4,14 @@ server:
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 # ===============================
 # = Spring Config
 # ===============================
@@ -37,6 +45,12 @@ spring:
       driver-class-name: org.postgresql.Driver
       dialect: org.hibernate.dialect.PostgreSQL9Dialect
       scanpackage: pers.acp.test.application.entity.pg
+# ===============================
+# = Controller Log Config
+# ===============================
+#controller-aspect:
+#  no-log-uri-regexes:
+#  - /oauth/.*
 ####################################################### 定时任务 #####################################################
 # 支持：cron字符串、none、不配置
 schedule:

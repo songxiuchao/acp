@@ -15,14 +15,14 @@ import pers.acp.core.log.LogFactory;
  */
 @RestController
 @RequestMapping("/boot")
-public class TestControllerMic {
+public class TestController {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private final Task1 task1;
 
     @Autowired
-    public TestControllerMic(Task1 task1) {
+    public TestController(Task1 task1) {
         this.task1 = task1;
     }
 
