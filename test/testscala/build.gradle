@@ -2,14 +2,29 @@ ext {
     println("scala version is ${scalaVersion}")
 }
 
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
+    }
+}
+
 apply plugin: 'scala'
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
 
 dependencies {
-    compile project(":acp:acp-core")
+    compile project(":acp:acp-spring-boot-starter-common")
 
     compile "org.scala-lang:scala-library:${scalaVersion}"
     compile "org.scala-lang:scala-compiler:${scalaVersion}"
     compile "org.scala-lang:scala-reflect:${scalaVersion}"
+    compile "com.fasterxml.jackson.module:jackson-module-scala_2.12:$versions.jackson_databind"
+
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'junit'
+    }
 }
 
 task scaladocJar(type: Jar, dependsOn: scaladoc) {
@@ -18,19 +33,15 @@ task scaladocJar(type: Jar, dependsOn: scaladoc) {
 }
 
 compileScala {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << '-XDignore.symbol.file'
+    options.encoding = "${encoding}"
     options.fork = true
 }
 
 compileTestScala {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << '-XDignore.symbol.file'
+    options.encoding = "${encoding}"
     options.fork = true
 }
 
 artifacts {
-    archives sourcesJar
-    archives javadocJar
     archives scaladocJar
 }

@@ -9,4 +9,5 @@
 - junit5 用例
 - Google 二次认证
 ## testscala
-scala 语言应用
+使用 scala 语言，引入脚手架开发的 springboot 应用
+- spring-data-jpa

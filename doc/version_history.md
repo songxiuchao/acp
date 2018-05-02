@@ -9,9 +9,10 @@
     7. gateway 增加自定义断路器
     8. 修改 Eureka Server 及 Client 配置，优化服务注册/发现感知度
     9. 优化 Controller 切片日志，重命名切片类
-    10. kotlin 版本升级至 1.2.40，增加 kotlin demo，test:testkotlin
+    10. kotlin 版本升级至 1.2.41，增加 kotlin demo，test:testkotlin
     11. 集成 junit5 单元测试，并增加测试用例编写，test:testspringboot、test:testkotlin
     12. 取消 specification-arg-resolver 集成
+    13. 增加 scala demo, test:testscala
 ##### 3.9.0
     1. 升级 spring-cloud 版本为 Finchley.M9
     2. spring cloud 网关服务由 zuul 更换为 spring-cloud-gateway

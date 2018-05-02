@@ -12,6 +12,14 @@ import java.util.List;
 @ConfigurationProperties(prefix = "controller-aspect")
 public class ControllerAspectConfiguration {
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public List<String> getNoLogUriRegexes() {
         return noLogUriRegexes;
     }
@@ -19,6 +27,8 @@ public class ControllerAspectConfiguration {
     public void setNoLogUriRegexes(List<String> noLogUriRegexes) {
         this.noLogUriRegexes = noLogUriRegexes;
     }
+
+    private boolean enabled = true;
 
     private List<String> noLogUriRegexes = new ArrayList<>();
 

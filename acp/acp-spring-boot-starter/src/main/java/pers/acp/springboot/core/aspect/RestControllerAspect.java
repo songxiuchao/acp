@@ -131,18 +131,22 @@ public class RestControllerAspect {
      * @return true|false
      */
     private boolean needLog(String uri) {
-        for (String regex : noLogUriRegexes) {
-            if (ServletTools.isBeIdentifiedUri(uri, regex)) {
-                return false;
+        if (controllerAspectConfiguration.isEnabled()) {
+            for (String regex : noLogUriRegexes) {
+                if (ServletTools.isBeIdentifiedUri(uri, regex)) {
+                    return false;
+                }
             }
-        }
-        List<String> noLogUriRegexesConfig = controllerAspectConfiguration.getNoLogUriRegexes();
-        for (String regex : noLogUriRegexesConfig) {
-            if (ServletTools.isBeIdentifiedUri(uri, regex)) {
-                return false;
+            List<String> noLogUriRegexesConfig = controllerAspectConfiguration.getNoLogUriRegexes();
+            for (String regex : noLogUriRegexesConfig) {
+                if (ServletTools.isBeIdentifiedUri(uri, regex)) {
+                    return false;
+                }
             }
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
     private static List<String> noLogUriRegexes = ImmutableList.of("/error");
