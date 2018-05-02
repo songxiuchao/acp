@@ -22,6 +22,5 @@ versions += [
 
         spring_boot     : "2.0.1.RELEASE",
         spring_cloud    : "Finchley.RC1",
-        spec_version    : "1.1.1",
         swagger         : "2.9.0"
 ]

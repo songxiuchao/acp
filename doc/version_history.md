@@ -11,6 +11,7 @@
     9. 优化 Controller 切片日志，重命名切片类
     10. kotlin 版本升级至 1.2.40，增加 kotlin demo，test:testkotlin
     11. 集成 junit5 单元测试，并增加测试用例编写，test:testspringboot、test:testkotlin
+    12. 取消 specification-arg-resolver 集成
 ##### 3.9.0
     1. 升级 spring-cloud 版本为 Finchley.M9
     2. spring cloud 网关服务由 zuul 更换为 spring-cloud-gateway
