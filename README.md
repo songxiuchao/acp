@@ -1,6 +1,6 @@
 # acp 
 Application Construction Platform 应用构建平台。该工程是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架克快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
-## 相关组件及官方文档
+## 相关组件版本及官方文档
 - [Spring Boot 2.0.1.RELEASE](https://projects.spring.io/spring-boot)
 - [Spring Cloud Finchley.RC1](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
@@ -45,9 +45,7 @@ gradle全局参数：
 
 ## 四、开发 SpringBoot 应用
 引入 acp 下相应模块包
-### （一）SpringBoot 版本
-2.0.0.RELEASE
-### （二）模块说明，具体API文档请查看各模块 javadoc
+### （一）模块说明，具体API文档请查看各模块 javadoc
 ##### 1. acp:acp-core 
     核心包，封装了常用工具类，包括jdbc、配置文件解析（xml、properties）、加解密算法、线程池、定时任务、四则运算、json处理、字符串处理
 ##### 2. acp:acp-core-orm
@@ -64,7 +62,7 @@ gradle全局参数：
     文件处理组件包，依赖 acp-core；封装了excel、pdf、word、html、fremark模板文件的读写转换等操作
 ##### 8. acp:acp-message
     消息处理组建包，依赖 acp-core；封装了发送email
-### （三）快速开发 springboot 应用
+### （二）快速开发 springboot 应用
     （1）参考 test:testspringboot
     （2）依赖 acp:acp-spring-boot-starter-common
     （3）src/main/java/resources 中增加配置文件（测试配置文件在 src/test/resources）
@@ -80,9 +78,7 @@ gradle全局参数：
     （12）如有需要，可选择引入 acp-file、acp-message 等包
 ## 五、开发 SpringCloud 应用
 引入 acp 下相应模块包，demo 位于 cloud 下
-### （一）SpringCloud 版本
-Finchley.RC1（持续更新）
-### （二）模块说明
+### （一）模块说明
 cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ##### 1. cloud:acp-spring-cloud-starter-common
     原子服务公共模块：
@@ -114,11 +110,12 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     原子服务
 ##### 8. cloud:world 
     原子服务
-### （三）组建开发
+### （二）组建开发
 ##### 1. 可视化监控
     cloud:admin-server
-    （1）无需改动代码
-    （2）修改 yml 配置即可
+    （1）需定置化开发一整套 UI 界面及相关接口
+    （2）需定置化开发收集 cloud 中各服务的信息，并提供接口给 UI 界面
+    （3）修改 yml 配置
 ##### 2. 服务注册发现（支持高可用eureka集群）
     cloud:eureka-server
     （1）无需改动代码
@@ -127,7 +124,7 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     需依赖 git 环境，如有需要参照网上教程
 ##### 4. 网关服务
     cloud:gateway-server
-    （1）待完善自定义开发限流、降级断流，需官方支持；
+    （1）需自定义限流策略
     （1）修改 yml 进行路由配置
 ##### 5. 认证服务
     cloud:oauth-server
