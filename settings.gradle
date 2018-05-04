@@ -1,4 +1,4 @@
-rootProject.name = 'pers-acp'
+rootProject.name = 'acp'
 include 'acp:acp-client'
 findProject(':acp:acp-client')?.name = 'acp-client'
 include 'acp:acp-message'
