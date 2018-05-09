@@ -7,6 +7,7 @@
     5. 动态维护网关路由
     6. oauth用户、客户端、角色、权限配置
     7. 日志监控
+ - 灰度发布服务
  - oauth-server 完善：
     1. AuthorizationServerConfig 中将 token 持久化到 redis 进行存储（待官方支持）
  - gateway-server 定制开发：
