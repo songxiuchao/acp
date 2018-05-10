@@ -20,7 +20,7 @@ versions += [
         ojdbc           : "12.1.0.2",
         postgresql      : "42.2.2",
 
-        spring_boot     : "2.0.1.RELEASE",
+        spring_boot     : "2.0.2.RELEASE",
         spring_cloud    : "Finchley.RC1",
         swagger         : "2.9.0"
 ]
