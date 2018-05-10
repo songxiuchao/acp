@@ -13,8 +13,7 @@ dependencies {
     compile "dom4j:dom4j:$versions.dom4j"
 
     // sql data base connection
-    compile "org.apache.tomcat:tomcat-jdbc:$versions.tomcat_pool"
-    compile "org.apache.tomcat:tomcat-juli:$versions.tomcat_pool"
+    compile "com.zaxxer:HikariCP:$versions.hikaricp"
     compile "mysql:mysql-connector-java:$versions.mysql"
     compile "com.microsoft.sqlserver:mssql-jdbc:$versions.mssqljdbc"
     compile "com.hynnet:oracle-driver-ojdbc:$versions.ojdbc"

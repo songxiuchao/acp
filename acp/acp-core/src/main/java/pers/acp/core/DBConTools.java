@@ -1,7 +1,7 @@
 package pers.acp.core;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.tomcat.jdbc.pool.DataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import pers.acp.core.config.instance.DBProperties;
 import pers.acp.core.dbconnection.ConnectionFactory;
 import pers.acp.core.dbconnection.DBType;
@@ -64,7 +64,7 @@ public final class DBConTools {
      *
      * @return 数据库连接资源
      */
-    public DataSource getDataSource() {
+    public HikariDataSource getDataSource() {
         return dbcon.getDataSource();
     }
 

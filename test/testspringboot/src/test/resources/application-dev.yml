@@ -32,19 +32,19 @@ spring:
 # ===============================
   datasource:
     primary:
-      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false
       username: root
       password: test
       driver-class-name: com.mysql.jdbc.Driver
-      dialect: org.hibernate.dialect.MySQL55Dialect
-      scanpackage: pers.acp.test.application.entity.primary
+      data-source-properties.dialect: org.hibernate.dialect.MySQL55Dialect
+      data-source-properties.scanpackage: pers.acp.test.application.entity.primary
     pg:
-      url: jdbc:postgresql://127.0.0.1:5432/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+      jdbc-url: jdbc:postgresql://127.0.0.1:5432/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
       username: postgres
       password: test
       driver-class-name: org.postgresql.Driver
-      dialect: org.hibernate.dialect.PostgreSQL9Dialect
-      scanpackage: pers.acp.test.application.entity.pg
+      data-source-properties.dialect: org.hibernate.dialect.PostgreSQL9Dialect
+      data-source-properties.scanpackage: pers.acp.test.application.entity.pg
 # ===============================
 # = Controller Log Config
 # ===============================

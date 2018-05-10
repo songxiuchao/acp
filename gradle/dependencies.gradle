@@ -14,7 +14,7 @@ versions += [
         xstream         : "1.4.10",
         jackson_databind: "2.9.5",
 
-        tomcat_pool     : "8.5.29",
+        hikaricp        : "2.7.9",
         mysql           : "5.1.46",
         mssqljdbc       : "6.4.0.jre8",
         ojdbc           : "12.1.0.2",
