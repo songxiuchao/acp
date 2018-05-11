@@ -4,7 +4,6 @@ dependencies {
     compile "org.apache.commons:commons-text:$versions.commons_text"
     compile "org.apache.commons:commons-lang3:$versions.commons_lang3"
     compile "org.slf4j:slf4j-api:$versions.slf4j"
-    compile "org.slf4j:log4j-over-slf4j:$versions.slf4j"
     compile "ch.qos.logback:logback-classic:$versions.logback"
     compile "com.fasterxml.jackson.core:jackson-databind:$versions.jackson_databind"
     compile "org.bouncycastle:bcmail-jdk15on:$versions.bouncycastle"
