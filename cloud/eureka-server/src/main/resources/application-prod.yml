@@ -22,6 +22,7 @@ spring:
 # = Eureka Config
 # ===============================
 eureka:
+  environment: dev
   server:
     enable-self-preservation: true
     eviction-interval-timer-in-ms: 3000
