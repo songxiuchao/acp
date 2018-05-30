@@ -22,6 +22,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 自定义 Feign Hystrix 并发策略
+ * 解决 Feign 开启 Hystrix 后 requestAttributes 无法共享传递的问题
+ *
  * @author zhangbin by 12/04/2018 14:28
  * @since JDK1.8
  */
@@ -38,20 +41,13 @@ public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy 
             if (this.delegate instanceof FeignHystrixConcurrencyStrategy) {
                 return;
             }
-            HystrixCommandExecutionHook commandExecutionHook = HystrixPlugins
-                    .getInstance().getCommandExecutionHook();
-            HystrixEventNotifier eventNotifier = HystrixPlugins.getInstance()
-                    .getEventNotifier();
-            HystrixMetricsPublisher metricsPublisher = HystrixPlugins.getInstance()
-                    .getMetricsPublisher();
-            HystrixPropertiesStrategy propertiesStrategy = HystrixPlugins.getInstance()
-                    .getPropertiesStrategy();
-            this.logCurrentStateOfHystrixPlugins(eventNotifier, metricsPublisher,
-                    propertiesStrategy);
+            HystrixEventNotifier eventNotifier = HystrixPlugins.getInstance().getEventNotifier();
+            HystrixMetricsPublisher metricsPublisher = HystrixPlugins.getInstance().getMetricsPublisher();
+            HystrixPropertiesStrategy propertiesStrategy = HystrixPlugins.getInstance().getPropertiesStrategy();
+            this.logCurrentStateOfHystrixPlugins(eventNotifier, metricsPublisher, propertiesStrategy);
             HystrixPlugins.reset();
             HystrixPlugins.getInstance().registerConcurrencyStrategy(this);
-            HystrixPlugins.getInstance()
-                    .registerCommandExecutionHook(commandExecutionHook);
+            HystrixPlugins.getInstance().registerCommandExecutionHook(HystrixPlugins.getInstance().getCommandExecutionHook());
             HystrixPlugins.getInstance().registerEventNotifier(eventNotifier);
             HystrixPlugins.getInstance().registerMetricsPublisher(metricsPublisher);
             HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
@@ -82,8 +78,7 @@ public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy 
                                             HystrixProperty<Integer> maximumPoolSize,
                                             HystrixProperty<Integer> keepAliveTime, TimeUnit unit,
                                             BlockingQueue<Runnable> workQueue) {
-        return this.delegate.getThreadPool(threadPoolKey, corePoolSize, maximumPoolSize,
-                keepAliveTime, unit, workQueue);
+        return this.delegate.getThreadPool(threadPoolKey, corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
     }
 
     @Override

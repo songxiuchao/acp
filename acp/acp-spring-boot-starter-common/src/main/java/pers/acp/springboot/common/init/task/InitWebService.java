@@ -1,4 +1,4 @@
-package pers.acp.springboot.common.init;
+package pers.acp.springboot.common.init.task;
 
 import pers.acp.springboot.core.soap.base.IWebService;
 import pers.acp.springboot.core.soap.config.WSConfig;
@@ -7,11 +7,11 @@ import pers.acp.core.log.LogFactory;
 import javax.xml.ws.Endpoint;
 import java.util.ArrayList;
 
-class InitWebService {
+public class InitWebService {
 
     private static final LogFactory log = LogFactory.getInstance(InitWebService.class);// 日志对象
 
-    static void publishWebService() {
+    public static void publishWebService() {
         try {
             WSConfig wsConfig = WSConfig.getInstance();
             if (wsConfig != null) {

@@ -1,4 +1,4 @@
-package pers.acp.springboot.common.init;
+package pers.acp.springboot.common.init.task;
 
 import pers.acp.springboot.core.file.config.SFTPConfig;
 import pers.acp.springboot.core.file.sftp.SFTPServer;
@@ -12,14 +12,14 @@ import java.util.List;
  * Created by zhangbin on 2016/12/21.
  * 启动SFTP服务
  */
-class InitSFtpServer {
+public class InitSFtpServer {
 
     /**
      * 日志对象
      */
     private static final LogFactory log = LogFactory.getInstance(InitFtpServer.class);
 
-    static void startSFtpServer() {
+    public static void startSFtpServer() {
         log.info("start sftp servers...");
         try {
             SFTPConfig sftpConfig = SFTPConfig.getInstance();

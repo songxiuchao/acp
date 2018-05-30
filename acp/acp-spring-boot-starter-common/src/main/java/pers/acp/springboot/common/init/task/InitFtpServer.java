@@ -1,4 +1,4 @@
-package pers.acp.springboot.common.init;
+package pers.acp.springboot.common.init.task;
 
 import pers.acp.springboot.core.file.config.FTPConfig;
 import pers.acp.springboot.core.file.ftp.FTPServer;
@@ -12,14 +12,14 @@ import java.util.List;
  * Created by zhangbin on 2016/12/20.
  * 初始化FTP服务器
  */
-class InitFtpServer {
+public class InitFtpServer {
 
     /**
      * 日志对象
      */
     private static final LogFactory log = LogFactory.getInstance(InitFtpServer.class);
 
-    static void startFtpServer() {
+    public static void startFtpServer() {
         log.info("start ftp servers...");
         try {
             FTPConfig ftpConfig = FTPConfig.getInstance();

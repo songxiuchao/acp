@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class AcpCommonBeansDefine {
 
+    /**
+     * 注册定时任务容器实例
+     *
+     * @return 线程池调度实例
+     */
     @Bean
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         return new ThreadPoolTaskScheduler();
