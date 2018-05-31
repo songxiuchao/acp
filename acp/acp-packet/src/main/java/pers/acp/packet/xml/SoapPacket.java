@@ -27,6 +27,8 @@ public class SoapPacket {
 
     private Map<String, String> patameterMap = new HashMap<>();
 
+    private String prefix = "";
+
     private String returnName = "return";
 
     public SoapPacket soapType(SoapType soapType) {
@@ -41,6 +43,11 @@ public class SoapPacket {
 
     public SoapPacket methodName(String methodName) {
         this.methodName = methodName;
+        return this;
+    }
+
+    public SoapPacket prefix(String prefix) {
+        this.prefix = prefix;
         return this;
     }
 
@@ -73,12 +80,23 @@ public class SoapPacket {
         SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
         SOAPBody body = envelope.getBody();
 
-        QName ename = new QName(nameSpace, methodName, "n1");
+        QName ename = new QName(nameSpace, methodName, prefix);
         SOAPBodyElement ele = body.addBodyElement(ename);
         for (Map.Entry<String, String> entry : patameterMap.entrySet()) {
             ele.addChildElement(entry.getKey()).setValue(entry.getValue());
         }
         return msg;
+    }
+
+    public static String soapMessageToString(SOAPMessage msg) {
+        try {
+            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+            msg.writeTo(bout);
+            return bout.toString();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return "";
+        }
     }
 
     /**
@@ -88,10 +106,7 @@ public class SoapPacket {
      */
     public String getSOAPMessageString() {
         try {
-            SOAPMessage msg = buildSOAPMessage();
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            msg.writeTo(bout);
-            return bout.toString();
+            return soapMessageToString(buildSOAPMessage());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return "";

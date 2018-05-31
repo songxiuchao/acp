@@ -34,6 +34,8 @@ public class WebServiceClient {
 
     private Map<String, String> patameterMap;
 
+    private String prefix = "";
+
     private String returnName = "return";
 
     private int timeout = MAX_TIMEOUT;
@@ -102,9 +104,12 @@ public class WebServiceClient {
                 .nameSpace(nameSpace)
                 .methodName(methodName)
                 .patameterMap(patameterMap)
+                .prefix(prefix)
                 .returnName(returnName);
         SOAPMessage msg = soapPacket.buildSOAPMessage();
+        log.debug("request = " + soapPacket.getSOAPMessageString());
         SOAPMessage response = dispatch.invoke(msg);
+        log.debug("response = " + SoapPacket.soapMessageToString(response));
         return soapPacket.getReturnString(response);
     }
 
@@ -189,5 +194,13 @@ public class WebServiceClient {
      */
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 }
