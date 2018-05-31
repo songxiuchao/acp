@@ -79,7 +79,6 @@ public class SoapPacket {
         SOAPMessage msg = MessageFactory.newInstance(soapType.getName()).createMessage();
         SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
         SOAPBody body = envelope.getBody();
-
         QName ename = new QName(nameSpace, methodName, prefix);
         SOAPBodyElement ele = body.addBodyElement(ename);
         for (Map.Entry<String, String> entry : patameterMap.entrySet()) {
@@ -88,11 +87,18 @@ public class SoapPacket {
         return msg;
     }
 
-    public static String soapMessageToString(SOAPMessage msg) {
+    /**
+     * SOAP消息转为字符串
+     *
+     * @param msg     消息对象
+     * @param charset 字符集
+     * @return 字符串内容
+     */
+    public static String soapMessageToString(SOAPMessage msg, String charset) {
         try {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             msg.writeTo(bout);
-            return bout.toString();
+            return bout.toString(charset);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return "";
@@ -102,11 +108,12 @@ public class SoapPacket {
     /**
      * 获取WebService请求报文（SOAP+XML）
      *
+     * @param charset 字符集
      * @return 信息字符串
      */
-    public String getSOAPMessageString() {
+    public String getSOAPMessageString(String charset) {
         try {
-            return soapMessageToString(buildSOAPMessage());
+            return soapMessageToString(buildSOAPMessage(), charset);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return "";

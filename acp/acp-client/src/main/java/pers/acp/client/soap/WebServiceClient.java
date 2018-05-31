@@ -107,9 +107,9 @@ public class WebServiceClient {
                 .prefix(prefix)
                 .returnName(returnName);
         SOAPMessage msg = soapPacket.buildSOAPMessage();
-        log.debug("request = " + soapPacket.getSOAPMessageString());
+        log.debug("request = " + soapPacket.getSOAPMessageString(CommonTools.getDefaultCharset()));
         SOAPMessage response = dispatch.invoke(msg);
-        log.debug("response = " + SoapPacket.soapMessageToString(response));
+        log.debug("response = " + SoapPacket.soapMessageToString(response, CommonTools.getDefaultCharset()));
         return soapPacket.getReturnString(response);
     }
 
