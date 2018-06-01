@@ -18,14 +18,19 @@ import java.util.Set;
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {
 
+    /**
+     * 根据 username 获取用户信息
+     *
+     * @param username 用户名
+     * @return 用户对象
+     * @throws UsernameNotFoundException 找不到用户信息异常
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));//角色编码
         grantedAuthorities.add(new SimpleGrantedAuthority("ALL"));//权限编码
-        return new User(username, username,
-                true, true, true,
-                true, grantedAuthorities);
+        return new User(username, username, true, true, true, true, grantedAuthorities);
     }
 
 }

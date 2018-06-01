@@ -13,10 +13,16 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
+    /**
+     * http 验证策略配置
+     *
+     * @param http http 安全验证对象
+     * @throws Exception 异常
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers(
+        // match 匹配的url，赋予全部权限（不进行拦截）
+        http.csrf().disable().authorizeRequests().antMatchers(
                 "/error",
                 "/download",
                 "/actuator",
