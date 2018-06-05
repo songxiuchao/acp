@@ -7,7 +7,6 @@
     5. 动态维护网关路由
     6. oauth用户、客户端、角色、权限配置
     7. 日志监控
- - 灰度发布服务
  - gateway-server 定制开发：
     1. 增加限流（使用 redis）
         1. 参考 112.7 RequestRateLimiter GatewayFilter Factory
