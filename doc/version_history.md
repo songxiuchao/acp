@@ -1,6 +1,6 @@
 ## 版本更新记录
-##### 4.1.0
-    1. SpringBoot 升级至 2.0.2
+##### 4.0.1
+    1. SpringBoot 升级至 2.0.2.RELEASE
     2. 修改数据源配置，连接池改用 HikariCP，去除 tomcat 连接池依赖
     3. 升级 spring-cloud 版本为 Finchley.RC2
     4. 增加相关注释
