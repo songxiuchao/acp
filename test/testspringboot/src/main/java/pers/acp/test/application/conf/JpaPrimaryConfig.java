@@ -1,9 +1,11 @@
 package pers.acp.test.application.conf;
 
+import com.zaxxer.hikari.HikariConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +15,9 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import pers.acp.springboot.core.datasource.AcpDataSource;
 
 import javax.persistence.EntityManager;
+import javax.sql.DataSource;
 import java.util.Objects;
 
 /**
@@ -39,17 +41,24 @@ public class JpaPrimaryConfig {
     @Primary
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.primary")
-    public AcpDataSource primaryDataSource() {
-        return new AcpDataSource();
+    public DataSource primaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Primary
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.primary")
+    public HikariConfig primaryConfig() {
+        return new HikariConfig();
     }
 
     @Primary
     @Bean(name = "entityManagerFactoryPrimary")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary(EntityManagerFactoryBuilder builder) {
-        AcpDataSource primaryDS = primaryDataSource();
-        jpaProperties.getProperties().put("hibernate.dialect", primaryDS.getDialect());
-        return builder.dataSource(primaryDS)
-                .packages(primaryDS.getScanpackage().split(","))
+        HikariConfig hikariConfig = primaryConfig();
+        jpaProperties.getProperties().put("hibernate.dialect", hikariConfig.getDataSourceProperties().getProperty("dialect"));
+        return builder.dataSource(primaryDataSource())
+                .packages(hikariConfig.getDataSourceProperties().getProperty("scanpackage").split(","))
                 .persistenceUnit("persistenceUnitPrimary")
                 .properties(jpaProperties.getHibernateProperties(new HibernateSettings()))
                 .build();

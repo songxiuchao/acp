@@ -14,6 +14,11 @@ import pers.acp.springcloud.gateway.vo.ErrorVO;
 @RestController
 public class CustomerHystrixErrorController {
 
+    /**
+     * 服务断路 Hystrix 响应
+     *
+     * @return ResponseEntity
+     */
     @GetMapping(value = "/hystrixhandle", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Object> hystrixHandle() {
         ErrorVO errorVO = new ErrorVO();

@@ -22,8 +22,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * Create by zhangbin on 2017-11-21 10:06
  * controller拦截器
+ *
+ * @author zhangbin by 21/11/2017 10:06
+ * @since JDK1.8
  */
 @Aspect
 @Component

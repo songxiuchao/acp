@@ -1,25 +1,25 @@
-package pers.acp.springboot.common.init;
+package pers.acp.springboot.common.init.task;
 
 import pers.acp.springboot.core.socket.base.BaseSocketHandle;
 import pers.acp.springboot.core.socket.config.ListenConfig;
-import pers.acp.springboot.core.socket.config.UdpConfig;
-import pers.acp.springboot.core.socket.udp.UdpServer;
+import pers.acp.springboot.core.socket.config.TcpConfig;
+import pers.acp.springboot.core.socket.tcp.TcpServer;
 import pers.acp.springboot.core.tools.SpringBeanFactory;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
-import java.util.ArrayList;
+import java.util.List;
 
-final class InitUdpServer {
+public final class InitTcpServer {
 
-    private static final LogFactory log = LogFactory.getInstance(InitUdpServer.class);// 日志对象
+    private static final LogFactory log = LogFactory.getInstance(InitTcpServer.class);// 日志对象
 
-    static void startUdpServer() {
-        log.info("start udp listen service...");
+    public static void startTcpServer() {
+        log.info("start tcp listen service...");
         try {
-            UdpConfig udpConfig = UdpConfig.getInstance();
-            if (udpConfig != null) {
-                ArrayList<ListenConfig> listens = (ArrayList<ListenConfig>) udpConfig.getListen();
+            TcpConfig tcpConfig = TcpConfig.getInstance();
+            if (tcpConfig != null) {
+                List<ListenConfig> listens = tcpConfig.getListen();
                 if (listens != null) {
                     for (ListenConfig listen : listens) {
                         if (listen.isEnabled()) {
@@ -27,19 +27,19 @@ final class InitUdpServer {
                             if (!CommonTools.isNullStr(beanName)) {
                                 Object responseBean = SpringBeanFactory.getBean(listen.getResponseBean());
                                 if (responseBean instanceof BaseSocketHandle) {
-                                    BaseSocketHandle udpResponse = (BaseSocketHandle) responseBean;
+                                    BaseSocketHandle tcpResponse = (BaseSocketHandle) responseBean;
                                     int port = listen.getPort();
-                                    UdpServer server = new UdpServer(port, listen, udpResponse);
+                                    TcpServer server = new TcpServer(port, listen, tcpResponse);
                                     Thread sub = new Thread(server);
                                     sub.setDaemon(true);
                                     sub.start();
-                                    log.info("start udp listen service success [" + listen.getName() + "] , port:" + listen.getPort());
+                                    log.info("start tcp listen service success [" + listen.getName() + "] , port:" + listen.getPort());
                                 } else {
-                                    log.error("udp response bean [" + beanName + "] is invalid!");
+                                    log.error("tcp response bean [" + beanName + "] is invalid!");
                                 }
                             }
                         } else {
-                            log.info("udp listen service is disabled [" + listen.getName() + "]");
+                            log.info("tcp listen service is disabled [" + listen.getName() + "]");
                         }
                     }
                 }

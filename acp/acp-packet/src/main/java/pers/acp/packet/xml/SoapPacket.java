@@ -27,6 +27,8 @@ public class SoapPacket {
 
     private Map<String, String> patameterMap = new HashMap<>();
 
+    private String prefix = "";
+
     private String returnName = "return";
 
     public SoapPacket soapType(SoapType soapType) {
@@ -41,6 +43,11 @@ public class SoapPacket {
 
     public SoapPacket methodName(String methodName) {
         this.methodName = methodName;
+        return this;
+    }
+
+    public SoapPacket prefix(String prefix) {
+        this.prefix = prefix;
         return this;
     }
 
@@ -72,8 +79,7 @@ public class SoapPacket {
         SOAPMessage msg = MessageFactory.newInstance(soapType.getName()).createMessage();
         SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
         SOAPBody body = envelope.getBody();
-
-        QName ename = new QName(nameSpace, methodName, "n1");
+        QName ename = new QName(nameSpace, methodName, prefix);
         SOAPBodyElement ele = body.addBodyElement(ename);
         for (Map.Entry<String, String> entry : patameterMap.entrySet()) {
             ele.addChildElement(entry.getKey()).setValue(entry.getValue());
@@ -82,16 +88,32 @@ public class SoapPacket {
     }
 
     /**
-     * 获取WebService请求报文（SOAP+XML）
+     * SOAP消息转为字符串
      *
-     * @return 信息字符串
+     * @param msg     消息对象
+     * @param charset 字符集
+     * @return 字符串内容
      */
-    public String getSOAPMessageString() {
+    public static String soapMessageToString(SOAPMessage msg, String charset) {
         try {
-            SOAPMessage msg = buildSOAPMessage();
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             msg.writeTo(bout);
-            return bout.toString();
+            return bout.toString(charset);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return "";
+        }
+    }
+
+    /**
+     * 获取WebService请求报文（SOAP+XML）
+     *
+     * @param charset 字符集
+     * @return 信息字符串
+     */
+    public String getSOAPMessageString(String charset) {
+        try {
+            return soapMessageToString(buildSOAPMessage(), charset);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return "";

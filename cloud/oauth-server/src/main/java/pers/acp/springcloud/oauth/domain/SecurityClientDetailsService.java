@@ -20,6 +20,9 @@ public class SecurityClientDetailsService implements ClientDetailsService {
 
     private ClientDetailsService clientDetailsService = null;
 
+    /**
+     * 初始化客户端信息
+     */
     @PostConstruct
     public void init() {
         InMemoryClientDetailsServiceBuilder builder = new InMemoryClientDetailsServiceBuilder();

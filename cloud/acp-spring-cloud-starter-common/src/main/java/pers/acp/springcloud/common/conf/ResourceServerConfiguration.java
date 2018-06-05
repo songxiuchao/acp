@@ -19,6 +19,8 @@ import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.log.LogFactory;
 
 /**
+ * Oauth2 资源服务配置
+ *
  * @author zhangbin by 11/04/2018 15:13
  * @since JDK1.8
  */
@@ -38,6 +40,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         this.resourceServerProperties = resourceServerProperties;
     }
 
+    /**
+     * 自定义权限验证服务，远程调用认证服务进行验证
+     *
+     * @return 远程 token 认证服务实例
+     */
     @Bean
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
@@ -65,15 +72,26 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         return services;
     }
 
+    /**
+     * 设置 token 验证服务
+     *
+     * @param resources 资源服务安全验证配置对象
+     */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         resources.tokenServices(remoteTokenServices());
     }
 
+    /**
+     * http 验证策略配置
+     *
+     * @param http http 安全验证对象
+     * @throws Exception 异常
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers(
+        // match 匹配的url，赋予全部权限（不进行拦截）
+        http.csrf().disable().authorizeRequests().antMatchers(
                 "/error",
                 "/download",
                 "/actuator",

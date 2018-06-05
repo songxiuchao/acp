@@ -47,14 +47,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService())
-                .passwordEncoder(userPasswordEncoder);
+        auth.userDetailsService(userDetailsService()).passwordEncoder(userPasswordEncoder);
     }
 
+    /**
+     * http 验证策略配置
+     *
+     * @param http http 安全验证对象
+     * @throws Exception 异常
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers(
+        http.csrf().disable().authorizeRequests().antMatchers(
                 "/error",
                 "/download",
                 "/actuator",

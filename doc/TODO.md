@@ -7,8 +7,6 @@
     5. 动态维护网关路由
     6. oauth用户、客户端、角色、权限配置
     7. 日志监控
- - oauth-server 完善：
-    1. AuthorizationServerConfig 中将 token 持久化到 redis 进行存储（待官方支持）
  - gateway-server 定制开发：
     1. 增加限流（使用 redis）
         1. 参考 112.7 RequestRateLimiter GatewayFilter Factory

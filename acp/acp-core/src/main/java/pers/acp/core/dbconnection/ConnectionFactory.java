@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang3.StringUtils;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
 import pers.acp.core.config.instance.DBProperties;
 import pers.acp.core.dbconnection.instance.BaseDBInstance;
 import pers.acp.core.exceptions.ConfigException;
@@ -37,9 +37,9 @@ public final class ConnectionFactory {
 
     private DBType dbType;
 
-    private static ConcurrentHashMap<String, DataSource> dsMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, HikariDataSource> dsMap = new ConcurrentHashMap<>();
 
-    private DataSource ds = null;
+    private HikariDataSource ds = null;
 
     private Connection connection = null;
 
@@ -74,20 +74,20 @@ public final class ConnectionFactory {
         if (dbProperties != null) {
             dbType = DBType.getEnum(dbProperties.getDbTypeByDbNo(connectionNo));
             if (!dbType.isNoSQL()) {
-                DataSource dataSource = new DataSource();
-                dataSource.getPoolProperties().setUrl(dbProperties.getJdbcUrlByDbNo(connectionNo));
-                dataSource.getPoolProperties().setUsername(dbProperties.getUsernameByDbNo(connectionNo));
-                dataSource.getPoolProperties().setPassword(dbProperties.getPasswordByDbNo(connectionNo));
-                dataSource.getPoolProperties().setName(dbProperties.getPoolNameByDbNo(connectionNo));
-                String poolName = "BoneCP";
-                if (!CommonUtils.isNullStr(dataSource.getPoolProperties().getName())) {
-                    poolName = dataSource.getPoolProperties().getName();
+                HikariDataSource dataSource = new HikariDataSource();
+                dataSource.setJdbcUrl(dbProperties.getJdbcUrlByDbNo(connectionNo));
+                dataSource.setUsername(dbProperties.getUsernameByDbNo(connectionNo));
+                dataSource.setPassword(dbProperties.getPasswordByDbNo(connectionNo));
+                dataSource.setPoolName(dbProperties.getPoolNameByDbNo(connectionNo));
+                dataSource.setDriverClassName(dbProperties.getDriverClass(connectionNo));
+                String poolName = "Hikari";
+                if (!CommonUtils.isNullStr(dataSource.getPoolName())) {
+                    poolName = dataSource.getPoolName();
                 }
                 if (dsMap.containsKey(poolName)) {
                     ds = dsMap.get(poolName);
                 } else {
                     ds = dataSource;
-                    ds.getPoolProperties().setDriverClassName(dbProperties.getDriverClass(connectionNo));
                     dsMap.put(poolName, ds);
                 }
             }
@@ -121,7 +121,7 @@ public final class ConnectionFactory {
      *
      * @return 数据库连接资源
      */
-    public DataSource getDataSource() {
+    public HikariDataSource getDataSource() {
         return this.ds;
     }
 
@@ -1091,7 +1091,7 @@ public final class ConnectionFactory {
      * @return 数据库名称
      */
     public String getDbName() {
-        String url = ds.getPoolProperties().getUrl();
+        String url = ds.getJdbcUrl();
         String dbName = "";
         switch (dbType) {
             case MySQL:
