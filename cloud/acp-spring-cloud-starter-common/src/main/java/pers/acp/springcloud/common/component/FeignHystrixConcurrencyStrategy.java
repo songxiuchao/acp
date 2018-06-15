@@ -27,8 +27,10 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zhangbin by 12/04/2018 14:28
  * @since JDK1.8
+ * @deprecated 升级至 SpringBoot 2.0.3.RELEASE 版本后不再需要
  */
-@Component
+//@Component
+@Deprecated
 public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
