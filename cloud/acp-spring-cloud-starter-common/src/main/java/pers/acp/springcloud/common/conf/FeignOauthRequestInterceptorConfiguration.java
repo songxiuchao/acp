@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author zhangbin by 12/04/2018 10:13
  * @since JDK1.8
+ * @deprecated 升级至 SpringBoot 2.0.3.RELEASE 版本后不再需要
  */
-@Configuration
+//@Configuration
+@Deprecated
 public class FeignOauthRequestInterceptorConfiguration {
 
     /**
@@ -23,7 +25,7 @@ public class FeignOauthRequestInterceptorConfiguration {
      *
      * @return 自定义 Feign 请求拦截器实例
      */
-    @Bean
+//    @Bean
     public RequestInterceptor requestInterceptor() {
         return template -> {
             // 获取当前服务的 request 对象，将 header 中的 Authorization 传递给 feign 的 request 对象
