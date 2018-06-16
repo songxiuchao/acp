@@ -71,3 +71,13 @@ spring:
           args:
             name: commonHystrix
             fallbackUri: forward:/hystrixhandle
+      - id: atomic-hello
+        uri: lb://atomic-hello
+        predicates:
+        - Path=/api/hello/**
+        filters:
+        - StripPrefix=2
+        - name: Hystrix
+          args:
+            name: commonHystrix
+            fallbackUri: forward:/hystrixhandle
