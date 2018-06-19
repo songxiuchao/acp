@@ -3,6 +3,7 @@ package pers.acp.springcloud.common.annotation;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.lang.annotation.*;
 
@@ -17,5 +18,6 @@ import java.lang.annotation.*;
 @SpringCloudApplication
 @EnableFeignClients
 @EnableHystrix
+@EnableSwagger2
 public @interface AcpCloudAtomApplication {
 }
