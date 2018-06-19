@@ -7,7 +7,6 @@ import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategy;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestVariable;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestVariableLifecycle;
 import com.netflix.hystrix.strategy.eventnotifier.HystrixEventNotifier;
-import com.netflix.hystrix.strategy.executionhook.HystrixCommandExecutionHook;
 import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
@@ -27,10 +26,8 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zhangbin by 12/04/2018 14:28
  * @since JDK1.8
- * @deprecated 升级至 SpringBoot 2.0.3.RELEASE 版本后不再需要
  */
-//@Component
-@Deprecated
+@Component
 public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
@@ -49,7 +46,6 @@ public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy 
             this.logCurrentStateOfHystrixPlugins(eventNotifier, metricsPublisher, propertiesStrategy);
             HystrixPlugins.reset();
             HystrixPlugins.getInstance().registerConcurrencyStrategy(this);
-            HystrixPlugins.getInstance().registerCommandExecutionHook(HystrixPlugins.getInstance().getCommandExecutionHook());
             HystrixPlugins.getInstance().registerEventNotifier(eventNotifier);
             HystrixPlugins.getInstance().registerMetricsPublisher(metricsPublisher);
             HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
