@@ -27,7 +27,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 "/download",
                 "/actuator",
                 "/actuator/**",
-                "/oauth/**").permitAll();
+                "/oauth/**").permitAll()
+                .antMatchers("/**").authenticated();
     }
 
 }

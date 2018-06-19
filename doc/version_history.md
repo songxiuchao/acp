@@ -2,7 +2,8 @@
 ##### 4.0.3
     1. SpringBoot 升级至 2.0.3.RELEASE
     2. 更新 jupiter 版本为 5.2.0
-    3. 废弃自定义 FeignHystrixConcurrencyStrategy
+    3. 修改 httpSecurity 策略配置
+    4. 优化 Feign 客户端访问资源服务器的认证配置
 ##### 4.0.2
     1. SpringBoot 升级至 2.0.2.RELEASE
     2. 修改数据源配置，连接池改用 HikariCP，去除 tomcat 连接池依赖

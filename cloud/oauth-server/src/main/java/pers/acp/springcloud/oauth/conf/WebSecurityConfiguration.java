@@ -63,7 +63,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/download",
                 "/actuator",
                 "/actuator/**",
-                "/oauth/**").permitAll();
+                "/oauth/**").permitAll()
+                .antMatchers("/**").authenticated();
     }
 
 }

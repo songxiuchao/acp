@@ -1,5 +1,6 @@
 package pers.acp.springcloud.common.annotation;
 
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -18,6 +19,7 @@ import java.lang.annotation.*;
 @SpringCloudApplication
 @EnableFeignClients
 @EnableHystrix
+@EnableOAuth2Sso
 @EnableSwagger2
 public @interface AcpCloudAtomApplication {
 }

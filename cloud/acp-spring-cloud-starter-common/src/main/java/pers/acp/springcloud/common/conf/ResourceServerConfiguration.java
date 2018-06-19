@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProper
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springcloud.common.enumerations.RestPrefix;
 
 /**
  * Oauth2 资源服务配置
@@ -45,6 +47,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      *
      * @return 远程 token 认证服务实例
      */
+    @Primary
     @Bean
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
@@ -103,7 +106,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 "/swagger-ui.html",
                 "/webjars/**",
                 "/swagger-resources/configuration/ui",
-                "**.stream").permitAll();
+                "**.stream",
+                RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
+                .antMatchers("/**").authenticated();
     }
 
 }
