@@ -1,10 +1,10 @@
 ## 版本更新记录
-##### 4.0.3
+##### v4.0.3
     1. SpringBoot 升级至 2.0.3.RELEASE
     2. 更新 jupiter 版本为 5.2.0
     3. 修改 httpSecurity 策略配置
     4. 优化 Feign 客户端访问资源服务器的认证配置
-##### 4.0.2
+##### v4.0.2
     1. SpringBoot 升级至 2.0.2.RELEASE
     2. 修改数据源配置，连接池改用 HikariCP，去除 tomcat 连接池依赖
     3. 升级 spring-cloud 版本为 Finchley.RC2
@@ -12,7 +12,7 @@
     5. 修复 acp-client 中 webservice client 调用异常的bug，增加 webservice client 用法 demo
     6. oauth-server 中，token 持久化到 redis
     7. 修改 bouncycastle 依赖版本
-##### 4.0.0
+##### v4.0.0
     1. 优化 gradle 脚本，spring cloud 版本号写入 dependencies.gradle；删除 cloud 模块下的 build.gradle
     2. 升级 spring-cloud 版本为 Finchley.RC1
     3. 优化 hystrix 断路监控
@@ -26,7 +26,7 @@
     11. 集成 junit5 单元测试，并增加测试用例编写，test:testspringboot、test:testkotlin
     12. 取消 specification-arg-resolver 集成
     13. 增加 scala demo, test:testscala
-##### 3.9.0
+##### v3.9.0
     1. 升级 spring-cloud 版本为 Finchley.M9
     2. spring cloud 网关服务由 zuul 更换为 spring-cloud-gateway
     2. gateway-server 增加路由配置
@@ -45,13 +45,13 @@
     15. 增加 controller-aspect 配置项
     16. 拆分 acp-core 中的 orm 自定义部分，新增 acp-core-orm 模块
     17. 增加文档
-##### 3.8.0
+##### v3.8.0
     1. cloud 下新增 acp-spring-cloud-starter-common 模块
     2. 优化 httpclient 封装
     3. 升级 spring-cloud 版本为 Finchley.M8，完美兼容 spring-boot 2.0.0.RELEASE
     4. 去除 zipkin-server 模块
     5. 更新数据库驱动包版本
-##### 3.7.0
+##### v3.7.0
     1. PackageTools 从 acp-common-spring-boot-starter 模块移入 acp-spring-boot-starter 模块中
     2. gateway 增加路由熔断逻辑
     3. 增加熔断聚合监控
@@ -62,15 +62,15 @@
     8. 优化 acp-core 配置文件加载、读取
     9. acp-common-spring-boot-starter 名称变更为 acp-spring-boot-starter-common
     10. 优化 acp-spring-boot-starter-common 模块初始化预加载逻辑，找不到配置文件的情况下日志提醒，并且不开启其他服务，开发任何springboot应用都可直接引用
-##### 3.6.0
+##### v3.6.0
     1. test:testspringboot 模块增加 docker 镜像打包 demo
     2. 优化cloud下各组建 demo
-##### 3.5.0
+##### v3.5.0
     1. cloud 增加 admin-server 模块
     2. 统一设置 cloud 模块下各子模块依赖的 spring-boot 版本号
     3. 调整acp下各模块依赖关系和代码
-##### 3.0.0
+##### v3.0.0
     1. 升级 spring-boot 版本至 1.5.9.RELEASE
     2. 增加模块 acp-common-spring-boot-starter
-##### 2.0.0
+##### v2.0.0
     1. 整合spring-boot
