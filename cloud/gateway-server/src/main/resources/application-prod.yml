@@ -45,6 +45,8 @@ ribbon:
 spring:
   thymeleaf:
     cache: false
+  redis:
+    url: redis://127.0.0.1:6379
   cloud:
 # ===============================
 # = GateWay Config
@@ -81,3 +83,8 @@ spring:
           args:
             name: commonHystrix
             fallbackUri: forward:/hystrixhandle
+        - name: RequestRateLimiter
+          args:
+            key-resolver: "#{@userKeyResolver}"
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20

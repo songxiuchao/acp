@@ -1,4 +1,5 @@
 # acp 
+###### v4.0.4
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件版本及官方文档
 - [Spring Boot 2.0.3.RELEASE](https://projects.spring.io/spring-boot)

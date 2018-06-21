@@ -1,7 +1,8 @@
 ## 版本更新记录
 ##### v4.0.4
     1. SpringCloud 升级至 Finchley.RELEASE
-    2. 更新 TODO.md 文档
+    2. gateway-server 增加限流配置
+    3. 更新 TODO.md 文档
 ##### v4.0.3
     1. SpringBoot 升级至 2.0.3.RELEASE
     2. 更新 jupiter 版本为 5.2.0
