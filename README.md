@@ -1,5 +1,5 @@
 # acp 
-###### v4.0.4
+###### v4.0.5
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件版本及官方文档
 - [Spring Boot 2.0.3.RELEASE](https://projects.spring.io/spring-boot)
@@ -93,7 +93,7 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ##### 4. cloud:gateway-server 
     网关服务
 ##### 5. cloud:oauth-server 
-统一认证服务：
+    统一认证服务：
 
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
@@ -105,11 +105,13 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 
 [查看认证过程](doc/oauth2.0认证.md)
 
-##### 6. cloud:helloworld 
+##### 6. cloud:log-server
+    日志服务，使用 kafka 作为日志消息队列
+##### 7. cloud:helloworld 
     原子服务，分别调用 hello 和 world
-##### 7. cloud:hello 
+##### 8. cloud:hello 
     原子服务
-##### 8. cloud:world 
+##### 9. cloud:world 
     原子服务
 ### （二）组建开发
 ##### 1. 可视化监控
@@ -126,14 +128,16 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ##### 4. 网关服务
     cloud:gateway-server
     （1）需自定义限流策略
-    （1）修改 yml 进行路由配置
+    （2）修改 yml 进行路由配置
 ##### 5. 认证服务
     cloud:oauth-server
     （1）需定制 UserPasswordEncoder 用户密码编码器，配置进 WebSecurityConfiguration
     （2）需定制用户（信息、角色、权限）初始化和查询方式 SecurityUserDetailsService，配置进 AuthorizationServerConfiguration
     （3）需定制客户端（信息）初始化和查询方式 SecurityClientDetailsService，配置进 AuthorizationServerConfiguration
     （4）需定制 token 持久化方式（默认内存），配置进 AuthorizationServerConfiguration
-##### 6. 原子服务
+##### 6. 日志服务
+    （1）修改 yml kafka 相关配置
+##### 7. 原子服务
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）参考 四、开发 SpringBoot 应用
     （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置

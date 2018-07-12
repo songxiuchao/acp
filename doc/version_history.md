@@ -1,4 +1,8 @@
 ## 版本更新记录
+##### v4.0.5
+    1. kotlin 更新至 1.2.51
+    2. cloud 模块下新增 log-server，统一记录日志服务，从 kafka 消费记录日志的消息
+    3. cloud 模块下的 acp-spring-cloud-starter-common 新增记录日志实例，向 kafka 发送记录日志的消息
 ##### v4.0.4
     1. SpringCloud 升级至 Finchley.RELEASE
     2. gateway-server 增加限流配置

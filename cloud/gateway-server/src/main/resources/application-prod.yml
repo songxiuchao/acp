@@ -38,7 +38,7 @@ ribbon:
   ServerListRefreshInterval: 5000
   eager-load:
     enabled: true
-    clients: server-oauth2,atomic-helloworld
+    clients: server-oauth2,atomic-helloworld,atomic-hello
 # ===============================
 # = Spring Config
 # ===============================
