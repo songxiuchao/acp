@@ -1,6 +1,6 @@
 debug: false
 server:
-  port: 0
+  port: 9003
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
@@ -80,6 +80,7 @@ hystrix:
             timeoutInMilliseconds: 11000
 ribbon:
   ServerListRefreshInterval: 5000
+# 开启懒加载后，如果使用随机端口，注册到 eureka 的端口号永远都是 0，必须使用固定端口号才行
   eager-load:
     enabled: true
     clients: atomic-hello,atomic-world

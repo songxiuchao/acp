@@ -1,6 +1,6 @@
 debug: false
 server:
-  port: 0
+  port: 8999
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
