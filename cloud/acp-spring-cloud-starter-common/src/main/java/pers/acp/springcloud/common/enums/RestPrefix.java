@@ -1,4 +1,4 @@
-package pers.acp.springcloud.common.enumerations;
+package pers.acp.springcloud.common.enums;
 
 /**
  * @author zhangbin by 19/06/2018 18:48

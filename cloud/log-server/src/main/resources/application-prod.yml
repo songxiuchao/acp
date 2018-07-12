@@ -35,6 +35,39 @@ spring:
           destination: test-log
           group: log-server-group
           content-type: application/json
+        # 与@StreamListener注解中的value一致，是绑定的渠道名
+        lot_input:
+          binder: kafka
+          consumer:
+            headerMode: raw
+          producer:
+            headerMode: raw
+          # topic
+          destination: test-log
+          group: log-server-group
+          content-type: application/json
+###### 多个 kafka 时配置
+#      binders:
+#        kafka1:
+#          type: kafka
+#          environment:
+#            spring:
+#              cloud:
+#                stream:
+#                  kafka:
+#                    binder:
+#                      brokers: name87:9094
+#                      zkNodes: name85:2181,name86:2181,name87:2181/kafka0101
+#        kafka2:
+#          type: kafka
+#          environment:
+#            spring:
+#              cloud:
+#                stream:
+#                  kafka:
+#                    binder:
+#                      brokers: name85:9094
+#                      zkNodes: name85:2181,name86:2181,name87:2181/kafkatest0101
 # ===============================
 # = Eureka Config
 # ===============================
@@ -59,24 +92,3 @@ security:
       token-info-uri: http://127.0.0.1:8770/oauth/2.0/oauth/check_token
       user-info-uri:  http://127.0.0.1:8770/oauth/2.0/user
       prefer-token-info: false
-# ===============================
-# = Ribbon Config
-# ===============================
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 10000
-        readTimeout: 10000
-        loggerLevel: full
-  hystrix:
-    enabled: true
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 11000
-ribbon:
-  ServerListRefreshInterval: 5000

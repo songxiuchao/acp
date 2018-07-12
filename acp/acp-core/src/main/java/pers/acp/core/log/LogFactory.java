@@ -15,25 +15,22 @@ public class LogFactory {
         logger = LoggerFactory.getLogger(clas);
     }
 
+    private LogFactory(String name) {
+        logger = LoggerFactory.getLogger(name);
+    }
+
     public static LogFactory getInstance(Class<?> clas) {
         return new LogFactory(clas);
+    }
+
+    public static LogFactory getInstance(String name) {
+        return new LogFactory(name);
     }
 
     public void info(String message) {
         setCustomerParams();
         logger.info(message);
     }
-
-    public void info(String message, Object var) {
-        setCustomerParams();
-        logger.info(message, var);
-    }
-
-    public void info(String message, Object var1, Object var2) {
-        setCustomerParams();
-        logger.info(message, var1, var2);
-    }
-
 
     public void info(String message, Object... var) {
         setCustomerParams();
@@ -50,17 +47,6 @@ public class LogFactory {
         logger.debug(message);
     }
 
-    public void debug(String message, Object var) {
-        setCustomerParams();
-        logger.debug(message, var);
-    }
-
-    public void debug(String message, Object var1, Object var2) {
-        setCustomerParams();
-        logger.debug(message, var1, var2);
-    }
-
-
     public void debug(String message, Object... var) {
         setCustomerParams();
         logger.debug(message, var);
@@ -75,17 +61,6 @@ public class LogFactory {
         setCustomerParams();
         logger.warn(message);
     }
-
-    public void warn(String message, Object var) {
-        setCustomerParams();
-        logger.warn(message, var);
-    }
-
-    public void warn(String message, Object var1, Object var2) {
-        setCustomerParams();
-        logger.warn(message, var1, var2);
-    }
-
 
     public void warn(String message, Object... var) {
         setCustomerParams();
@@ -102,17 +77,6 @@ public class LogFactory {
         logger.error(message);
     }
 
-    public void error(String message, Object var) {
-        setCustomerParams();
-        logger.error(message, var);
-    }
-
-    public void error(String message, Object var1, Object var2) {
-        setCustomerParams();
-        logger.debug(message, var1, var2);
-    }
-
-
     public void error(String message, Object... var) {
         setCustomerParams();
         logger.debug(message, var);
@@ -127,17 +91,6 @@ public class LogFactory {
         setCustomerParams();
         logger.trace(message);
     }
-
-    public void trace(String message, Object var) {
-        setCustomerParams();
-        logger.trace(message, var);
-    }
-
-    public void trace(String message, Object var1, Object var2) {
-        setCustomerParams();
-        logger.trace(message, var1, var2);
-    }
-
 
     public void trace(String message, Object... var) {
         setCustomerParams();

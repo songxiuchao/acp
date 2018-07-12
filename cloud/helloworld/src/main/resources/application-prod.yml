@@ -18,6 +18,23 @@ management:
 spring:
   thymeleaf:
     cache: false
+  cloud:
+    stream:
+      default-binder: kafka
+      kafka:
+        binder:
+          brokers: 127.0.0.1:9092
+      bindings:
+        log_output:
+          binder: kafka
+          consumer:
+            headerMode: raw
+          producer:
+            headerMode: raw
+          # topic
+          destination: test-log
+          group: log-server-group
+          content-type: application/json
 # ===============================
 # = Eureka Config
 # ===============================

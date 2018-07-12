@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.log.LogFactory;
-import pers.acp.springcloud.common.enumerations.RestPrefix;
+import pers.acp.springcloud.common.enums.RestPrefix;
 
 /**
  * Oauth2 资源服务配置
