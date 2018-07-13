@@ -24,7 +24,7 @@ public class LogConsumer {
     @StreamListener(LogConstant.INPUT)
     public void process(String message) {
         LogInfo logInfo = CommonTools.jsonToObject(CommonTools.getJsonFromStr(message), LogInfo.class);
-        String logType = "ALL";
+        String logType = LogConstant.DEFAULT_TYPE;
         if (!CommonTools.isNullStr(logInfo.getLogType())) {
             logType = logInfo.getLogType();
         }

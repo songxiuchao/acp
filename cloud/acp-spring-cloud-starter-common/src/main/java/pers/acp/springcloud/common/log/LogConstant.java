@@ -6,8 +6,10 @@ package pers.acp.springcloud.common.log;
  */
 public interface LogConstant {
 
-    String INPUT = "lot_input";
+    String DEFAULT_TYPE = "ALL";
 
-    String OUTPUT = "log_output";
+    String INPUT = "LOG_INPUT";
+
+    String OUTPUT = "LOG_OUTPUT";
 
 }

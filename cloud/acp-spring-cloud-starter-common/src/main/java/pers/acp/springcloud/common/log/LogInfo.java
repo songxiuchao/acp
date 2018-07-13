@@ -95,7 +95,14 @@ public class LogInfo {
     @Value("${spring.application.name}")
     private String serverName;
 
-    private String logType = null;
+    /**
+     * 日志类型字符串
+     * 在 log-server 的 logback.xml 中对应配置日志规则，可实现不同类型的日志记录到的文件
+     *
+     * @see LogConstant#DEFAULT_TYPE
+     * 默认日志类型为“ALL”，新增日志类型之后需在 log-server 中的 logback.xml 参照 ALL 进行配置
+     */
+    private String logType = LogConstant.DEFAULT_TYPE;
 
     private Integer logLevel;
 
