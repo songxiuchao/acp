@@ -41,6 +41,14 @@ public class LogInfo {
         this.logLevel = logLevel;
     }
 
+    public Long getServerTime() {
+        return serverTime;
+    }
+
+    public void setServerTime(Long serverTime) {
+        this.serverTime = serverTime;
+    }
+
     public String getClassName() {
         return className;
     }
@@ -105,6 +113,8 @@ public class LogInfo {
     private String logType = LogConstant.DEFAULT_TYPE;
 
     private Integer logLevel;
+
+    private Long serverTime;
 
     private String className;
 

@@ -10,6 +10,7 @@ import pers.acp.springboot.core.tools.SpringBeanFactory;
 import pers.acp.springcloud.common.enums.LogLevel;
 
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * @author zhangbin by 11/07/2018 13:36
@@ -29,6 +30,7 @@ public class LogInstance {
     }
 
     private void sendToLogServer(LogInfo logInfo) {
+        logInfo.setServerTime(new Date().getTime());
         StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
         int lineno = 0;
         String className = "";
