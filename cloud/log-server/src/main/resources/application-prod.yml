@@ -36,7 +36,7 @@ spring:
           group: log-server-group
           content-type: application/json
         # 与@StreamListener注解中的value一致，是绑定的渠道名
-        lot_input:
+        log_input:
           binder: kafka
           consumer:
             headerMode: raw

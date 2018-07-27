@@ -8,8 +8,8 @@ public interface LogConstant {
 
     String DEFAULT_TYPE = "ALL";
 
-    String INPUT = "LOG_INPUT";
+    String INPUT = "log_input";
 
-    String OUTPUT = "LOG_OUTPUT";
+    String OUTPUT = "log_output";
 
 }
