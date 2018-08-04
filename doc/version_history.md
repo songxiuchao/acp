@@ -1,4 +1,7 @@
 ## 版本更新记录
+##### v4.0.7
+    1. SpringCloud 升级至 Finchley.SR1
+    2. gradle 构建工具更新至 4.9
 ##### v4.0.6
     1. SpringBoot 升级至 2.0.4.RELEASE
     2. 更新依赖包版本

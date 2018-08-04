@@ -21,6 +21,6 @@ versions += [
         postgresql      : "42.2.2",
 
         spring_boot     : "2.0.4.RELEASE",
-        spring_cloud    : "Finchley.RELEASE",
+        spring_cloud    : "Finchley.SR1",
         swagger         : "2.9.0"
 ]
