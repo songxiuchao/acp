@@ -1,5 +1,5 @@
 # acp 
-###### v4.0.6
+###### v4.0.7
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件版本及官方文档
 - [Spring Boot 2.0.4.RELEASE](https://projects.spring.io/spring-boot)
@@ -38,6 +38,9 @@ gradle全局参数：
 ### （二）自定义任务
 - clearPj 清理所有输出文件
 - release 编译打包并输出
+
+### （三）升级命令
+    gradlew wrapper --gradle-version=4.9 --distribution-type=all
 
 ## 三、工程说明
 - doc目录下的files文件夹，当需要用到时放到打包后的jar同目录下即可
