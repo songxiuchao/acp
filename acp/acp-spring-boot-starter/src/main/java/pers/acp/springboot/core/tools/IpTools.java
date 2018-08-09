@@ -21,23 +21,19 @@ public final class IpTools {
      */
     public static String getRemoteIP(HttpServletRequestAcp request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
-        if (ipAddress == null || ipAddress.length() == 0
-                || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (CommonTools.isNullStr(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Citrix-Client-IP");
         }
-        if (ipAddress == null || ipAddress.length() == 0
-                || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (CommonTools.isNullStr(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
         }
-        if (ipAddress == null || ipAddress.length() == 0
-                || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (CommonTools.isNullStr(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ipAddress == null || ipAddress.length() == 0
-                || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (CommonTools.isNullStr(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = getRemoteRealIP(request);
         }
-        if (ipAddress != null && ipAddress.length() > 15) {
+        if (!CommonTools.isNullStr(ipAddress) && ipAddress.length() > 15) {
             if (ipAddress.contains(",")) {
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }
@@ -51,11 +47,9 @@ public final class IpTools {
      * @param request 请求对象
      * @return IP
      */
-    public static String getRemoteRealIP(HttpServletRequestAcp request) {
+    private static String getRemoteRealIP(HttpServletRequestAcp request) {
         String ipAddress = request.getRemoteAddr();
-        if (ipAddress.equals("127.0.0.1")
-                || ipAddress.equals("0:0:0:0:0:0:0:1")
-                || ipAddress.equals("::1")) {
+        if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1") || ipAddress.equals("::1")) {
             // 根据网卡取本机配置的IP
             InetAddress inet = null;
             try {
@@ -65,7 +59,7 @@ public final class IpTools {
             }
             ipAddress = inet != null ? inet.getHostAddress() : null;
         }
-        if (ipAddress != null && ipAddress.length() > 15) {
+        if (!CommonTools.isNullStr(ipAddress) && ipAddress.length() > 15) {
             if (ipAddress.contains(",")) {
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }
