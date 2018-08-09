@@ -20,7 +20,7 @@ public final class IpTools {
      * @return IP
      */
     public static String getRemoteIP(HttpServletRequestAcp request) {
-        String ipAddress = request.getHeader("x-forwarded-for");
+        String ipAddress = request.getHeader("X-Forwarded-For");
         if (ipAddress == null || ipAddress.length() == 0
                 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Citrix-Client-IP");
