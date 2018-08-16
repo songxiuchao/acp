@@ -54,6 +54,7 @@ public abstract class BaseXML {
                     if (inputStreamReader != null) {
                         synchronized (instanceMap) {
                             XStream xstream = new XStream(new DomDriver());
+                            XStream.setupDefaultSecurity(xstream);
                             xstream.addPermission(type -> type.getName().equals(cls.getName()));
                             xstream.processAnnotations(cls);
                             BaseXML obj = (BaseXML) xstream.fromXML(inputStreamReader);
@@ -97,6 +98,7 @@ public abstract class BaseXML {
         try {
             synchronized (this) {
                 XStream xstream = new XStream(new DomDriver());
+                XStream.setupDefaultSecurity(xstream);
                 xstream.toXML(this, out);
             }
             return out.toString();
@@ -122,6 +124,7 @@ public abstract class BaseXML {
                 synchronized (this) {
                     File file = new File(fileAdbPathName);
                     XStream xstream = new XStream(new DomDriver());
+                    XStream.setupDefaultSecurity(xstream);
                     oFile = new OutputStreamWriter(new FileOutputStream(file), CommonUtils.getDefaultCharset());
                     xstream.toXML(this, oFile);
                     lastModified = file.lastModified();

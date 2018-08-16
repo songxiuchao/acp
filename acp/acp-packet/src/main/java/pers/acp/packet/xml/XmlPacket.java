@@ -125,6 +125,7 @@ public class XmlPacket {
     @SuppressWarnings("unchecked")
     public static <T> T xmlToObject(String xmlStr, Class<T> cls) {
         XStream xstream = new XStream(new DomDriver());
+        XStream.setupDefaultSecurity(xstream);
         xstream.addPermission(type -> type.equals(cls));
         xstream.processAnnotations(cls);
         return (T) xstream.fromXML(xmlStr);
@@ -138,6 +139,7 @@ public class XmlPacket {
      */
     public static String objectToXML(Object obj) {
         XStream xstream = new XStream(new DomDriver());
+        XStream.setupDefaultSecurity(xstream);
         return xstream.toXML(obj);
     }
 
