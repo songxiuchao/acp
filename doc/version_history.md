@@ -3,6 +3,7 @@
     1. 优化完善 acp:acp-spring-boot-starter 中的工具类
         pers/acp/springboot/core/tools/IpTools.java
     2. BaseXML.java 中增加转换为 String 的方法
+    3. 优化 XStream 调用方式
 ##### v4.0.7
     1. SpringCloud 升级至 Finchley.SR1
     2. gradle 构建工具更新至 4.9
