@@ -10,6 +10,7 @@ import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
 import java.io.ByteArrayInputStream;
@@ -128,18 +129,27 @@ public class XmlPacket {
         XStream.setupDefaultSecurity(xstream);
         xstream.addPermission(type -> type.equals(cls));
         xstream.processAnnotations(cls);
+        xstream.autodetectAnnotations(true);
         return (T) xstream.fromXML(xmlStr);
     }
 
     /**
      * 对象转xml字符串
      *
-     * @param obj 对象
+     * @param obj     对象
+     * @param charset 字符集
      * @return xml字符串
      */
-    public static String objectToXML(Object obj) {
-        XStream xstream = new XStream(new DomDriver());
+    public static String objectToXML(Object obj, String charset) {
+        String encoding;
+        if (CommonTools.isNullStr(charset)) {
+            encoding = CommonTools.getDefaultCharset();
+        } else {
+            encoding = charset;
+        }
+        XStream xstream = new XStream(new DomDriver(encoding));
         XStream.setupDefaultSecurity(xstream);
+        xstream.autodetectAnnotations(true);
         return xstream.toXML(obj);
     }
 
