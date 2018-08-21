@@ -46,8 +46,10 @@ public final class TcpServerHandle implements Runnable {
             buffer.setAutoShrink(true);
             buffer.put(bts);
             buffer.flip();
-            session.write(buffer);
-            log.debug("tcp return:" + responseStr);
+            if (listenConfig.isResponsable()) {
+                session.write(buffer);
+                log.debug("tcp return:" + responseStr);
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if (session != null) {
