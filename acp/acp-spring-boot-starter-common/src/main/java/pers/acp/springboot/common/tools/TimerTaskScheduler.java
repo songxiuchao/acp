@@ -54,8 +54,10 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
                 String cron = crons.get(key);
                 scheduledTaskMap.put(key, scheduledTask);
                 ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(scheduledTask::executeScheduledTask, new CronTrigger(cron));
-                futureMap.put(key, future);
-                log.info("启动定时任务：" + scheduledTask.getTaskName() + " 【" + cron + "】 【" + scheduledTask.getClass().getCanonicalName() + "】");
+                if (future != null) {
+                    futureMap.put(key, future);
+                    log.info("启动定时任务：" + scheduledTask.getTaskName() + " 【" + cron + "】 【" + scheduledTask.getClass().getCanonicalName() + "】");
+                }
             }
         });
     }
