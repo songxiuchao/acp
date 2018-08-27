@@ -26,16 +26,6 @@ public class Task1 extends BaseSpringBootScheduledTask {
     }
 
     @Override
-    public void executeScheduledTask() {
-        this.run();
-    }
-
-    @Override
-    public boolean isWaiting() {
-        return false;
-    }
-
-    @Override
     public boolean beforeExcuteFun() {
         return true;
     }
