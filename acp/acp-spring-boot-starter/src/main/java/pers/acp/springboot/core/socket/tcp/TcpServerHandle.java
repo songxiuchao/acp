@@ -3,6 +3,7 @@ package pers.acp.springboot.core.socket.tcp;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import pers.acp.core.CommonTools;
 import pers.acp.springboot.core.socket.base.BaseSocketHandle;
 import pers.acp.springboot.core.socket.config.ListenConfig;
 import pers.acp.core.log.LogFactory;
@@ -34,26 +35,27 @@ public final class TcpServerHandle implements Runnable {
 
     public void run() {
         String responseStr = this.socketResponse.doResponse(recvStr);
-        try {
-            byte[] bts;
-            if (listenConfig.isHex()) {
-                bts = ByteUtils.fromHexString(responseStr);
-            } else {
-                bts = responseStr.getBytes(listenConfig.getCharset());
-            }
-            IoBuffer buffer = IoBuffer.allocate(bts.length);
-            buffer.setAutoExpand(true);
-            buffer.setAutoShrink(true);
-            buffer.put(bts);
-            buffer.flip();
-            if (listenConfig.isResponsable()) {
+        if (listenConfig.isResponsable()) {
+            responseStr = CommonTools.isNullStr(responseStr) ? "" : responseStr;
+            try {
+                byte[] bts;
+                if (listenConfig.isHex()) {
+                    bts = ByteUtils.fromHexString(responseStr);
+                } else {
+                    bts = responseStr.getBytes(listenConfig.getCharset());
+                }
+                IoBuffer buffer = IoBuffer.allocate(bts.length);
+                buffer.setAutoExpand(true);
+                buffer.setAutoShrink(true);
+                buffer.put(bts);
+                buffer.flip();
                 session.write(buffer);
                 log.debug("tcp return:" + responseStr);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            if (session != null) {
-                session.closeNow();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                if (session != null) {
+                    session.closeNow();
+                }
             }
         }
     }

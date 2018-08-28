@@ -79,7 +79,7 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
         }
         log.debug("udp receive:" + recvStr);
         UdpServerHandle handle = new UdpServerHandle(session, listenConfig, socketResponse, recvStr);
-        handle.run();
+        new Thread(handle).start();
     }
 
     @Override

@@ -78,7 +78,7 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
         }
         log.debug("tcp receive:" + recvStr);
         TcpServerHandle handle = new TcpServerHandle(session, listenConfig, socketResponse, recvStr);
-        handle.run();
+        new Thread(handle).start();
     }
 
     @Override
