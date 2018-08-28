@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
   * @since JDK1.8
   */
 @Service
-@Transactional(readOnly = true)
+@Transactional
 class TableOneDomain @Autowired()(private val tableOneRepository: TableOneRepository) {
 
   @Transactional

@@ -12,7 +12,7 @@ import java.util.*
  * @since JDK1.8
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional
 class TableOneDomain(private val tableOneRepository: TableOneRepository) {
 
     @Transactional

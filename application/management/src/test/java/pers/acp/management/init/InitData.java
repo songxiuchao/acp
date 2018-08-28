@@ -12,7 +12,7 @@ import pers.acp.core.security.MD5Utils;
  * @since JDK1.8
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class InitData {
 
     @Autowired
