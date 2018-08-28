@@ -33,6 +33,10 @@ public final class TcpClient extends IoHandlerAdapter {
 
     private boolean keepAlive = false;
 
+    private IoConnector connector = null;
+
+    private IoSession session = null;
+
     /**
      * 创建socket发送客户端
      *
@@ -52,22 +56,22 @@ public final class TcpClient extends IoHandlerAdapter {
     }
 
     /**
-     * 发送报文
+     * 同步发送报文
      *
      * @param mess     报文字符串
      * @param needRead 是否需要接收返回信息
      * @return 响应报文
      */
     public String doSend(final String mess, boolean needRead) {
-        IoConnector connector = null;
-        IoSession session = null;
         try {
-            connector = new NioSocketConnector();
-            connector.setConnectTimeoutMillis(timeOut);
-            connector.getSessionConfig().setUseReadOperation(true);
-            session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-            session.getConfig().setWriteTimeout(timeOut / 1000);
-            log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
+            if (connector == null && session == null) {
+                connector = new NioSocketConnector();
+                connector.setConnectTimeoutMillis(timeOut);
+                connector.getSessionConfig().setUseReadOperation(true);
+                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                session.getConfig().setWriteTimeout(timeOut / 1000);
+                log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
+            }
             byte[] bts;
             if (isHex) {
                 bts = ByteUtils.fromHexString(mess);
@@ -104,16 +108,18 @@ public final class TcpClient extends IoHandlerAdapter {
             if (!keepAlive) {
                 if (session != null) {
                     session.closeNow();
+                    session = null;
                 }
                 if (connector != null) {
                     connector.dispose();
+                    session = null;
                 }
             }
         }
     }
 
     /**
-     * 发送报文
+     * 异步发送报文
      *
      * @param socketHandle 响应报文处理类
      * @param mess         报文字符串
@@ -123,7 +129,7 @@ public final class TcpClient extends IoHandlerAdapter {
     }
 
     /**
-     * 发送报文
+     * 异步发送报文
      *
      * @param socketHandle 响应报文处理类
      * @param mess         报文字符串
@@ -131,15 +137,15 @@ public final class TcpClient extends IoHandlerAdapter {
      */
     public void doSend(ISocketHandle socketHandle, final String mess, boolean needRead) {
         this.socketHandle = socketHandle;
-        IoConnector connector = null;
-        IoSession session = null;
         try {
-            connector = new NioSocketConnector();
-            connector.setConnectTimeoutMillis(timeOut);
-            connector.setHandler(this);
-            session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-            session.getConfig().setWriteTimeout(timeOut / 1000);
-            log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
+            if (connector == null && session == null) {
+                connector = new NioSocketConnector();
+                connector.setConnectTimeoutMillis(timeOut);
+                connector.setHandler(this);
+                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                session.getConfig().setWriteTimeout(timeOut / 1000);
+                log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
+            }
             byte[] bts;
             if (isHex) {
                 bts = ByteUtils.fromHexString(mess);
@@ -156,6 +162,8 @@ public final class TcpClient extends IoHandlerAdapter {
                 if (!keepAlive) {
                     session.closeOnFlush();
                     connector.dispose(true);
+                    session = null;
+                    connector = null;
                 }
             }
         } catch (Exception e) {
