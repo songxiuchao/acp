@@ -6,15 +6,17 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.logging.LogLevel;
 import org.apache.mina.filter.logging.LoggingFilter;
+import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import pers.acp.springboot.core.interfaces.IDaemonService;
 import pers.acp.springboot.core.socket.base.BaseSocketHandle;
 import pers.acp.springboot.core.socket.config.ListenConfig;
 import pers.acp.core.log.LogFactory;
 
 import java.net.InetSocketAddress;
 
-public final class TcpServer extends IoHandlerAdapter implements Runnable {
+public final class TcpServer extends IoHandlerAdapter implements Runnable, IDaemonService {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
@@ -49,7 +51,6 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
             loggingFilter.setMessageSentLogLevel(LogLevel.DEBUG);
             loggingFilter.setMessageReceivedLogLevel(LogLevel.DEBUG);
             acceptor.getFilterChain().addLast("logger", loggingFilter);
-            acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
             acceptor.setHandler(this);
             try {
                 acceptor.bind(new InetSocketAddress(port));
@@ -78,7 +79,9 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
         }
         log.debug("tcp receive:" + recvStr);
         TcpServerHandle handle = new TcpServerHandle(session, listenConfig, socketResponse, recvStr);
-        new Thread(handle).start();
+        Thread thread = new Thread(handle);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @Override
@@ -111,6 +114,10 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
+        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
+        cfg.setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
+        cfg.setKeepAlive(listenConfig.isKeepAlive());
+        cfg.setSoLinger(0);
     }
 
     @Override
@@ -126,5 +133,15 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void sessionOpened(IoSession session) throws Exception {
         super.sessionOpened(session);
+    }
+
+    @Override
+    public String getServiceName() {
+        return listenConfig.getName();
+    }
+
+    @Override
+    public void stopService() {
+
     }
 }

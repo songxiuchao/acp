@@ -37,7 +37,7 @@ public class SystemInitialization extends BaseInitialization {
 
     @Override
     public void stop() {
-
+        systemControl.stop();
     }
 
     @Override

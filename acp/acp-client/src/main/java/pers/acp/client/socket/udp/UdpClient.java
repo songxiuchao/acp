@@ -9,6 +9,7 @@ import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioDatagramConnector;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import pers.acp.client.socket.ISocketHandle;
@@ -64,7 +65,6 @@ public final class UdpClient extends IoHandlerAdapter {
             connector.setConnectTimeoutMillis(timeOut);
             connector.getSessionConfig().setUseReadOperation(true);
             session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-            session.getConfig().setWriteTimeout(timeOut / 1000);
             log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
             byte[] bts;
             if (isHex) {
@@ -124,7 +124,6 @@ public final class UdpClient extends IoHandlerAdapter {
             connector.setConnectTimeoutMillis(timeOut);
             connector.setHandler(this);
             session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-            session.getConfig().setWriteTimeout(timeOut / 1000);
             log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
             byte[] bts;
             if (isHex) {
@@ -201,6 +200,9 @@ public final class UdpClient extends IoHandlerAdapter {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
+        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
+        cfg.setWriteTimeout(timeOut / 1000);
+        cfg.setSoLinger(0);
     }
 
     @Override

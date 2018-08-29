@@ -9,6 +9,7 @@ import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import pers.acp.client.socket.ISocketHandle;
@@ -56,6 +57,20 @@ public final class TcpClient extends IoHandlerAdapter {
     }
 
     /**
+     * 手动关闭连接
+     */
+    public void doClose() {
+        if (session != null) {
+            session.closeNow();
+            session = null;
+        }
+        if (connector != null) {
+            connector.dispose();
+            connector = null;
+        }
+    }
+
+    /**
      * 同步发送报文
      *
      * @param mess     报文字符串
@@ -69,7 +84,6 @@ public final class TcpClient extends IoHandlerAdapter {
                 connector.setConnectTimeoutMillis(timeOut);
                 connector.getSessionConfig().setUseReadOperation(true);
                 session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-                session.getConfig().setWriteTimeout(timeOut / 1000);
                 log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
             }
             byte[] bts;
@@ -106,14 +120,7 @@ public final class TcpClient extends IoHandlerAdapter {
             return "";
         } finally {
             if (!keepAlive) {
-                if (session != null) {
-                    session.closeNow();
-                    session = null;
-                }
-                if (connector != null) {
-                    connector.dispose();
-                    connector = null;
-                }
+                doClose();
             }
         }
     }
@@ -143,7 +150,6 @@ public final class TcpClient extends IoHandlerAdapter {
                 connector.setConnectTimeoutMillis(timeOut);
                 connector.setHandler(this);
                 session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-                session.getConfig().setWriteTimeout(timeOut / 1000);
                 log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
             }
             byte[] bts;
@@ -168,12 +174,7 @@ public final class TcpClient extends IoHandlerAdapter {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if (session != null) {
-                session.closeNow();
-            }
-            if (connector != null) {
-                connector.dispose();
-            }
+            doClose();
         }
     }
 
@@ -227,6 +228,10 @@ public final class TcpClient extends IoHandlerAdapter {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
+        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
+        cfg.setWriteTimeout(timeOut / 1000);
+        cfg.setKeepAlive(keepAlive);
+        cfg.setSoLinger(0);
     }
 
     @Override

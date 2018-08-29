@@ -6,6 +6,7 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.logging.LogLevel;
 import org.apache.mina.filter.logging.LoggingFilter;
+import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import pers.acp.springboot.core.socket.base.BaseSocketHandle;
@@ -49,7 +50,6 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
             loggingFilter.setMessageSentLogLevel(LogLevel.DEBUG);
             loggingFilter.setMessageReceivedLogLevel(LogLevel.DEBUG);
             acceptor.getFilterChain().addLast("logger", loggingFilter);
-            acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
             acceptor.setHandler(this);
             try {
                 acceptor.bind(new InetSocketAddress(port));
@@ -79,7 +79,9 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
         }
         log.debug("udp receive:" + recvStr);
         UdpServerHandle handle = new UdpServerHandle(session, listenConfig, socketResponse, recvStr);
-        new Thread(handle).start();
+        Thread thread = new Thread(handle);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @Override
@@ -110,6 +112,10 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
+        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
+        cfg.setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
+        cfg.setSoLinger(0);
+        cfg.setKeepAlive(listenConfig.isKeepAlive());
     }
 
     @Override
