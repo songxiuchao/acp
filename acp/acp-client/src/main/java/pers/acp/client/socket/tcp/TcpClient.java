@@ -64,7 +64,7 @@ public final class TcpClient extends IoHandlerAdapter {
      */
     public String doSend(final String mess, boolean needRead) {
         try {
-            if (connector == null && session == null) {
+            if (connector == null || session == null) {
                 connector = new NioSocketConnector();
                 connector.setConnectTimeoutMillis(timeOut);
                 connector.getSessionConfig().setUseReadOperation(true);
@@ -112,7 +112,7 @@ public final class TcpClient extends IoHandlerAdapter {
                 }
                 if (connector != null) {
                     connector.dispose();
-                    session = null;
+                    connector = null;
                 }
             }
         }
@@ -138,7 +138,7 @@ public final class TcpClient extends IoHandlerAdapter {
     public void doSend(ISocketHandle socketHandle, final String mess, boolean needRead) {
         this.socketHandle = socketHandle;
         try {
-            if (connector == null && session == null) {
+            if (connector == null || session == null) {
                 connector = new NioSocketConnector();
                 connector.setConnectTimeoutMillis(timeOut);
                 connector.setHandler(this);
@@ -195,6 +195,7 @@ public final class TcpClient extends IoHandlerAdapter {
         if (!keepAlive) {
             if (session != null) {
                 session.closeNow();
+                connector = null;
             }
         }
     }
@@ -205,6 +206,7 @@ public final class TcpClient extends IoHandlerAdapter {
         super.exceptionCaught(session, cause);
         if (session != null) {
             session.closeNow();
+            connector = null;
         }
     }
 
@@ -218,6 +220,7 @@ public final class TcpClient extends IoHandlerAdapter {
         super.sessionClosed(session);
         if (session != null) {
             session.closeNow();
+            connector = null;
         }
     }
 
@@ -232,6 +235,7 @@ public final class TcpClient extends IoHandlerAdapter {
         if (!keepAlive) {
             if (session != null) {
                 session.closeNow();
+                connector = null;
             }
         }
     }
