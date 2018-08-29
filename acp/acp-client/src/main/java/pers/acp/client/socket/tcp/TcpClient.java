@@ -71,6 +71,32 @@ public final class TcpClient extends IoHandlerAdapter {
     }
 
     /**
+     * 手动关闭连接
+     */
+    public void doCloseOnFlush() {
+        if (session != null) {
+            session.closeOnFlush();
+            session = null;
+        }
+        if (connector != null) {
+            connector.dispose(true);
+            connector = null;
+        }
+    }
+
+    /**
+     * 设置session配置
+     */
+    private void setUpSessoinConfig() {
+        connector.getSessionConfig().setUseReadOperation(true);
+        connector.getSessionConfig().setWriteTimeout(timeOut / 1000);
+        ((SocketSessionConfig) connector.getSessionConfig()).setKeepAlive(keepAlive);
+        if (keepAlive) {
+            ((SocketSessionConfig) connector.getSessionConfig()).setSoLinger(0);
+        }
+    }
+
+    /**
      * 同步发送报文
      *
      * @param mess     报文字符串
@@ -79,10 +105,10 @@ public final class TcpClient extends IoHandlerAdapter {
      */
     public String doSend(final String mess, boolean needRead) {
         try {
-            if (connector == null || session == null) {
+            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
                 connector = new NioSocketConnector();
                 connector.setConnectTimeoutMillis(timeOut);
-                connector.getSessionConfig().setUseReadOperation(true);
+                setUpSessoinConfig();
                 session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
                 log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
             }
@@ -117,10 +143,11 @@ public final class TcpClient extends IoHandlerAdapter {
             return recvStr;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            doClose();
             return "";
         } finally {
             if (!keepAlive) {
-                doClose();
+                doCloseOnFlush();
             }
         }
     }
@@ -145,9 +172,10 @@ public final class TcpClient extends IoHandlerAdapter {
     public void doSend(ISocketHandle socketHandle, final String mess, boolean needRead) {
         this.socketHandle = socketHandle;
         try {
-            if (connector == null || session == null) {
+            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
                 connector = new NioSocketConnector();
                 connector.setConnectTimeoutMillis(timeOut);
+                setUpSessoinConfig();
                 connector.setHandler(this);
                 session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
                 log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
@@ -166,10 +194,7 @@ public final class TcpClient extends IoHandlerAdapter {
             session.write(buffer);
             if (!needRead) {
                 if (!keepAlive) {
-                    session.closeOnFlush();
-                    connector.dispose(true);
-                    session = null;
-                    connector = null;
+                    doCloseOnFlush();
                 }
             }
         } catch (Exception e) {
@@ -207,7 +232,6 @@ public final class TcpClient extends IoHandlerAdapter {
         super.exceptionCaught(session, cause);
         if (session != null) {
             session.closeNow();
-            connector = null;
         }
     }
 
@@ -221,7 +245,6 @@ public final class TcpClient extends IoHandlerAdapter {
         super.sessionClosed(session);
         if (session != null) {
             session.closeNow();
-            connector = null;
         }
     }
 
@@ -231,7 +254,9 @@ public final class TcpClient extends IoHandlerAdapter {
         SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
         cfg.setWriteTimeout(timeOut / 1000);
         cfg.setKeepAlive(keepAlive);
-        cfg.setSoLinger(0);
+        if (keepAlive) {
+            cfg.setSoLinger(0);
+        }
     }
 
     @Override
@@ -240,7 +265,6 @@ public final class TcpClient extends IoHandlerAdapter {
         if (!keepAlive) {
             if (session != null) {
                 session.closeNow();
-                connector = null;
             }
         }
     }

@@ -64,6 +64,7 @@ public final class UdpClient extends IoHandlerAdapter {
             connector = new NioDatagramConnector();
             connector.setConnectTimeoutMillis(timeOut);
             connector.getSessionConfig().setUseReadOperation(true);
+            connector.getSessionConfig().setWriteTimeout(timeOut / 1000);
             session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
             log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
             byte[] bts;
@@ -100,10 +101,10 @@ public final class UdpClient extends IoHandlerAdapter {
             return "";
         } finally {
             if (session != null) {
-                session.closeNow();
+                session.closeOnFlush();
             }
             if (connector != null) {
-                connector.dispose();
+                connector.dispose(true);
             }
         }
     }
@@ -179,9 +180,6 @@ public final class UdpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
-        if (session != null) {
-            session.closeNow();
-        }
     }
 
     @Override
@@ -202,7 +200,6 @@ public final class UdpClient extends IoHandlerAdapter {
         super.sessionCreated(session);
         SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
         cfg.setWriteTimeout(timeOut / 1000);
-        cfg.setSoLinger(0);
     }
 
     @Override
