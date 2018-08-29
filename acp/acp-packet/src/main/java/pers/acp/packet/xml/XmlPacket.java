@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.naming.NoNameCoder;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
@@ -147,7 +148,7 @@ public class XmlPacket {
         } else {
             encoding = charset;
         }
-        XStream xstream = new XStream(new DomDriver(encoding));
+        XStream xstream = new XStream(new DomDriver(encoding, new NoNameCoder()));
         XStream.setupDefaultSecurity(xstream);
         xstream.autodetectAnnotations(true);
         return xstream.toXML(obj);
