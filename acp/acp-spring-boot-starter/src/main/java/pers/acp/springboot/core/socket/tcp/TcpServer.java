@@ -115,10 +115,11 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable, IDaem
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
         SocketSessionConfig config = (SocketSessionConfig) session.getConfig();
-        config.setBothIdleTime((int) (listenConfig.getIdletime() / 1000));
         config.setKeepAlive(listenConfig.isKeepAlive());
         if (listenConfig.isKeepAlive()) {
             config.setSoLinger(0);
+        } else {
+            config.setBothIdleTime((int) (listenConfig.getIdletime() / 1000));
         }
     }
 

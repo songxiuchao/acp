@@ -91,10 +91,11 @@ public final class TcpClient extends IoHandlerAdapter {
         connector.setConnectTimeoutMillis(timeOut);
         SocketSessionConfig config = (SocketSessionConfig) connector.getSessionConfig();
         config.setWriteTimeout(timeOut / 1000);
-        config.setBothIdleTime(timeOut / 1000);
         config.setKeepAlive(keepAlive);
         if (keepAlive) {
             config.setSoLinger(0);
+        } else {
+            config.setBothIdleTime(timeOut / 1000);
         }
     }
 
