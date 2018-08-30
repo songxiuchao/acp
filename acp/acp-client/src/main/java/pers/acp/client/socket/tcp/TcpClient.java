@@ -85,14 +85,16 @@ public final class TcpClient extends IoHandlerAdapter {
     }
 
     /**
-     * 设置session配置
+     * 配置信息
      */
-    private void setUpSessoinConfig() {
-        connector.getSessionConfig().setUseReadOperation(true);
-        connector.getSessionConfig().setWriteTimeout(timeOut / 1000);
-        ((SocketSessionConfig) connector.getSessionConfig()).setKeepAlive(keepAlive);
+    private void setUpConfig() {
+        connector.setConnectTimeoutMillis(timeOut);
+        SocketSessionConfig config = (SocketSessionConfig) connector.getSessionConfig();
+        config.setWriteTimeout(timeOut / 1000);
+        config.setBothIdleTime(timeOut / 1000);
+        config.setKeepAlive(keepAlive);
         if (keepAlive) {
-            ((SocketSessionConfig) connector.getSessionConfig()).setSoLinger(0);
+            config.setSoLinger(0);
         }
     }
 
@@ -107,8 +109,8 @@ public final class TcpClient extends IoHandlerAdapter {
         try {
             if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
                 connector = new NioSocketConnector();
-                connector.setConnectTimeoutMillis(timeOut);
-                setUpSessoinConfig();
+                connector.getSessionConfig().setUseReadOperation(true);
+                setUpConfig();
                 session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
                 log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
             }
@@ -174,9 +176,8 @@ public final class TcpClient extends IoHandlerAdapter {
         try {
             if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
                 connector = new NioSocketConnector();
-                connector.setConnectTimeoutMillis(timeOut);
-                setUpSessoinConfig();
                 connector.setHandler(this);
+                setUpConfig();
                 session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
                 log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
             }
@@ -251,21 +252,13 @@ public final class TcpClient extends IoHandlerAdapter {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
-        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
-        cfg.setWriteTimeout(timeOut / 1000);
-        cfg.setKeepAlive(keepAlive);
-        if (keepAlive) {
-            cfg.setSoLinger(0);
-        }
     }
 
     @Override
     public void sessionIdle(IoSession session, IdleStatus idlestatus) throws Exception {
         super.sessionIdle(session, idlestatus);
-        if (!keepAlive) {
-            if (session != null) {
-                session.closeNow();
-            }
+        if (session != null) {
+            session.closeNow();
         }
     }
 

@@ -112,10 +112,8 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
-        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
-        cfg.setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
-        cfg.setSoLinger(0);
-        cfg.setKeepAlive(listenConfig.isKeepAlive());
+        SocketSessionConfig config = (SocketSessionConfig) session.getConfig();
+        config.setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
     }
 
     @Override

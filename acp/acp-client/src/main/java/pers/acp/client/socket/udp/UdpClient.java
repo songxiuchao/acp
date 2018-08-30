@@ -51,6 +51,16 @@ public final class UdpClient extends IoHandlerAdapter {
     }
 
     /**
+     * 配置信息
+     */
+    private void setUpConfig(IoConnector connector) {
+        connector.setConnectTimeoutMillis(timeOut);
+        SocketSessionConfig config = (SocketSessionConfig) connector.getSessionConfig();
+        config.setWriteTimeout(timeOut / 1000);
+        config.setBothIdleTime(timeOut / 1000);
+    }
+
+    /**
      * 发送报文
      *
      * @param mess     报文字符串
@@ -62,9 +72,8 @@ public final class UdpClient extends IoHandlerAdapter {
         IoSession session = null;
         try {
             connector = new NioDatagramConnector();
-            connector.setConnectTimeoutMillis(timeOut);
             connector.getSessionConfig().setUseReadOperation(true);
-            connector.getSessionConfig().setWriteTimeout(timeOut / 1000);
+            setUpConfig(connector);
             session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
             log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
             byte[] bts;
@@ -122,8 +131,8 @@ public final class UdpClient extends IoHandlerAdapter {
         IoSession session = null;
         try {
             connector = new NioDatagramConnector();
-            connector.setConnectTimeoutMillis(timeOut);
             connector.setHandler(this);
+            setUpConfig(connector);
             session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
             log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
             byte[] bts;
@@ -198,8 +207,6 @@ public final class UdpClient extends IoHandlerAdapter {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
-        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
-        cfg.setWriteTimeout(timeOut / 1000);
     }
 
     @Override

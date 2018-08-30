@@ -114,19 +114,19 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable, IDaem
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
-        SocketSessionConfig cfg = (SocketSessionConfig) session.getConfig();
-        cfg.setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
-        cfg.setKeepAlive(listenConfig.isKeepAlive());
-        cfg.setSoLinger(0);
+        SocketSessionConfig config = (SocketSessionConfig) session.getConfig();
+        config.setBothIdleTime((int) (listenConfig.getIdletime() / 1000));
+        config.setKeepAlive(listenConfig.isKeepAlive());
+        if (listenConfig.isKeepAlive()) {
+            config.setSoLinger(0);
+        }
     }
 
     @Override
     public void sessionIdle(IoSession session, IdleStatus idlestatus) throws Exception {
         super.sessionIdle(session, idlestatus);
-        if (!listenConfig.isKeepAlive()) {
-            if (session != null) {
-                session.closeNow();
-            }
+        if (session != null) {
+            session.closeNow();
         }
     }
 
