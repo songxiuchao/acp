@@ -245,6 +245,7 @@ public final class TcpClient extends IoHandlerAdapter {
     @Override
     public void sessionClosed(IoSession session) throws Exception {
         super.sessionClosed(session);
+        log.debug("tcp client session closed");
         if (session != null) {
             session.closeNow();
         }
@@ -258,6 +259,7 @@ public final class TcpClient extends IoHandlerAdapter {
     @Override
     public void sessionIdle(IoSession session, IdleStatus idlestatus) throws Exception {
         super.sessionIdle(session, idlestatus);
+        log.debug("tcp client session idle");
         if (session != null) {
             session.closeNow();
         }

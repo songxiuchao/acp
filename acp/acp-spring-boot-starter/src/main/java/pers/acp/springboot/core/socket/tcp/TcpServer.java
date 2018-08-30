@@ -87,6 +87,7 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable, IDaem
     @Override
     public void sessionClosed(IoSession session) throws Exception {
         super.sessionClosed(session);
+        log.debug("tcp server session closed");
         if (session != null) {
             session.closeNow();
         }
@@ -126,6 +127,7 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable, IDaem
     @Override
     public void sessionIdle(IoSession session, IdleStatus idlestatus) throws Exception {
         super.sessionIdle(session, idlestatus);
+        log.debug("tcp server session idle");
         if (session != null) {
             session.closeNow();
         }

@@ -87,6 +87,7 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void sessionClosed(IoSession session) throws Exception {
         super.sessionClosed(session);
+        log.debug("udp server session closed");
         if (session != null) {
             session.closeNow();
         }
@@ -119,6 +120,7 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void sessionIdle(IoSession session, IdleStatus idlestatus) throws Exception {
         super.sessionIdle(session, idlestatus);
+        log.debug("udp server session idle");
         if (session != null) {
             session.closeNow();
         }
