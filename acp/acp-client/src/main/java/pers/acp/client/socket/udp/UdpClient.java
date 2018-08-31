@@ -18,7 +18,7 @@ import pers.acp.core.log.LogFactory;
 
 public final class UdpClient extends IoHandlerAdapter {
 
-    private LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private String serverIp;
 

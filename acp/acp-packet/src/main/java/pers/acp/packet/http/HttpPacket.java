@@ -20,7 +20,7 @@ public class HttpPacket {
     /**
      * 日志对象
      */
-    private static LogFactory log = LogFactory.getInstance(HttpPacket.class);
+    private static final LogFactory log = LogFactory.getInstance(HttpPacket.class);
 
     /**
      * url编码

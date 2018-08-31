@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class XmlPacket {
 
-    private static LogFactory log = LogFactory.getInstance(XmlPacket.class);
+    private static final LogFactory log = LogFactory.getInstance(XmlPacket.class);
 
     /**
      * 解析XML获取Map对象

@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 
 final class ClientSender {
 
-    private LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private static TrustManager manager = new X509TrustManager() {
 

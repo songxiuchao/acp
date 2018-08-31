@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 public class DaemonServiceManager implements ServletContextListener {
 
-    private static LogFactory log = LogFactory.getInstance(DaemonServiceManager.class);
+    private static final LogFactory log = LogFactory.getInstance(DaemonServiceManager.class);
 
     private static final ConcurrentLinkedDeque<IDaemonService> serverDeque = new ConcurrentLinkedDeque<>();
 

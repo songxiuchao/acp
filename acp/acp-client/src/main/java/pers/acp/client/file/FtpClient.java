@@ -12,7 +12,7 @@ import java.net.InetAddress;
 
 public class FtpClient extends BaseClient {
 
-    private LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private String serverCharset = "ISO-8859-1";
 

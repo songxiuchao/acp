@@ -18,7 +18,7 @@ public class WebServiceClient {
 
     private static int MAX_TIMEOUT = 3600000;
 
-    private static LogFactory log = LogFactory.getInstance(WebServiceClient.class);
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private SoapType soapType = SoapType.SOAP_1_2;
 
