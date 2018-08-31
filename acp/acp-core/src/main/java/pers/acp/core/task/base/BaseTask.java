@@ -163,7 +163,7 @@ public abstract class BaseTask implements IBaseTask, Runnable {
     }
 
     /**
-     * 是否需要立即执行
+     * 是否需要立即执行，不使用工作线程
      *
      * @return false-等待执行策略；true-立即执行
      */
