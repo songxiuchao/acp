@@ -20,6 +20,8 @@ public final class UdpClient extends IoHandlerAdapter {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
+    private final Object lock = new Object();
+
     private String serverIp;
 
     private int port;
@@ -55,9 +57,18 @@ public final class UdpClient extends IoHandlerAdapter {
     }
 
     /**
+     * 该链接是否关闭
+     *
+     * @return boolean
+     */
+    public boolean isClosed() {
+        return connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing();
+    }
+
+    /**
      * 手动关闭连接
      */
-    public void doClose() {
+    public void doDestroy() {
         if (session != null) {
             session.closeNow();
             session = null;
@@ -71,7 +82,7 @@ public final class UdpClient extends IoHandlerAdapter {
     /**
      * 手动关闭连接
      */
-    public void doCloseOnFlush() {
+    public void doDestroyOnFlush() {
         if (session != null) {
             session.closeOnFlush();
             session = null;
@@ -100,12 +111,14 @@ public final class UdpClient extends IoHandlerAdapter {
      */
     public String doSendSync(final String mess, boolean needRead) {
         try {
-            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
-                connector = new NioDatagramConnector();
-                connector.getSessionConfig().setUseReadOperation(true);
-                setUpConfig();
-                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-                log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+            synchronized (lock) {
+                if (isClosed()) {
+                    connector = new NioDatagramConnector();
+                    connector.getSessionConfig().setUseReadOperation(true);
+                    setUpConfig();
+                    session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                    log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+                }
             }
             byte[] bts;
             if (isHex) {
@@ -140,7 +153,7 @@ public final class UdpClient extends IoHandlerAdapter {
             log.error(e.getMessage(), e);
             return "";
         } finally {
-            doClose();
+            doDestroy();
         }
     }
 
@@ -152,12 +165,14 @@ public final class UdpClient extends IoHandlerAdapter {
      */
     public void doSendAsync(final String mess, boolean needRead) {
         try {
-            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
-                connector = new NioDatagramConnector();
-                connector.setHandler(this);
-                setUpConfig();
-                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-                log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+            synchronized (lock) {
+                if (isClosed()) {
+                    connector = new NioDatagramConnector();
+                    connector.setHandler(this);
+                    setUpConfig();
+                    session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                    log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+                }
             }
             byte[] bts;
             if (isHex) {
@@ -172,11 +187,11 @@ public final class UdpClient extends IoHandlerAdapter {
             buffer.flip();
             session.write(buffer);
             if (!needRead) {
-                doCloseOnFlush();
+                doDestroyOnFlush();
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            doClose();
+            doDestroy();
         }
     }
 
@@ -195,7 +210,7 @@ public final class UdpClient extends IoHandlerAdapter {
         if (socketHandle != null) {
             socketHandle.receiveMsg(recvStr);
         }
-        doClose();
+        doDestroy();
     }
 
     @Override
@@ -204,7 +219,7 @@ public final class UdpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
-        doClose();
+        doDestroy();
         if (socketHandle != null) {
             socketHandle.exceptionCaught(session, cause);
         } else {
@@ -224,7 +239,7 @@ public final class UdpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
-        doClose();
+        doDestroy();
         if (socketHandle != null) {
             socketHandle.sessionClosed(session);
         }
@@ -245,7 +260,7 @@ public final class UdpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
-        doClose();
+        doDestroy();
         socketHandle.sessionIdle(session, idlestatus);
     }
 

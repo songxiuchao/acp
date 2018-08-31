@@ -20,6 +20,8 @@ public final class TcpClient extends IoHandlerAdapter {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
+    private final Object lock = new Object();
+
     private String serverIp;
 
     private int port;
@@ -65,9 +67,18 @@ public final class TcpClient extends IoHandlerAdapter {
     }
 
     /**
+     * 该链接是否关闭
+     *
+     * @return boolean
+     */
+    public boolean isClosed() {
+        return connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing();
+    }
+
+    /**
      * 手动关闭连接
      */
-    public void doClose() {
+    public void doDestroy() {
         if (session != null) {
             session.closeNow();
             session = null;
@@ -81,7 +92,7 @@ public final class TcpClient extends IoHandlerAdapter {
     /**
      * 手动关闭连接
      */
-    public void doCloseOnFlush() {
+    public void doDestroyOnFlush() {
         if (session != null) {
             session.closeOnFlush();
             session = null;
@@ -117,12 +128,14 @@ public final class TcpClient extends IoHandlerAdapter {
      */
     public String doSendSync(final String mess, boolean needRead) {
         try {
-            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
-                connector = new NioSocketConnector();
-                connector.getSessionConfig().setUseReadOperation(true);
-                setUpConfig();
-                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-                log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut + " idleTime:" + idleTime);
+            synchronized (lock) {
+                if (isClosed()) {
+                    connector = new NioSocketConnector();
+                    connector.getSessionConfig().setUseReadOperation(true);
+                    setUpConfig();
+                    session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                    log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut + " idleTime:" + idleTime);
+                }
             }
             byte[] bts;
             if (isHex) {
@@ -155,11 +168,11 @@ public final class TcpClient extends IoHandlerAdapter {
             return recvStr;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            doClose();
+            doDestroy();
             return "";
         } finally {
             if (!keepAlive) {
-                doCloseOnFlush();
+                doDestroyOnFlush();
             }
         }
     }
@@ -172,12 +185,14 @@ public final class TcpClient extends IoHandlerAdapter {
      */
     public void doSendAsync(final String mess, boolean needRead) {
         try {
-            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
-                connector = new NioSocketConnector();
-                connector.setHandler(this);
-                setUpConfig();
-                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-                log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
+            synchronized (lock) {
+                if (isClosed()) {
+                    connector = new NioSocketConnector();
+                    connector.setHandler(this);
+                    setUpConfig();
+                    session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                    log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
+                }
             }
             byte[] bts;
             if (isHex) {
@@ -193,12 +208,12 @@ public final class TcpClient extends IoHandlerAdapter {
             session.write(buffer);
             if (!needRead) {
                 if (!keepAlive) {
-                    doCloseOnFlush();
+                    doDestroyOnFlush();
                 }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            doClose();
+            doDestroy();
         }
     }
 
@@ -218,7 +233,7 @@ public final class TcpClient extends IoHandlerAdapter {
             socketHandle.receiveMsg(recvStr);
         }
         if (!keepAlive) {
-            doClose();
+            doDestroy();
         }
     }
 
@@ -228,7 +243,7 @@ public final class TcpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
-        doClose();
+        doDestroy();
         if (socketHandle != null) {
             socketHandle.exceptionCaught(session, cause);
         } else {
@@ -248,7 +263,7 @@ public final class TcpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
-        doClose();
+        doDestroy();
         if (socketHandle != null) {
             socketHandle.sessionClosed(session);
         }
@@ -272,7 +287,7 @@ public final class TcpClient extends IoHandlerAdapter {
             if (session != null) {
                 session.closeNow();
             }
-            doClose();
+            doDestroy();
         }
     }
 
