@@ -12,7 +12,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
-import pers.acp.client.socket.ISocketHandle;
+import pers.acp.client.socket.ISocketClientHandle;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
@@ -26,11 +26,13 @@ public final class TcpClient extends IoHandlerAdapter {
 
     private int timeOut;
 
+    private int idleTime;
+
     private String serverCharset = CommonTools.getDefaultCharset();
 
     private boolean isHex = false;
 
-    private ISocketHandle socketHandle = null;
+    private ISocketClientHandle socketHandle = null;
 
     private boolean keepAlive = false;
 
@@ -43,16 +45,22 @@ public final class TcpClient extends IoHandlerAdapter {
      *
      * @param serverIp 发送IP
      * @param port     发送端口
-     * @param timeOut  接收超时时间
+     * @param timeOut  超时时间
+     * @param idleTime 空闲等待时间
      */
-    public TcpClient(String serverIp, int port, int timeOut) {
+    public TcpClient(String serverIp, int port, int timeOut, int idleTime) {
         this.serverIp = serverIp;
         this.port = port;
-        int MAX_TIMEOUT = 3600000;
-        if (timeOut < MAX_TIMEOUT) {
+        int MAX_TIME = 3600000;
+        if (timeOut < MAX_TIME) {
             this.timeOut = timeOut;
         } else {
-            this.timeOut = MAX_TIMEOUT;
+            this.timeOut = MAX_TIME;
+        }
+        if (idleTime < MAX_TIME) {
+            this.idleTime = idleTime;
+        } else {
+            this.idleTime = MAX_TIME;
         }
     }
 
@@ -91,11 +99,12 @@ public final class TcpClient extends IoHandlerAdapter {
         connector.setConnectTimeoutMillis(timeOut);
         SocketSessionConfig config = (SocketSessionConfig) connector.getSessionConfig();
         config.setWriteTimeout(timeOut / 1000);
+        config.setBothIdleTime(idleTime / 1000);
+        config.setWriterIdleTime(idleTime / 1000);
+        config.setReaderIdleTime(idleTime / 1000);
         config.setKeepAlive(keepAlive);
         if (keepAlive) {
             config.setSoLinger(0);
-        } else {
-            config.setBothIdleTime(timeOut / 1000);
         }
     }
 
@@ -106,14 +115,14 @@ public final class TcpClient extends IoHandlerAdapter {
      * @param needRead 是否需要接收返回信息
      * @return 响应报文
      */
-    public String doSend(final String mess, boolean needRead) {
+    public String doSendSync(final String mess, boolean needRead) {
         try {
             if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
                 connector = new NioSocketConnector();
                 connector.getSessionConfig().setUseReadOperation(true);
                 setUpConfig();
                 session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-                log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut);
+                log.debug("connect tcp server[" + serverIp + ":port] timeOut:" + timeOut + " idleTime:" + idleTime);
             }
             byte[] bts;
             if (isHex) {
@@ -158,22 +167,10 @@ public final class TcpClient extends IoHandlerAdapter {
     /**
      * 异步发送报文
      *
-     * @param socketHandle 响应报文处理类
-     * @param mess         报文字符串
+     * @param mess     报文字符串
+     * @param needRead 是否需要接收返回
      */
-    public void doSend(ISocketHandle socketHandle, final String mess) {
-        doSend(socketHandle, mess, true);
-    }
-
-    /**
-     * 异步发送报文
-     *
-     * @param socketHandle 响应报文处理类
-     * @param mess         报文字符串
-     * @param needRead     是否需要接收返回
-     */
-    public void doSend(ISocketHandle socketHandle, final String mess, boolean needRead) {
-        this.socketHandle = socketHandle;
+    public void doSendAsync(final String mess, boolean needRead) {
         try {
             if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
                 connector = new NioSocketConnector();
@@ -221,19 +218,21 @@ public final class TcpClient extends IoHandlerAdapter {
             socketHandle.receiveMsg(recvStr);
         }
         if (!keepAlive) {
-            if (session != null) {
-                session.closeNow();
-                connector = null;
-            }
+            doClose();
         }
     }
 
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
         log.error(cause.getMessage(), cause);
-        super.exceptionCaught(session, cause);
         if (session != null) {
             session.closeNow();
+        }
+        doClose();
+        if (socketHandle != null) {
+            socketHandle.exceptionCaught(session, cause);
+        } else {
+            super.exceptionCaught(session, cause);
         }
     }
 
@@ -249,25 +248,40 @@ public final class TcpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
+        doClose();
+        if (socketHandle != null) {
+            socketHandle.sessionClosed(session);
+        }
     }
 
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
+        if (socketHandle != null) {
+            socketHandle.sessionCreated(session);
+        }
     }
 
     @Override
     public void sessionIdle(IoSession session, IdleStatus idlestatus) throws Exception {
         super.sessionIdle(session, idlestatus);
         log.debug("tcp client session idle");
-        if (session != null) {
-            session.closeNow();
+        if (socketHandle != null) {
+            socketHandle.sessionIdle(session, idlestatus);
+        } else {
+            if (session != null) {
+                session.closeNow();
+            }
+            doClose();
         }
     }
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
         super.sessionOpened(session);
+        if (socketHandle != null) {
+            socketHandle.sessionOpened(session);
+        }
     }
 
     public String getServerCharset() {
@@ -299,6 +313,14 @@ public final class TcpClient extends IoHandlerAdapter {
      */
     public void setHex(boolean isHex) {
         this.isHex = isHex;
+    }
+
+    public ISocketClientHandle getSocketHandle() {
+        return socketHandle;
+    }
+
+    public void setSocketHandle(ISocketClientHandle socketHandle) {
+        this.socketHandle = socketHandle;
     }
 
     public boolean isKeepAlive() {

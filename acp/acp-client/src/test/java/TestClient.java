@@ -49,15 +49,15 @@ public class TestClient {
 //                        client.setFileName("测试.txt");
 //                        client.doUploadForSFTP(new File("C:\\WorkFile\\工作资料\\区块链\\服务器信息.txt"));
                     } else if (flag == 3) {
-                        TcpClient client = new TcpClient("192.168.19.1", 1234, 60000);
+                        TcpClient client = new TcpClient("192.168.19.1", 1234, 60000, 600000);
 //                        client.setServerCharset("gbk");
-                        client.doSend("你是猪", true);
-                        System.out.println(client.doSend("你是猪", true));
+                        client.doSendSync("你是猪", true);
+                        System.out.println(client.doSendSync("你是猪", true));
                     } else if (flag == 4) {
                         UdpClient client = new UdpClient("127.0.0.1", 9999, 60000);
 //                        client.setServerCharset("gbk");
 //                        client.doSend("你是猪", true);
-                        System.out.println(client.doSend("你是猪", true));
+                        System.out.println(client.doSendSync("你是猪", true));
                     }
                 }
             }).start();

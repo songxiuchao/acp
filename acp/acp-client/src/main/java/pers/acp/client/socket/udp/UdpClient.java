@@ -12,7 +12,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioDatagramConnector;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
-import pers.acp.client.socket.ISocketHandle;
+import pers.acp.client.socket.ISocketClientHandle;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
@@ -30,7 +30,11 @@ public final class UdpClient extends IoHandlerAdapter {
 
     private boolean isHex = false;
 
-    private ISocketHandle socketHandle = null;
+    private ISocketClientHandle socketHandle = null;
+
+    private IoConnector connector = null;
+
+    private IoSession session = null;
 
     /**
      * 创建socket发送客户端
@@ -51,31 +55,58 @@ public final class UdpClient extends IoHandlerAdapter {
     }
 
     /**
-     * 配置信息
+     * 手动关闭连接
      */
-    private void setUpConfig(IoConnector connector) {
-        connector.setConnectTimeoutMillis(timeOut);
-        SocketSessionConfig config = (SocketSessionConfig) connector.getSessionConfig();
-        config.setWriteTimeout(timeOut / 1000);
-        config.setBothIdleTime(timeOut / 1000);
+    public void doClose() {
+        if (session != null) {
+            session.closeNow();
+            session = null;
+        }
+        if (connector != null) {
+            connector.dispose();
+            connector = null;
+        }
     }
 
     /**
-     * 发送报文
+     * 手动关闭连接
+     */
+    public void doCloseOnFlush() {
+        if (session != null) {
+            session.closeOnFlush();
+            session = null;
+        }
+        if (connector != null) {
+            connector.dispose(true);
+            connector = null;
+        }
+    }
+
+    /**
+     * 配置信息
+     */
+    private void setUpConfig() {
+        connector.setConnectTimeoutMillis(timeOut);
+        SocketSessionConfig config = (SocketSessionConfig) connector.getSessionConfig();
+        config.setWriteTimeout(timeOut / 1000);
+    }
+
+    /**
+     * 同步发送报文
      *
      * @param mess     报文字符串
      * @param needRead 是否需要接收返回信息
      * @return 响应报文
      */
-    public String doSend(final String mess, boolean needRead) {
-        IoConnector connector = null;
-        IoSession session = null;
+    public String doSendSync(final String mess, boolean needRead) {
         try {
-            connector = new NioDatagramConnector();
-            connector.getSessionConfig().setUseReadOperation(true);
-            setUpConfig(connector);
-            session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-            log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
+                connector = new NioDatagramConnector();
+                connector.getSessionConfig().setUseReadOperation(true);
+                setUpConfig();
+                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+            }
             byte[] bts;
             if (isHex) {
                 bts = ByteUtils.fromHexString(mess);
@@ -109,32 +140,25 @@ public final class UdpClient extends IoHandlerAdapter {
             log.error(e.getMessage(), e);
             return "";
         } finally {
-            if (session != null) {
-                session.closeOnFlush();
-            }
-            if (connector != null) {
-                connector.dispose(true);
-            }
+            doClose();
         }
     }
 
     /**
-     * 发送报文
+     * 异步发送报文
      *
-     * @param socketHandle 响应报文处理类
-     * @param mess         报文字符串
-     * @param needRead     是否需要接收返回信息
+     * @param mess     报文字符串
+     * @param needRead 是否需要接收返回信息
      */
-    public void doSend(ISocketHandle socketHandle, final String mess, boolean needRead) {
-        this.socketHandle = socketHandle;
-        IoConnector connector = null;
-        IoSession session = null;
+    public void doSendAsync(final String mess, boolean needRead) {
         try {
-            connector = new NioDatagramConnector();
-            connector.setHandler(this);
-            setUpConfig(connector);
-            session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
-            log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+            if (connector == null || session == null || connector.isDisposed() || !session.isConnected() || connector.isDisposing() || session.isClosing()) {
+                connector = new NioDatagramConnector();
+                connector.setHandler(this);
+                setUpConfig();
+                session = connector.connect(new InetSocketAddress(serverIp, port)).awaitUninterruptibly().getSession();
+                log.debug("connect udp server[" + serverIp + ":port] timeOut:" + timeOut);
+            }
             byte[] bts;
             if (isHex) {
                 bts = ByteUtils.fromHexString(mess);
@@ -148,17 +172,11 @@ public final class UdpClient extends IoHandlerAdapter {
             buffer.flip();
             session.write(buffer);
             if (!needRead) {
-                session.closeOnFlush();
-                connector.dispose(true);
+                doCloseOnFlush();
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if (session != null) {
-                session.closeNow();
-            }
-            if (connector != null) {
-                connector.dispose();
-            }
+            doClose();
         }
     }
 
@@ -177,17 +195,20 @@ public final class UdpClient extends IoHandlerAdapter {
         if (socketHandle != null) {
             socketHandle.receiveMsg(recvStr);
         }
-        if (session != null) {
-            session.closeNow();
-        }
+        doClose();
     }
 
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
         log.error(cause.getMessage(), cause);
-        super.exceptionCaught(session, cause);
         if (session != null) {
             session.closeNow();
+        }
+        doClose();
+        if (socketHandle != null) {
+            socketHandle.exceptionCaught(session, cause);
+        } else {
+            super.exceptionCaught(session, cause);
         }
     }
 
@@ -203,11 +224,18 @@ public final class UdpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
+        doClose();
+        if (socketHandle != null) {
+            socketHandle.sessionClosed(session);
+        }
     }
 
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
+        if (socketHandle != null) {
+            socketHandle.sessionCreated(session);
+        }
     }
 
     @Override
@@ -217,11 +245,16 @@ public final class UdpClient extends IoHandlerAdapter {
         if (session != null) {
             session.closeNow();
         }
+        doClose();
+        socketHandle.sessionIdle(session, idlestatus);
     }
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
         super.sessionOpened(session);
+        if (socketHandle != null) {
+            socketHandle.sessionOpened(session);
+        }
     }
 
     public String getServerCharset() {
@@ -235,6 +268,14 @@ public final class UdpClient extends IoHandlerAdapter {
      */
     public void setServerCharset(String serverCharset) {
         this.serverCharset = serverCharset;
+    }
+
+    public ISocketClientHandle getSocketHandle() {
+        return socketHandle;
+    }
+
+    public void setSocketHandle(ISocketClientHandle socketHandle) {
+        this.socketHandle = socketHandle;
     }
 
     /**

@@ -4,7 +4,7 @@ import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import pers.acp.core.CommonTools;
-import pers.acp.springboot.core.socket.base.BaseSocketHandle;
+import pers.acp.springboot.core.socket.base.ISocketServerHandle;
 import pers.acp.springboot.core.socket.config.ListenConfig;
 import pers.acp.core.log.LogFactory;
 
@@ -21,20 +21,20 @@ public final class TcpServerHandle implements Runnable {
 
     private ListenConfig listenConfig;
 
-    private BaseSocketHandle socketResponse;
+    private ISocketServerHandle socketServerHandle;
 
     private String recvStr;
 
-    TcpServerHandle(IoSession session, ListenConfig listenConfig, BaseSocketHandle socketResponse, String recvStr) {
+    TcpServerHandle(IoSession session, ListenConfig listenConfig, ISocketServerHandle socketServerHandle, String recvStr) {
         super();
         this.session = session;
         this.listenConfig = listenConfig;
-        this.socketResponse = socketResponse;
+        this.socketServerHandle = socketServerHandle;
         this.recvStr = recvStr;
     }
 
     public void run() {
-        String responseStr = this.socketResponse.doResponse(recvStr);
+        String responseStr = this.socketServerHandle.doResponse(recvStr);
         if (listenConfig.isResponsable()) {
             responseStr = CommonTools.isNullStr(responseStr) ? "" : responseStr;
             try {
