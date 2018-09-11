@@ -80,6 +80,19 @@ gradle全局参数：
     （10）pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
     （11）udp 同 tcp 的开发
     （12）如有需要，可选择引入 acp-file、acp-message 等包
+### （三）启停 springboot 应用
+- [jvm 参考参数](doc/jvm-params.txt)
+- [启停脚本(Linux) server.sh](doc/script/server.sh)，根据实际情况修改第2行 APP_NAME 和第3行 JVM_PARAM 的值即可，和 SpringBoot 应用的 .jar 放在同一路径下
+- [启停(windows) server.bat](doc/script/server.bat)，根据实际情况修改第1行末尾需要执行的 jar 名称，和SpringBoot应用的 .jar 放在同一路径下
+- Linux 命令：
+
+|          命令         |           描述          |
+| --------------------- | ----------------------- | 
+| ./server.sh           | 查看可用参数            |
+| ./server.sh status    | 查看系统运行状态        |
+| ./server.sh start     | 启动应用                |
+| ./server.sh stop      | 停止应用                |
+| ./server.sh restart   | 重启应用                |
 ## 五、开发 SpringCloud 应用
 引入 acp 下相应模块包，demo 位于 cloud 下
 ### （一）模块说明

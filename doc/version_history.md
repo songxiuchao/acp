@@ -8,6 +8,7 @@
     5. 优化改造 socket 服务端和客户端
     6. 优化代码书写
     7. 优化线程池，支持自定义工作线程
+    8. 增加单机 SpringBoot 应用启停脚本
 ##### v4.0.7
     1. SpringCloud 升级至 Finchley.SR1
     2. gradle 构建工具更新至 4.9
