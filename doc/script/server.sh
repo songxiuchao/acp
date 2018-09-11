@@ -46,7 +46,17 @@ status(){
 
 restart(){
   stop
-  start
+  for i in $(seq 1 100)
+  do
+    is_exist
+    if [ $? -eq "0" ]
+    then
+        sleep 1s
+    else
+        start
+        break
+    fi
+  done
 }
 
 case "$1" in
