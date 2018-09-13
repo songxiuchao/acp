@@ -6,7 +6,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
 - [Spring Cloud Finchley.SR1](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 1.8 及以上
-- gradle 4.9
+- gradle 4.10.1
 
 ## 二、gralde 配置
 ### （一）配置文件
@@ -40,7 +40,9 @@ gradle全局参数：
 - release 编译打包并输出
 
 ### （三）升级命令
-    gradlew wrapper --gradle-version=4.9 --distribution-type=all
+``
+    gradlew wrapper --gradle-version=4.10.1 --distribution-type=all
+``
 
 ## 三、工程说明
 - doc目录下的files文件夹，当需要用到时放到打包后的jar同目录下即可
