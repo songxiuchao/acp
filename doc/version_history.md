@@ -10,7 +10,7 @@
     7. 增加单机 SpringBoot 应用启停脚本
     8. 更新 gradle 至 4.10.1
     9. 更新 scala 至 2.12.6
-    10. 更新 kotlin 至 1.2.61
+    10. 更新 kotlin 至 1.2.70
 ##### v4.0.7
     1. SpringCloud 升级至 Finchley.SR1
     2. gradle 构建工具更新至 4.9
