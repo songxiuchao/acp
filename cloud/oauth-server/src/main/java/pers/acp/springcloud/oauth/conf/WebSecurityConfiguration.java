@@ -1,6 +1,7 @@
 package pers.acp.springcloud.oauth.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import pers.acp.core.CommonTools;
 import pers.acp.springcloud.oauth.component.UserPasswordEncoder;
 import pers.acp.springcloud.oauth.domain.SecurityClientDetailsService;
 import pers.acp.springcloud.oauth.domain.SecurityUserDetailsService;
@@ -22,11 +24,14 @@ import pers.acp.springcloud.oauth.domain.SecurityUserDetailsService;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private final String contextPath;
+
     private final UserPasswordEncoder userPasswordEncoder;
 
     @Autowired
-    public WebSecurityConfiguration(UserPasswordEncoder userPasswordEncoder) {
+    public WebSecurityConfiguration(ServerProperties serverProperties, UserPasswordEncoder userPasswordEncoder) {
         this.userPasswordEncoder = userPasswordEncoder;
+        this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
 
     @Bean
@@ -59,12 +64,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers(
-                "/error",
-                "/download",
-                "/actuator",
-                "/actuator/**",
-                "/oauth/**").permitAll()
-                .antMatchers("/**").authenticated();
+                contextPath + "/error",
+                contextPath + "/download",
+                contextPath + "/actuator",
+                contextPath + "/actuator/**",
+                contextPath + "/oauth/**").permitAll()
+                .antMatchers(contextPath + "/**").authenticated();
     }
 
 }

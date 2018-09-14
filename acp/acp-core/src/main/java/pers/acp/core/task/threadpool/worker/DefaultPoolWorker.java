@@ -10,7 +10,7 @@ import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
  */
 public class DefaultPoolWorker extends ThreadPoolWorker {
 
-    private DefaultPoolWorker(ThreadPoolService poolService, long spacingTime) {
+    public DefaultPoolWorker(ThreadPoolService poolService, long spacingTime) {
         super(poolService, spacingTime);
     }
 

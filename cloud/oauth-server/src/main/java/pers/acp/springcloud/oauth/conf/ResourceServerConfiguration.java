@@ -1,9 +1,12 @@
 package pers.acp.springcloud.oauth.conf;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import pers.acp.core.CommonTools;
 
 /**
  * @author zhangbin by 11/04/2018 15:13
@@ -12,6 +15,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
+    private final String contextPath;
+
+    @Autowired
+    public ResourceServerConfiguration(ServerProperties serverProperties) {
+        this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
+    }
 
     /**
      * http 验证策略配置
@@ -23,12 +33,12 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         // match 匹配的url，赋予全部权限（不进行拦截）
         http.csrf().disable().authorizeRequests().antMatchers(
-                "/error",
-                "/download",
-                "/actuator",
-                "/actuator/**",
-                "/oauth/**").permitAll()
-                .antMatchers("/**").authenticated();
+                contextPath + "/error",
+                contextPath + "/download",
+                contextPath + "/actuator",
+                contextPath + "/actuator/**",
+                contextPath + "/oauth/**").permitAll()
+                .antMatchers(contextPath + "/**").authenticated();
     }
 
 }

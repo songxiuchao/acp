@@ -1,3 +1,6 @@
+versions += [
+        boot_admin: "2.0.2"
+]
 buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
@@ -14,8 +17,10 @@ dependencyManagement {
 }
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-security"
     compile("org.springframework.cloud:spring-cloud-starter-netflix-turbine") {
         exclude group: "junit", module: "junit"
     }
     compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard"
+    compile "de.codecentric:spring-boot-admin-starter-server:$versions.boot_admin"
 }

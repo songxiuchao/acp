@@ -105,7 +105,11 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     （2）oauth2.0资源服务配置、客户端服务配置及远程单点认证机制
     （3）自定义 feign 并发策略、自定义 feign 请求拦截
 ##### 2. cloud:admin-server 
-    可视化监控，监控服务状态、信息聚合
+可视化监控，监控服务状态、信息聚合
+    
+|          url          |  描述                   |
+| --------------------- | ----------------------- | 
+| /hystrix              | 断路信息监控            |
 ##### 3. cloud:eureka-server 
     服务注册发现
 ##### 4. cloud:gateway-server 
@@ -134,9 +138,8 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ### （二）组建开发
 ##### 1. 可视化监控
     cloud:admin-server
-    （1）需定置化开发一整套 UI 界面及相关接口
-    （2）需定置化开发收集 cloud 中各服务的信息，并提供接口给 UI 界面
-    （3）修改 yml 配置
+    （1）无需改动代码
+    （2）修改 yml 配置即可
 ##### 2. 服务注册发现（支持高可用eureka集群）
     cloud:eureka-server
     （1）无需改动代码
