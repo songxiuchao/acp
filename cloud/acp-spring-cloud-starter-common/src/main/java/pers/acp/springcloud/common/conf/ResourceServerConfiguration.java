@@ -113,7 +113,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/swagger-resources/configuration/ui",
                 "**.stream",
                 contextPath + RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
-                .antMatchers(contextPath + "/**").authenticated();
+                .anyRequest().authenticated();
     }
 
 }

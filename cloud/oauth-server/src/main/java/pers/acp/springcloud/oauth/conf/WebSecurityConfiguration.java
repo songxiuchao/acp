@@ -69,7 +69,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 contextPath + "/actuator",
                 contextPath + "/actuator/**",
                 contextPath + "/oauth/**").permitAll()
-                .antMatchers(contextPath + "/**").authenticated();
+                .anyRequest().authenticated();
     }
 
 }

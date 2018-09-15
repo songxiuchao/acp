@@ -38,7 +38,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/actuator",
                 contextPath + "/actuator/**",
                 contextPath + "/oauth/**").permitAll()
-                .antMatchers(contextPath + "/**").authenticated();
+                .anyRequest().authenticated();
     }
 
 }
