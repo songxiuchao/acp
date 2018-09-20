@@ -109,6 +109,7 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
+| /                     | 后台监控管理首页        |
 | /hystrix              | 断路信息监控            |
 ##### 3. cloud:eureka-server 
     服务注册发现

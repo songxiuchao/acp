@@ -111,7 +111,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/swagger-ui.html",
                 contextPath + "/webjars/**",
                 contextPath + "/swagger-resources/configuration/ui",
-                "**.stream",
+                contextPath + "/hystrix.stream",
                 contextPath + RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
                 .anyRequest().authenticated();
     }
