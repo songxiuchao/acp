@@ -3,6 +3,7 @@ package pers.acp.springcloud.common.conf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -17,6 +18,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
+import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springcloud.common.enums.RestPrefix;
 
@@ -36,10 +38,13 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     private final ResourceServerProperties resourceServerProperties;
 
+    private final String contextPath;
+
     @Autowired
-    public ResourceServerConfiguration(OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties) {
+    public ResourceServerConfiguration(OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
+        this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
 
     /**
@@ -95,20 +100,20 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         // match 匹配的url，赋予全部权限（不进行拦截）
         http.csrf().disable().authorizeRequests().antMatchers(
-                "/error",
-                "/download",
-                "/actuator",
-                "/actuator/**",
-                "/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**",
-                "/swagger-resources/configuration/ui",
-                "**.stream",
-                RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
-                .antMatchers("/**").authenticated();
+                contextPath + "/error",
+                contextPath + "/download",
+                contextPath + "/actuator",
+                contextPath + "/actuator/**",
+                contextPath + "/v2/api-docs",
+                contextPath + "/configuration/ui",
+                contextPath + "/swagger-resources/**",
+                contextPath + "/configuration/security",
+                contextPath + "/swagger-ui.html",
+                contextPath + "/webjars/**",
+                contextPath + "/swagger-resources/configuration/ui",
+                contextPath + "/hystrix.stream",
+                contextPath + RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
+                .anyRequest().authenticated();
     }
 
 }

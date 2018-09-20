@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pers.acp.springboot.core.handle.HttpServletRequestAcp;
+import pers.acp.springboot.core.tools.IpTools;
 import pers.acp.springcloud.common.log.LogInstance;
 import pers.acp.springcloud.server.helloworld.feign.HelloServer;
 import pers.acp.springcloud.server.helloworld.feign.WorldServer;
@@ -38,6 +40,12 @@ public class HelloWorldController {
     public ResponseEntity<Object> helloWorldGet(@RequestParam String name) {
         logInstance.info(helloServer.fromClient(name) + ";" + worldServer.fromClient(name));
         return ResponseEntity.ok(helloServer.fromClient(name) + ";" + worldServer.fromClient(name));
+    }
+
+    @GetMapping(value = "/open/ips", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Object> ips(HttpServletRequestAcp requestAcp) {
+        String ip = IpTools.getRemoteIP(requestAcp);
+        return ResponseEntity.ok(ip);
     }
 
 }

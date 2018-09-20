@@ -1,6 +1,6 @@
 package pers.acp.springboot.common.init.task;
 
-import pers.acp.springboot.core.socket.base.BaseSocketHandle;
+import pers.acp.springboot.core.socket.base.ISocketServerHandle;
 import pers.acp.springboot.core.socket.config.ListenConfig;
 import pers.acp.springboot.core.socket.config.TcpConfig;
 import pers.acp.springboot.core.socket.tcp.TcpServer;
@@ -26,8 +26,8 @@ public final class InitTcpServer {
                             String beanName = listen.getResponseBean();
                             if (!CommonTools.isNullStr(beanName)) {
                                 Object responseBean = SpringBeanFactory.getBean(listen.getResponseBean());
-                                if (responseBean instanceof BaseSocketHandle) {
-                                    BaseSocketHandle tcpResponse = (BaseSocketHandle) responseBean;
+                                if (responseBean instanceof ISocketServerHandle) {
+                                    ISocketServerHandle tcpResponse = (ISocketServerHandle) responseBean;
                                     int port = listen.getPort();
                                     TcpServer server = new TcpServer(port, listen, tcpResponse);
                                     Thread sub = new Thread(server);

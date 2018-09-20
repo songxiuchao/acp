@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class SftpClient extends BaseClient {
 
-    private LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private String serverCharset = "GBK";
 

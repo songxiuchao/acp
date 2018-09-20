@@ -6,9 +6,10 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.logging.LogLevel;
 import org.apache.mina.filter.logging.LoggingFilter;
+import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
-import pers.acp.springboot.core.socket.base.BaseSocketHandle;
+import pers.acp.springboot.core.socket.base.ISocketServerHandle;
 import pers.acp.springboot.core.socket.config.ListenConfig;
 import pers.acp.core.log.LogFactory;
 
@@ -22,24 +23,24 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
 
     private ListenConfig listenConfig;
 
-    private BaseSocketHandle socketResponse;
+    private ISocketServerHandle socketServerHandle;
 
     /**
      * 构造函数
      *
-     * @param port           端口
-     * @param listenConfig   监听服务配置
-     * @param socketResponse 接收报文处理对象
+     * @param port               端口
+     * @param listenConfig       监听服务配置
+     * @param socketServerHandle 接收报文处理对象
      */
-    public TcpServer(int port, ListenConfig listenConfig, BaseSocketHandle socketResponse) {
+    public TcpServer(int port, ListenConfig listenConfig, ISocketServerHandle socketServerHandle) {
         this.port = port;
         this.listenConfig = listenConfig;
-        this.socketResponse = socketResponse;
+        this.socketServerHandle = socketServerHandle;
     }
 
     @Override
     public void run() {
-        if (this.socketResponse != null) {
+        if (this.socketServerHandle != null) {
             NioSocketAcceptor acceptor = new NioSocketAcceptor();
             LoggingFilter loggingFilter = new LoggingFilter();
             loggingFilter.setSessionClosedLogLevel(LogLevel.DEBUG);
@@ -49,7 +50,6 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
             loggingFilter.setMessageSentLogLevel(LogLevel.DEBUG);
             loggingFilter.setMessageReceivedLogLevel(LogLevel.DEBUG);
             acceptor.getFilterChain().addLast("logger", loggingFilter);
-            acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, (int) (listenConfig.getIdletime() / 1000));
             acceptor.setHandler(this);
             try {
                 acceptor.bind(new InetSocketAddress(port));
@@ -77,25 +77,29 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
             recvStr = new String(byten, listenConfig.getCharset());
         }
         log.debug("tcp receive:" + recvStr);
-        TcpServerHandle handle = new TcpServerHandle(session, listenConfig, socketResponse, recvStr);
-        handle.run();
+        TcpServerHandle handle = new TcpServerHandle(session, listenConfig, socketServerHandle, recvStr);
+        Thread thread = new Thread(handle);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @Override
     public void sessionClosed(IoSession session) throws Exception {
         super.sessionClosed(session);
+        log.debug("tcp server session closed");
         if (session != null) {
             session.closeNow();
         }
+        socketServerHandle.sessionClosed(session);
     }
 
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
         log.error(cause.getMessage(), cause);
-        super.exceptionCaught(session, cause);
         if (session != null) {
             session.closeNow();
         }
+        socketServerHandle.exceptionCaught(session, cause);
     }
 
     @Override
@@ -111,20 +115,28 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
+        SocketSessionConfig config = (SocketSessionConfig) session.getConfig();
+        config.setBothIdleTime((int) (listenConfig.getIdletime() / 1000));
+        config.setWriterIdleTime((int) (listenConfig.getIdletime() / 1000));
+        config.setReaderIdleTime((int) (listenConfig.getIdletime() / 1000));
+        config.setKeepAlive(listenConfig.isKeepAlive());
+        if (listenConfig.isKeepAlive()) {
+            config.setSoLinger(0);
+        }
+        socketServerHandle.sessionCreated(session);
     }
 
     @Override
     public void sessionIdle(IoSession session, IdleStatus idlestatus) throws Exception {
         super.sessionIdle(session, idlestatus);
-        if (!listenConfig.isKeepAlive()) {
-            if (session != null) {
-                session.closeNow();
-            }
-        }
+        log.debug("tcp server session idle");
+        socketServerHandle.sessionIdle(session, idlestatus);
     }
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
         super.sessionOpened(session);
+        socketServerHandle.sessionOpened(session);
     }
+
 }

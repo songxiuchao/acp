@@ -33,7 +33,7 @@ public final class ConnectionFactory {
      */
     private static int DEFAULT_CONNECTION_NO = 0;
 
-    private int connectionNo = 0;
+    private int connectionNo;
 
     private DBType dbType;
 

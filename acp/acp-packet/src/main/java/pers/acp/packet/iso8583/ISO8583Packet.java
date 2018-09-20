@@ -44,7 +44,7 @@ import java.util.TreeMap;
  */
 public class ISO8583Packet {
 
-    private static LogFactory log = LogFactory.getInstance(ISO8583Packet.class);
+    private static final LogFactory log = LogFactory.getInstance(ISO8583Packet.class);
 
     private static String packet_encoding = "UTF-8";//报文编码 UTF-8 GBK
 

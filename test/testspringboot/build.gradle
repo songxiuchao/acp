@@ -25,7 +25,7 @@ task dockerBuilder(type: Docker, dependsOn: build) {
     tag = "${project.group}/${applicationName}"
     volume('/tmp')
     addFile("${jar.archiveName}", "/app/${jar.archiveName}")
-    entryPoint(["java", "-Xmx500m", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/${jar.archiveName}"])
+    entryPoint(["java", "-XX:UseG1GC", "-XX:InitiatingHeapOccupancyPercent=0", "-Xmx500m", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/${jar.archiveName}"])
     exposePort(9090)
     doFirst {
         copy {

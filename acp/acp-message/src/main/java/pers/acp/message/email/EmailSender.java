@@ -16,7 +16,7 @@ import java.util.Properties;
 
 public class EmailSender {
 
-    private LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private String encode = CommonTools.getDefaultCharset();
 

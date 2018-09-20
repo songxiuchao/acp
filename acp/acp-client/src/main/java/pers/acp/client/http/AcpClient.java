@@ -266,6 +266,25 @@ public class AcpClient {
         setSendSOAP(false);
         setRootNameXML(rootNameXML);
         setParams(params);
+        setBytes(null);
+        return doRequest();
+    }
+
+    /**
+     * POST请求发送XML
+     *
+     * @param bytes xml内容
+     * @return 响应信息
+     */
+    public ResponseResult doPostXML(byte[] bytes) throws HttpException {
+        post(true);
+        setSendXML(true);
+        setSendJSONStr(false);
+        setSendBytes(false);
+        setSendSOAP(false);
+        setRootNameXML(null);
+        setParams(null);
+        setBytes(bytes);
         return doRequest();
     }
 

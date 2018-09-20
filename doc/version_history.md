@@ -1,4 +1,17 @@
 ## 版本更新记录
+##### v4.0.8
+    1. 优化完善 acp:acp-spring-boot-starter 中的工具类
+        pers/acp/springboot/core/tools/IpTools.java
+    2. BaseXML.java 中增加转换为 String 的方法
+    3. 优化 XStream 调用方式
+    4. 优化改造 socket 服务端和客户端
+    5. 优化代码书写
+    6. 优化线程池，支持自定义工作线程
+    7. 增加单机 SpringBoot 应用启停脚本
+    8. Cloud 完善监控服务，使用 Spring Boot Admin 2.0.2
+    9. 更新 gradle 至 4.10.1
+    10. 更新 scala 至 2.12.6
+    11. 更新 kotlin 至 1.2.70
 ##### v4.0.7
     1. SpringCloud 升级至 Finchley.SR1
     2. gradle 构建工具更新至 4.9

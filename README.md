@@ -1,12 +1,12 @@
 # acp 
-###### v4.0.7
+###### v4.0.8
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件版本及官方文档
 - [Spring Boot 2.0.4.RELEASE](https://projects.spring.io/spring-boot)
 - [Spring Cloud Finchley.SR1](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 1.8 及以上
-- gradle 4.9
+- gradle 4.10.1
 
 ## 二、gralde 配置
 ### （一）配置文件
@@ -40,7 +40,9 @@ gradle全局参数：
 - release 编译打包并输出
 
 ### （三）升级命令
-    gradlew wrapper --gradle-version=4.9 --distribution-type=all
+``
+    gradlew wrapper --gradle-version=4.10.1 --distribution-type=all
+``
 
 ## 三、工程说明
 - doc目录下的files文件夹，当需要用到时放到打包后的jar同目录下即可
@@ -80,6 +82,19 @@ gradle全局参数：
     （10）pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
     （11）udp 同 tcp 的开发
     （12）如有需要，可选择引入 acp-file、acp-message 等包
+### （三）启停 springboot 应用
+- [jvm 参考参数](doc/jvm-params.txt)
+- [启停脚本(Linux) server.sh](doc/script/server.sh)，根据实际情况修改第2行 APP_NAME 和第3行 JVM_PARAM 的值即可，和 SpringBoot 应用的 .jar 放在同一路径下
+- [启停(windows) server.bat](doc/script/server.bat)，根据实际情况修改第1行末尾需要执行的 jar 名称，和SpringBoot应用的 .jar 放在同一路径下
+- Linux 命令：
+
+|          命令         |           描述          |
+| --------------------- | ----------------------- | 
+| ./server.sh           | 查看可用参数            |
+| ./server.sh status    | 查看系统运行状态        |
+| ./server.sh start     | 启动应用                |
+| ./server.sh stop      | 停止应用                |
+| ./server.sh restart   | 重启应用                |
 ## 五、开发 SpringCloud 应用
 引入 acp 下相应模块包，demo 位于 cloud 下
 ### （一）模块说明
@@ -90,7 +105,12 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     （2）oauth2.0资源服务配置、客户端服务配置及远程单点认证机制
     （3）自定义 feign 并发策略、自定义 feign 请求拦截
 ##### 2. cloud:admin-server 
-    可视化监控，监控服务状态、信息聚合
+可视化监控，监控服务状态、信息聚合
+    
+|          url          |  描述                   |
+| --------------------- | ----------------------- | 
+| /                     | 后台监控管理首页        |
+| /hystrix              | 断路信息监控            |
 ##### 3. cloud:eureka-server 
     服务注册发现
 ##### 4. cloud:gateway-server 
@@ -119,9 +139,8 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ### （二）组建开发
 ##### 1. 可视化监控
     cloud:admin-server
-    （1）需定置化开发一整套 UI 界面及相关接口
-    （2）需定置化开发收集 cloud 中各服务的信息，并提供接口给 UI 界面
-    （3）修改 yml 配置
+    （1）无需改动代码
+    （2）修改 yml 配置即可
 ##### 2. 服务注册发现（支持高可用eureka集群）
     cloud:eureka-server
     （1）无需改动代码

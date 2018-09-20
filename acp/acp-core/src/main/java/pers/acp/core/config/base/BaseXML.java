@@ -54,6 +54,7 @@ public abstract class BaseXML {
                     if (inputStreamReader != null) {
                         synchronized (instanceMap) {
                             XStream xstream = new XStream(new DomDriver());
+                            XStream.setupDefaultSecurity(xstream);
                             xstream.addPermission(type -> type.getName().equals(cls.getName()));
                             xstream.processAnnotations(cls);
                             BaseXML obj = (BaseXML) xstream.fromXML(inputStreamReader);
@@ -88,6 +89,32 @@ public abstract class BaseXML {
     }
 
     /**
+     * 转换成 XML 字符串
+     *
+     * @return XML 字符串
+     */
+    public String toXMLString() throws ConfigException {
+        StringWriter out = new StringWriter();
+        try {
+            synchronized (this) {
+                XStream xstream = new XStream(new DomDriver());
+                XStream.setupDefaultSecurity(xstream);
+                xstream.toXML(this, out);
+            }
+            return out.toString();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new ConfigException("convert config failed:[" + this.getClass().getCanonicalName() + "]");
+        } finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
      * 将java对象信息写入xml文件
      */
     public void storeToXml() throws ConfigException {
@@ -97,6 +124,7 @@ public abstract class BaseXML {
                 synchronized (this) {
                     File file = new File(fileAdbPathName);
                     XStream xstream = new XStream(new DomDriver());
+                    XStream.setupDefaultSecurity(xstream);
                     oFile = new OutputStreamWriter(new FileOutputStream(file), CommonUtils.getDefaultCharset());
                     xstream.toXML(this, oFile);
                     lastModified = file.lastModified();

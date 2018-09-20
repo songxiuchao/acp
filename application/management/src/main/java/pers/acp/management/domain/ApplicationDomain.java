@@ -13,7 +13,7 @@ import java.util.List;
  * @since JDK1.8
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ApplicationDomain {
 
     private final ApplicationRepository applicationRepository;

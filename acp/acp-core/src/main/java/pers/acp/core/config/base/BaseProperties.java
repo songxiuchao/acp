@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class BaseProperties extends Properties {
 
+    private static final long serialVersionUID = -8039022312482420408L;
+
     private static final LogFactory log = LogFactory.getInstance(BaseProperties.class);// 日志对象
 
     private static final Map<String, BaseProperties> instanceMap = new ConcurrentHashMap<>();

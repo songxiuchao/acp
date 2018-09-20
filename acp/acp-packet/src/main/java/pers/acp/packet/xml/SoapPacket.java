@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class SoapPacket {
 
-    private static LogFactory log = LogFactory.getInstance(SoapPacket.class);
+    private static final LogFactory log = LogFactory.getInstance(SoapPacket.class);
 
     private SoapType soapType = SoapType.SOAP_1_2;
 

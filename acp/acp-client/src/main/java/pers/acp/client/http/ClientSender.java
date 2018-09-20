@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 
 final class ClientSender {
 
-    private LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private static TrustManager manager = new X509TrustManager() {
 
@@ -312,17 +312,21 @@ final class ClientSender {
                 createHttpClient();
                 HttpClientContext context = generateContext(url);
                 if (post) {
-                    request = new HttpPost(url);
-                    request = initHeader(request, headers);
+                    HttpRequestBase origRequest = new HttpPost(url);
+                    request = initHeader(origRequest, headers);
                     if (sendXML) {
-                        if (params == null || params.isEmpty()) {
-                            log.error("model is sendXML,but params is null!");
-                            throw new HttpException("model is sendXML,but params is null!");
+                        if ((params == null || params.isEmpty()) && (bytes == null || bytes.length == 0)) {
+                            log.error("model is sendXML,but content is null!");
+                            throw new HttpException("model is sendXML,but content is null!");
                         }
                         request.addHeader("content-Type", "application/xml;charset=" + clientCharset);
                         request.addHeader("Accept-Charset", clientCharset);
-                        String xmlData = HttpPacket.buildPostXMLParam(params, rootName, clientCharset);
-                        ((HttpPost) request).setEntity(new StringEntity(xmlData, clientCharset));
+                        if (params != null && !params.isEmpty()) {
+                            String xmlData = HttpPacket.buildPostXMLParam(params, rootName, clientCharset);
+                            ((HttpPost) request).setEntity(new StringEntity(xmlData, clientCharset));
+                        } else {
+                            ((HttpPost) request).setEntity(new ByteArrayEntity(bytes));
+                        }
                     } else if (sendJSONStr) {
                         if (CommonTools.isNullStr(jsonString)) {
                             log.error("model is sendJSONStr,but JSONString is null!");
@@ -356,8 +360,8 @@ final class ClientSender {
                     response = client.execute(request, context);
                 } else {
                     url = HttpPacket.buildGetParam(url, params, clientCharset);
-                    request = new HttpGet(url);
-                    request = initHeader(request, headers);
+                    HttpRequestBase origRequest = new HttpGet(url);
+                    request = initHeader(origRequest, headers);
                     request.addHeader("content-Type", "text/html; charset=" + clientCharset);
                     response = client.execute(request, context);
                 }

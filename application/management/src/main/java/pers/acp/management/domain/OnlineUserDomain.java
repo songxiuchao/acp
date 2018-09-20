@@ -13,7 +13,7 @@ import java.util.Date;
  * @since JDK1.8
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class OnlineUserDomain {
 
     private final OnlineUserRepository onlineUserRepository;

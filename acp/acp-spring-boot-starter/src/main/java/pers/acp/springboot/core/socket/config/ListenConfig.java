@@ -34,6 +34,10 @@ public class ListenConfig {
     private String responseBean;
 
     @XStreamAsAttribute
+    @XStreamAlias("responsable")
+    private boolean responsable;
+
+    @XStreamAsAttribute
     @XStreamAlias("charset")
     private String charset;
 
@@ -67,6 +71,10 @@ public class ListenConfig {
 
     public String getCharset() {
         return charset;
+    }
+
+    public boolean isResponsable() {
+        return responsable;
     }
 
 }

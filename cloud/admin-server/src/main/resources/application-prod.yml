@@ -18,6 +18,19 @@ management:
 spring:
   thymeleaf:
     cache: false
+  security:
+    user:
+      name: admin
+      password: 888888
+  # ===============================
+  # = Spring Boot Admin
+  # ===============================
+  boot:
+    admin:
+      ui:
+        resource-locations:
+        - "classpath:/META-INF/spring-boot-admin-server-ui/"
+        - "classpath:/static/"
 # ===============================
 # = Eureka Config
 # ===============================
@@ -26,6 +39,9 @@ eureka:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 15
+    metadata-map:
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
   client:
     registry-fetch-interval-seconds: 5
     service-url:

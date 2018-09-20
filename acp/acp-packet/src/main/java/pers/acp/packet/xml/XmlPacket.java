@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.naming.NoNameCoder;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
 import java.io.ByteArrayInputStream;
@@ -25,7 +27,7 @@ import java.util.Map;
  */
 public class XmlPacket {
 
-    private static LogFactory log = LogFactory.getInstance(XmlPacket.class);
+    private static final LogFactory log = LogFactory.getInstance(XmlPacket.class);
 
     /**
      * 解析XML获取Map对象
@@ -125,19 +127,30 @@ public class XmlPacket {
     @SuppressWarnings("unchecked")
     public static <T> T xmlToObject(String xmlStr, Class<T> cls) {
         XStream xstream = new XStream(new DomDriver());
+        XStream.setupDefaultSecurity(xstream);
         xstream.addPermission(type -> type.equals(cls));
         xstream.processAnnotations(cls);
+        xstream.autodetectAnnotations(true);
         return (T) xstream.fromXML(xmlStr);
     }
 
     /**
      * 对象转xml字符串
      *
-     * @param obj 对象
+     * @param obj     对象
+     * @param charset 字符集
      * @return xml字符串
      */
-    public static String objectToXML(Object obj) {
-        XStream xstream = new XStream(new DomDriver());
+    public static String objectToXML(Object obj, String charset) {
+        String encoding;
+        if (CommonTools.isNullStr(charset)) {
+            encoding = CommonTools.getDefaultCharset();
+        } else {
+            encoding = charset;
+        }
+        XStream xstream = new XStream(new DomDriver(encoding, new NoNameCoder()));
+        XStream.setupDefaultSecurity(xstream);
+        xstream.autodetectAnnotations(true);
         return xstream.toXML(obj);
     }
 

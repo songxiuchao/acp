@@ -1,6 +1,6 @@
 package pers.acp.springboot.common.init.task;
 
-import pers.acp.springboot.core.socket.base.BaseSocketHandle;
+import pers.acp.springboot.core.socket.base.ISocketServerHandle;
 import pers.acp.springboot.core.socket.config.ListenConfig;
 import pers.acp.springboot.core.socket.config.UdpConfig;
 import pers.acp.springboot.core.socket.udp.UdpServer;
@@ -26,8 +26,8 @@ public final class InitUdpServer {
                             String beanName = listen.getResponseBean();
                             if (!CommonTools.isNullStr(beanName)) {
                                 Object responseBean = SpringBeanFactory.getBean(listen.getResponseBean());
-                                if (responseBean instanceof BaseSocketHandle) {
-                                    BaseSocketHandle udpResponse = (BaseSocketHandle) responseBean;
+                                if (responseBean instanceof ISocketServerHandle) {
+                                    ISocketServerHandle udpResponse = (ISocketServerHandle) responseBean;
                                     int port = listen.getPort();
                                     UdpServer server = new UdpServer(port, listen, udpResponse);
                                     Thread sub = new Thread(server);
