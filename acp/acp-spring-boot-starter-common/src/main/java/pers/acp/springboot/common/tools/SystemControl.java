@@ -48,18 +48,16 @@ public class SystemControl implements IDaemonService {
     }
 
     public void stop() {
-        new Thread(() -> {
-            try {
-                Map<String, IListener> listenerMap = SpringBeanFactory.getApplicationContext().getBeansOfType(IListener.class);
-                listenerMap.forEach((key, listener) -> {
-                    log.info("开始停止监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
-                    listener.stopListener();
-                });
-                timerTaskScheduler.controlSchedule(ITimerTaskScheduler.STOP);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-        }).start();
+        try {
+            Map<String, IListener> listenerMap = SpringBeanFactory.getApplicationContext().getBeansOfType(IListener.class);
+            listenerMap.forEach((key, listener) -> {
+                log.info("开始停止监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
+                listener.stopListener();
+            });
+            timerTaskScheduler.controlSchedule(ITimerTaskScheduler.STOP);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override

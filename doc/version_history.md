@@ -1,6 +1,8 @@
 ## 版本更新记录
 ##### v4.0.9
     1. 更新 gradle 至 4.10.2
+    2. 更新 kotlin 至 1.2.71
+    3. 优化系统停止时的过程，不使用单独的线程释放资源
 ##### v4.0.8
     1. 优化完善 acp:acp-spring-boot-starter 中的工具类
         pers/acp/springboot/core/tools/IpTools.java
