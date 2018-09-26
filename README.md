@@ -55,7 +55,7 @@ gradle全局参数：
 ##### 1. acp:acp-core 
     核心包，封装了常用工具类，包括jdbc、配置文件解析（xml、properties）、加解密算法、线程池、定时任务、四则运算、json处理、字符串处理
 ##### 2. acp:acp-core-orm
-    核心扩展包，自定义 ORM 组建
+    核心扩展包，自定义 ORM 组建；以 hibernate 的思想自己封装的组建，仅供娱乐，建议还是使用hibernate
 ##### 3. acp:acp-packet
     通讯打解包组建，依赖 acp-core；封装了http数据包、iso8583报文、xml报文的打解包操作
 ##### 4. acp:acp-client
