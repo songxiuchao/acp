@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import pers.acp.springboot.common.interfaces.IListener;
 import pers.acp.springboot.common.interfaces.ITimerTaskScheduler;
 import pers.acp.springboot.core.daemon.DaemonServiceManager;
-import pers.acp.springboot.core.interfaces.IDaemonService;
+import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.springboot.core.tools.SpringBeanFactory;
 import pers.acp.core.log.LogFactory;
 

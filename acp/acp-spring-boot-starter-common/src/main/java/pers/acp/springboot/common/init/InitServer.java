@@ -61,8 +61,6 @@ class InitSource extends Thread {
             /* 初始化系统服务 */
             InitTcpServer.startTcpServer();
             InitUdpServer.startUdpServer();
-            InitFtpServer.startFtpServer();
-            InitSFtpServer.startSFtpServer();
             initTools();
             log.info("finish start-up");
             log.info("****************** system is started ******************");

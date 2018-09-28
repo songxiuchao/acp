@@ -1,7 +1,3 @@
-versions += [
-        ftpserver: "1.1.1",
-        sftp     : "0.11.0"
-]
 buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
@@ -15,12 +11,6 @@ dependencyManagement {
 }
 dependencies {
     compile project(":acp:acp-client")
-
-    // ftp server
-    compile "org.apache.ftpserver:ftpserver-core:$versions.ftpserver"
-
-    // sftp server
-    compile "org.apache.sshd:sshd-sftp:$versions.sftp"
 
     compile "org.javassist:javassist:$versions.javassist"
     compile "org.mockito:mockito-core:$versions.mockito"
