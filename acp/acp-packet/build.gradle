@@ -1,3 +1,7 @@
+versions += [
+        webservices_api: "2.1-b16"
+]
 dependencies {
     compile project(":acp:acp-core")
+    compile "javax.xml:webservices-api:$versions.webservices_api"
 }

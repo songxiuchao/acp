@@ -31,7 +31,7 @@ public class InitFtpServer {
                             String classname = listen.getUserFactoryClass();
                             if (!CommonTools.isNullStr(classname)) {
                                 Class<?> cls = Class.forName(classname);
-                                UserFactory userFactory = (UserFactory) cls.newInstance();
+                                UserFactory userFactory = (UserFactory) cls.getDeclaredConstructor().newInstance();
                                 FTPServer ftpServer = new FTPServer(userFactory.generateFtpUserList(), listen);
                                 Thread sub = new Thread(ftpServer);
                                 sub.setDaemon(true);

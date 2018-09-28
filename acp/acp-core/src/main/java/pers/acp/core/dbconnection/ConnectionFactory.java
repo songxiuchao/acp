@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
@@ -145,7 +146,7 @@ public final class ConnectionFactory {
         String fname = dbType.getInstanceName();
         String classname = ConnectionFactory.class.getCanonicalName();
         Class<?> cls = Class.forName(classname.substring(0, classname.lastIndexOf(".")) + ".factory." + fname);
-        return (BaseDBInstance) cls.newInstance();
+        return (BaseDBInstance) cls.getDeclaredConstructor().newInstance();
     }
 
     /**
@@ -213,7 +214,7 @@ public final class ConnectionFactory {
      * @param cls 自定义类
      * @return 结果List
      */
-    private <T> List<T> resultSetToCusObjList(ResultSet rs, Class<T> cls) throws SQLException, InstantiationException, IllegalAccessException, IOException {
+    private <T> List<T> resultSetToCusObjList(ResultSet rs, Class<T> cls) throws SQLException, InstantiationException, IllegalAccessException, IOException, NoSuchMethodException, InvocationTargetException {
         if (rs == null) {
             return new ArrayList<>();
         }
@@ -232,11 +233,11 @@ public final class ConnectionFactory {
      * @param clas 自定义类
      * @return 自定义对象实例
      */
-    private <T> T rowToCusObj(ResultSet rs, Class<T> clas) throws SQLException, IllegalAccessException, InstantiationException, IOException {
+    private <T> T rowToCusObj(ResultSet rs, Class<T> clas) throws SQLException, IllegalAccessException, InstantiationException, IOException, NoSuchMethodException, InvocationTargetException {
         ResultSetMetaData md = rs.getMetaData();
         int columnCount = md.getColumnCount();
         Field[] fields = clas.getDeclaredFields();
-        T rowData = clas.newInstance();
+        T rowData = clas.getDeclaredConstructor().newInstance();
         for (int i = 1; i <= columnCount; i++) {
             String colName = md.getColumnLabel(i);
             for (Field field : fields) {

@@ -147,12 +147,14 @@ configure(allprojects) {
     compileJava {
         options.encoding = "${encoding}"
         options.fork = true
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
     compileJava.dependsOn(processResources)
 
     compileTestJava {
         options.encoding = "${encoding}"
         options.fork = true
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 
     artifacts {

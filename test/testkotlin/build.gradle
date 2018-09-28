@@ -1,4 +1,6 @@
 ext {
+    kotlinJvmVersion = "1.8"
+    println("kotlin target jvm is ${kotlinJvmVersion}")
     println("kotlin version is ${kotlinVersion}")
 }
 
@@ -18,11 +20,11 @@ apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "${javaVersion}"
+    kotlinOptions.jvmTarget = "${kotlinJvmVersion}"
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "${javaVersion}"
+    kotlinOptions.jvmTarget = "${kotlinJvmVersion}"
 }
 
 dependencies {

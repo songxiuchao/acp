@@ -1,4 +1,6 @@
 ext {
+    scalaJvmVersion = "1.8"
+    println("scala target jvm is ${scalaJvmVersion}")
     println("scala version is ${scalaVersion}")
 }
 
@@ -11,6 +13,9 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
+
+sourceCompatibility = "${scalaJvmVersion}"
+targetCompatibility = "${scalaJvmVersion}"
 
 dependencies {
     compile project(":acp:acp-spring-boot-starter-common")

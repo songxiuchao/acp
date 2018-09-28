@@ -5,6 +5,7 @@
 - docker 打包脚本
 ## testkotlin
 使用 kotlin 语言，引入脚手架开发的 springboot 应用
+- jvm target 目前仅支持 jdk 1.8
 - spring-data-jpa
 - junit5 用例
 - Google 二次认证

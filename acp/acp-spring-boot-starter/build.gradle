@@ -1,6 +1,10 @@
 versions += [
-        ftpserver: "1.1.1",
-        sftp     : "0.11.0"
+        ftpserver   : "1.1.1",
+        sftp        : "0.11.0",
+        
+        jaxb_impl   : "2.1",
+        jaxws_rt    : "2.3.0.2",
+        saaj_api    : "1.3.1"
 ]
 buildscript {
     dependencies {
@@ -22,6 +26,13 @@ dependencies {
     // sftp server
     compile "org.apache.sshd:sshd-sftp:$versions.sftp"
 
+    compile "org.javassist:javassist:$versions.javassist"
+    compile "org.mockito:mockito-core:$versions.mockito"
+    compile "org.glassfish.jaxb:jaxb-runtime:$versions.jaxb_runtime"
+    
+    compile "javax.xml:jaxb-impl:$versions.jaxb_impl"
+    compile "javax.xml.soap:saaj-api:$versions.saaj_api"
+    compile "com.sun.xml.ws:jaxws-rt:$versions.jaxws_rt"
     // spring boot
 //    compile("org.springframework.boot:spring-boot-starter-web") {
 //        exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"

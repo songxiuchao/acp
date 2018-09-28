@@ -21,7 +21,7 @@ public class InitWebService {
                         String classname = server.getClassName();
                         String href = server.getHref();
                         Class<?> cls = Class.forName(classname);
-                        Object instance = cls.newInstance();
+                        Object instance = cls.getDeclaredConstructor().newInstance();
                         IWebService ws = (IWebService) instance;
                         String name = ws.getServiceName();
                         href = href + "/" + name;
