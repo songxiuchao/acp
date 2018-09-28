@@ -1,4 +1,4 @@
-package com.test.springboot.webservice;
+package pers.acp.webservice.test.ws;
 
 import javax.jws.WebService;
 import javax.xml.ws.BindingType;
@@ -8,7 +8,7 @@ import javax.xml.ws.BindingType;
  * @date 2018-1-15 10:41
  * @since JDK1.8
  */
-@WebService(endpointInterface = "com.test.springboot.webservice.ITestWebService", serviceName = "test", portName = "testport", targetNamespace = "http://acp.test/")
+@WebService(endpointInterface = "pers.acp.webservice.test.ws.ITestWebService", serviceName = "test", portName = "testport", targetNamespace = "http://acp.test/")
 @BindingType(value = javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_BINDING)
 public class TestWebService implements ITestWebService {
 

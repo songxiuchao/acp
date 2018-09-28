@@ -1,6 +1,6 @@
-package com.test.springboot.webservice;
+package pers.acp.webservice.test.ws;
 
-import pers.acp.springboot.core.soap.base.IWebService;
+import pers.acp.webservice.base.IWebService;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

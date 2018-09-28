@@ -1,4 +1,4 @@
-package pers.acp.packet.xml;
+package pers.acp.webservice.message;
 
 import java.util.HashMap;
 import java.util.Map;

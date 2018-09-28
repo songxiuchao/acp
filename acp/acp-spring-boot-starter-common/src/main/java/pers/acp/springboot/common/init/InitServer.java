@@ -63,7 +63,6 @@ class InitSource extends Thread {
             InitUdpServer.startUdpServer();
             InitFtpServer.startFtpServer();
             InitSFtpServer.startSFtpServer();
-            InitWebService.publishWebService();
             initTools();
             log.info("finish start-up");
             log.info("****************** system is started ******************");

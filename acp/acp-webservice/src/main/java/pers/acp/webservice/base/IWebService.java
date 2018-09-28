@@ -1,4 +1,4 @@
-package pers.acp.springboot.core.soap.base;
+package pers.acp.webservice.base;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;

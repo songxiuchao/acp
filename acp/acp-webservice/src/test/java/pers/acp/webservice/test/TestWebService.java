@@ -1,5 +1,7 @@
-import pers.acp.client.soap.WebServiceClient;
-import pers.acp.packet.xml.SoapType;
+package pers.acp.webservice.test;
+
+import pers.acp.webservice.client.WebServiceClient;
+import pers.acp.webservice.message.SoapType;
 
 import java.util.HashMap;
 import java.util.Map;

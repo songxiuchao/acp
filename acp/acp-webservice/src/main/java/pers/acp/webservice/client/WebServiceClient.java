@@ -1,10 +1,10 @@
-package pers.acp.client.soap;
+package pers.acp.webservice.client;
 
-import pers.acp.client.exceptions.WSException;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
-import pers.acp.packet.xml.SoapPacket;
-import pers.acp.packet.xml.SoapType;
+import pers.acp.webservice.exceptions.WSException;
+import pers.acp.webservice.message.SoapPacket;
+import pers.acp.webservice.message.SoapType;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;

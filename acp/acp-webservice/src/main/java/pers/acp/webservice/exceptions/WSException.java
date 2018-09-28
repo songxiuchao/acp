@@ -1,4 +1,4 @@
-package pers.acp.client.exceptions;
+package pers.acp.webservice.exceptions;
 
 import pers.acp.core.exceptions.base.BaseException;
 

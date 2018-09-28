@@ -1,4 +1,4 @@
-package pers.acp.packet.xml;
+package pers.acp.webservice.message;
 
 import org.w3c.dom.Document;
 import pers.acp.core.CommonTools;

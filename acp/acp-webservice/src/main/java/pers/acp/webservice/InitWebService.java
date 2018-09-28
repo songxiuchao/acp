@@ -1,8 +1,8 @@
-package pers.acp.springboot.common.init.task;
+package pers.acp.webservice;
 
-import pers.acp.springboot.core.soap.base.IWebService;
-import pers.acp.springboot.core.soap.config.WSConfig;
 import pers.acp.core.log.LogFactory;
+import pers.acp.webservice.base.IWebService;
+import pers.acp.webservice.config.WSConfig;
 
 import javax.xml.ws.Endpoint;
 import java.util.ArrayList;

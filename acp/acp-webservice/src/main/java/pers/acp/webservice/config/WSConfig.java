@@ -1,4 +1,4 @@
-package pers.acp.springboot.core.soap.config;
+package pers.acp.webservice.config;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
