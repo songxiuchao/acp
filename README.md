@@ -42,7 +42,7 @@ gradle全局参数：
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=4.10.1 --distribution-type=all
+    gradlew wrapper --gradle-version=4.10.2 --distribution-type=all
 ``
 
 ## 三、工程说明
