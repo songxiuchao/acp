@@ -1,4 +1,4 @@
-package pers.acp.springboot.core.tools;
+package pers.acp.springboot.core.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -10,6 +10,7 @@ import pers.acp.springboot.core.conf.ScheduleConfiguration;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.interfaces.ITimerTaskScheduler;
+import pers.acp.springboot.core.tools.SpringBeanFactory;
 
 import java.util.Iterator;
 import java.util.Map;

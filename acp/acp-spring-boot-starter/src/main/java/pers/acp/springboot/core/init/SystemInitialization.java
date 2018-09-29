@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.base.BaseInitialization;
-import pers.acp.springboot.core.tools.SystemControl;
+import pers.acp.springboot.core.component.SystemControl;
 
 /**
  * Created by zhangbin on 2017-6-16.

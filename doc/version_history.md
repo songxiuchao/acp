@@ -7,6 +7,7 @@
     5. 剥离 webservice 服务端和客户端为单独的模块 acp-webservice，可选依赖
     6. 剥离 ftp/sftp 服务端和客户端为单独的模块 acp-ftp，可选依赖
     7. 删除 acp-spring-boot-starter-common 模块，代码合并入 acp-spring-boot-starter 模块
+    8. 增加链路监控，基于 zipkin 和 elasticsearch
 ##### v4.0.8
     1. 优化完善 acp:acp-spring-boot-starter 中的工具类
         pers/acp/springboot/core/tools/IpTools.java

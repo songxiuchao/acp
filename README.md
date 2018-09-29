@@ -6,6 +6,15 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
 - [Spring Cloud Finchley.SR1](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 11
+    - 启动时会提示如下警告
+    ```log
+    WARNING: An illegal reflective access operation has occurred
+    WARNING: Illegal reflective access by org.springframework.cglib.core.ReflectUtils$1 (file:/C:/Users/zhangbin/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/5.0.8.RELEASE/dc39c49e3246cdf73d3786ac41119140aed3fa08/spring-core-5.0.8.RELEASE.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+    WARNING: Please consider reporting this to the maintainers of org.springframework.cglib.core.ReflectUtils$1
+    WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+    WARNING: All illegal access operations will be denied in a future release
+    ```
+    暂时忽略，不影响程序正常运行，spring 官方回应待升级至 5.1.0 以后的版本，可解决此问题
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8
 - gradle 4.10.2
 
@@ -105,21 +114,93 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 ##### 1. cloud:acp-spring-cloud-starter-common
     原子服务公共模块：
     （1）自定义程序入口注解
-    （2）oauth2.0资源服务配置、客户端服务配置及远程单点认证机制
+    （2）oauth2.0 资源服务配置、客户端服务配置及远程单点认证机制
     （3）自定义 feign 并发策略、自定义 feign 请求拦截
+    （4）hystrix 断路器
+    （5）封装日志服务客户端，发送日志消息至 kafka
+    （6）zipkin 链路追踪客户端
 ##### 2. cloud:admin-server 
-可视化监控，监控服务状态、信息聚合
-    
+###### 2.1 可视化监控，监控服务状态、信息聚合
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
 | /                     | 后台监控管理首页        |
 | /hystrix              | 断路信息监控            |
+###### 2.2 zipkin 链路追踪
+- 服务端
+> 从SpringCloud2.0 以后，官方已经不支持自定义服务，官方只提供编译好的jar包供用户使用。可以自行使用多种方式部署zipkin服务，并采用elasticsearch作为zipkin的数据存储器。以下展示使用docker部署zipkin和elasticsearch
+> - 下载镜像
+> ```bash
+> docker pull openzipkin/zipkin
+> docker pull docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+> ```
+> - 新建文件夹，目录如下
+> ```
+>   dockerfile
+>       |- elasticsearch
+>       |    |- data
+>       |- docker-compose.yml
+> ```
+> - 编写启动文件docker-compose.yml
+> ```bash
+>   version: "3"
+>   services:
+>     elasticsearch:
+>       image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+>       container_name: elasticsearch
+>       restart: always
+>       networks:
+>         - elk
+>       ports:
+>         - "9200:9200"
+>         - "9300:9300"
+>       volumes:
+>          - ../elasticsearch/data:/usr/share/elasticsearch/data
+>   
+>     zipkin:
+>       image: openzipkin/zipkin:latest
+>       container_name: zipkin
+>       restart: always
+>       networks:
+>         - elk
+>       ports:
+>         - "9411:9411"
+>       environment:
+>         - STORAGE_TYPE=elasticsearch
+>         - ES_HOSTS=elasticsearch
+>   
+>   networks:
+>       elk:
+> ```
+> 关于docker-compose.yml 文件格式及相关内容请自行百度了解。
+> - 启动服务
+> 
+> 命令模式进入dockerfile目录，执行启动命令
+> ```bash
+> docker-compose up -d
+> ```
+> - 停止服务
+> 
+> 命令模式进入dockerfile目录，执行启动命令
+> ```bash
+> docker-compose down [OPTIONS]
+> ```
+- 客户端
+> - 依赖 cloud:acp-spring-cloud-starter-common
+> - 增加 zipkin 相关配置
+> ```yaml
+> spring:
+>   zipkin:
+>     base-url: http://localhost:9411/
+>   sleuth:
+>     sampler:
+>       probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
+> ```
 ##### 3. cloud:eureka-server 
     服务注册发现
 ##### 4. cloud:gateway-server 
     网关服务
 ##### 5. cloud:oauth-server 
-    统一认证服务：
+    统一认证服务：token 存储于 Redis，user 及 client 信息可扩展配置
 
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
@@ -159,7 +240,7 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     （1）需定制 UserPasswordEncoder 用户密码编码器，配置进 WebSecurityConfiguration
     （2）需定制用户（信息、角色、权限）初始化和查询方式 SecurityUserDetailsService，配置进 AuthorizationServerConfiguration
     （3）需定制客户端（信息）初始化和查询方式 SecurityClientDetailsService，配置进 AuthorizationServerConfiguration
-    （4）需定制 token 持久化方式（默认内存），配置进 AuthorizationServerConfiguration
+    （4）token 持久化方式为 Redis，配置在 AuthorizationServerConfiguration
 ##### 6. 日志服务
     （1）修改 yml kafka 相关配置
 ##### 7. 原子服务
