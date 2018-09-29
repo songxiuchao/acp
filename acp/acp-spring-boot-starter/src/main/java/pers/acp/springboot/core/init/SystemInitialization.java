@@ -1,10 +1,10 @@
-package pers.acp.springboot.common.init;
+package pers.acp.springboot.core.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pers.acp.springboot.core.base.BaseInitialization;
 import pers.acp.core.log.LogFactory;
-import pers.acp.springboot.common.tools.SystemControl;
+import pers.acp.springboot.core.base.BaseInitialization;
+import pers.acp.springboot.core.tools.SystemControl;
 
 /**
  * Created by zhangbin on 2017-6-16.

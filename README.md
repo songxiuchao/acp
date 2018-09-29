@@ -62,12 +62,14 @@ gradle全局参数：
 ##### 4. acp:acp-client
     客户端组建包，依赖 acp-packet；封装了http、https、tcp、udp、ftp、sftp协议的客户端
 ##### 5. acp:acp-spring-boot-starter
-    springboot 应用扩展组建，依赖 acp-client；扩展支持 tcp、udp、soap、ftp、sftp 等协议服务端开发
-##### 6. acp:acp-spring-boot-starter-common
-    springboot 应用扩展组建，依赖 acp-spring-boot-starter；增加配置文件预加载、springboot定时任务支持
-##### 7. acp:acp-file
+    springboot 应用扩展组建，依赖 acp-client；扩展支持 tcp、udp 等协议服务端开发；同时封装定时任务
+##### 6. acp:acp-ftp
+    应用扩展组建，依赖 acp-core；封装支持 ftp/sftp 服务端及客户端
+##### 7. acp:acp-webservice
+    应用扩展组建，依赖 acp-core；封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
+##### 8. acp:acp-file
     文件处理组件包，依赖 acp-core；封装了excel、pdf、word、html、fremark模板文件的读写转换等操作
-##### 8. acp:acp-message
+##### 9. acp:acp-message
     消息处理组建包，依赖 acp-core；封装了发送email
 ### （二）快速开发 springboot 应用
     （1）参考 test:testspringboot

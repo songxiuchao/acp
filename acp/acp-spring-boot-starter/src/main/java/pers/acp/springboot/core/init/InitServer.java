@@ -1,10 +1,11 @@
-package pers.acp.springboot.common.init;
+package pers.acp.springboot.core.init;
 
-import pers.acp.springboot.common.init.task.*;
-import pers.acp.springboot.core.daemon.DaemonServiceManager;
 import pers.acp.core.CommonTools;
 import pers.acp.core.DBConTools;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.daemon.DaemonServiceManager;
+import pers.acp.springboot.core.init.task.InitTcpServer;
+import pers.acp.springboot.core.init.task.InitUdpServer;
 
 class InitServer {
 

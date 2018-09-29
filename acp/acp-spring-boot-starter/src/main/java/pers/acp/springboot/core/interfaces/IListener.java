@@ -1,4 +1,4 @@
-package pers.acp.springboot.common.interfaces;
+package pers.acp.springboot.core.interfaces;
 
 /**
  * @author zhangbin by 2018-1-20 21:21

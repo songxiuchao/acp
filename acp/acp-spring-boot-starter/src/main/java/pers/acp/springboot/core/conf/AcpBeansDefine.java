@@ -1,4 +1,4 @@
-package pers.acp.springboot.common.component;
+package pers.acp.springboot.core.conf;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @since JDK1.8
  */
 @Component
-public class AcpCommonBeansDefine {
+public class AcpBeansDefine {
 
     /**
      * 注册定时任务容器实例

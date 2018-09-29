@@ -1,4 +1,4 @@
-package pers.acp.springboot.common.tools;
+package pers.acp.springboot.core.tools;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -6,11 +6,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 import pers.acp.springboot.core.base.BaseSpringBootScheduledTask;
-import pers.acp.springboot.common.conf.ScheduleConfiguration;
-import pers.acp.springboot.common.interfaces.ITimerTaskScheduler;
-import pers.acp.springboot.core.tools.SpringBeanFactory;
+import pers.acp.springboot.core.conf.ScheduleConfiguration;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.interfaces.ITimerTaskScheduler;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -86,9 +85,9 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
     @Override
     public void controlSchedule(int command) throws InterruptedException {
         synchronized (this) {
-            if (command == START) {
+            if (command == ITimerTaskScheduler.START) {
                 startSchedule();
-            } else if (command == STOP) {
+            } else if (command == ITimerTaskScheduler.STOP) {
                 stopSchedule();
             }
         }

@@ -1,4 +1,4 @@
-package pers.acp.springboot.common.conf;
+package pers.acp.springboot.core.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

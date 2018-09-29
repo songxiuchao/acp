@@ -18,7 +18,7 @@ sourceCompatibility = "${scalaJvmVersion}"
 targetCompatibility = "${scalaJvmVersion}"
 
 dependencies {
-    compile project(":acp:acp-spring-boot-starter-common")
+    compile project(":acp:acp-spring-boot-starter")
 
     compile "org.scala-lang:scala-library:${scalaVersion}"
     compile "org.scala-lang:scala-compiler:${scalaVersion}"
