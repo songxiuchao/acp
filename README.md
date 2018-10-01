@@ -127,63 +127,7 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
 | /hystrix              | 断路信息监控            |
 ###### 2.2 zipkin 链路追踪
 - 服务端
-> 从SpringCloud2.0 以后，官方已经不支持自定义服务，官方只提供编译好的jar包供用户使用。可以自行使用多种方式部署zipkin服务，并采用elasticsearch作为zipkin的数据存储器。以下展示使用docker部署zipkin和elasticsearch
-> - 下载镜像
-> ```bash
-> docker pull openzipkin/zipkin
-> docker pull docker.elastic.co/elasticsearch/elasticsearch:6.3.0
-> ```
-> - 新建文件夹，目录如下
-> ```
->   dockerfile
->       |- elasticsearch
->       |    |- data
->       |- docker-compose.yml
-> ```
-> - 编写启动文件docker-compose.yml
-> ```bash
->   version: "3"
->   services:
->     elasticsearch:
->       image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
->       container_name: elasticsearch
->       restart: always
->       networks:
->         - elk
->       ports:
->         - "9200:9200"
->         - "9300:9300"
->       volumes:
->          - ../elasticsearch/data:/usr/share/elasticsearch/data
->   
->     zipkin:
->       image: openzipkin/zipkin:latest
->       container_name: zipkin
->       restart: always
->       networks:
->         - elk
->       ports:
->         - "9411:9411"
->       environment:
->         - STORAGE_TYPE=elasticsearch
->         - ES_HOSTS=elasticsearch
->   
->   networks:
->       elk:
-> ```
-> 关于docker-compose.yml 文件格式及相关内容请自行百度了解。
-> - 启动服务
-> 
-> 命令模式进入dockerfile目录，执行启动命令
-> ```bash
-> docker-compose up -d
-> ```
-> - 停止服务
-> 
-> 命令模式进入dockerfile目录，执行启动命令
-> ```bash
-> docker-compose down [OPTIONS]
-> ```
+> 从SpringCloud2.0 以后，官方已经不支持自定义服务，官方只提供编译好的jar包供用户使用。可以自行使用多种方式部署zipkin服务，并采用elasticsearch作为zipkin的数据存储器。
 - 客户端
 > - 依赖 cloud:acp-spring-cloud-starter-common
 > - 增加 zipkin 相关配置
@@ -220,7 +164,27 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     原子服务
 ##### 9. cloud:world 
     原子服务
-### （二）组建开发
+### （二）基础中间件环境搭建
+基础中间件包括：redis、zookeeper、kafka、zoonavigator-api、zoonavigator-web、elasticsearch、zipkin、zipkin-dependencies、prometheus、grafana、setup_grafana_datasource
+> - 启动服务
+> 
+> 命令模式进入dockerfile目录，执行启动命令
+> ```bash
+> docker-compose -f docker-compose-base.yml up -d
+> ```
+> - 停止服务
+> 
+> 命令模式进入dockerfile目录，执行启动命令
+> ```bash
+> docker-compose -f docker-compose-base.yml stop [OPTIONS]
+> ```
+> - 停止并删除容器实例
+> 
+> 命令模式进入dockerfile目录，执行启动命令
+> ```bash
+> docker-compose -f docker-compose-base.yml stop [OPTIONS]
+> ```
+### （三）组建开发
 ##### 1. 可视化监控
     cloud:admin-server
     （1）无需改动代码

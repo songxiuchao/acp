@@ -18,12 +18,12 @@ management:
 spring:
   thymeleaf:
     cache: false
-# ==== zipkin 链路监控，需要时放开注释
-#  zipkin:
-#    base-url: http://localhost:9411/
-#  sleuth:
-#    sampler:
-#      probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
+  # ==== zipkin 链路监控，需要时放开注释
+  zipkin:
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
   cloud:
     stream:
       default-binder: kafka
@@ -86,7 +86,7 @@ hystrix:
             timeoutInMilliseconds: 11000
 ribbon:
   ServerListRefreshInterval: 5000
-# 开启懒加载后，如果使用随机端口，注册到 eureka 的端口号永远都是 0，必须使用固定端口号才行
+  # 开启懒加载后，如果使用随机端口，注册到 eureka 的端口号永远都是 0，必须使用固定端口号才行
   eager-load:
     enabled: true
     clients: atomic-hello,atomic-world

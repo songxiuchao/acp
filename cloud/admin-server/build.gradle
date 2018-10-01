@@ -25,5 +25,4 @@ dependencies {
         exclude group: "junit", module: "junit"
     }
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard"
-
 }
