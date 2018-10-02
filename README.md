@@ -34,7 +34,6 @@ gradle全局参数：
 - encoding：编译字符集
 - mavenCentralUrl：maven中央仓库地址
 - org.gradle.jvmargs：gradle执行时的jvm参数
-- dockerPluginsVersion：docker插件版本号
 - javaVersion：jdk版本号
 - kotlinVersion：kotlin版本号
 - scalaVersion：scala版本号
@@ -213,10 +212,7 @@ cloud 模块下的 build.gradle 文件内定义了 SpringCloud 版本号
     （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置
     （4）参考 cloud:hello、cloud:world、cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
 ## 六、打包为 docker 镜像
-    （1）参考 test:testspringboot 模块中的 gradle.build
-    （2）执行 dockerBuilder 任务，在 build/docker 目录下自动生成 Dockerfile 文件和 项目打包源文件
-    （3）执行（1）之后镜像会直接在本地 docker 中生成，可直接使用
-    （4）也可将生成好的 Dockerfile 和 xxx.jar 拷贝至有 docker 的环境中生成镜像
+    （1）自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
 ## 七、版本记录
 [点击前往](doc/version_history.md)
 ## 八、待完善内容
