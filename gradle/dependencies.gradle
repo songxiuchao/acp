@@ -14,11 +14,11 @@ versions += [
         xstream         : "1.4.10",
         jackson_databind: "2.9.6",
 
-        hikaricp        : "3.2.0",
-        mysql           : "5.1.46",
+        hikaricp        : "2.7.9",
+        mysql           : "5.1.47",
         mssqljdbc       : "6.2.2.jre8",
         ojdbc           : "12.1.0.2",
-        postgresql      : "42.2.4",
+        postgresql      : "42.2.5",
 
         javassist       : "3.23.1-GA",
         mockito         : "2.22.0",

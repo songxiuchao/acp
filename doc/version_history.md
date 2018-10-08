@@ -9,6 +9,8 @@
     7. 删除 acp-spring-boot-starter-common 模块，代码合并入 acp-spring-boot-starter 模块
     8. 增加链路监控，基于 zipkin 和 elasticsearch
     9. cloud 模块下增加 dokerfile 文件夹
+    10.更新依赖包版本
+    11.优化 gateway 断路器
 ##### v4.0.8
     1. 优化完善 acp:acp-spring-boot-starter 中的工具类
         pers/acp/springboot/core/tools/IpTools.java
