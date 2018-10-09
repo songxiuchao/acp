@@ -31,6 +31,7 @@ services:
   kafka1:
     image: wurstmeister/kafka
     hostname: kafka1
+    restart: always
     ports:
     - "9092:9092"
     - "9999:9999"

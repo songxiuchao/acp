@@ -23,7 +23,7 @@ versions += [
         javassist       : "3.23.1-GA",
         mockito         : "2.22.0",
         jaxb_runtime    : "2.4.0-b180830.0438",
-        spring_boot     : "2.0.4.RELEASE",
+        spring_boot     : "2.0.5.RELEASE",
         spring_cloud    : "Finchley.SR1",
         swagger         : "2.9.2"
 ]

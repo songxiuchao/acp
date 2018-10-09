@@ -11,6 +11,8 @@
     9. cloud 模块下增加 dokerfile 文件夹
     10.更新依赖包版本
     11.优化 gateway 断路器
+    12.更新 SpringBoot 至 2.0.5.RELEASE
+    13.优化 gateway，增加 HiddenHttpMethodFilter，解决升级 SpringBoot 后 WebFlux 导致 “Only one connection receive subscriber allowed” 的问题
 ##### v4.0.8
     1. 优化完善 acp:acp-spring-boot-starter 中的工具类
         pers/acp/springboot/core/tools/IpTools.java
