@@ -1,6 +1,6 @@
 #!/bin/bash
 APP_NAME=xxx.jar
-JVM_PARAM='-XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=0 -Xms1024m -Xmx4086m -Dfile.encoding=utf-8'
+JVM_PARAM='-server -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -Xlog:age*,gc*=info:file=gc-%t.log:time,tid,tags:filecount=3,filesize=20m -Djava.io.tmpdir=/tmp -Xms1024m -Xmx4086m -Dfile.encoding=utf-8'
 
 usage() {
     echo "Usage: sh 执行脚本.sh [start|stop|restart|status]"

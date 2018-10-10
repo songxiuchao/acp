@@ -1,0 +1,13 @@
+versions += [
+        webservices_api: "2.1-b16",
+        jaxb_impl      : "2.1",
+        jaxws_rt       : "2.3.0.2",
+        saaj_api       : "1.3.1"
+]
+dependencies {
+    compile project(":acp:acp-core")
+    compile "javax.xml:webservices-api:$versions.webservices_api"
+    compile "javax.xml:jaxb-impl:$versions.jaxb_impl"
+    compile "javax.xml.soap:saaj-api:$versions.saaj_api"
+    compile "com.sun.xml.ws:jaxws-rt:$versions.jaxws_rt"
+}

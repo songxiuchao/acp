@@ -2,7 +2,7 @@ package pers.acp.core.match;
 
 import pers.acp.core.exceptions.EnumValueUndefinedException;
 
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,23 +12,23 @@ import java.util.Map;
  */
 public enum DecimalProcessModeEnum {
 
-    Up(1, BigDecimal.ROUND_UP),//入
+    Up(1, RoundingMode.UP),//入
 
-    Down(2, BigDecimal.ROUND_DOWN),//舍
+    Down(2, RoundingMode.DOWN),//舍
 
-    Ceiling(3, BigDecimal.ROUND_CEILING),//正无穷大
+    Ceiling(3, RoundingMode.CEILING),//正无穷大
 
-    Floor(4, BigDecimal.ROUND_FLOOR),//负无穷大
+    Floor(4, RoundingMode.FLOOR),//负无穷大
 
-    Half_UP(5, BigDecimal.ROUND_HALF_UP),//四舍五入
+    Half_UP(5, RoundingMode.HALF_UP),//四舍五入
 
-    Half_DOWN(6, BigDecimal.ROUND_HALF_DOWN),//五舍六入
+    Half_DOWN(6, RoundingMode.HALF_DOWN),//五舍六入
 
-    Half_EVEN(7, BigDecimal.ROUND_HALF_EVEN);//银行家舍入（左为奇，四舍五入；左为偶，五舍六入）
+    Half_EVEN(7, RoundingMode.HALF_EVEN);//银行家舍入（左为奇，四舍五入；左为偶，五舍六入）
 
     private Integer value;
 
-    private Integer mode;
+    private RoundingMode mode;
 
     private static Map<Integer, DecimalProcessModeEnum> map;
 
@@ -39,7 +39,7 @@ public enum DecimalProcessModeEnum {
         }
     }
 
-    DecimalProcessModeEnum(Integer value, Integer mode) {
+    DecimalProcessModeEnum(Integer value, RoundingMode mode) {
         this.value = value;
         this.mode = mode;
     }
@@ -48,7 +48,7 @@ public enum DecimalProcessModeEnum {
         return value;
     }
 
-    public Integer getMode() {
+    public RoundingMode getMode() {
         return mode;
     }
 
