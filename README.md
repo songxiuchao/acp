@@ -183,13 +183,13 @@ gradle全局参数：
 > 
 > 命令模式进入dockerfile目录，执行启动命令
 > ```bash
-> docker-compose -f docker-compose-base.yml stop [OPTIONS]
+> docker-compose -f docker-compose-base.yml stop
 > ```
 > - 停止并删除容器实例
 > 
 > 命令模式进入dockerfile目录，执行启动命令
 > ```bash
-> docker-compose -f docker-compose-base.yml stop [OPTIONS]
+> docker-compose -f docker-compose-base.yml down
 > ```
 ### （三）组建开发
 ##### 1. 可视化监控
