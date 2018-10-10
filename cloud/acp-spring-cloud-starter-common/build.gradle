@@ -11,13 +11,14 @@ dependencyManagement {
     }
 }
 dependencies {
-    compile project(":acp:acp-spring-boot-starter-common")
+    compile project(":acp:acp-spring-boot-starter")
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
     compile "org.springframework.cloud:spring-cloud-starter-oauth2"
     compile "org.springframework.cloud:spring-cloud-starter-stream-kafka"
-    // monitor : 服务间调用、断路器
+    // monitor : 服务间调用、断路器、链路追踪
     compile "org.springframework.cloud:spring-cloud-starter-openfeign"
     compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
+    compile "org.springframework.cloud:spring-cloud-starter-zipkin"
 }

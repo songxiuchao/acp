@@ -1,4 +1,18 @@
 ## 版本更新记录
+##### v5.0.0
+    1. 更新 gradle 至 4.10.2
+    2. 更新 kotlin 至 1.2.71
+    3. 优化系统停止时的过程，不使用单独的线程释放资源
+    4. 升级至 java 11，各依赖关系、兼容性、过时api改写
+    5. 剥离 webservice 服务端和客户端为单独的模块 acp-webservice，可选依赖
+    6. 剥离 ftp/sftp 服务端和客户端为单独的模块 acp-ftp，可选依赖
+    7. 删除 acp-spring-boot-starter-common 模块，代码合并入 acp-spring-boot-starter 模块
+    8. 增加链路监控，基于 zipkin 和 elasticsearch
+    9. cloud 模块下增加 dokerfile 文件夹
+    10.更新依赖包版本
+    11.优化 gateway 断路器
+    12.更新 SpringBoot 至 2.0.5.RELEASE
+    13.优化 gateway，增加 HiddenHttpMethodFilter，解决升级 SpringBoot 后 WebFlux 导致 “Only one connection receive subscriber allowed” 的问题
 ##### v4.0.8
     1. 优化完善 acp:acp-spring-boot-starter 中的工具类
         pers/acp/springboot/core/tools/IpTools.java

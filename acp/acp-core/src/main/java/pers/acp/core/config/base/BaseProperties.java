@@ -5,6 +5,7 @@ import pers.acp.core.log.LogFactory;
 import pers.acp.core.tools.CommonUtils;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,11 +27,11 @@ public abstract class BaseProperties extends Properties {
 
     private long lastModified = 0;
 
-    public static BaseProperties getInstance(Class<? extends BaseProperties> cls, String propertiesFileName) throws ConfigException, IOException, IllegalAccessException, InstantiationException {
+    public static BaseProperties getInstance(Class<? extends BaseProperties> cls, String propertiesFileName) throws ConfigException, IOException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         return getInstance(cls, propertiesFileName, null);
     }
 
-    public static BaseProperties getInstance(Class<? extends BaseProperties> cls, String propertiesFileName, String fileAdbPathName) throws ConfigException, IOException, IllegalAccessException, InstantiationException {
+    public static BaseProperties getInstance(Class<? extends BaseProperties> cls, String propertiesFileName, String fileAdbPathName) throws ConfigException, IOException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         if (!CommonUtils.isNullStr(propertiesFileName)) {
             if (CommonUtils.isNullStr(fileAdbPathName)) {
                 fileAdbPathName = CommonUtils.getAbsPath(propertiesFileName);
@@ -57,7 +58,7 @@ public abstract class BaseProperties extends Properties {
             if (!instanceMap.containsKey(propertiesFileName) || (file.exists() && file.lastModified() > instance.lastModified)) {
                 if (inputStreamReader != null) {
                     synchronized (instanceMap) {
-                        instance = cls.newInstance();
+                        instance = cls.getDeclaredConstructor().newInstance();
                         instance.load(inputStreamReader);
                         if (file.exists()) {
                             instance.lastModified = file.lastModified();

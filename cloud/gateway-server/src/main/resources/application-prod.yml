@@ -47,10 +47,16 @@ spring:
     cache: false
   redis:
     url: redis://127.0.0.1:6379
+  # ==== zipkin 链路监控，需要时放开注释
+  zipkin:
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
   cloud:
-# ===============================
-# = GateWay Config
-# ===============================
+    # ===============================
+    # = GateWay Config
+    # ===============================
     gateway:
       routes:
       - id: server-oauth2
@@ -61,7 +67,7 @@ spring:
         - StripPrefix=2
         - name: Hystrix
           args:
-            name: commonHystrix
+            name: GateWayHystrix
             fallbackUri: forward:/hystrixhandle
       - id: atomic-helloworld
         uri: lb://atomic-helloworld
@@ -71,7 +77,7 @@ spring:
         - StripPrefix=2
         - name: Hystrix
           args:
-            name: commonHystrix
+            name: GateWayHystrix
             fallbackUri: forward:/hystrixhandle
       - id: atomic-hello
         uri: lb://atomic-hello
@@ -81,7 +87,7 @@ spring:
         - StripPrefix=2
         - name: Hystrix
           args:
-            name: commonHystrix
+            name: GateWayHystrix
             fallbackUri: forward:/hystrixhandle
         - name: RequestRateLimiter
           args:

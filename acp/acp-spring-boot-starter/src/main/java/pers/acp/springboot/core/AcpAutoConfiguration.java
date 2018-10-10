@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import pers.acp.springboot.core.conf.ControllerAspectConfiguration;
+import pers.acp.springboot.core.conf.ScheduleConfiguration;
 
 /**
  * @author zhangbin by 2018-1-15 0:37
@@ -18,6 +19,11 @@ public class AcpAutoConfiguration {
     @Bean
     public ControllerAspectConfiguration controllerAspectConfiguration() {
         return new ControllerAspectConfiguration();
+    }
+
+    @Bean
+    public ScheduleConfiguration scheduleConfiguration() {
+        return new ScheduleConfiguration();
     }
 
 }

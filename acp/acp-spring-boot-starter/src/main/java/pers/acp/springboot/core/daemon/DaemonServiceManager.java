@@ -1,12 +1,13 @@
 package pers.acp.springboot.core.daemon;
 
-import pers.acp.springboot.core.interfaces.IDaemonService;
+import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.core.DBConTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.task.threadpool.ThreadPoolService;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -29,6 +30,18 @@ public class DaemonServiceManager implements ServletContextListener {
             if (!serverDeque.contains(daemonService)) {
                 serverDeque.push(daemonService);
                 log.info("add daemon service [" + daemonService.getServiceName() + "]");
+            }
+            serverDeque.notifyAll();
+        }
+    }
+
+    public static void addAllService(List<IDaemonService> daemonServiceList) {
+        synchronized (serverDeque) {
+            for (IDaemonService daemonService : daemonServiceList) {
+                if (!serverDeque.contains(daemonService)) {
+                    serverDeque.push(daemonService);
+                    log.info("add daemon service [" + daemonService.getServiceName() + "]");
+                }
             }
             serverDeque.notifyAll();
         }

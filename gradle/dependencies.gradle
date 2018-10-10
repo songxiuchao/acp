@@ -14,13 +14,16 @@ versions += [
         xstream         : "1.4.10",
         jackson_databind: "2.9.6",
 
-        hikaricp        : "3.2.0",
-        mysql           : "5.1.46",
+        hikaricp        : "2.7.9",
+        mysql           : "5.1.47",
         mssqljdbc       : "6.2.2.jre8",
         ojdbc           : "12.1.0.2",
-        postgresql      : "42.2.4",
+        postgresql      : "42.2.5",
 
-        spring_boot     : "2.0.4.RELEASE",
+        javassist       : "3.23.1-GA",
+        mockito         : "2.22.0",
+        jaxb_runtime    : "2.4.0-b180830.0438",
+        spring_boot     : "2.0.5.RELEASE",
         spring_cloud    : "Finchley.SR1",
         swagger         : "2.9.2"
 ]

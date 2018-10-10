@@ -1,4 +1,6 @@
 ext {
+    kotlinJvmVersion = "1.8"
+    println("kotlin target jvm is ${kotlinJvmVersion}")
     println("kotlin version is ${kotlinVersion}")
 }
 
@@ -17,16 +19,19 @@ apply plugin: 'kotlin-jpa'
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 
+sourceCompatibility = "${kotlinJvmVersion}"
+targetCompatibility = "${kotlinJvmVersion}"
+
 compileKotlin {
-    kotlinOptions.jvmTarget = "${javaVersion}"
+    kotlinOptions.jvmTarget = "${kotlinJvmVersion}"
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "${javaVersion}"
+    kotlinOptions.jvmTarget = "${kotlinJvmVersion}"
 }
 
 dependencies {
-    compile project(":acp:acp-spring-boot-starter-common")
+    compile project(":acp:acp-spring-boot-starter")
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
     compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"

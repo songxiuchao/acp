@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pers.acp.management.entity.*;
+import pers.acp.management.entity.Module;
 import pers.acp.management.repository.*;
 import pers.acp.core.security.MD5Utils;
 
