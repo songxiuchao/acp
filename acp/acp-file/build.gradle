@@ -2,7 +2,7 @@ versions += [
         freemarker   : "2.3.28",
         flying_saucer: "9.1.9",
         jsoup        : "1.11.3",
-        batik        : "1.9.1",
+        batik        : "1.10",
         jxl          : "2.6.12",
         poi          : "3.17"
 ]
