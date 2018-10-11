@@ -49,6 +49,7 @@ configure(allprojects) {
 
     dependencies {
         testCompile("org.junit.jupiter:junit-jupiter-engine:$versions.jupiter")
+        testCompile("org.junit.jupiter:junit-jupiter-api:$versions.jupiter")
     }
 
     tasks.withType(JavaCompile) {
