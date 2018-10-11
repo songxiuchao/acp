@@ -5,10 +5,10 @@ ext {
 versions += [
         jupiter         : "5.2.0",
 
-        commons_text    : "1.4",
-        commons_lang3   : "3.7",
+        commons_text    : "1.5",
+        commons_lang3   : "3.8.1",
         dom4j           : "1.6.1",
-        bouncycastle    : "1.56",
+        bouncycastle    : "1.60",
         slf4j           : "1.7.25",
         logback         : "1.2.3",
         xstream         : "1.4.10",
