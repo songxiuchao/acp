@@ -1,4 +1,8 @@
 ## 版本更新记录
+##### v5.0.1
+    1. 更新 SpringBoot 至 2.0.6.RELEASE
+    2. 更新依赖包版本
+    3. cloud 模块下 docker-compose-base.yml 文件修改，注释暂时无用又占资源的服务
 ##### v5.0.0
     1. 更新 gradle 至 4.10.2
     2. 更新 kotlin 至 1.2.71
