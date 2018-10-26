@@ -8,7 +8,7 @@ versions += [
         commons_text    : "1.5",
         commons_lang3   : "3.7",
         dom4j           : "1.6.1",
-        bouncycastle    : "1.56",
+        bouncycastle    : "1.60",
         slf4j           : "1.7.25",
         logback         : "1.2.3",
         xstream         : "1.4.10",
@@ -24,6 +24,6 @@ versions += [
         mockito         : "2.15.0",
         jaxb_runtime    : "2.4.0-b180830.0438",
         spring_boot     : "2.0.6.RELEASE",
-        spring_cloud    : "Finchley.SR1",
+        spring_cloud    : "Finchley.SR2",
         swagger         : "2.9.2"
 ]
