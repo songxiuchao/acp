@@ -3,7 +3,7 @@
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件版本及官方文档
 - [Spring Boot 2.1.0.RELEASE](https://projects.spring.io/spring-boot)
-- [Spring Cloud Finchley.SR2](http://projects.spring.io/spring-cloud)
+- [Spring Cloud Finchley.SR2](http://projects.spring.io/spring-cloud) 该版本暂不兼容 Spring Boot 2.1.0.RELEASE，待官方更新
 ## 一、环境要求
 - jdk 11
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8
