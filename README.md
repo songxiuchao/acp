@@ -49,7 +49,7 @@ gradle全局参数：
 - 工程全局默认使用 UTF-8 字符集
 - acp 目录下为所有核心模块
 - application 目录下为管理端的后台服务（已弃用，待 5.1.0 版本时从工程中剔除）
-- cloud 目录下为基于 Spring Cloud 的一整套组建模块
+- cloud 目录下为基于 Spring Cloud 的一整套组件模块
 - gradle 目录下为相关配置文件
 - test 目录下为测试工程
 - swagger url : /swagger-ui.html
@@ -60,21 +60,21 @@ gradle全局参数：
 ##### 1. acp:acp-core 
     核心包，封装了常用工具类，包括jdbc、配置文件解析（xml、properties）、加解密算法、线程池、定时任务、四则运算、json处理、字符串处理
 ##### 2. acp:acp-core-orm
-    核心扩展包，自定义 ORM 组建；以 hibernate 的思想自己封装的组建，仅供娱乐，建议还是使用hibernate
+    核心扩展包，自定义 ORM 组件；以 hibernate 的思想自己封装的组件，仅供娱乐，建议还是使用hibernate
 ##### 3. acp:acp-packet
-    通讯打解包组建，依赖 acp-core；封装了http数据包、iso8583报文、xml报文的打解包操作
+    通讯打解包组件，依赖 acp-core；封装了http数据包、iso8583报文、xml报文的打解包操作
 ##### 4. acp:acp-client
-    客户端组建包，依赖 acp-packet；封装了http、https、tcp、udp、ftp、sftp协议的客户端
+    客户端组件包，依赖 acp-packet；封装了http、https、tcp、udp、ftp、sftp协议的客户端
 ##### 5. acp:acp-spring-boot-starter
-    springboot 应用扩展组建，依赖 acp-client；扩展支持 tcp、udp 等协议服务端开发；同时封装定时任务
+    springboot 应用扩展组件，依赖 acp-client；扩展支持 tcp、udp 等协议服务端开发；同时封装定时任务
 ##### 6. acp:acp-ftp
-    应用扩展组建，依赖 acp-core；封装支持 ftp/sftp 服务端及客户端
+    应用扩展组件，依赖 acp-core；封装支持 ftp/sftp 服务端及客户端
 ##### 7. acp:acp-webservice
-    应用扩展组建，依赖 acp-core；封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
+    应用扩展组件，依赖 acp-core；封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
 ##### 8. acp:acp-file
     文件处理组件包，依赖 acp-core；封装了excel、pdf、word、html、fremark模板文件的读写转换等操作
 ##### 9. acp:acp-message
-    消息处理组建包，依赖 acp-core；封装了发送email
+    消息处理组件包，依赖 acp-core；封装了发送email
 ### （二）快速开发 springboot 应用
     （1）参考 test:testspringboot
     （2）依赖 acp:acp-spring-boot-starter
@@ -182,7 +182,7 @@ gradle全局参数：
 > ```bash
 > docker-compose -f docker-compose-base.yml down
 > ```
-### （三）组建开发
+### （三）组件开发
 ##### 1. 可视化监控
     cloud:admin-server
     （1）无需改动代码
