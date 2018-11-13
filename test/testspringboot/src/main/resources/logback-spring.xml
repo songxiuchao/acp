@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="10 seconds">
 
-    <property name="LOG_HOME" value="logs/adminserver"/>
+    <property name="LOG_HOME" value="logs/testspringboot"/>
 
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <!--<logger name="pers.acp" level="DEBUG"/>-->
 
     <!-- 控制台日志：输出全部日志到控制台 -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>
-                [%date{yyyy-MM-dd HH:mm:ss.SSS}] [ %-5level] [%thread] %logger{96} [%X{lineno}] - %msg%n
-            </pattern>
-            <charset>UTF8</charset>
-        </encoder>
-    </appender>
+    <!-- 根据spring配置文件中活动中的环境来启用或禁用配置，name属性指定 -->
+    <!-- 例如：name="staging" name="dev | staging" name="!production" -->
+    <springProfile name="!prod">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>
+                    [%date{yyyy-MM-dd HH:mm:ss.SSS}] [ %-5level] [%thread] %logger{96} [%X{lineno}] - %msg%n
+                </pattern>
+                <charset>UTF8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
 
     <!-- 输出到文件：根据时间拆分为多个文件 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
