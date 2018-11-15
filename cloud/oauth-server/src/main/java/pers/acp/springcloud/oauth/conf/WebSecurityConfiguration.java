@@ -34,12 +34,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
 
-    @Bean
+    @Bean(name = "customerUserDetailsService")
     public UserDetailsService userDetailsService() {
         return new SecurityUserDetailsService();
     }
 
-    @Bean
+    @Bean(name = "customerClientDetailsService")
     public ClientDetailsService clientDetailsService() {
         return new SecurityClientDetailsService();
     }
