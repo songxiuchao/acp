@@ -12,20 +12,20 @@ services:
   #    command: redis-server --requirepass ${pwd} --notify-keyspace-events Eglx
 
   zookeeper:
-    image: zookeeper
+    image: wurstmeister/zookeeper
+    hostname: zookeeper
     container_name: zookeeper
     restart: always
     networks:
     - elk
     ports:
-    - "9181:9181"
+    - "12181:2181"
+    - "2888:3888"
+    - "3888:3888"
+    - "5000:5000"
     environment:
       ZOO_MY_ID: 1
-      ZOO_PORT: 9181
       ZOO_SERVERS: server.1=zookeeper:2888:3888
-    volumes:
-    - ./zk-kafka/zookeeper/data:/data
-    - ./zk-kafka/zookeeper/datalog:/datalog
 
   kafka1:
     image: wurstmeister/kafka
@@ -33,7 +33,6 @@ services:
     restart: always
     ports:
     - "9092:9092"
-    - "9999:9999"
     networks:
     - elk
     environment:
@@ -42,15 +41,27 @@ services:
       #      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka1:9092"
       #      KAFKA_LISTENERS: "PLAINTEXT://kafka1:9092"
       KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:9181"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       #      KAFKA_HEAP_OPTS: "-Xmx1G -Xms1G"
       EXTRA_ARGS: "-name kafkaServer -loggc"
       #      JMX_PORT: 9999
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    volumes:
-    - ./zk-kafka/kafka1/data:/var/lib/kafka/data
+    depends_on:
+    - zookeeper
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    restart: always
+    networks:
+    - elk
+    environment:
+      ZK_HOSTS: zookeeper:2181
+    ports:
+    - "9000:9000"
+    expose:
+      - 9000
     depends_on:
     - zookeeper
 
