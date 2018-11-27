@@ -16,8 +16,6 @@ management:
 # = Spring Config
 # ===============================
 spring:
-  main:
-    allow-bean-definition-overriding: true
   thymeleaf:
     cache: false
   # ==== zipkin 链路监控，需要时放开注释

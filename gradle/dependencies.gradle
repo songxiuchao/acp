@@ -24,6 +24,6 @@ versions += [
         mockito         : "2.15.0",
         jaxb_runtime    : "2.4.0-b180830.0438",
         spring_boot     : "2.1.0.RELEASE",
-        spring_cloud    : "Greenwich.M1",
+        spring_cloud    : "Greenwich.M3",
         swagger         : "2.9.2"
 ]
