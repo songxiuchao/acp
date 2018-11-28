@@ -26,14 +26,16 @@ public class HelloController {
 
     @GetMapping(value = "/hellor", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> hello(@RequestParam String name) {
-        logInstance.error("hello response: name=" + name);
-        return ResponseEntity.ok("hello response: name=" + name);
+        String respon = "hello response: name=" + name;
+        logInstance.info(respon);
+        return ResponseEntity.ok(respon);
     }
 
     @GetMapping(value = "/hello", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> hello(HttpServletRequest request, @RequestParam String name) {
-        logInstance.error("hello response: name=" + name);
-        return ResponseEntity.ok("hello response: name=" + name);
+        String respon = "hello response: name=" + name;
+        logInstance.info(respon);
+        return ResponseEntity.ok(respon);
     }
 
 }

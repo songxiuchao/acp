@@ -32,14 +32,16 @@ public class HelloWorldController {
 
     @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> helloWorld(@RequestBody String content) {
-        logInstance.info(helloServer.fromClient(content) + ";" + worldServer.fromClient(content));
-        return ResponseEntity.ok(helloServer.fromClient(content) + ";" + worldServer.fromClient(content));
+        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content);
+        logInstance.info(respon);
+        return ResponseEntity.ok(respon);
     }
 
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> helloWorldGet(@RequestParam String name) {
-        logInstance.info(helloServer.fromClient(name) + ";" + worldServer.fromClient(name));
-        return ResponseEntity.ok(helloServer.fromClient(name) + ";" + worldServer.fromClient(name));
+        String respon = helloServer.fromClient(name) + ";" + worldServer.fromClient(name);
+        logInstance.info(respon);
+        return ResponseEntity.ok(respon);
     }
 
     @GetMapping(value = "/open/ips", produces = MediaType.TEXT_PLAIN_VALUE)
