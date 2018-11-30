@@ -20,9 +20,6 @@ services:
     - elk
     ports:
     - "12181:2181"
-    - "2888:3888"
-    - "3888:3888"
-    - "5000:5000"
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zookeeper:2888:3888
