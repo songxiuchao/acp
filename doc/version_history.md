@@ -6,7 +6,8 @@
     4. cloud 模块下 docker-compose-base.yml 文件修改，修改 zookeeper 端口号，增加 kafka-manager
     5. 更新 spring-data-jpa 数据库连接配置及多数据源写法
     6. 修改 spring boot 中 logback 配置
-    7. 更新 kotlin 至 1.3.10
+    7. 更新 kotlin 至 1.3.11
+    8. 优化定时器配置
 ##### v5.0.1
     1. 更新 SpringBoot 至 2.0.6.RELEASE
     2. 更新 SpringCloud 至 Finchley.SR2
