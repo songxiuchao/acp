@@ -4,6 +4,8 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import pers.acp.springboot.core.conf.ControllerAspectConfiguration;
 import pers.acp.springboot.core.conf.ScheduleConfiguration;
 
@@ -26,4 +28,14 @@ public class AcpAutoConfiguration {
         return new ScheduleConfiguration();
     }
 
+    /**
+     * 注册定时任务容器实例
+     *
+     * @return 线程池调度实例
+     */
+    @Primary
+    @Bean("acpThreadPoolTaskScheduler")
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+        return new ThreadPoolTaskScheduler();
+    }
 }

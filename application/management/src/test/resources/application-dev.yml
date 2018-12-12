@@ -4,12 +4,23 @@ server:
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 # ===============================
 # = Spring Config
 # ===============================
 spring:
   thymeleaf:
     cache: false
+  # ===============================
+  # = JPA / HIBERNATE
+  # ===============================
   jpa:
     show-sql: true
     hibernate:
@@ -19,7 +30,7 @@ spring:
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/acp?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false
+    url: jdbc:mysql://127.0.0.1:3306/acp?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
     username: root
     password: test
     driver-class-name: com.mysql.cj.jdbc.Driver
