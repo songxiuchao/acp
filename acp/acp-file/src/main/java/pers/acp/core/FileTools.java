@@ -274,7 +274,7 @@ public final class FileTools {
      * @param isDelete 是否读取完数据后删除文件
      * @return 相对于webroot路径
      */
-    public static String readExcelDataByPOI(String filePath, int sheetNo, int beginRow, int beginCol, int rowNo, int colNo, boolean isDelete) {
+    public static String readExcelData(String filePath, int sheetNo, int beginRow, int beginCol, int rowNo, int colNo, boolean isDelete) {
         String excelPath = (getWebRootAbsPath() + filePath).replace("\\", File.separator).replace("/", File.separator);
         ExcelService excelService = new ExcelService();
         JsonNode result = excelService.readExcelData(excelPath, sheetNo, beginRow, beginCol, rowNo, colNo, isDelete);
@@ -294,7 +294,7 @@ public final class FileTools {
      * @param isHorizontal 是否为横向
      * @return 相对于webroot的文件位置
      */
-    public static String exportToExcelByJsonPOI(ExcelType fileType, String jsonStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
+    public static String exportToExcelByJson(ExcelType fileType, String jsonStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
         String webRootAdsPath = getWebRootAbsPath();
         String filename = generateExcelResultFileName(fileType, null);
         ExcelService es = new ExcelService();
@@ -315,7 +315,7 @@ public final class FileTools {
      * @param isHorizontal 是否为横向
      * @return 相对于webroot的文件位置
      */
-    public static String exportToExcelByPOI(ExcelType fileType, String sqlStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
+    public static String exportToExcel(ExcelType fileType, String sqlStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
         String webRootAdsPath = getWebRootAbsPath();
         String filename = generateExcelResultFileName(fileType, null);
         ConnectionFactory dbcon = new ConnectionFactory();
@@ -355,7 +355,7 @@ public final class FileTools {
      * @param fileName 目标文件名
      * @return 相对于webroot路径
      */
-    public static String exportToExcelByPOI(ExcelType fileType, String jsonStr, String fileName) {
+    public static String exportToExcel(ExcelType fileType, String jsonStr, String fileName) {
         String webRootAdsPath = getWebRootAbsPath();
         String resultfile = generateExcelResultFileName(fileType, fileName);
         ExcelService es = new ExcelService();
@@ -372,7 +372,7 @@ public final class FileTools {
      * @param fileName     生成的文件名
      * @return 相对于webroot路径
      */
-    public static String exportToExcelByPOI(ExcelType fileType, String templatePath, Map<String, String> data, String fileName) {
+    public static String exportToExcel(ExcelType fileType, String templatePath, Map<String, String> data, String fileName) {
         String webRootAdsPath = getWebRootAbsPath();
         String resultfile = generateExcelResultFileName(fileType, fileName);
         ExcelService es = new ExcelService();

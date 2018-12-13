@@ -40,7 +40,7 @@ public class ApplicationController {
     public ResponseEntity<Object> appExcel() {
         List<Application> applicationList = applicationDomain.findAll();
         String names = "appname,version,webroot,language,copyrightOwner,copyrightBegin,copyrightEnd,defaultapp,type";
-        String filename = FileTools.exportToExcelByJsonPOI(ExcelType.EXCEL_TYPE_XLSX, CommonTools.objectToJson(applicationList).toString(), names,
+        String filename = FileTools.exportToExcelByJson(ExcelType.EXCEL_TYPE_XLSX, CommonTools.objectToJson(applicationList).toString(), names,
                 "应用列表[colspan=9]", "名称^版本^根路径^页面语言^版权所有者^版权开始年^版权结束年^默认应用^类型", null, true, false);
         if (CommonTools.isNullStr(filename)) {
             return ResponseEntity.ok(PackageTools.buildErrorResponsePackage(ResponseCode.otherError, "生成失败！").toString());
