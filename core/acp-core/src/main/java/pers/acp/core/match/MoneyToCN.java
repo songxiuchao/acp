@@ -75,10 +75,7 @@ public final class MoneyToCN {
             getZero = true;
         }
         int zeroSize = 0;
-        while (true) {
-            if (number <= 0) {
-                break;
-            }
+        while (number > 0) {
             // 每次获取到最后一个数
             numUnit = (int) (number % 10);
             if (numUnit > 0) {
@@ -98,9 +95,7 @@ public final class MoneyToCN {
                     sb.insert(0, CN_UPPER_NUMBER[numUnit]);
                 }
                 if (numIndex == 2) {
-                    if (number > 0) {
-                        sb.insert(0, CN_UPPER_MONETRAY_UNIT[numIndex]);
-                    }
+                    sb.insert(0, CN_UPPER_MONETRAY_UNIT[numIndex]);
                 } else if (((numIndex - 2) % 4 == 0) && (number % 1000 > 0)) {
                     sb.insert(0, CN_UPPER_MONETRAY_UNIT[numIndex]);
                 }

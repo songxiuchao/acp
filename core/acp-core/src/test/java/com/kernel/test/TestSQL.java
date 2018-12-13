@@ -2,6 +2,7 @@ package com.kernel.test;
 
 import pers.acp.core.CommonTools;
 import pers.acp.core.DBConTools;
+import pers.acp.core.match.DecimalProcessModeEnum;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +20,7 @@ public class TestSQL {
 
         BigDecimal gasPrice = BigDecimal.valueOf(160000);
         System.out.println(gasPrice.toPlainString());
-        System.out.println(gasPrice.setScale(0, BigDecimal.ROUND_HALF_UP).toPlainString());
+        System.out.println(gasPrice.setScale(0, DecimalProcessModeEnum.Half_UP.getMode()).toPlainString());
     }
 
 }

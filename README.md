@@ -7,7 +7,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
 ## 一、环境要求
 - jdk 11
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8
-- gradle 4.10.2
+- gradle 5.0
 
 ## 二、gralde 配置及使用
 ### （一）配置文件

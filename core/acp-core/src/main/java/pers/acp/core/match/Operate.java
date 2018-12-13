@@ -80,7 +80,7 @@ public final class Operate {
                     }
                 }
             } else {
-                tempNum = tempNum.append(temp);
+                tempNum.append(temp);
             }
         }
         return numStack.pop();

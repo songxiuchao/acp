@@ -121,7 +121,7 @@ class DBTableFactory {
         if (obj != null) {
             table = obj;
         } else {
-            table = cls.newInstance();
+            table = cls.getDeclaredConstructor().newInstance();
         }
         List<DBTableInfo> tableInfos = table.getTableInfos();
         String pkeystr = "";

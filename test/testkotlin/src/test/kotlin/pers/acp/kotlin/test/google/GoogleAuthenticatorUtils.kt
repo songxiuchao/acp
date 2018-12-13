@@ -61,7 +61,7 @@ object GoogleAuthenticatorUtils {
   private fun setupParam(crypto: String, timeExcursionConfig: String?) {
     this.crypto = crypto
     if (!timeExcursionConfig.isNullOrBlank()) {
-      timeExcursion = timeExcursionConfig!!.toInt()
+      timeExcursion = timeExcursionConfig.toInt()
     }
   }
 

@@ -12,6 +12,7 @@ import pers.acp.core.log.LogFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
@@ -66,7 +67,7 @@ public abstract class DBTable {
      * @param obj 实例对象
      * @return 结果List
      */
-    private static List<DBTable> resultSetToObjList(ResultSet rs, Class<? extends DBTable> cls, DBTable obj) throws SQLException, InstantiationException, IllegalAccessException, IOException {
+    private static List<DBTable> resultSetToObjList(ResultSet rs, Class<? extends DBTable> cls, DBTable obj) throws SQLException, InstantiationException, IllegalAccessException, IOException, NoSuchMethodException, InvocationTargetException {
         if (rs == null) {
             return new ArrayList<>();
         }
@@ -75,7 +76,7 @@ public abstract class DBTable {
         }
         ArrayList<DBTable> list = new ArrayList<>();
         while (rs.next()) {
-            DBTable rowData = rowToObj(rs, cls.newInstance(), false);
+            DBTable rowData = rowToObj(rs, cls.getDeclaredConstructor().newInstance(), false);
             if (obj != null) {
                 rowData.setPrefix(obj.getPrefix());
                 rowData.setSuffix(obj.getSuffix());
@@ -191,15 +192,11 @@ public abstract class DBTable {
     private static <T> Map<String, Object> buildPkeyWhere(Object pKey, Class<T> cls) {
         try {
             Map<String, Object> whereValues = new HashMap<>();
-            DBTable instance = (DBTable) cls.newInstance();
+            DBTable instance = (DBTable) cls.getDeclaredConstructor().newInstance();
             DBTableInfo dbTableInfo = instance.getTableInfos().get(0);
             Map<String, DBTablePrimaryKeyInfo> pKeys = dbTableInfo.getpKeys();
-            for (Entry<String, DBTablePrimaryKeyInfo> entry : pKeys.entrySet()) {
-                if (whereValues.isEmpty()) {
-                    whereValues.put(dbTableInfo.getClassName() + "." + entry.getValue().getFieldName(), pKey);
-                    break;
-                }
-            }
+            Entry<String, DBTablePrimaryKeyInfo> entry = pKeys.entrySet().iterator().next();
+            whereValues.put(dbTableInfo.getClassName() + "." + entry.getValue().getFieldName(), pKey);
             return whereValues;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -276,7 +273,6 @@ public abstract class DBTable {
                     break;
                 }
             } else {
-                result = null;
                 break;
             }
             cls = cls.getSuperclass();
