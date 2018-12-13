@@ -17,7 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Map;
 
-public final class POIExcelService {
+public final class ExcelService {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
 
@@ -137,7 +137,7 @@ public final class POIExcelService {
                 } else {
                     printSetup.setLandscape(false);
                 }
-                SheetDataForPOI sheetData = new SheetDataForPOI();
+                SheetData sheetData = new SheetData();
                 sheetData.generateSheetDataByJSON(wb, sheet, jsonArray, names, titleCtrl, bodyCtrl, footCtrl, showBodyHead, defaultRowIndex, defaultCellIndex);
                 wb.write(new FileOutputStream(file));
                 return filename;
@@ -186,7 +186,7 @@ public final class POIExcelService {
      * @return Excel文件绝对路径
      */
     public String createExcelFile(String fileName, JsonNode configJSON) {
-        SheetDataForPOI sheetData = new SheetDataForPOI();
+        SheetData sheetData = new SheetData();
         String fileType = FileOperation.getFileExt(fileName);
         Workbook wb;
         if (CommonTools.isNullStr(fileName)) {

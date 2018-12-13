@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import pers.acp.core.dbconnection.ConnectionFactory;
 import pers.acp.file.FileOperation;
 import pers.acp.file.excel.scheme.ExcelType;
-import pers.acp.file.excel.POIExcelService;
+import pers.acp.file.excel.ExcelService;
 import pers.acp.file.pdf.PDFService;
 import pers.acp.file.pdf.PageNumberHandle;
 import pers.acp.file.pdf.PermissionType;
@@ -276,7 +276,7 @@ public final class FileTools {
      */
     public static String readExcelDataByPOI(String filePath, int sheetNo, int beginRow, int beginCol, int rowNo, int colNo, boolean isDelete) {
         String excelPath = (getWebRootAbsPath() + filePath).replace("\\", File.separator).replace("/", File.separator);
-        POIExcelService excelService = new POIExcelService();
+        ExcelService excelService = new ExcelService();
         JsonNode result = excelService.readExcelData(excelPath, sheetNo, beginRow, beginCol, rowNo, colNo, isDelete);
         return result.toString();
     }
@@ -297,7 +297,7 @@ public final class FileTools {
     public static String exportToExcelByJsonPOI(ExcelType fileType, String jsonStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
         String webRootAdsPath = getWebRootAbsPath();
         String filename = generateExcelResultFileName(fileType, null);
-        POIExcelService es = new POIExcelService();
+        ExcelService es = new ExcelService();
         String filepath = es.createExcelFile(filename, CommonTools.getJsonFromStr(jsonStr), names, titleCtrl, bodyCtrl, footCtrl, showBodyHead, isHorizontal, 0, 0);
         return filepath.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
     }
@@ -319,7 +319,7 @@ public final class FileTools {
         String webRootAdsPath = getWebRootAbsPath();
         String filename = generateExcelResultFileName(fileType, null);
         ConnectionFactory dbcon = new ConnectionFactory();
-        POIExcelService es = new POIExcelService();
+        ExcelService es = new ExcelService();
         String filepath = es.createExcelFile(filename, dbcon.doQueryForJSON(sqlStr), names, titleCtrl, bodyCtrl, footCtrl, showBodyHead, isHorizontal, 0, 0);
         return filepath.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
     }
@@ -358,7 +358,7 @@ public final class FileTools {
     public static String exportToExcelByPOI(ExcelType fileType, String jsonStr, String fileName) {
         String webRootAdsPath = getWebRootAbsPath();
         String resultfile = generateExcelResultFileName(fileType, fileName);
-        POIExcelService es = new POIExcelService();
+        ExcelService es = new ExcelService();
         String filepath = es.createExcelFile(resultfile, CommonTools.getJsonFromStr(jsonStr));
         return filepath.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
     }
@@ -375,7 +375,7 @@ public final class FileTools {
     public static String exportToExcelByPOI(ExcelType fileType, String templatePath, Map<String, String> data, String fileName) {
         String webRootAdsPath = getWebRootAbsPath();
         String resultfile = generateExcelResultFileName(fileType, fileName);
-        POIExcelService es = new POIExcelService();
+        ExcelService es = new ExcelService();
         String filepath = es.createExcelFile(resultfile, templatePath, data);
         return filepath.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
     }

@@ -12,7 +12,7 @@ import pers.acp.file.excel.scheme.PrintSetting;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
-final class SheetDataForPOI {
+final class SheetData {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
 
