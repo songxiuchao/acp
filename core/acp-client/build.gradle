@@ -3,7 +3,7 @@ versions += [
         httpclient : "4.5.6"
 ]
 dependencies {
-    compile project(":acp:acp-packet")
+    compile project(":core:acp-packet")
 
     // tcp/udp
     compile "org.apache.mina:mina-core:$versions.mina"

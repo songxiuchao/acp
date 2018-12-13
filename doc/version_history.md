@@ -10,6 +10,7 @@
 > - 优化定时器配置
 > - acp-file 去除 jxl 相关依赖，不再封装 jxl 相关操作
 > - 剥离订制工程 [management](https://github.com/zhangbin1010/acp-ace-php-back)
+> - 修改核心模块名称
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2

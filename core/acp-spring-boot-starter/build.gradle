@@ -10,7 +10,7 @@ dependencyManagement {
     }
 }
 dependencies {
-    compile project(":acp:acp-client")
+    compile project(":core:acp-client")
 
     compile "org.javassist:javassist:$versions.javassist"
     compile "org.mockito:mockito-core:$versions.mockito"

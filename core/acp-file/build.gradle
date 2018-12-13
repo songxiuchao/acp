@@ -7,7 +7,7 @@ versions += [
 ]
 
 dependencies {
-    compile project(":acp:acp-core")
+    compile project(":core:acp-core")
 
     // free marker
     compile "org.freemarker:freemarker:$versions.freemarker"

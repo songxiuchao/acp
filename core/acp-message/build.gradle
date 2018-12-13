@@ -3,7 +3,7 @@ versions += [
 ]
 
 dependencies {
-    compile project(":acp:acp-core")
+    compile project(":core:acp-core")
 
     // email
     compile "javax.mail:mail:$versions.javax_mail"
