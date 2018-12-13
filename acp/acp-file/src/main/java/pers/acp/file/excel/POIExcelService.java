@@ -1,4 +1,4 @@
-package pers.acp.file.excel.poi;
+package pers.acp.file.excel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +20,19 @@ import java.util.Map;
 public final class POIExcelService {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
+
+    private void fillFIlePath(File file) {
+        if (file.exists()) {
+            if (!file.delete()) {
+                log.error("delete file failed : " + file.getAbsolutePath());
+            }
+        }
+        if (!file.getParentFile().exists()) {
+            if (!file.getParentFile().mkdirs()) {
+                log.error("mkdirs failed : " + file.getParent());
+            }
+        }
+    }
 
     /**
      * 通过模板创建Excel文件
@@ -66,7 +79,7 @@ public final class POIExcelService {
                         for (int j = 0; j < colCount; j++) {
                             Cell cell = row.getCell(j);
                             if (cell != null) {
-                                if (cell.getCellType() != Cell.CELL_TYPE_BLANK) {
+                                if (!cell.getCellTypeEnum().equals(CellType.BLANK)) {
                                     cell.setCellValue(CommonTools.replaceVar(cell.getStringCellValue(), data));
                                 }
                             }
@@ -109,16 +122,7 @@ public final class POIExcelService {
         File file = new File(filename);
         Workbook wb;
         try {
-            if (file.exists()) {
-                if (!file.delete()) {
-                    log.error("delete file failed : " + file.getAbsolutePath());
-                }
-            }
-            if (!file.getParentFile().exists()) {
-                if (!file.getParentFile().mkdirs()) {
-                    log.error("mkdirs failed : " + file.getParent());
-                }
-            }
+            fillFIlePath(file);
             if (file.createNewFile()) {
                 wb = getWorkbook(fileType);
                 if (wb == null) {
@@ -190,16 +194,7 @@ public final class POIExcelService {
         }
         File file = new File(fileName);
         try {
-            if (file.exists()) {
-                if (!file.delete()) {
-                    log.error("delete file failed : " + file.getAbsolutePath());
-                }
-            }
-            if (!file.getParentFile().exists()) {
-                if (!file.getParentFile().mkdirs()) {
-                    log.error("mkdirs failed : " + file.getParent());
-                }
-            }
+            fillFIlePath(file);
             if (file.createNewFile()) {
                 wb = getWorkbook(fileType);
                 if (wb == null) {
@@ -217,13 +212,13 @@ public final class POIExcelService {
                     /* 生成sheet内数据 **/
                     sheet = sheetData.generateSheetData(wb, sheet, sheetConfig);
                     /* 设置sheet页眉 **/
-                    sheet = sheetData.generateSheetHeader(sheet, sheetConfig);
+                    sheetData.generateSheetHeader(sheet, sheetConfig);
                     /* 设置sheet页脚 **/
-                    sheet = sheetData.generateSheetFooter(sheet, sheetConfig);
+                    sheetData.generateSheetFooter(sheet, sheetConfig);
                     /* 设置sheet合并单元格 **/
-                    sheet = sheetData.generateSheetMerge(sheet, sheetConfig);
+                    sheetData.generateSheetMerge(sheet, sheetConfig);
                     /* 设置sheet打印配置 **/
-                    sheet = sheetData.generateSheetPrintSetting(wb, i, sheet, sheetConfig);
+                    sheetData.generateSheetPrintSetting(wb, i, sheet, sheetConfig);
                     /* 设置sheet窗口冻结 **/
                     sheetData.generateSheetFreeze(sheet, sheetConfig);
                 }
@@ -304,12 +299,12 @@ public final class POIExcelService {
                         }
                         Cell cell = row.getCell(j);
                         if (cell != null) {
-                            switch (cell.getCellType()) {
-                                case Cell.CELL_TYPE_STRING:
+                            switch (cell.getCellTypeEnum()) {
+                                case STRING:
                                     cellData.put("type", "string");
                                     cellData.put("value", cell.getStringCellValue());
                                     break;
-                                case Cell.CELL_TYPE_NUMERIC:
+                                case NUMERIC:
                                     if (DateUtil.isCellDateFormatted(cell)) {
                                         cellData.put("type", "date");
                                         cellData.put("value", DateUtil.getJavaDate(cell.getNumericCellValue()).getTime());
@@ -318,15 +313,15 @@ public final class POIExcelService {
                                         cellData.put("value", cell.getNumericCellValue());
                                     }
                                     break;
-                                case Cell.CELL_TYPE_BOOLEAN:
+                                case BOOLEAN:
                                     cellData.put("type", "boolean");
                                     cellData.put("value", cell.getBooleanCellValue());
                                     break;
-                                case Cell.CELL_TYPE_BLANK:
+                                case BLANK:
                                     cellData.put("type", "string");
                                     cellData.put("value", "");
                                     break;
-                                case Cell.CELL_TYPE_FORMULA:
+                                case FORMULA:
                                     cellData.put("type", "formula");
                                     cellData.put("value", cell.getCellFormula());
                                     break;

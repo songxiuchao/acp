@@ -8,6 +8,7 @@
     6. 修改 spring boot 中 logback 配置
     7. 更新 kotlin 至 1.3.11
     8. 优化定时器配置
+    9. acp-file 去除 jxl 相关依赖，不再封装 jxl 相关操作
 ##### v5.0.1
     1. 更新 SpringBoot 至 2.0.6.RELEASE
     2. 更新 SpringCloud 至 Finchley.SR2

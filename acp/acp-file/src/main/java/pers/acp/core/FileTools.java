@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import pers.acp.core.dbconnection.ConnectionFactory;
 import pers.acp.file.FileOperation;
 import pers.acp.file.excel.scheme.ExcelType;
-import pers.acp.file.excel.jxl.JXLExcelService;
-import pers.acp.file.excel.poi.POIExcelService;
+import pers.acp.file.excel.POIExcelService;
 import pers.acp.file.pdf.PDFService;
 import pers.acp.file.pdf.PageNumberHandle;
 import pers.acp.file.pdf.PermissionType;
@@ -261,104 +260,6 @@ public final class FileTools {
             resultfile = CommonTools.getAbsPath(fileName) + extName;
         }
         return exportToFileFromTemplete(templatePath, data, resultfile);
-    }
-
-    /**
-     * 读取excel文件
-     *
-     * @param filePath 文件路径:相对于webroot
-     * @param sheetNo  工作表序号
-     * @param beginRow 读取的起始行
-     * @param beginCol 读取的起始列
-     * @param rowNo    读取的行数，0则表示读取全部
-     * @param colNo    读取的列数，0则表示读取全部
-     * @param isDelete 是否读取完数据后删除文件
-     * @return 结果集
-     */
-    public static String readExcelDataByJXL(String filePath, int sheetNo, int beginRow, int beginCol, int rowNo, int colNo, boolean isDelete) {
-        String excelPath = (getWebRootAbsPath() + filePath).replace("\\", File.separator).replace("/", File.separator);
-        JXLExcelService excelService = new JXLExcelService();
-        JsonNode result = excelService.readExcelData(excelPath, sheetNo, beginRow, beginCol, rowNo, colNo, isDelete);
-        return result.toString();
-    }
-
-    /**
-     * 导出Excel文件
-     *
-     * @param jsonStr      json数据
-     * @param names        数据列名
-     * @param titleCtrl    标题
-     * @param bodyCtrl     数据
-     * @param footCtrl     页脚
-     * @param showBodyHead 是否显示表头
-     * @param isHorizontal 是否为横向
-     * @return 相对于webroot的文件位置
-     */
-    public static String exportToExcelByJsonJXL(String jsonStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
-        String webRootAdsPath = getWebRootAbsPath();
-        String filename = generateExcelResultFileName(ExcelType.EXCEL_TYPE_XLS, null);
-        JXLExcelService es = new JXLExcelService();
-        String filepath = es.createExcelFile(filename, CommonTools.getJsonFromStr(jsonStr), names, titleCtrl, bodyCtrl, footCtrl, showBodyHead, isHorizontal, 0, 0);
-        return filepath.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
-    }
-
-    /**
-     * 导出Excel文件
-     *
-     * @param sqlStr       查询数据的sql语句
-     * @param names        查询结果集中的列名
-     * @param titleCtrl    标题
-     * @param bodyCtrl     数据
-     * @param footCtrl     页脚
-     * @param showBodyHead 是否显示表头
-     * @param isHorizontal 是否为横向
-     * @return 相对于webroot的文件位置
-     */
-    public static String exportToExcelByJXL(String sqlStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
-        String webRootAdsPath = getWebRootAbsPath();
-        String filename = generateExcelResultFileName(ExcelType.EXCEL_TYPE_XLS, null);
-        ConnectionFactory dbcon = new ConnectionFactory();
-        JXLExcelService es = new JXLExcelService();
-        String filepath = es.createExcelFile(filename, dbcon.doQueryForJSON(sqlStr), names, titleCtrl, bodyCtrl, footCtrl, showBodyHead, isHorizontal, 0, 0);
-        return filepath.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
-    }
-
-    /**
-     * 生成Excel文件
-     *
-     * @param jsonStr  配置信息 [{ "sheetName":String, "printSetting":{
-     *                 "isHorizontal":boolean, "pageWidth":int, "pageHeight":int,
-     *                 "topMargin":double, "bottomMargin":double,
-     *                 "leftMargin":double, "rightMargin":double,
-     *                 "horizontalCentre":boolean, "verticallyCenter":boolean,
-     *                 "printArea"
-     *                 :{"firstCol":int,"firstRow":int,"lastCol":int,"lastRow":int},
-     *                 "printTitles"
-     *                 :{"firstRow":int,"lastRow":int,"firstCol":int,"lastCol":int}
-     *                 },
-     *                 "header":{"left":"***[pageNumber]***[pageTotal]***","center"
-     *                 :"***[pageNumber]***[pageTotal]***"
-     *                 ,"right":"***[pageNumber]***[pageTotal]***"},
-     *                 "footer":{"left":"***[pageNumber]***[pageTotal]***","center":
-     *                 "***[pageNumber]***[pageTotal]***"
-     *                 ,"right":"***[pageNumber]***[pageTotal]***"}, "datas":{
-     *                 "jsonDatas":[{"name":value,"name":value,...},{...}...],
-     *                 "names":String, "titleCtrl":
-     *                 "内容[row=,col=,colspan=,rowspan=,width=,height=,font=,align=,border=no|all|top|left|right|bottom,bold=true|false]^..."
-     *                 , "bodyCtrl":String, "footCtrl":String,
-     *                 "showBodyHead":boolean, "defaultRowIndex":int,
-     *                 "defaultCellIndex":int },"mergeCells":[{
-     *                 "firstCol":int,"firstRow":int,"lastCol":int,"lastRow"
-     *                 :int},{...},...], "freeze":{"row":int,"col":int} }, {...},...]
-     * @param fileName 目标文件名
-     * @return 相对于webroot路径
-     */
-    public static String exportToExcelByJXL(String jsonStr, String fileName) {
-        String webRootAdsPath = getWebRootAbsPath();
-        String resultfile = generateExcelResultFileName(ExcelType.EXCEL_TYPE_XLS, fileName);
-        JXLExcelService es = new JXLExcelService();
-        String filepath = es.createExcelFile(resultfile, CommonTools.getJsonFromStr(jsonStr));
-        return filepath.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
     }
 
     /**

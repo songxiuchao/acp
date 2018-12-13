@@ -38,8 +38,7 @@ public final class PDFService {
         OutputStream os = null;
         try {
             os = new FileOutputStream(fileName);
-            ITextRenderer renderer = new ITextRenderer();
-            renderer = FontLoader.loadFonts(renderer);
+            ITextRenderer renderer = FontLoader.loadFonts(new ITextRenderer());
             String htmlString = HtmlParse.parseHTML(htmlstr);
             renderer.setDocumentFromString(htmlString);
             String baseUrl = FileOperation.getFileBaseURL(basePath);

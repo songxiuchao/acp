@@ -1,21 +1,18 @@
-package pers.acp.file.excel.jxl;
+package pers.acp.file.excel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import jxl.HeaderFooter;
-import jxl.HeaderFooter.Contents;
-import jxl.format.*;
-import jxl.write.Label;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableSheet;
 import org.apache.commons.lang3.StringUtils;
 
+import org.apache.poi.hssf.usermodel.HSSFFooter;
+import org.apache.poi.hssf.usermodel.HSSFHeader;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import pers.acp.file.excel.scheme.CellPoint;
 import pers.acp.file.excel.scheme.PrintSetting;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
-final class SheetDataForJXL {
+final class SheetDataForPOI {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
 
@@ -24,11 +21,12 @@ final class SheetDataForJXL {
     /**
      * 生成sheet内数据
      *
+     * @param wb          工作簿对象
      * @param sheet       sheet对象
      * @param sheetConfig sheet配置
      * @return sheet对象
      */
-    WritableSheet generateSheetData(WritableSheet sheet, JsonNode sheetConfig) throws Exception {
+    Sheet generateSheetData(Workbook wb, Sheet sheet, JsonNode sheetConfig) throws Exception {
         if (validationConfig(sheetConfig, 1)) {
             JsonNode datas = sheetConfig.get("datas");
             int defaultRowIndex = 0;
@@ -39,13 +37,12 @@ final class SheetDataForJXL {
             if (datas.has("defaultCellIndex")) {
                 defaultCellIndex = datas.get("defaultCellIndex").asInt();
             }
-            sheet = generateSheetDataByJSON(sheet,
+            return generateSheetDataByJSON(wb, sheet,
                     datas.get("jsonDatas"), datas.get("names").textValue(),
                     datas.get("titleCtrl").textValue(), datas.get("bodyCtrl").textValue(),
                     datas.get("footCtrl").textValue(),
                     datas.get("showBodyHead").asBoolean(), defaultRowIndex,
                     defaultCellIndex);
-            return sheet;
         } else {
             throw new Exception("config is not complete!");
         }
@@ -54,6 +51,7 @@ final class SheetDataForJXL {
     /**
      * 生成sheet内数据
      *
+     * @param wb               工作簿对象
      * @param sheet            需要填充数据的sheet对象
      * @param jsonArray        数据
      * @param names            名称
@@ -65,45 +63,51 @@ final class SheetDataForJXL {
      * @param defaultCellIndex 默认起始列号
      * @return sheet对象
      */
-    WritableSheet generateSheetDataByJSON(WritableSheet sheet, JsonNode jsonArray, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, int defaultRowIndex, int defaultCellIndex) throws Exception {
+    Sheet generateSheetDataByJSON(Workbook wb, Sheet sheet, JsonNode jsonArray, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, int defaultRowIndex, int defaultCellIndex) {
         int rowIndex = defaultRowIndex;
         int cellIndex = defaultCellIndex;
         /* 插入标题 start ****/
         if (!CommonTools.isNullStr(titleCtrl)) {
             String[] titles = StringUtils.splitPreserveAllTokens(titleCtrl, "^");
             for (String title1 : titles) {
-                String title = title1.substring(0, title1.indexOf("["));// 获取标题
                 String titleStyle = title1.substring(title1.indexOf("[") + 1, title1.indexOf("]"));// 获取标题样式字符串
-                String rowConfig = getConfig(titleStyle, "row");// 获取起始行号
-                if (!CommonTools.isNullStr(rowConfig)) {
-                    rowIndex = Integer.valueOf(rowConfig);
-                }
+                String title = title1.substring(0, title1.indexOf("["));// 获取标题
                 String colConfig = getConfig(titleStyle, "col");// 获取起始列号
                 if (!CommonTools.isNullStr(colConfig)) {
                     cellIndex = Integer.valueOf(colConfig);
                 }
-                WritableCellFormat wcfTitle = createStyle(titleStyle, 0);// 标题样式
-
-                String widthConfig = getConfig(titleStyle, "width");// 获取宽度
-                if (!CommonTools.isNullStr(widthConfig)) {
-                    sheet.setColumnView(cellIndex, Integer.valueOf(widthConfig));
+                String rowConfig = getConfig(titleStyle, "row");// 获取起始行号
+                if (!CommonTools.isNullStr(rowConfig)) {
+                    rowIndex = Integer.valueOf(rowConfig);
                 }
+                Row row = sheet.getRow(rowIndex);
+                if (row == null) {
+                    row = sheet.createRow(rowIndex);
+                }
+                Cell cell = row.createCell(cellIndex);
+                CellStyle cellStyle = createStyle(wb, titleStyle, 0);// 标题样式
+                cell.setCellType(CellType.STRING);
+                cell.setCellStyle(cellStyle);
+                cell.setCellValue(title);
+
                 String heightConfig = getConfig(titleStyle, "height");// 获取高度
                 if (!CommonTools.isNullStr(heightConfig)) {
-                    sheet.setRowView(rowIndex, Integer.valueOf(heightConfig));
+                    row.setHeightInPoints(Integer.valueOf(heightConfig));
+                }
+                String widthConfig = getConfig(titleStyle, "width");// 获取宽度
+                if (!CommonTools.isNullStr(widthConfig)) {
+                    sheet.setColumnWidth(cellIndex, Integer.valueOf(widthConfig) * 256);
                 }
 
                 String colspanConfig = getConfig(titleStyle, "colspan");// 获取合并列数
                 String rowspanConfig = getConfig(titleStyle, "rowspan");// 获取合并行数
                 if (!CommonTools.isNullStr(colspanConfig) && !CommonTools.isNullStr(rowspanConfig)) {// 合并单元格
-                    sheet.mergeCells(cellIndex, rowIndex, cellIndex + Integer.valueOf(colspanConfig) - 1, rowIndex + Integer.valueOf(rowspanConfig) - 1);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + Integer.valueOf(rowspanConfig) - 1, cellIndex, cellIndex + Integer.valueOf(colspanConfig) - 1));
                 } else if (!CommonTools.isNullStr(colspanConfig)) {
-                    sheet.mergeCells(cellIndex, rowIndex, cellIndex + Integer.valueOf(colspanConfig) - 1, rowIndex);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, cellIndex, cellIndex + Integer.valueOf(colspanConfig) - 1));
                 } else if (!CommonTools.isNullStr(rowspanConfig)) {
-                    sheet.mergeCells(cellIndex, rowIndex, cellIndex, rowIndex + Integer.valueOf(rowspanConfig) - 1);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex + Integer.valueOf(rowspanConfig) - 1, cellIndex, cellIndex));
                 }
-
-                sheet.addCell(new Label(cellIndex, rowIndex, title, wcfTitle));
                 if (!CommonTools.isNullStr(rowspanConfig)) {
                     rowIndex += Integer.valueOf(rowspanConfig);
                 } else {
@@ -116,10 +120,9 @@ final class SheetDataForJXL {
         /* 填充数据的内容 start ****/
         if (showBodyHead) {
             if (CommonTools.isNullStr(bodyCtrl)) {
-                rowIndex = createBodyHeadByName(names, rowIndex, cellIndex,
-                        sheet);
+                rowIndex = createBodyHeadByName(wb, names, rowIndex, cellIndex, sheet);
             } else {
-                rowIndex = createBodyHead(bodyCtrl, rowIndex, cellIndex, sheet);
+                rowIndex = createBodyHead(wb, bodyCtrl, rowIndex, cellIndex, sheet);
             }
         }
         String[] bodys = StringUtils.splitPreserveAllTokens(bodyCtrl, "^");
@@ -127,33 +130,53 @@ final class SheetDataForJXL {
             JsonNode rowData = jsonArray.get(i);
             int cellindex = cellIndex;
             String[] name = StringUtils.splitPreserveAllTokens(names, ",");
+            Row row = sheet.getRow(rowIndex);
+            if (row == null) {
+                row = sheet.createRow(rowIndex);
+            }
             for (String aName : name) {
-                WritableCellFormat wcfBody;
+                Cell cell = row.createCell(cellindex);
+                CellStyle cellStyle;
                 if (!CommonTools.isNullStr(bodyCtrl) && bodys[cellindex - cellIndex].contains("[")) {
                     String bodyStr = bodys[cellindex - cellIndex];
                     String bodyStyle = bodyStr.substring(bodyStr.indexOf("[") + 1, bodyStr.indexOf("]"));// 获取标题样式字符串
-                    wcfBody = createStyle(bodyStyle, 1);// 标题样式
-
+                    cellStyle = createStyle(wb, bodyStyle, 1);// 标题样式
                     String widthConfig = getConfig(bodyStyle, "width");// 获取宽度
                     if (!CommonTools.isNullStr(widthConfig)) {
-                        sheet.setColumnView(cellindex, Integer.valueOf(widthConfig));
+                        sheet.setColumnWidth(cellindex, Integer.valueOf(widthConfig) * 256);
                     }
                     String heightConfig = getConfig(bodyStyle, "height");// 获取高度
                     if (!CommonTools.isNullStr(heightConfig)) {
-                        sheet.setRowView(rowIndex, Integer.valueOf(heightConfig));
+                        row.setHeightInPoints(Integer.valueOf(heightConfig));
                     }
                 } else {
-                    WritableFont wf = new WritableFont(WritableFont.ARIAL, FONT_SIZE, WritableFont.NO_BOLD, false, UnderlineStyle.NO_UNDERLINE, Colour.BLACK);
-                    wcfBody = new WritableCellFormat(wf);
-                    wcfBody.setVerticalAlignment(VerticalAlignment.CENTRE);
-                    wcfBody.setAlignment(Alignment.LEFT);
-                    wcfBody.setBorder(Border.ALL, BorderLineStyle.THIN);
+                    cellStyle = wb.createCellStyle();
+                    Font font = wb.createFont();
+                    /* 设置字体大小 */
+                    font.setFontHeightInPoints(FONT_SIZE);
+                    /* 设置字体颜色 */
+                    font.setColor(IndexedColors.BLACK.getIndex());
+                    /* 设置字体加粗 */
+                    font.setBold(false);
+                    cellStyle.setFont(font);
+                    /* 设置单元格自动换行 */
+                    cellStyle.setWrapText(true);
+                    /* 设置单元格对齐方式 */
+                    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+                    cellStyle.setAlignment(HorizontalAlignment.LEFT);
+                    /* 边框 */
+                    cellStyle.setBorderTop(BorderStyle.THIN);
+                    cellStyle.setBorderBottom(BorderStyle.THIN);
+                    cellStyle.setBorderLeft(BorderStyle.THIN);
+                    cellStyle.setBorderRight(BorderStyle.THIN);
                 }
+                cell.setCellType(CellType.STRING);
+                cell.setCellStyle(cellStyle);
                 JsonNode jsonCell = rowData.get(aName);
                 if (jsonCell.isTextual()) {
-                    sheet.addCell(new Label(cellindex, rowIndex, jsonCell.textValue(), wcfBody));
+                    cell.setCellValue(jsonCell.textValue());
                 } else {
-                    sheet.addCell(new Label(cellindex, rowIndex, jsonCell.toString(), wcfBody));
+                    cell.setCellValue(jsonCell.toString());
                 }
                 cellindex++;
             }
@@ -182,23 +205,31 @@ final class SheetDataForJXL {
                 }
                 String widthConfig = getConfig(footStyle, "width");// 获取宽度
                 if (!CommonTools.isNullStr(widthConfig)) {
-                    sheet.setColumnView(cellIndex, Integer.valueOf(widthConfig));
+                    sheet.setColumnWidth(cellIndex, Integer.valueOf(widthConfig) * 256);
+                }
+
+                Row row = sheet.getRow(rowIndex + paddingrow);
+                if (row == null) {
+                    row = sheet.createRow(rowIndex);
                 }
                 String heightConfig = getConfig(footStyle, "height");// 获取高度
                 if (!CommonTools.isNullStr(heightConfig)) {
-                    sheet.setRowView(rowIndex + paddingrow, Integer.valueOf(heightConfig));
+                    row.setHeightInPoints(Integer.valueOf(heightConfig));
                 }
-                WritableCellFormat wcfTitle = createStyle(footStyle, 2);// 页脚样式
+                CellStyle cellStyle = createStyle(wb, footStyle, 2);// 页脚样式
                 String colspanConfig = getConfig(footStyle, "colspan");// 获取合并列数
                 String rowspanConfig = getConfig(footStyle, "rowspan");// 获取合并行数
                 if (!CommonTools.isNullStr(colspanConfig) && !CommonTools.isNullStr(rowspanConfig)) {// 合并单元格
-                    sheet.mergeCells(cellIndex, rowIndex + paddingrow, cellIndex + Integer.valueOf(colspanConfig) - 1, rowIndex + paddingrow + Integer.valueOf(rowspanConfig) - 1);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex + paddingrow, rowIndex + paddingrow + Integer.valueOf(rowspanConfig) - 1, cellIndex, cellIndex + Integer.valueOf(colspanConfig) - 1));
                 } else if (!CommonTools.isNullStr(colspanConfig)) {
-                    sheet.mergeCells(cellIndex, rowIndex + paddingrow, cellIndex + Integer.valueOf(colspanConfig) - 1, rowIndex + paddingrow);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex + paddingrow, rowIndex + paddingrow, cellIndex, cellIndex + Integer.valueOf(colspanConfig) - 1));
                 } else if (!CommonTools.isNullStr(rowspanConfig)) {
-                    sheet.mergeCells(cellIndex, rowIndex + paddingrow, cellIndex, rowIndex + paddingrow + Integer.valueOf(rowspanConfig) - 1);
+                    sheet.addMergedRegion(new CellRangeAddress(rowIndex + paddingrow, rowIndex + paddingrow + Integer.valueOf(rowspanConfig) - 1, cellIndex, cellIndex));
                 }
-                sheet.addCell(new Label(cellIndex, rowIndex + paddingrow, foot, wcfTitle));
+                Cell cell = row.createCell(cellIndex);
+                cell.setCellType(CellType.STRING);
+                cell.setCellStyle(cellStyle);
+                cell.setCellValue(foot);
             }
         }
         /* 插入页脚 end ****/
@@ -210,27 +241,24 @@ final class SheetDataForJXL {
      *
      * @param sheet       sheet对象
      * @param sheetConfig sheet配置
-     * @return sheet对象
      */
-    WritableSheet generateSheetHeader(WritableSheet sheet, JsonNode sheetConfig) {
+    void generateSheetHeader(Sheet sheet, JsonNode sheetConfig) {
         if (validationConfig(sheetConfig, 2)) {
             JsonNode header = sheetConfig.get("header");
-            HeaderFooter head = new HeaderFooter();
-            if (header.has("left")) {
-                String headStr = header.get("left").textValue();
-                head = buildHeadFooter(head, headStr, 0);
-            }
+            Header head = sheet.getHeader();
             if (header.has("center")) {
                 String headStr = header.get("center").textValue();
-                head = buildHeadFooter(head, headStr, 1);
+                buildHeadFooter(head, headStr, 1);
+            }
+            if (header.has("left")) {
+                String headStr = header.get("left").textValue();
+                buildHeadFooter(head, headStr, 0);
             }
             if (header.has("right")) {
                 String headStr = header.get("right").textValue();
-                head = buildHeadFooter(head, headStr, 2);
+                buildHeadFooter(head, headStr, 2);
             }
-            sheet.getSettings().setHeader(head);
         }
-        return sheet;
     }
 
     /**
@@ -238,27 +266,24 @@ final class SheetDataForJXL {
      *
      * @param sheet       sheet对象
      * @param sheetConfig sheet配置
-     * @return sheet对象
      */
-    WritableSheet generateSheetFooter(WritableSheet sheet, JsonNode sheetConfig) {
+    void generateSheetFooter(Sheet sheet, JsonNode sheetConfig) {
         if (validationConfig(sheetConfig, 3)) {
             JsonNode footer = sheetConfig.get("footer");
-            HeaderFooter foot = new HeaderFooter();
+            Footer foot = sheet.getFooter();
             if (footer.has("left")) {
                 String footStr = footer.get("left").textValue();
-                foot = buildHeadFooter(foot, footStr, 0);
+                buildHeadFooter(foot, footStr, 0);
             }
             if (footer.has("center")) {
                 String footStr = footer.get("center").textValue();
-                foot = buildHeadFooter(foot, footStr, 1);
+                buildHeadFooter(foot, footStr, 1);
             }
             if (footer.has("right")) {
                 String footStr = footer.get("right").textValue();
-                foot = buildHeadFooter(foot, footStr, 2);
+                buildHeadFooter(foot, footStr, 2);
             }
-            sheet.getSettings().setFooter(foot);
         }
-        return sheet;
     }
 
     /**
@@ -266,61 +291,61 @@ final class SheetDataForJXL {
      *
      * @param sheet       sheet对象
      * @param sheetConfig sheet配置
-     * @return sheet对象
      */
-    WritableSheet generateSheetMerge(WritableSheet sheet, JsonNode sheetConfig) throws Exception {
+    void generateSheetMerge(Sheet sheet, JsonNode sheetConfig) throws Exception {
         if (validationConfig(sheetConfig, 4)) {
             JsonNode mergeCells = sheetConfig.get("mergeCells");
             for (int j = 0; j < mergeCells.size(); j++) {
                 JsonNode mergeCellsInfo = mergeCells.get(j);
                 CellPoint cellPoint = buildCellPoint(mergeCellsInfo);
                 if (cellPoint.getFirstCol() > -1 && cellPoint.getFirstRow() > -1 && cellPoint.getLastCol() > -1 && cellPoint.getLastRow() > -1) {
-                    sheet.mergeCells(cellPoint.getFirstCol(), cellPoint.getFirstRow(), cellPoint.getLastCol(), cellPoint.getLastRow());
+                    sheet.addMergedRegion(new CellRangeAddress(cellPoint.getFirstRow(), cellPoint.getLastRow(), cellPoint.getFirstCol(), cellPoint.getLastCol()));
                 } else {
                     throw new Exception("merge cell config is not complete!");
                 }
             }
         }
-        return sheet;
     }
 
     /**
      * 设置sheet打印配置
      *
+     * @param wb          工作簿对象
+     * @param sheetIndex  sheet编号
      * @param sheet       sheet对象
      * @param sheetConfig sheet配置
-     * @return sheet对象
      */
-    WritableSheet generateSheetPrintSetting(WritableSheet sheet, JsonNode sheetConfig) throws Exception {
+    void generateSheetPrintSetting(Workbook wb, int sheetIndex, Sheet sheet, JsonNode sheetConfig) throws Exception {
         if (validationConfig(sheetConfig, 5)) {
             JsonNode jsonPrintSetting = sheetConfig.get("printSetting");
             PrintSetting printSetting = buildPrintSetting(jsonPrintSetting);
-            sheet.getSettings().setPaperSize(PaperSize.A4);
+            PrintSetup printSetup = sheet.getPrintSetup();
+            printSetup.setPaperSize(PrintSetup.A4_PAPERSIZE);
             if (printSetting.isHorizontal()) {
-                sheet.getSettings().setOrientation(PageOrientation.LANDSCAPE);
+                printSetup.setLandscape(true);
             } else {
-                sheet.getSettings().setOrientation(PageOrientation.PORTRAIT);
+                printSetup.setLandscape(false);
             }
             if (printSetting.getPageWidth() > -1) {
-                sheet.getSettings().setFitWidth(printSetting.getPageWidth());
+                printSetup.setFitWidth((short) printSetting.getPageWidth());
             }
             if (printSetting.getPageHeight() > -1) {
-                sheet.getSettings().setFitHeight(printSetting.getPageHeight());
+                printSetup.setFitHeight((short) printSetting.getPageHeight());
             }
-            sheet.getSettings().setTopMargin(printSetting.getTopMargin());
-            sheet.getSettings().setBottomMargin(printSetting.getBottomMargin());
-            sheet.getSettings().setLeftMargin(printSetting.getLeftMargin());
-            sheet.getSettings().setRightMargin(printSetting.getRightMargin());
+            sheet.setMargin(Sheet.TopMargin, printSetting.getTopMargin());
+            sheet.setMargin(Sheet.BottomMargin, printSetting.getBottomMargin());
+            sheet.setMargin(Sheet.LeftMargin, printSetting.getLeftMargin());
+            sheet.setMargin(Sheet.RightMargin, printSetting.getRightMargin());
             if (printSetting.getHorizontalCentre() != null) {
-                sheet.getSettings().setHorizontalCentre(Boolean.valueOf(printSetting.getHorizontalCentre().toString()));
+                sheet.setHorizontallyCenter(Boolean.valueOf(printSetting.getHorizontalCentre().toString()));
             }
             if (printSetting.getVerticallyCenter() != null) {
-                sheet.getSettings().setVerticalCentre(Boolean.valueOf(printSetting.getVerticallyCenter().toString()));
+                sheet.setVerticallyCenter(Boolean.valueOf(printSetting.getVerticallyCenter().toString()));
             }
             CellPoint printArea = printSetting.getPrintArea();
             if (printArea != null) {
                 if (printArea.getFirstCol() > -1 && printArea.getFirstRow() > -1 && printArea.getLastCol() > -1 && printArea.getLastRow() > -1) {
-                    sheet.getSettings().setPrintArea(printArea.getFirstCol(), printArea.getFirstRow(), printArea.getLastCol(), printArea.getLastRow());
+                    wb.setPrintArea(sheetIndex, printArea.getFirstCol(), printArea.getLastCol(), printArea.getFirstRow(), printArea.getLastRow());
                 } else {
                     throw new Exception("print config is not complete!");
                 }
@@ -328,17 +353,16 @@ final class SheetDataForJXL {
             CellPoint printTitles = printSetting.getPrintTitles();
             if (printTitles != null) {
                 if (printTitles.getFirstCol() > -1 && printTitles.getFirstRow() > -1 && printTitles.getLastCol() > -1 && printTitles.getLastRow() > -1) {
-                    sheet.getSettings().setPrintTitles(printTitles.getFirstRow(), printTitles.getLastRow(), printTitles.getFirstCol(), printTitles.getLastCol());
+                    sheet.setRepeatingRows(new CellRangeAddress(printTitles.getFirstRow(), printTitles.getLastRow(), printTitles.getFirstCol(), printTitles.getLastCol()));
                 } else if (printTitles.getFirstCol() > -1 && printTitles.getLastCol() > -1) {
-                    sheet.getSettings().setPrintTitlesCol(printTitles.getFirstCol(), printTitles.getLastCol());
+                    sheet.setRepeatingColumns(new CellRangeAddress(0, 0, printTitles.getFirstCol(), printTitles.getLastCol()));
                 } else if (printTitles.getFirstRow() > -1 && printTitles.getLastRow() > -1) {
-                    sheet.getSettings().setPrintTitlesRow(printTitles.getFirstRow(), printTitles.getLastRow());
+                    sheet.setRepeatingRows(new CellRangeAddress(printTitles.getFirstRow(), printTitles.getLastRow(), 0, 0));
                 } else {
                     throw new Exception("print titles is not complete!");
                 }
             }
         }
-        return sheet;
     }
 
     /**
@@ -347,25 +371,24 @@ final class SheetDataForJXL {
      * @param sheet       sheet对象
      * @param sheetConfig sheet配置
      */
-    void generateSheetFreeze(WritableSheet sheet, JsonNode sheetConfig) throws Exception {
+    void generateSheetFreeze(Sheet sheet, JsonNode sheetConfig) throws Exception {
         if (validationConfig(sheetConfig, 6)) {
+            int row = 0;
+            int col = 0;
             JsonNode freeze = sheetConfig.get("freeze");
             if (freeze.has("row")) {
-                int row = freeze.get("row").asInt();
-                if (row >= 0) {
-                    sheet.getSettings().setVerticalFreeze(row);
-                } else {
+                row = freeze.get("row").asInt();
+                if (row < 0) {
                     throw new Exception("freeze row config is not complete!");
                 }
             }
             if (freeze.has("col")) {
-                int col = freeze.get("col").asInt();
-                if (col >= 0) {
-                    sheet.getSettings().setHorizontalFreeze(col);
-                } else {
+                col = freeze.get("col").asInt();
+                if (col < 0) {
                     throw new Exception("freeze cell config is not complete!");
                 }
             }
+            sheet.createFreezePane(col, row, col, row);
         }
     }
 
@@ -375,7 +398,7 @@ final class SheetDataForJXL {
      * @param sheetConfig sheet配置
      * @param flag        0-sheet基本配置信息 1-数据配置信息 2-页眉配置信息 3-页脚配置信息 4-合并单元格配置信息 5-打印配置信息
      *                    6-冻结窗口配置信息
-     * @return 校验是否成功
+     * @return 校验是否通过
      */
     boolean validationConfig(JsonNode sheetConfig, int flag) {
         if (flag == 0) {
@@ -428,182 +451,198 @@ final class SheetDataForJXL {
     /**
      * 获取配置信息
      *
-     * @param styleStr   配置信息
+     * @param styleStr   样式配置信息
      * @param configName 配置名称
-     * @return 配置值
+     * @return 配置信息值
      */
     private String getConfig(String styleStr, String configName) {
         String[] styles = StringUtils.splitPreserveAllTokens(styleStr, ",");
-        for (String style : styles) {
+        for (String style : styles)
             if (style.contains(configName) && style.substring(0, style.indexOf("=")).length() == configName.length()) {
                 return style.substring(configName.length() + 1);
             }
-        }
         return "";
     }
 
     /**
      * 创建样式
      *
-     * @param style 样式字符串
+     * @param wb    工作簿对象
+     * @param style 样式信息
      * @param flag  0-标题,1-数据,2-脚
-     * @return 单元格对象
+     * @return 单元格样式
      */
-    private WritableCellFormat createStyle(String style, int flag) throws Exception {
-        int font = FONT_SIZE;
+    private CellStyle createStyle(Workbook wb, String style, int flag) {
+        CellStyle cellStyle = wb.createCellStyle();
+        Font font = wb.createFont();
+        /* 设置字体大小 */
+        short fontSize = FONT_SIZE;
         String fontConfig = getConfig(style, "font");
         if (!CommonTools.isNullStr(fontConfig)) {
-            font = Integer.valueOf(fontConfig);
+            fontSize = Short.valueOf(fontConfig);
         }
-        Colour color = Colour.BLACK;
+        font.setFontHeightInPoints(fontSize);
+        /* 设置字体颜色 */
+        short color = IndexedColors.BLACK.getIndex();
         String colorConfig = getConfig(style, "color");
         if (!CommonTools.isNullStr(colorConfig)) {
             switch (colorConfig) {
                 case "black":
-                    color = Colour.BLACK;
+                    color = IndexedColors.BLACK.getIndex();
                     break;
                 case "blue":
-                    color = Colour.BLUE;
+                    color = IndexedColors.BLUE.getIndex();
                     break;
                 case "red":
-                    color = Colour.RED;
+                    color = IndexedColors.RED.getIndex();
                     break;
                 case "green":
-                    color = Colour.GREEN;
+                    color = IndexedColors.GREEN.getIndex();
                     break;
             }
         }
-        WritableFont wf;
+        font.setColor(color);
+        /* 设置字体加粗 */
         String boldConfig = getConfig(style, "bold");
-        String underlineConfig = getConfig(style, "underline");
-        UnderlineStyle underline = UnderlineStyle.NO_UNDERLINE;
-        if (underlineConfig.equals("true")) {
-            underline = UnderlineStyle.SINGLE;
-        }
         if (flag == 0) {
             if (boldConfig.equals("false")) {
-                wf = new WritableFont(WritableFont.ARIAL, font, WritableFont.NO_BOLD, false, underline, color);
+                font.setBold(false);
             } else {
-                wf = new WritableFont(WritableFont.ARIAL, font, WritableFont.BOLD, false, underline, color);
+                font.setBold(true);
             }
         } else {
             if (boldConfig.equals("true")) {
-                wf = new WritableFont(WritableFont.ARIAL, font, WritableFont.BOLD, false, underline, color);
+                font.setBold(true);
             } else {
-                wf = new WritableFont(WritableFont.ARIAL, font, WritableFont.NO_BOLD, false, underline, color);
+                font.setBold(false);
             }
         }
-        WritableCellFormat wcf = new WritableCellFormat(wf);
-        wcf.setVerticalAlignment(VerticalAlignment.CENTRE);
-        Alignment align = Alignment.LEFT;
-        if (flag == 0) {
-            align = Alignment.CENTRE;
+        /* 设置字体下划线 */
+        String underlineConfig = getConfig(style, "underline");
+        if (underlineConfig.equals("true")) {
+            font.setUnderline(Font.U_SINGLE);
         }
+        cellStyle.setFont(font);
+        /* 设置单元格对齐方式 */
         String alignConfig = getConfig(style, "align");
+        HorizontalAlignment align = HorizontalAlignment.LEFT;
+        if (flag == 0) {
+            align = HorizontalAlignment.CENTER;
+        }
         if (!CommonTools.isNullStr(alignConfig)) {
             switch (alignConfig) {
                 case "center":
-                    align = Alignment.CENTRE;
+                    align = HorizontalAlignment.CENTER;
                     break;
                 case "left":
-                    align = Alignment.LEFT;
+                    align = HorizontalAlignment.LEFT;
                     break;
                 case "right":
-                    align = Alignment.RIGHT;
+                    align = HorizontalAlignment.RIGHT;
                     break;
             }
         }
-        wcf.setWrap(true);
-        wcf.setAlignment(align);
-        if (flag != 2) {
-            String borderConfig = getConfig(style, "border");
-            Border border = Border.ALL;
-            if (!CommonTools.isNullStr(borderConfig)) {
-                switch (borderConfig) {
-                    case "no":
-                        border = Border.NONE;
-                        break;
-                    case "all":
-                        border = Border.ALL;
-                        break;
-                    case "top":
-                        border = Border.TOP;
-                        break;
-                    case "bottom":
-                        border = Border.BOTTOM;
-                        break;
-                    case "right":
-                        border = Border.RIGHT;
-                        break;
-                    case "left":
-                        border = Border.LEFT;
-                        break;
-                }
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setAlignment(align);
+        /* 设置单元格自动换行 */
+        cellStyle.setWrapText(true);
+        /* 设置单元格边框 */
+        String borderConfig = getConfig(style, "border");
+        if (!CommonTools.isNullStr(borderConfig)) {
+            switch (borderConfig) {
+                case "no":
+                    cellStyle.setBorderTop(BorderStyle.NONE);
+                    cellStyle.setBorderBottom(BorderStyle.NONE);
+                    cellStyle.setBorderLeft(BorderStyle.NONE);
+                    cellStyle.setBorderRight(BorderStyle.NONE);
+                    break;
+                case "all":
+                    cellStyle.setBorderTop(BorderStyle.THIN);
+                    cellStyle.setBorderBottom(BorderStyle.THIN);
+                    cellStyle.setBorderLeft(BorderStyle.THIN);
+                    cellStyle.setBorderRight(BorderStyle.THIN);
+                    break;
+                case "top":
+                    cellStyle.setBorderTop(BorderStyle.THIN);
+                    break;
+                case "bottom":
+                    cellStyle.setBorderBottom(BorderStyle.THIN);
+                    break;
+                case "right":
+                    cellStyle.setBorderRight(BorderStyle.THIN);
+                    break;
+                case "left":
+                    cellStyle.setBorderLeft(BorderStyle.THIN);
+                    break;
             }
-            wcf.setBorder(border, BorderLineStyle.THIN);
-        } else {
-            String borderConfig = getConfig(style, "border");
-            Border border = Border.NONE;
-            if (!CommonTools.isNullStr(borderConfig)) {
-                switch (borderConfig) {
-                    case "no":
-                        border = Border.NONE;
-                        break;
-                    case "all":
-                        border = Border.ALL;
-                        break;
-                    case "top":
-                        border = Border.TOP;
-                        break;
-                    case "bottom":
-                        border = Border.BOTTOM;
-                        break;
-                    case "right":
-                        border = Border.RIGHT;
-                        break;
-                    case "left":
-                        border = Border.LEFT;
-                        break;
-                }
-            }
-            wcf.setBorder(border, BorderLineStyle.THIN);
         }
-        return wcf;
+        if (flag != 2) {
+            if (CommonTools.isNullStr(borderConfig)) {
+                cellStyle.setBorderTop(BorderStyle.THIN);
+                cellStyle.setBorderBottom(BorderStyle.THIN);
+                cellStyle.setBorderLeft(BorderStyle.THIN);
+                cellStyle.setBorderRight(BorderStyle.THIN);
+            }
+        } else {
+            if (CommonTools.isNullStr(borderConfig)) {
+                cellStyle.setBorderTop(BorderStyle.NONE);
+                cellStyle.setBorderBottom(BorderStyle.NONE);
+                cellStyle.setBorderLeft(BorderStyle.NONE);
+                cellStyle.setBorderRight(BorderStyle.NONE);
+            }
+        }
+        return cellStyle;
     }
 
     /**
      * 通过配置信息生成表头
      *
-     * @param bodyCtrl  表头配置
-     * @param rowIndex  开始行
-     * @param cellIndex 开始列
-     * @param sheet     sheet对象
-     * @return 结束行
+     * @param wb 工作簿对象
      */
-    private int createBodyHead(String bodyCtrl, int rowIndex, int cellIndex, WritableSheet sheet) throws Exception {
+    private int createBodyHead(Workbook wb, String bodyCtrl, int rowIndex, int cellIndex, Sheet sheet) {
+        Row row = sheet.getRow(rowIndex);
+        if (row == null) {
+            row = sheet.createRow(rowIndex);
+        }
         String[] bodys = StringUtils.splitPreserveAllTokens(bodyCtrl, "^");
         for (int i = 0; i < bodys.length; i++) {
+            Cell cell = row.createCell(cellIndex + i);
+            CellStyle cellStyle;
             String headStr = bodys[i];
             String headtitle;
-            WritableCellFormat wcfTitle;
             if (headStr.contains("[")) {
                 headtitle = headStr.substring(0, headStr.indexOf("["));// 获取标题
                 String headStyle = headStr.substring(headStr.indexOf("[") + 1, headStr.indexOf("]"));// 获取标题样式字符串
-                wcfTitle = createStyle(headStyle, 0);// 标题样式
+                cellStyle = createStyle(wb, headStyle, 0);// 标题样式
                 String widthConfig = getConfig(headStyle, "width");// 获取宽度
                 if (!CommonTools.isNullStr(widthConfig)) {
-                    sheet.setColumnView(cellIndex + i, Integer.valueOf(widthConfig));
+                    sheet.setColumnWidth(cellIndex + i, Integer.valueOf(widthConfig) * 256);
                 }
             } else {
                 headtitle = headStr;// 获取标题
-                WritableFont wf = new WritableFont(WritableFont.ARIAL, FONT_SIZE, WritableFont.BOLD, false, UnderlineStyle.NO_UNDERLINE, Colour.BLACK);
-                wcfTitle = new WritableCellFormat(wf);
-                wcfTitle.setVerticalAlignment(VerticalAlignment.CENTRE);
-                wcfTitle.setAlignment(Alignment.LEFT);
-                wcfTitle.setBorder(Border.ALL, BorderLineStyle.THIN);
+                cellStyle = wb.createCellStyle();
+                Font font = wb.createFont();
+                /* 设置字体大小 */
+                font.setFontHeightInPoints(FONT_SIZE);
+                /* 设置字体颜色 */
+                font.setColor(IndexedColors.BLACK.getIndex());
+                /* 设置字体加粗 */
+                font.setBold(true);
+                cellStyle.setFont(font);
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                /* 设置单元格自动换行 */
+                cellStyle.setWrapText(true);
+                /* 设置单元格对齐方式 */
+                cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+                /* 边框 */
+                cellStyle.setBorderTop(BorderStyle.THIN);
+                cellStyle.setBorderBottom(BorderStyle.THIN);
+                cellStyle.setBorderLeft(BorderStyle.THIN);
+                cellStyle.setBorderRight(BorderStyle.THIN);
             }
-            sheet.addCell(new Label(cellIndex + i, rowIndex, headtitle, wcfTitle));
-
+            cell.setCellType(CellType.STRING);
+            cell.setCellValue(headtitle);
+            cell.setCellStyle(cellStyle);
         }
         return ++rowIndex;
     }
@@ -611,22 +650,43 @@ final class SheetDataForJXL {
     /**
      * 通过数据列名生成表头
      *
+     * @param wb        工作簿
      * @param names     名称
      * @param rowIndex  开始行
      * @param cellIndex 开始列
      * @param sheet     sheet对象
      * @return 结束行
      */
-    private int createBodyHeadByName(String names, int rowIndex, int cellIndex, WritableSheet sheet) throws Exception {
-        WritableFont wf = new WritableFont(WritableFont.ARIAL, FONT_SIZE, WritableFont.BOLD, false, UnderlineStyle.NO_UNDERLINE, Colour.BLACK);
-        WritableCellFormat wcf = new WritableCellFormat(wf);
-        wcf.setVerticalAlignment(VerticalAlignment.CENTRE);
-        wcf.setAlignment(Alignment.CENTRE);
-        wcf.setBorder(Border.ALL, BorderLineStyle.THIN);
+    private int createBodyHeadByName(Workbook wb, String names, int rowIndex, int cellIndex, Sheet sheet) {
+        Row row = sheet.getRow(rowIndex);
+        if (row == null) {
+            row = sheet.createRow(rowIndex);
+        }
+        CellStyle cellStyle = wb.createCellStyle();
+        Font font = wb.createFont();
+        /* 设置字体颜色 */
+        font.setColor(IndexedColors.BLACK.getIndex());
+        /* 设置字体大小 */
+        font.setFontHeightInPoints(FONT_SIZE);
+        /* 设置字体加粗 */
+        font.setBold(true);
+        cellStyle.setFont(font);
+        /* 设置单元格对齐方式 */
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        /* 设置单元格自动换行 */
+        cellStyle.setWrapText(true);
+        /* 边框 */
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
         int cellindex = cellIndex;
         String[] name = StringUtils.splitPreserveAllTokens(names, ",");
         for (String aName : name) {
-            sheet.addCell(new Label(cellindex, rowIndex, aName, wcf));
+            Cell cell = row.createCell(cellindex);
+            cell.setCellType(CellType.STRING);
+            cell.setCellValue(aName);
+            cell.setCellStyle(cellStyle);
             cellindex++;
         }
         return ++rowIndex;
@@ -638,45 +698,114 @@ final class SheetDataForJXL {
      * @param headerfooter 页眉页脚对象
      * @param info         配置信息字符串
      * @param flag         0-左 1-中 2-右
-     * @return 页眉页脚对象
      */
-    private HeaderFooter buildHeadFooter(HeaderFooter headerfooter, String info, int flag) {
-        Contents contents;
-        if (flag == 0) {
-            contents = headerfooter.getLeft();
-        } else if (flag == 2) {
-            contents = headerfooter.getRight();
-        } else {
-            contents = headerfooter.getCentre();
+    private void buildHeadFooter(Header headerfooter, String info, int flag) {
+        StringBuilder contents;
+        switch (flag) {
+            case 0:
+                contents = new StringBuilder(headerfooter.getLeft());
+                break;
+            case 1:
+                contents = new StringBuilder(headerfooter.getCenter());
+                break;
+            case 2:
+                contents = new StringBuilder(headerfooter.getRight());
+                break;
+            default:
+                contents = new StringBuilder(headerfooter.getCenter());
         }
         int pageNumberBegin = info.indexOf("[pageNumber]");
         int pageTotalBegin = info.indexOf("[pageTotal]");
         if (pageNumberBegin > -1 && pageTotalBegin < 0) {
-            contents.append(info.substring(0, pageNumberBegin));
-            contents.appendPageNumber();
+            contents.append(info, 0, pageNumberBegin);
+            contents.append(HSSFHeader.page());
             contents.append(info.substring(pageNumberBegin + 12));
-        } else if (pageNumberBegin > -1 && pageTotalBegin > -1) {
+        } else if (pageNumberBegin > -1) {
             if (pageNumberBegin < pageTotalBegin) {
-                contents.append(info.substring(0, pageNumberBegin));
-                contents.appendPageNumber();
-                contents.append(info.substring(pageNumberBegin + 12, pageTotalBegin));
-                contents.appendTotalPages();
+                contents.append(info, 0, pageNumberBegin);
+                contents.append(HSSFHeader.page());
+                contents.append(info, pageNumberBegin + 12, pageTotalBegin);
+                contents.append(HSSFHeader.numPages());
                 contents.append(info.substring(pageTotalBegin + 11));
             } else {
-                contents.append(info.substring(0, pageTotalBegin));
-                contents.appendTotalPages();
-                contents.append(info.substring(pageTotalBegin + 11, pageNumberBegin));
-                contents.appendPageNumber();
+                contents.append(info, 0, pageTotalBegin);
+                contents.append(HSSFHeader.numPages());
+                contents.append(info, pageTotalBegin + 11, pageNumberBegin);
+                contents.append(HSSFHeader.page());
                 contents.append(info.substring(pageNumberBegin + 12));
             }
-        } else if (pageNumberBegin < 0 && pageTotalBegin > -1) {
-            contents.append(info.substring(0, pageTotalBegin));
-            contents.appendTotalPages();
+        } else if (pageTotalBegin > -1) {
+            contents.append(info, 0, pageTotalBegin);
+            contents.append(HSSFHeader.numPages());
             contents.append(info.substring(pageTotalBegin + 11));
         } else {
             contents.append(info);
         }
-        return headerfooter;
+        if (flag == 0) {
+            headerfooter.setLeft(contents.toString());
+        } else if (flag == 2) {
+            headerfooter.setRight(contents.toString());
+        } else {
+            headerfooter.setCenter(contents.toString());
+        }
+    }
+
+    /**
+     * 构建页眉页脚
+     *
+     * @param headerfooter 页眉页脚对象
+     * @param info         配置信息字符串
+     * @param flag         0-左 1-中 2-右
+     */
+    private void buildHeadFooter(Footer headerfooter, String info, int flag) {
+        StringBuilder contents;
+        switch (flag) {
+            case 0:
+                contents = new StringBuilder(headerfooter.getLeft());
+                break;
+            case 2:
+                contents = new StringBuilder(headerfooter.getRight());
+                break;
+            case 1:
+                contents = new StringBuilder(headerfooter.getCenter());
+                break;
+            default:
+                contents = new StringBuilder(headerfooter.getCenter());
+        }
+        int pageTotalBegin = info.indexOf("[pageTotal]");
+        int pageNumberBegin = info.indexOf("[pageNumber]");
+        if (pageNumberBegin > -1 && pageTotalBegin < 0) {
+            contents.append(info, 0, pageNumberBegin);
+            contents.append(HSSFFooter.page());
+            contents.append(info.substring(pageNumberBegin + 12));
+        } else if (pageNumberBegin > -1) {
+            if (pageNumberBegin < pageTotalBegin) {
+                contents.append(info, 0, pageNumberBegin);
+                contents.append(HSSFFooter.page());
+                contents.append(info, pageNumberBegin + 12, pageTotalBegin);
+                contents.append(HSSFFooter.numPages());
+                contents.append(info.substring(pageTotalBegin + 11));
+            } else {
+                contents.append(info, 0, pageTotalBegin);
+                contents.append(HSSFFooter.numPages());
+                contents.append(info, pageTotalBegin + 11, pageNumberBegin);
+                contents.append(HSSFFooter.page());
+                contents.append(info.substring(pageNumberBegin + 12));
+            }
+        } else if (pageTotalBegin > -1) {
+            contents.append(info, 0, pageTotalBegin);
+            contents.append(HSSFFooter.numPages());
+            contents.append(info.substring(pageTotalBegin + 11));
+        } else {
+            contents.append(info);
+        }
+        if (flag == 0) {
+            headerfooter.setLeft(contents.toString());
+        } else if (flag == 2) {
+            headerfooter.setRight(contents.toString());
+        } else {
+            headerfooter.setCenter(contents.toString());
+        }
     }
 
     /**
@@ -711,7 +840,7 @@ final class SheetDataForJXL {
     private PrintSetting buildPrintSetting(JsonNode jsonPrintSetting) {
         PrintSetting printSetting = new PrintSetting();
         if (jsonPrintSetting.has("isHorizontal")) {
-            printSetting.setHorizontal(jsonPrintSetting.get("isHorizontal").asBoolean());
+            printSetting.setHorizontal(jsonPrintSetting.get("isHorizontal").booleanValue());
         }
         if (jsonPrintSetting.has("pageWidth")) {
             printSetting.setPageWidth(jsonPrintSetting.get("pageWidth").asInt());

@@ -43,7 +43,7 @@ public class FileOperation {
         FileInputStream fis = null;
         FileChannel channel = null;
         try {
-            StringBuilder buff = new StringBuilder("");
+            StringBuilder buff = new StringBuilder();
             fis = new FileInputStream(filePath);
             channel = fis.getChannel();
             ByteBuffer buffer = ByteBuffer.allocate(1024);

@@ -3,7 +3,6 @@ versions += [
         flying_saucer: "9.1.9",
         jsoup        : "1.11.3",
         batik        : "1.10",
-        jxl          : "2.6.12",
         poi          : "3.17"
 ]
 
@@ -34,10 +33,6 @@ dependencies {
     compile "org.apache.xmlgraphics:batik-util:$versions.batik"
     compile "org.apache.xmlgraphics:batik-xml:$versions.batik"
 
-    // excle and doc
-    compile("net.sourceforge.jexcelapi:jxl:$versions.jxl") {
-        exclude group: 'log4j', module: 'log4j'
-    }
     compile "org.apache.poi:poi:$versions.poi"
     compile "org.apache.poi:poi-ooxml:$versions.poi"
     compile "org.apache.poi:poi-ooxml-schemas:$versions.poi"

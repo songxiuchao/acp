@@ -8,7 +8,7 @@ import pers.acp.file.pdf.fonts.FontLoader;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class HtmlParse {
+class HtmlParse {
 
     private static String[] tags = {"area", "base", "br", "col", "command",
             "embed", "hr", "img", "input", "keygen", "link", "meta", "param",
@@ -99,7 +99,7 @@ public class HtmlParse {
      * @param content html字符串
      * @return html字符串
      */
-    protected static String parseHTML(String content) {
+    static String parseHTML(String content) {
         org.jsoup.nodes.Document doc = Jsoup.parse(content);
         Element firstStyle = doc.getElementsByTag("style").first();
         if (firstStyle != null) {
