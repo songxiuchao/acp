@@ -9,7 +9,7 @@
 适用范围：此类型可用于有服务端的应用，是最贴近老版本的方式
 #### 交互过程
 ##### 1. Client向Authorization Server发出申请（/oauth/authorize）
-###### 请求类型：http application/x-www-form-urlencoded
+###### 请求类型：http/post application/x-www-form-urlencoded
     response_type = code
     client_id
     redirect_uri
@@ -19,7 +19,7 @@
     code
     state
 ##### 2. Client向Authorization Server发出申请（/oauth/token）
-###### 请求类型：http application/x-www-form-urlencoded
+###### 请求类型：http/post application/x-www-form-urlencoded
     grant_type = authorization_code
     code
     client_id
@@ -39,7 +39,7 @@
 适用范围：此类型可用于没有服务端的应用，比如Javascript应用
 #### 交互过程
 ##### Client向Authorization Server发出申请（/oauth/authorize）
-###### 请求类型：http application/x-www-form-urlencoded
+###### 请求类型：http/post application/x-www-form-urlencoded
     response_type = token
     client_id
     redirect_uri
@@ -58,9 +58,10 @@
 ## 三、Resource Owner Password Credentials
 #### 说明
 适用范围：不管有无服务端，此类型都可用
+请求必须通过 http basic 进行验证（使用 client_id 和 client_secret）
 #### 交互过程
 ##### Clien向Authorization Server发出申请（/oauth/token）
-###### 请求类型：http application/x-www-form-urlencoded
+###### 请求类型：http/post application/x-www-form-urlencoded
     grant_type = password
     username
     password
@@ -80,7 +81,7 @@
 适用范围：不管有无服务端，此类型都可用
 #### 交互过程
 ##### Client向Authorization Server发出申请（/oauth/token）
-###### 请求类型：http application/x-www-form-urlencoded
+###### 请求类型：http/post application/x-www-form-urlencoded
     grant_type = client_credentials
     client_id
     client_secret
@@ -95,10 +96,10 @@
 }
 ```
 ## 五、用 Refresh Token 刷新有效的Access Token
-请求是必须通过 http basic 进行验证
+请求必须通过 http basic 进行验证（使用 client_id 和 client_secret）
 #### 交互过程
 ##### Client向Authorization Server发出申请（/oauth/token）
-###### 请求类型：http application/x-www-form-urlencoded
+###### 请求类型：http/post application/x-www-form-urlencoded
     grant_type = refresh_token
     refresh_token
     client_id
@@ -115,10 +116,10 @@
 }
 ```
 ## 六、校验 Access Token
-请求是必须通过 http basic 进行验证
+请求必须通过 http basic 进行验证（使用 client_id 和 client_secret）
 #### 交互过程
-##### Client向Authorization Server发出申请（/oauth/token）
-###### 请求类型：http application/x-www-form-urlencoded
+##### Client向Authorization Server发出申请（/oauth/check_token）
+###### 请求类型：http/post application/x-www-form-urlencoded
     token
 ###### 响应：
 ```json
