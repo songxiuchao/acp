@@ -10,7 +10,7 @@ import javax.jws.soap.SOAPBinding;
 
 /**
  * @author zhangbin by 2018-1-31 22:05
- * @since JDK1.8
+ * @since JDK 11
  */
 @WebService(targetNamespace = "http://acp.test/")
 @SOAPBinding(style = SOAPBinding.Style.RPC)

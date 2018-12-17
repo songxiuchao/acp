@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 /**
  * @author zhangbin by 28/04/2018 17:17
- * @since JDK1.8
+ * @since JDK 11
  */
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [(TestKotlinApplication::class)], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

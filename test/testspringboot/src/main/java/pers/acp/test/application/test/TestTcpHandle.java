@@ -10,7 +10,7 @@ import pers.acp.core.CommonTools;
 
 /**
  * @author zhangbin by 2018-1-31 11:59
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component("TestTcpHandle")
 public class TestTcpHandle implements ISocketServerHandle {

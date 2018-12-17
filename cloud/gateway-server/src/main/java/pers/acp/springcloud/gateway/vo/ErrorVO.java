@@ -2,7 +2,7 @@ package pers.acp.springcloud.gateway.vo;
 
 /**
  * @author zhangbin by 26/04/2018 21:35
- * @since JDK1.8
+ * @since JDK 11
  */
 public class ErrorVO {
 

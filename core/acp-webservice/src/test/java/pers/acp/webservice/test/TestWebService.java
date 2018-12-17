@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @author zhangbin by 31/05/2018 14:48
- * @since JDK1.8
+ * @since JDK 11
  */
 public class TestWebService {
 

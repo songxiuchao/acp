@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * 解决 Feign 开启 Hystrix 后 requestAttributes 无法共享传递的问题
  *
  * @author zhangbin by 12/04/2018 14:28
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {

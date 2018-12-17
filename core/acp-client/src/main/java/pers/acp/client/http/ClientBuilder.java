@@ -4,7 +4,7 @@ import pers.acp.client.exceptions.HttpException;
 
 /**
  * @author zhangbin by 13/04/2018 18:09
- * @since JDK1.8
+ * @since JDK 11
  */
 public class ClientBuilder {
 

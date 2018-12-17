@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * 密码编码器
  *
  * @author zhangbin by 11/04/2018 17:14
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 public class UserPasswordEncoder implements PasswordEncoder {

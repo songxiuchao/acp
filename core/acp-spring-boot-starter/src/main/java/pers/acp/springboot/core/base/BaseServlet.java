@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author zhangbin by 2018-1-21 1:52
- * @since JDK1.8
+ * @since JDK 11
  */
 public abstract class BaseServlet extends HttpServlet {
 

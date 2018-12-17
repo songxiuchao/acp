@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 /**
  * @author zhangbin by 28/04/2018 15:54
- * @since JDK1.8
+ * @since JDK 11
  */
 class RestTest extends BaseTest {
 

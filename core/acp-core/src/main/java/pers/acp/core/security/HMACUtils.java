@@ -8,7 +8,7 @@ import java.security.Key;
 
 /**
  * @author zhangbin by 10/04/2018 16:21
- * @since JDK1.8
+ * @since JDK 11
  */
 public final class HMACUtils {
 

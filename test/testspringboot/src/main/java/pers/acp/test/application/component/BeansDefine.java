@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author zhangbin by 2018-3-2 0:41
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 public class BeansDefine {

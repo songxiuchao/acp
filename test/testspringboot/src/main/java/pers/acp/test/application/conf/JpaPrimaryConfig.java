@@ -22,7 +22,7 @@ import java.util.Objects;
 
 /**
  * @author zhangbin by 2018-1-15 16:03
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 @EnableTransactionManagement

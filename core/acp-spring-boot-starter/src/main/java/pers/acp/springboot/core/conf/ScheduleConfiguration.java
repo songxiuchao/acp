@@ -9,7 +9,7 @@ import java.util.Map;
  * 定时调度配置
  *
  * @author zhangbin by 2018-1-20 21:08
- * @since JDK1.8
+ * @since JDK 11
  */
 @ConfigurationProperties(prefix = "schedule")
 public class ScheduleConfiguration {

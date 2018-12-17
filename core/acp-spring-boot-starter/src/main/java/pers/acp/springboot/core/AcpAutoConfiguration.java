@@ -11,7 +11,7 @@ import pers.acp.springboot.core.conf.ScheduleConfiguration;
 
 /**
  * @author zhangbin by 2018-1-15 0:37
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 @ComponentScan("pers.acp.springboot.core")

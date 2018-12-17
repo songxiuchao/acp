@@ -6,7 +6,7 @@ import pers.acp.core.tools.CommonUtils;
 
 /**
  * @author zhangbin by 2018-2-3 21:14
- * @since JDK1.8
+ * @since JDK 11
  */
 public class ISO8583FieldProperties extends BaseProperties {
 

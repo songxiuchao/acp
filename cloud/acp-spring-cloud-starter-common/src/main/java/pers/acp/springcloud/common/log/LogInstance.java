@@ -14,7 +14,7 @@ import java.util.Date;
 
 /**
  * @author zhangbin by 11/07/2018 13:36
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 @EnableBinding(LogOutput.class)

@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 
 /**
  * @author zhangbin by 2018-1-21 1:30
- * @since JDK1.8
+ * @since JDK 11
  */
 @WebServlet(name = "DownLoadFile", urlPatterns = "/download", initParams = {@WebInitParam(name = "encode", value = "utf-8")})
 public class DownLoadFile extends BaseServlet {

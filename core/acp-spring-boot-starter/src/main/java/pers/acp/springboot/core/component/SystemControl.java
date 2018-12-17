@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * @author zhangbin by 2018-1-20 21:24
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 @Scope("singleton")

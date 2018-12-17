@@ -5,7 +5,7 @@ import org.springframework.boot.runApplication
 
 /**
  * @author zhangbin by 28/04/2018 12:42
- * @since JDK1.8
+ * @since JDK 11
  */
 @SpringBootApplication
 class TestKotlinApplication

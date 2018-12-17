@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author zhangbin by 2018-2-1 22:39
- * @since JDK1.8
+ * @since JDK 11
  */
 public class XmlPacket {
 

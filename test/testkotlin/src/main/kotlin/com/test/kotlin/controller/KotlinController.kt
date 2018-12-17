@@ -13,7 +13,7 @@ import pers.acp.springboot.core.exceptions.ServerException
 
 /**
  * @author zhangbin by 28/04/2018 13:06
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 class KotlinController(private val tableOneDomain: TableOneDomain) {

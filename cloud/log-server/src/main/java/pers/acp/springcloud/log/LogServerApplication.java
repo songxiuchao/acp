@@ -5,7 +5,7 @@ import pers.acp.springcloud.common.annotation.AcpCloudAtomApplication;
 
 /**
  * @author zhangbin by 09/04/2018 16:11
- * @since JDK1.8
+ * @since JDK 11
  */
 @AcpCloudAtomApplication
 public class LogServerApplication {

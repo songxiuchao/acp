@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhangbin by 2018-3-5 14:05
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 public class WorldController {

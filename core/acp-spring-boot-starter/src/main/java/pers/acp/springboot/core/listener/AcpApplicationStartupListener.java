@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author zhangbin by 2018-1-31 12:50
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 public class AcpApplicationStartupListener implements ApplicationListener<ContextRefreshedEvent> {

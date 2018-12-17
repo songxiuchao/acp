@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 /**
  * @author zhangbin by 2018-2-3 23:09
- * @since JDK1.8
+ * @since JDK 11
  */
 public class Test8583 {
 

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 /**
  * @author zhangbin by 2018-1-21 1:55
- * @since JDK1.8
+ * @since JDK 11
  */
 public abstract class BaseFilter implements Filter {
 

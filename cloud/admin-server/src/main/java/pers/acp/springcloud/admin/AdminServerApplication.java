@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.turbine.EnableTurbine;
 
 /**
  * @author zhangbin by 2018-3-11 10:50
- * @since JDK1.8
+ * @since JDK 11
  */
 @SpringBootApplication
 @EnableDiscoveryClient

@@ -7,7 +7,7 @@ import java.security.Principal;
 
 /**
  * @author zhangbin by 11/04/2018 16:04
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 public class UserController {

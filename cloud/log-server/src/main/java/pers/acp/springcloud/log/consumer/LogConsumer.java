@@ -15,7 +15,7 @@ import pers.acp.springcloud.common.log.LogInput;
 
 /**
  * @author zhangbin by 11/07/2018 18:50
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 @EnableBinding(LogInput.class)

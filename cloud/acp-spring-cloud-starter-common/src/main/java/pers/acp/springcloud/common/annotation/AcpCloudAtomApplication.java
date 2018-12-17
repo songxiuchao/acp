@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 
 /**
  * @author zhangbin by 12/04/2018 12:47
- * @since JDK1.8
+ * @since JDK 11
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

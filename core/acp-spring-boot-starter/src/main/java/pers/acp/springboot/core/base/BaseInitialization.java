@@ -4,7 +4,7 @@ import pers.acp.core.log.LogFactory;
 
 /**
  * @author zhangbin by 2018-1-31 13:04
- * @since JDK1.8
+ * @since JDK 11
  */
 public abstract class BaseInitialization {
 

@@ -9,7 +9,7 @@ import pers.acp.test.application.TestSpringBootTestApplication;
 
 /**
  * @author zhangbin by 28/04/2018 15:49
- * @since JDK1.8
+ * @since JDK 11
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestSpringBootTestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

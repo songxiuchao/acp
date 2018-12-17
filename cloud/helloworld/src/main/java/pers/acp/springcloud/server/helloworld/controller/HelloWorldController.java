@@ -12,7 +12,7 @@ import pers.acp.springcloud.server.helloworld.feign.WorldServer;
 
 /**
  * @author zhangbin by 2018-3-6 15:34
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 public class HelloWorldController {

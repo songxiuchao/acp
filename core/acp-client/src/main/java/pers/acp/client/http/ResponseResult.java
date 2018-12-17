@@ -5,7 +5,7 @@ import org.apache.http.HttpResponse;
 
 /**
  * @author zhangbin by 2018-2-22 23:10
- * @since JDK1.8
+ * @since JDK 11
  */
 public class ResponseResult {
 

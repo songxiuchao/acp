@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author zhangbin by 2018-3-5 14:00
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 public class HelloController {

@@ -6,7 +6,7 @@ import javax.xml.ws.BindingType;
 /**
  * @author zhangbin
  * @date 2018-1-15 10:41
- * @since JDK1.8
+ * @since JDK 11
  */
 @WebService(endpointInterface = "pers.acp.webservice.test.ws.ITestWebService", serviceName = "test", portName = "testport", targetNamespace = "http://acp.test/")
 @BindingType(value = javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_BINDING)

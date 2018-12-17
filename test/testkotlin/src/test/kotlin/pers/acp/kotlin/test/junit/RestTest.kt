@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 
 /**
  * @author zhangbin by 28/04/2018 17:18
- * @since JDK1.8
+ * @since JDK 11
  */
 class RestTest : BaseTest() {
 

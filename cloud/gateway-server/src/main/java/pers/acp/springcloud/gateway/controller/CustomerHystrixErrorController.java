@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * @author zhangbin by 26/04/2018 21:30
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 public class CustomerHystrixErrorController {

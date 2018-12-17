@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * @author zhangbin by 05/06/2018 14:23
- * @since JDK1.8
+ * @since JDK 11
  */
 public class CustomerRedisTokenStore implements TokenStore {
 

@@ -5,7 +5,7 @@ import pers.acp.ftp.InitSFtpServer;
 
 /**
  * @author zhangbin by 28/09/2018 16:36
- * @since JDK1.8
+ * @since JDK 11
  */
 public class FtpMain {
 

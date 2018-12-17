@@ -10,7 +10,7 @@ import pers.acp.core.CommonTools;
 
 /**
  * @author zhangbin by 11/04/2018 15:13
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 @EnableResourceServer

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 /**
  * @author zhangbin by 2018-1-15 16:45
- * @since JDK1.8
+ * @since JDK 11
  */
 @Entity
 @Table(name = "table2")

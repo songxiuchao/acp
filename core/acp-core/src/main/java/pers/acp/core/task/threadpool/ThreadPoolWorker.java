@@ -5,7 +5,7 @@ import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
 
 /**
  * @author zhangbin by 31/08/2018 15:37
- * @since JDK1.8
+ * @since JDK 11
  */
 public abstract class ThreadPoolWorker extends Thread {
 

@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 /**
  * @author zhangbin by 31/08/2018 15:53
- * @since JDK1.8
+ * @since JDK 11
  */
 public class PoolWorkerDispatch implements Runnable {
 

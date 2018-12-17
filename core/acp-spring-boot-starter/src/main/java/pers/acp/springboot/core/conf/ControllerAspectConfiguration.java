@@ -9,7 +9,7 @@ import java.util.List;
  * controller 切面日志配置
  *
  * @author zhangbin by 14/04/2018 00:36
- * @since JDK1.8
+ * @since JDK 11
  */
 @ConfigurationProperties(prefix = "controller-aspect")
 public class ControllerAspectConfiguration {

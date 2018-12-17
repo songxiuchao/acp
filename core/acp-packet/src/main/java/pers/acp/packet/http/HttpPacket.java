@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * @author zhangbin by 2018-2-1 22:20
- * @since JDK1.8
+ * @since JDK 11
  */
 public class HttpPacket {
 

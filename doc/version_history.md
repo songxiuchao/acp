@@ -12,6 +12,7 @@
 > - 剥离订制工程 [management](https://github.com/zhangbin1010/acp-ace-php-back)
 > - 修改核心模块名称
 > - 更新 gradle 至 5.0
+> - cloud 模块下 gateway-server 支持跨域
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
