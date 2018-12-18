@@ -13,11 +13,11 @@ import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 import pers.acp.core.interfaces.IDaemonService;
+import pers.acp.core.security.SignatureUtils;
 import pers.acp.ftp.config.FTPConfig;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.security.MD5Utils;
-import pers.acp.core.security.SHA1Utils;
 import pers.acp.ftp.exceptions.FTPServerException;
 
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class FTPServer implements Runnable, IDaemonService {
                             result = MD5Utils.encrypt(pwd);
                             break;
                         case "SHA1":
-                            result = SHA1Utils.encrypt(pwd);
+                            result = SignatureUtils.encrypt(pwd, SignatureUtils.SHA1);
                             break;
                         default:
                             result = null;
