@@ -1,6 +1,7 @@
 package pers.acp.springboot.core.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author zhangbin by 14/04/2018 00:36
  * @since JDK 11
  */
+@Component
 @ConfigurationProperties(prefix = "controller-aspect")
 public class ControllerAspectConfiguration {
 

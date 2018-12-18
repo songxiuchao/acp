@@ -18,18 +18,18 @@ management:
 spring:
   thymeleaf:
     cache: false
-# ===============================
-# = JPA / HIBERNATE
-# ===============================
+  # ===============================
+  # = JPA / HIBERNATE
+  # ===============================
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-# ===============================
-# = DATA SOURCE
-# ===============================
+  # ===============================
+  # = DATA SOURCE
+  # ===============================
   datasource:
     primary:
       jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
