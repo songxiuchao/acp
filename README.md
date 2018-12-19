@@ -145,11 +145,11 @@ gradle全局参数：
 
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
-| /oauth/authorize      | 验证 basic认证保护      |
-| /oauth/token          | 获取token的服务 url中没有client_id和client_secret的，走basic认证保护 |
-| /oauth/check_token    | 资源服务器用来校验token basic认证保护 |
-| /oauth/confirm_access | 用户授权 basic认证保护  |
-| /oauth/error          | 认证失败 无认证保护     |
+| /oauth/authorize      | 申请授权，basic认证保护      |
+| /oauth/token          | 获取token的服务，url中没有client_id和client_secret的，走basic认证保护 |
+| /oauth/check_token    | 资源服务器用来校验token，basic认证保护 |
+| /oauth/confirm_access | 授权确认，basic认证保护  |
+| /oauth/error          | 认证失败，无认证保护     |
 
 [查看认证过程](doc/oauth2.0认证.md)
 

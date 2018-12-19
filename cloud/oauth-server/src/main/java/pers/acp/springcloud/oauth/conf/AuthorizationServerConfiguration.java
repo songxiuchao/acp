@@ -46,14 +46,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         // 使用默认的 token service，需自定义时，继承 DefaultTokenServices ，重写对应方法即可
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore);
-        defaultTokenServices.setAuthenticationManager(authenticationManager);
         defaultTokenServices.setClientDetailsService(securityClientDetailsService);
         return defaultTokenServices;
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints.tokenServices(securityTokenService()).userDetailsService(securityUserDetailsService);
+        endpoints.authenticationManager(authenticationManager)
+                .userDetailsService(securityUserDetailsService)
+                .tokenServices(securityTokenService());
     }
 
     @Override
