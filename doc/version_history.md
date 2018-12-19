@@ -14,6 +14,7 @@
 > - 更新 gradle 至 5.0
 > - cloud 模块下 gateway-server 支持跨域
 > - 更新 spring boot admin 至 2.1.1
+> - cloud 模块下，oauth-server 优化 token 服务配置，方便自定义扩展
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2

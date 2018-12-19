@@ -41,7 +41,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     private DefaultTokenServices securityTokenService() {
 //        TokenStore tokenStore = new InMemoryTokenStore(); // token 默认持久化到内存
+        // 持久化到 redis
         TokenStore tokenStore = new RedisTokenStore(connectionFactory);
+        // 使用默认的 token service，需自定义时，继承 DefaultTokenServices ，重写对应方法即可
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore);
         defaultTokenServices.setAuthenticationManager(authenticationManager);
