@@ -1,7 +1,7 @@
 ## 版本更新记录
 ##### v5.1.0
 > - 更新 SpringBoot 至 2.1.1.RELEASE
-> - 更新 SpringCloud 至 Greenwich.RC1
+> - 更新 SpringCloud 至 Greenwich.RC2
 > - 更新依赖包版本
 > - cloud 模块下 docker-compose-base.yml 文件修改，修改 zookeeper 端口号，增加 kafka-manager
 > - 更新 spring-data-jpa 数据库连接配置及多数据源写法
