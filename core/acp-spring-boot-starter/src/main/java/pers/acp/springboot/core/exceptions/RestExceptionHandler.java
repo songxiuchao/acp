@@ -68,7 +68,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         } else {
             json = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, ex.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(json.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(json.toString());
     }
 
     /**
@@ -83,8 +83,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
-        headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(headers).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()).toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()).toString());
     }
 
     /**
@@ -99,8 +98,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
-        headers.set("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(headers).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()).toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()).toString());
     }
 
 }
