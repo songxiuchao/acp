@@ -41,11 +41,7 @@ public abstract class BaseProperties extends Properties {
             File file = new File(fileAdbPathName);
             InputStreamReader inputStreamReader = null;
             if (!file.exists()) {
-                propertiesFileName = propertiesFileName.replace("\\", "/");
-                if (propertiesFileName.startsWith("/")) {
-                    propertiesFileName = propertiesFileName.substring(1);
-                }
-                InputStream in = BaseProperties.class.getClassLoader().getResourceAsStream(propertiesFileName);
+                InputStream in = CommonUtils.getResourceInputStream(propertiesFileName.replace("\\", "/"));
                 if (in != null) {
                     inputStreamReader = new InputStreamReader(in, CommonUtils.getDefaultCharset());
                 } else {

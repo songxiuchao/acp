@@ -17,7 +17,7 @@ dependencies {
     compile project(":core:acp-spring-boot-starter")
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
-
+    compile "org.springframework.boot:spring-boot-devtools"
     testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'junit'
     }

@@ -1,5 +1,7 @@
 package pers.acp.test.application.entity.primary;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -12,6 +14,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "table1")
+@ApiModel("表1")
 public class TableOne {
 
     public Long getId() {
@@ -47,12 +50,15 @@ public class TableOne {
                     @Parameter(name = "initial_value", value = "1"),
                     @Parameter(name = "increment_size", value = "1")})
     @GeneratedValue(generator = "testSequenceGenerator")
+    @ApiModelProperty("主键")
     private Long id;
 
     @Column
+    @ApiModelProperty("名称")
     private String name;
 
     @Column
+    @ApiModelProperty("值")
     private BigDecimal value;
 
 }

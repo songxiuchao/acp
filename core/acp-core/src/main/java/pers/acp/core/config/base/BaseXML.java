@@ -35,11 +35,7 @@ public abstract class BaseXML {
                 File file = new File(CommonUtils.getAbsPath(fileName));
                 InputStreamReader inputStreamReader = null;
                 if (!file.exists()) {
-                    fileName = fileName.replace("\\", "/");
-                    if (fileName.startsWith("/")) {
-                        fileName = fileName.substring(1);
-                    }
-                    InputStream in = BaseXML.class.getClassLoader().getResourceAsStream(fileName);
+                    InputStream in = CommonUtils.getResourceInputStream(fileName.replace("\\", "/"));
                     if (in != null) {
                         inputStreamReader = new InputStreamReader(in, CommonUtils.getDefaultCharset());
                     } else {

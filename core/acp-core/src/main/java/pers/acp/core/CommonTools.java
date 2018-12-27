@@ -19,6 +19,7 @@ import pers.acp.core.tools.CommonUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,16 @@ public final class CommonTools {
 
     public static void initTools() {
         log.info("default charset is : " + getDefaultCharset());
+    }
+
+    /**
+     * 获取资源文件的输入流
+     *
+     * @param fileName 文件路径
+     * @return 输入流
+     */
+    public InputStream getResourceInputStream(String fileName) {
+        return CommonUtils.getResourceInputStream(fileName);
     }
 
     /**

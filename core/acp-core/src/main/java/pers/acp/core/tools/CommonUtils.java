@@ -9,6 +9,7 @@ import pers.acp.core.task.threadpool.ThreadPoolService;
 import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
@@ -33,6 +34,20 @@ public class CommonUtils {
      */
     public static String getDefaultCharset() {
         return DEFAULT_CHARSET;
+    }
+
+    /**
+     * 获取资源文件的输入流
+     *
+     * @param fileName 文件路径
+     * @return 输入流
+     */
+    public static InputStream getResourceInputStream(String fileName) {
+        String name = fileName.replace("\\", "/");
+        if (name.startsWith("/")) {
+            name = name.substring(1);
+        }
+        return CommonUtils.class.getClassLoader().getResourceAsStream(name);
     }
 
     /**
