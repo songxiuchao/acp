@@ -1,6 +1,5 @@
 package pers.acp.springboot.core.exceptions;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,7 @@ import pers.acp.springboot.core.enums.ResponseCode;
 import pers.acp.springboot.core.tools.PackageTools;
 import pers.acp.core.exceptions.EnumValueUndefinedException;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.vo.ErrorVO;
 
 /**
  * Create by zhangbin on 2017-8-10 16:26
@@ -39,8 +39,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         } catch (EnumValueUndefinedException e) {
             responseCode = ResponseCode.otherError;
         }
-        JsonNode json = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(json.toString());
+        ErrorVO errorVO = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(errorVO);
     }
 
     /**
@@ -56,7 +56,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
-        JsonNode json;
+        ErrorVO errorVO;
         if (ex instanceof ServerException) {
             ResponseCode responseCode;
             try {
@@ -64,11 +64,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             } catch (EnumValueUndefinedException e) {
                 responseCode = ResponseCode.otherError;
             }
-            json = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
+            errorVO = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
         } else {
-            json = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, ex.getMessage());
+            errorVO = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, ex.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(json.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(errorVO);
     }
 
     /**

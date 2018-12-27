@@ -1,10 +1,10 @@
 package pers.acp.springboot.core.handle;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.MediaType;
-import pers.acp.springboot.core.variable.ResponseKeys;
+import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.enums.ResponseCode;
+import pers.acp.springboot.core.vo.ErrorVO;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -54,15 +54,16 @@ public class HttpServletResponseAcp extends HttpServletResponseWrapper {
     }
 
     /**
-     * 返回错误信息（json格式：{"errmsg":""}），自动转换为客户端指定字符编码
+     * 返回错误信息（json格式），自动转换为客户端指定字符编码
      *
      * @param errorMessage 错误信息
      */
     public void doReturnError(String errorMessage) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put(ResponseKeys.responseErrorMsgKey, errorMessage);
-        doReturn(objectNode.toString(), MediaType.APPLICATION_JSON_VALUE);
+        ErrorVO errorVO = new ErrorVO();
+        errorVO.setCode(ResponseCode.otherError.getValue());
+        errorVO.setError(errorMessage);
+        errorVO.setErrorDescription(errorMessage);
+        doReturn(CommonTools.objectToJson(errorVO).toString(), MediaType.APPLICATION_JSON_VALUE);
     }
 
     /**
