@@ -24,6 +24,7 @@
 > - 更新依赖包版本
 > - cloud 模块下 docker-compose-base.yml 文件修改，注释暂时无用又占资源的服务
 > - gateway 去除自定义 HiddenHttpMethodFilter ，官方已解决“Only one connection receive subscriber allowed” 的问题
+> - 更新 cloud 中资源服务器配置，负载均衡直连 oauth2 进行认证，不经过 gateway
 ##### v5.0.0
 > - 更新 gradle 至 4.10.2
 > - 更新 kotlin 至 1.2.71

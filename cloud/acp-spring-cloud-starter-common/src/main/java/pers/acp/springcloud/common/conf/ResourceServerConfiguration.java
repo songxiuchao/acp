@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -47,17 +48,23 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
 
+    @LoadBalanced
+    @Bean("acpSpringCloudRestTemplate")
+    public RestTemplate acpSpringCloudRestTemplate() throws HttpException {
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+    }
+
     /**
      * 自定义权限验证服务，远程调用认证服务进行验证
      *
      * @return 远程 token 认证服务实例
      */
     @Primary
-    @Bean("acpRemoteTokenServices")
+    @Bean("acpResourceServerRemoteTokenServices")
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
         try {
-            RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+            RestTemplate restTemplate = acpSpringCloudRestTemplate();
             // 自定义错误处理类，所有错误放行统一交由 oauth 模块进行进出
             restTemplate.setErrorHandler(new ResponseErrorHandler() {
                 @Override
