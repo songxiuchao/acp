@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import pers.acp.springcloud.oauth.domain.SecurityClientDetailsService;
 import pers.acp.springcloud.oauth.domain.SecurityUserDetailsService;
@@ -32,7 +33,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private final SecurityClientDetailsService securityClientDetailsService;
 
     @Autowired
-    public AuthorizationServerConfiguration(AuthenticationManager authenticationManager, SecurityUserDetailsService securityUserDetailsService, SecurityClientDetailsService securityClientDetailsService, RedisConnectionFactory connectionFactory) {
+    public AuthorizationServerConfiguration(AuthenticationManager authenticationManager, SecurityUserDetailsService securityUserDetailsService, SecurityClientDetailsService securityClientDetailsService
+            , RedisConnectionFactory connectionFactory) {
         this.authenticationManager = authenticationManager;
         this.securityUserDetailsService = securityUserDetailsService;
         this.securityClientDetailsService = securityClientDetailsService;

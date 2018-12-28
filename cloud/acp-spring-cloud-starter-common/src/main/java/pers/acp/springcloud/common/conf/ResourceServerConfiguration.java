@@ -53,7 +53,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      * @return 远程 token 认证服务实例
      */
     @Primary
-    @Bean
+    @Bean("acpRemoteTokenServices")
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
         try {

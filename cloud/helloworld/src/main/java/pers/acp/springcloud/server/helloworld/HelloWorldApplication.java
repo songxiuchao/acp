@@ -1,6 +1,12 @@
 package pers.acp.springcloud.server.helloworld;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+import pers.acp.client.exceptions.HttpException;
+import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.springcloud.common.annotation.AcpCloudAtomApplication;
 
 /**
@@ -12,6 +18,12 @@ public class HelloWorldApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(HelloWorldApplication.class, args);
+    }
+
+    @Bean("customerRestTemplate")
+    @LoadBalanced
+    public RestTemplate restTemplate() throws HttpException {
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
     }
 
 }

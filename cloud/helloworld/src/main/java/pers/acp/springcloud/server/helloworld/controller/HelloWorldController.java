@@ -1,9 +1,11 @@
 package pers.acp.springcloud.server.helloworld.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import pers.acp.client.exceptions.HttpException;
 import pers.acp.springboot.core.handle.HttpServletRequestAcp;
 import pers.acp.springboot.core.tools.IpTools;
 import pers.acp.springcloud.common.log.LogInstance;
@@ -23,11 +25,14 @@ public class HelloWorldController {
 
     private final WorldServer worldServer;
 
+    private final RestTemplate restTemplate;
+
     @Autowired
-    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance) {
+    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance, @Qualifier(value = "customerRestTemplate") RestTemplate restTemplate) {
         this.helloServer = helloServer;
         this.worldServer = worldServer;
         this.logInstance = logInstance;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -38,10 +43,16 @@ public class HelloWorldController {
     }
 
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Object> helloWorldGet(@RequestParam String name) {
-        String respon = helloServer.fromClient(name) + ";" + worldServer.fromClient(name);
-        logInstance.info(respon);
-        return ResponseEntity.ok(respon);
+    public ResponseEntity<String> helloWorldGet(HttpServletRequestAcp requestAcp, @RequestParam String name) throws HttpException {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Authorization", requestAcp.getHeader("Authorization"));
+        requestHeaders.add(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN_VALUE);
+        requestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, requestHeaders);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("http://atomic-world/world?name={1}", HttpMethod.GET, requestEntity, String.class, name);
+        System.out.println(responseEntity.getStatusCode());
+        System.out.println(responseEntity.getBody());
+        return responseEntity;
     }
 
     @GetMapping(value = "/open/ips", produces = MediaType.TEXT_PLAIN_VALUE)
