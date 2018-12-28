@@ -66,8 +66,6 @@ security:
       client-secret: client
     resource:
       token-info-uri: http://127.0.0.1:8770/oauth/2.0/oauth/check_token
-      user-info-uri:  http://127.0.0.1:8770/oauth/2.0/user
-      prefer-token-info: false
 # ===============================
 # = Ribbon Config
 # ===============================

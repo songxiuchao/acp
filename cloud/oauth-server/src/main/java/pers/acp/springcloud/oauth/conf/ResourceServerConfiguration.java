@@ -37,7 +37,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/download",
                 contextPath + "/actuator",
                 contextPath + "/actuator/**",
-                contextPath + "/oauth/**").permitAll()
+                contextPath + "/oauth/authorize",
+                contextPath + "/oauth/token",
+                contextPath + "/oauth/error").permitAll()
                 .anyRequest().authenticated();
     }
 
