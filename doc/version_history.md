@@ -17,6 +17,7 @@
 > - cloud 模块下，oauth-server 优化 token 服务配置，方便自定义扩展
 > - 优化全局异常处理，增加 ErrorVO
 > - 优化 oauth2 demo
+> - cloud helloworld 中增加使用 RestTemplate 通过服务名调用远程服务的例子
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
