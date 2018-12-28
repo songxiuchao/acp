@@ -111,8 +111,13 @@ public class RestControllerAspect {
                 String responseInfo = null;
                 if (response instanceof ResponseEntity) {
                     ResponseEntity responseEntity = ((ResponseEntity) response);
-                    if (responseEntity.getBody() != null) {
-                        responseInfo = responseEntity.getBody().toString();
+                    Object responseBody = responseEntity.getBody();
+                    if (responseBody != null) {
+                        if (responseBody instanceof String) {
+                            responseInfo = (String) responseBody;
+                        } else {
+                            responseInfo = CommonTools.objectToJson(responseBody).toString();
+                        }
                     }
                 } else {
                     responseInfo = CommonTools.objectToJson(response).toString();
