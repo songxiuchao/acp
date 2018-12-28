@@ -18,6 +18,7 @@
 > - 优化全局异常处理，增加 ErrorVO
 > - 优化 oauth2 demo
 > - cloud helloworld 中增加使用 RestTemplate 通过服务名调用远程服务的例子
+> - 优化 REST 日志切片
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
