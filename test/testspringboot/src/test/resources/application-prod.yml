@@ -35,14 +35,14 @@ spring:
 # ===============================
   datasource:
     primary:
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
       username: root
       password: test
       driver-class-name: com.mysql.cj.jdbc.Driver
       data-source-properties.dialect: org.hibernate.dialect.MySQL8Dialect
       data-source-properties.scanpackage: pers.acp.test.application.entity.primary
     pg:
-      jdbc-url: jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+      jdbc-url: jdbc:postgresql://localhost:5432/test?autoReconnect=true&zeroDateTimeBehavior=convertToNull
       username: postgres
       password: test
       driver-class-name: org.postgresql.Driver
