@@ -19,6 +19,7 @@
 > - 优化 oauth2 demo
 > - cloud helloworld 中增加使用 RestTemplate 通过服务名调用远程服务的例子
 > - 优化 REST 日志切片
+> - 修改 jdbc mysql 链接字符串，支持 utf8mb4 字符集
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
