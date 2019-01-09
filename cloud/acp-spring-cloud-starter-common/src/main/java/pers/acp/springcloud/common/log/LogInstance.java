@@ -1,12 +1,11 @@
 package pers.acp.springcloud.common.log;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.tools.SpringBeanFactory;
 import pers.acp.springcloud.common.enums.LogLevel;
@@ -26,12 +25,12 @@ public class LogInstance {
 
     private final LogOutput logOutput;
 
-    private final JacksonProperties jacksonProperties;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public LogInstance(LogOutput logOutput, JacksonProperties jacksonProperties) {
+    public LogInstance(LogOutput logOutput, ObjectMapper objectMapper) {
         this.logOutput = logOutput;
-        this.jacksonProperties = jacksonProperties;
+        this.objectMapper = objectMapper;
     }
 
     private void sendToLogServer(LogInfo logInfo) {
@@ -45,11 +44,11 @@ public class LogInstance {
         }
         logInfo.setLineno(lineno);
         logInfo.setClassName(className);
-        PropertyNamingStrategy propertyNamingStrategy = new PropertyNamingStrategy();
-        if ("CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES".equals(jacksonProperties.getPropertyNamingStrategy())) {
-            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE;
+        try {
+            logOutput.sendMessage().send(MessageBuilder.withPayload(objectMapper.writeValueAsString(logInfo)).build());
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
         }
-        logOutput.sendMessage().send(MessageBuilder.withPayload(CommonTools.objectToJson(propertyNamingStrategy, logInfo, null).toString()).build());
     }
 
     public void info(String message) {

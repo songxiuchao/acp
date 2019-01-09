@@ -1,13 +1,12 @@
 package pers.acp.springboot.core.aspect;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +37,12 @@ public class RestControllerAspect {
 
     private final ControllerAspectConfiguration controllerAspectConfiguration;
 
-    private final JacksonProperties jacksonProperties;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public RestControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration, JacksonProperties jacksonProperties) {
+    public RestControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration, ObjectMapper objectMapper) {
         this.controllerAspectConfiguration = controllerAspectConfiguration;
-        this.jacksonProperties = jacksonProperties;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -70,10 +69,6 @@ public class RestControllerAspect {
      */
     @Around("excudeService()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-        PropertyNamingStrategy propertyNamingStrategy = new PropertyNamingStrategy();
-        if ("CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES".equals(jacksonProperties.getPropertyNamingStrategy())) {
-            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE;
-        }
         Object response = null;
         long beginTime = System.currentTimeMillis();
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
@@ -125,11 +120,11 @@ public class RestControllerAspect {
                         if (responseBody instanceof String) {
                             responseInfo = (String) responseBody;
                         } else {
-                            responseInfo = CommonTools.objectToJson(propertyNamingStrategy, responseBody, null).toString();
+                            responseInfo = objectMapper.writeValueAsString(responseBody);
                         }
                     }
                 } else {
-                    responseInfo = CommonTools.objectToJson(propertyNamingStrategy, response, null).toString();
+                    responseInfo = objectMapper.writeValueAsString(response);
                 }
                 endLog.append("      ┖---- body: \n").append(responseInfo).append("\n");
                 endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");

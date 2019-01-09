@@ -1,8 +1,7 @@
 package pers.acp.springcloud.log.consumer;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
@@ -16,6 +15,8 @@ import pers.acp.springcloud.common.log.LogConstant;
 import pers.acp.springcloud.common.log.LogInfo;
 import pers.acp.springcloud.common.log.LogInput;
 
+import java.io.IOException;
+
 /**
  * @author zhangbin by 11/07/2018 18:50
  * @since JDK 11
@@ -24,20 +25,16 @@ import pers.acp.springcloud.common.log.LogInput;
 @EnableBinding(LogInput.class)
 public class LogConsumer {
 
-    private final JacksonProperties jacksonProperties;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public LogConsumer(JacksonProperties jacksonProperties) {
-        this.jacksonProperties = jacksonProperties;
+    public LogConsumer(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
     @StreamListener(LogConstant.INPUT)
-    public void process(String message) {
-        PropertyNamingStrategy propertyNamingStrategy = new PropertyNamingStrategy();
-        if ("CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES".equals(jacksonProperties.getPropertyNamingStrategy())) {
-            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE;
-        }
-        LogInfo logInfo = CommonTools.jsonToObject(propertyNamingStrategy, CommonTools.getJsonFromStr(message), LogInfo.class);
+    public void process(String message) throws IOException {
+        LogInfo logInfo = objectMapper.readValue(message, LogInfo.class);
         String logType = LogConstant.DEFAULT_TYPE;
         if (!CommonTools.isNullStr(logInfo.getLogType())) {
             logType = logInfo.getLogType();
