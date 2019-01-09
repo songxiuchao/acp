@@ -21,6 +21,7 @@
 > - 优化 REST 日志切片
 > - 修改 jdbc mysql 链接字符串，支持 utf8mb4 字符集
 > - 修改 DockerFile 内容，通过 kafka 传递信息给 zipkin server，gateway-server 去除 zipkin 相关依赖
+> - testspringboot 中增加 swagger 开关配置
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2

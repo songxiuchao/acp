@@ -1,7 +1,9 @@
 package pers.acp.test.application.conf;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -23,7 +25,19 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
+@Component
+@ConfigurationProperties(prefix = "swagger")
 public class SwaggerConfiguration {
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    private boolean enabled = false;
 
     @Bean
     public Docket createRestApi() {

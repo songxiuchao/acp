@@ -15,6 +15,7 @@ dependencies {
     compile project(":core:acp-webservice")
     compile project(":core:acp-ftp")
     compile project(":core:acp-spring-boot-starter")
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
 
