@@ -1,10 +1,12 @@
 package pers.acp.core;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -339,9 +341,26 @@ public final class CommonTools {
      * @return 目标对象
      */
     public static <T> T jsonToObject(JsonNode jsonObj, Class<T> cls) {
+        return jsonToObject(PropertyNamingStrategy.SNAKE_CASE, jsonObj, cls);
+    }
+
+    /**
+     * json对象转为java对象
+     *
+     * @param propertyNamingStrategy 名称处理规则
+     * @param jsonObj                json对象（JsonNode）
+     * @param cls                    目标类
+     * @return 目标对象
+     */
+    public static <T> T jsonToObject(PropertyNamingStrategy propertyNamingStrategy, JsonNode jsonObj, Class<T> cls) {
+        PropertyNamingStrategy propertyNamingStrategyDefault = new PropertyNamingStrategy();
+        if (propertyNamingStrategy != null) {
+            propertyNamingStrategyDefault = propertyNamingStrategy;
+        }
         ObjectMapper mapper = new ObjectMapper();
         T instance = null;
         try {
+            mapper.setPropertyNamingStrategy(propertyNamingStrategyDefault);
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             instance = mapper.readValue(jsonObj.toString(), cls);
         } catch (IOException e) {
@@ -368,6 +387,22 @@ public final class CommonTools {
      * @return json对象
      */
     public static JsonNode objectToJson(Object instance, String[] excludes) {
+        return objectToJson(PropertyNamingStrategy.SNAKE_CASE, instance, excludes);
+    }
+
+    /**
+     * 实体对象转换为json对象
+     *
+     * @param propertyNamingStrategy 名称处理规则
+     * @param instance               实体对象（只持Map对象）
+     * @param excludes               排除的实体成员
+     * @return json对象
+     */
+    public static JsonNode objectToJson(PropertyNamingStrategy propertyNamingStrategy, Object instance, String[] excludes) {
+        PropertyNamingStrategy propertyNamingStrategyDefault = new PropertyNamingStrategy();
+        if (propertyNamingStrategy != null) {
+            propertyNamingStrategyDefault = propertyNamingStrategy;
+        }
         JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(true);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setNodeFactory(jsonNodeFactory);
@@ -380,6 +415,8 @@ public final class CommonTools {
                 }
             }
             mapper.setFilterProvider(provider);
+            mapper.setPropertyNamingStrategy(propertyNamingStrategyDefault);
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String jsonStr = mapper.writeValueAsString(instance);
             jsonNode = getJsonFromStr(jsonStr);
         } catch (JsonProcessingException e) {

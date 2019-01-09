@@ -1,6 +1,8 @@
 package pers.acp.springcloud.common.log;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -24,9 +26,12 @@ public class LogInstance {
 
     private final LogOutput logOutput;
 
+    private final JacksonProperties jacksonProperties;
+
     @Autowired
-    public LogInstance(LogOutput logOutput) {
+    public LogInstance(LogOutput logOutput, JacksonProperties jacksonProperties) {
         this.logOutput = logOutput;
+        this.jacksonProperties = jacksonProperties;
     }
 
     private void sendToLogServer(LogInfo logInfo) {
@@ -40,7 +45,11 @@ public class LogInstance {
         }
         logInfo.setLineno(lineno);
         logInfo.setClassName(className);
-        logOutput.sendMessage().send(MessageBuilder.withPayload(CommonTools.objectToJson(logInfo).toString()).build());
+        PropertyNamingStrategy propertyNamingStrategy = new PropertyNamingStrategy();
+        if ("CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES".equals(jacksonProperties.getPropertyNamingStrategy())) {
+            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE;
+        }
+        logOutput.sendMessage().send(MessageBuilder.withPayload(CommonTools.objectToJson(propertyNamingStrategy, logInfo, null).toString()).build());
     }
 
     public void info(String message) {

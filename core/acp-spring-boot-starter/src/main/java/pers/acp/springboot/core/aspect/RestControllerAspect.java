@@ -1,11 +1,13 @@
 package pers.acp.springboot.core.aspect;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.collect.ImmutableList;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +38,12 @@ public class RestControllerAspect {
 
     private final ControllerAspectConfiguration controllerAspectConfiguration;
 
+    private final JacksonProperties jacksonProperties;
+
     @Autowired
-    public RestControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration) {
+    public RestControllerAspect(ControllerAspectConfiguration controllerAspectConfiguration, JacksonProperties jacksonProperties) {
         this.controllerAspectConfiguration = controllerAspectConfiguration;
+        this.jacksonProperties = jacksonProperties;
     }
 
     /**
@@ -65,6 +70,10 @@ public class RestControllerAspect {
      */
     @Around("excudeService()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+        PropertyNamingStrategy propertyNamingStrategy = new PropertyNamingStrategy();
+        if ("CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES".equals(jacksonProperties.getPropertyNamingStrategy())) {
+            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE;
+        }
         Object response = null;
         long beginTime = System.currentTimeMillis();
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
@@ -116,11 +125,11 @@ public class RestControllerAspect {
                         if (responseBody instanceof String) {
                             responseInfo = (String) responseBody;
                         } else {
-                            responseInfo = CommonTools.objectToJson(responseBody).toString();
+                            responseInfo = CommonTools.objectToJson(propertyNamingStrategy, responseBody, null).toString();
                         }
                     }
                 } else {
-                    responseInfo = CommonTools.objectToJson(response).toString();
+                    responseInfo = CommonTools.objectToJson(propertyNamingStrategy, response, null).toString();
                 }
                 endLog.append("      ┖---- body: \n").append(responseInfo).append("\n");
                 endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");

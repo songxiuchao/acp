@@ -1,5 +1,6 @@
 package pers.acp.springboot.core;
 
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,4 +27,11 @@ public class AcpAutoConfiguration {
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         return new ThreadPoolTaskScheduler();
     }
+
+    @Primary
+    @Bean("acpJacksonProperties")
+    public JacksonProperties acpJacksonProperties() {
+        return new JacksonProperties();
+    }
+
 }

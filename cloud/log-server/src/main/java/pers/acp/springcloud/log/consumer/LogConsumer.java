@@ -1,5 +1,8 @@
 package pers.acp.springcloud.log.consumer;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
@@ -21,9 +24,20 @@ import pers.acp.springcloud.common.log.LogInput;
 @EnableBinding(LogInput.class)
 public class LogConsumer {
 
+    private final JacksonProperties jacksonProperties;
+
+    @Autowired
+    public LogConsumer(JacksonProperties jacksonProperties) {
+        this.jacksonProperties = jacksonProperties;
+    }
+
     @StreamListener(LogConstant.INPUT)
     public void process(String message) {
-        LogInfo logInfo = CommonTools.jsonToObject(CommonTools.getJsonFromStr(message), LogInfo.class);
+        PropertyNamingStrategy propertyNamingStrategy = new PropertyNamingStrategy();
+        if ("CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES".equals(jacksonProperties.getPropertyNamingStrategy())) {
+            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE;
+        }
+        LogInfo logInfo = CommonTools.jsonToObject(propertyNamingStrategy, CommonTools.getJsonFromStr(message), LogInfo.class);
         String logType = LogConstant.DEFAULT_TYPE;
         if (!CommonTools.isNullStr(logInfo.getLogType())) {
             logType = logInfo.getLogType();
