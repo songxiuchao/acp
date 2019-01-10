@@ -17,7 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.conf.ControllerAspectConfiguration;
-import pers.acp.springboot.core.tools.ServletTools;
+import pers.acp.springboot.core.tools.HttpTools;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -144,13 +144,13 @@ public class RestControllerAspect {
     private boolean needLog(String uri) {
         if (controllerAspectConfiguration.isEnabled()) {
             for (String regex : noLogUriRegexes) {
-                if (ServletTools.isBeIdentifiedUri(uri, regex)) {
+                if (HttpTools.isBeIdentifiedUri(uri, regex)) {
                     return false;
                 }
             }
             List<String> noLogUriRegexesConfig = controllerAspectConfiguration.getNoLogUriRegexes();
             for (String regex : noLogUriRegexesConfig) {
-                if (ServletTools.isBeIdentifiedUri(uri, regex)) {
+                if (HttpTools.isBeIdentifiedUri(uri, regex)) {
                     return false;
                 }
             }

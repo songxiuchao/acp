@@ -6,11 +6,12 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
-import pers.acp.springboot.core.handle.HttpServletRequestAcp;
 import pers.acp.springboot.core.tools.IpTools;
 import pers.acp.springcloud.common.log.LogInstance;
 import pers.acp.springcloud.server.helloworld.feign.HelloServer;
 import pers.acp.springcloud.server.helloworld.feign.WorldServer;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author zhangbin by 2018-3-6 15:34
@@ -43,9 +44,9 @@ public class HelloWorldController {
     }
 
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> helloWorldGet(HttpServletRequestAcp requestAcp, @RequestParam String name) throws HttpException {
+    public ResponseEntity<String> helloWorldGet(HttpServletRequest request, @RequestParam String name) throws HttpException {
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("Authorization", requestAcp.getHeader("Authorization"));
+        requestHeaders.add("Authorization", request.getHeader("Authorization"));
         requestHeaders.add(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN_VALUE);
         requestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
         HttpEntity<String> requestEntity = new HttpEntity<>(null, requestHeaders);
@@ -56,8 +57,8 @@ public class HelloWorldController {
     }
 
     @GetMapping(value = "/open/ips", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Object> ips(HttpServletRequestAcp requestAcp) {
-        String ip = IpTools.getRemoteIP(requestAcp);
+    public ResponseEntity<Object> ips(HttpServletRequest request) {
+        String ip = IpTools.getRemoteIP(request);
         return ResponseEntity.ok(ip);
     }
 

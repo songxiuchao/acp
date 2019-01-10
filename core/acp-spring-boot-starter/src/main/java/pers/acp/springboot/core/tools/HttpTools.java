@@ -1,69 +1,23 @@
 package pers.acp.springboot.core.tools;
 
-import pers.acp.springboot.core.handle.HttpServletRequestAcp;
-import pers.acp.springboot.core.handle.HttpServletResponseAcp;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-public final class ServletTools {
+public final class HttpTools {
 
-    private static final LogFactory log = LogFactory.getInstance(ServletTools.class);// 日志对象
-
-    /**
-     * 构建Request对象
-     *
-     * @param request HttpServletRequest
-     * @param charset 字符集
-     * @return Request对象
-     */
-    public static HttpServletRequestAcp parseRequest(HttpServletRequest request, String charset) {
-        HttpServletRequestAcp aRequest;
-        if (!request.getClass().equals(HttpServletRequestAcp.class)) {
-            String oldCharset = request.getCharacterEncoding();
-            if (CommonTools.isNullStr(oldCharset)) {
-                oldCharset = charset;
-            }
-            aRequest = new HttpServletRequestAcp(oldCharset, request);
-        } else {
-            aRequest = (HttpServletRequestAcp) request;
-        }
-        return aRequest;
-    }
-
-    /**
-     * 构建Response对象
-     *
-     * @param request  HttpServletRequest
-     * @param response HttpServletResponse
-     * @param charset  字符集
-     * @return Response对象
-     */
-    public static HttpServletResponseAcp parseResponse(HttpServletRequest request, HttpServletResponse response, String charset) {
-        HttpServletResponseAcp aResponse;
-        if (!response.getClass().equals(HttpServletResponseAcp.class)) {
-            String oldCharset = request.getCharacterEncoding();
-            if (CommonTools.isNullStr(oldCharset)) {
-                oldCharset = charset;
-            }
-            aResponse = new HttpServletResponseAcp(oldCharset, response);
-        } else {
-            aResponse = (HttpServletResponseAcp) request;
-        }
-        return aResponse;
-    }
+    private static final LogFactory log = LogFactory.getInstance(HttpTools.class);// 日志对象
 
     /**
      * 通过request获取项目webroot路径
      *
      * @return 项目webroot路径
      */
-    public static String getWebRootPath(HttpServletRequestAcp request) {
+    public static String getWebRootPath(HttpServletRequest request) {
         String webroot = request.getContextPath();
         if (webroot.equals("/")) {
             return "";
@@ -78,7 +32,7 @@ public final class ServletTools {
      * @param request 请求对象
      * @return 请求内容
      */
-    public static String getRequestContent(HttpServletRequestAcp request) {
+    public static String getRequestContent(HttpServletRequest request) {
         ServletInputStream sis = null;
         try {
             sis = request.getInputStream();
@@ -102,7 +56,7 @@ public final class ServletTools {
             if (count <= 0) {
                 return "";
             }
-            return new String(dataByte, request.getOldCharset());
+            return new String(dataByte, request.getCharacterEncoding());
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             return "";

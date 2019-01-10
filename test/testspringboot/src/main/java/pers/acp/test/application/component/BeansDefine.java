@@ -1,5 +1,6 @@
 package pers.acp.test.application.component;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.orm.hibernate5.HibernateExceptionTranslator;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class BeansDefine {
 
     @Bean
+    @ConditionalOnMissingBean(HibernateExceptionTranslator.class)
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }

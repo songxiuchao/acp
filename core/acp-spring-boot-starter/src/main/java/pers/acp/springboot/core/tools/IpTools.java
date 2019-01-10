@@ -1,9 +1,9 @@
 package pers.acp.springboot.core.tools;
 
-import pers.acp.springboot.core.handle.HttpServletRequestAcp;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public final class IpTools {
      * @param request 请求对象
      * @return IP
      */
-    public static String getRemoteIP(HttpServletRequestAcp request) {
+    public static String getRemoteIP(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
         if (CommonTools.isNullStr(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Citrix-Client-IP");
@@ -47,7 +47,7 @@ public final class IpTools {
      * @param request 请求对象
      * @return IP
      */
-    private static String getRemoteRealIP(HttpServletRequestAcp request) {
+    private static String getRemoteRealIP(HttpServletRequest request) {
         String ipAddress = request.getRemoteAddr();
         if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1") || ipAddress.equals("::1")) {
             // 根据网卡取本机配置的IP
@@ -135,7 +135,7 @@ public final class IpTools {
      * @param request 请求对象
      * @return 服务器IP
      */
-    public static String getWebServerIP(HttpServletRequestAcp request) {
+    public static String getWebServerIP(HttpServletRequest request) {
         return request.getLocalAddr();
     }
 
@@ -145,7 +145,7 @@ public final class IpTools {
      * @param request 请求对象
      * @return 服务器物理地址
      */
-    public static String getMACAddress(HttpServletRequestAcp request) {
+    public static String getMACAddress(HttpServletRequest request) {
         String ip = getWebServerIP(request);
         String mac = getMACFromIP(ip);
         if (CommonTools.isNullStr(mac)) {
