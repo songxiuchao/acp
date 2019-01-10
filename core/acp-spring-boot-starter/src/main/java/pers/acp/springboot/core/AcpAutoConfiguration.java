@@ -27,12 +27,13 @@ public class AcpAutoConfiguration {
      */
     @Primary
     @Bean("acpThreadPoolTaskScheduler")
+    @ConditionalOnMissingBean(ThreadPoolTaskScheduler.class)
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         return new ThreadPoolTaskScheduler();
     }
 
-    @Bean
     @Primary
+    @Bean
     @ConditionalOnMissingBean(ObjectMapper.class)
     @ConditionalOnBean(Jackson2ObjectMapperBuilder.class)
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
