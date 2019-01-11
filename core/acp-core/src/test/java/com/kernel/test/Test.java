@@ -138,5 +138,13 @@ public class Test {
         System.out.println(list1.get(list1.size() - 1).toString());
 
         System.out.println(MD5Utils.encrypt(MD5Utils.encrypt("888888") + "admin"));
+
+        String dtext = "nameValueConsole";
+        String ntext = CommonTools.toUnderline(dtext);
+        System.out.println(ntext);
+        System.out.println(CommonTools.toCamel("name,param_config"));
+        System.out.println(CommonTools.toCamel("namnifowniea"));
+        System.out.println(CommonTools.toCamel("NIFOSADI"));
+        System.out.println(CommonTools.toCamel("NIFOSAND_NFDOSIA"));
     }
 }

@@ -1,5 +1,14 @@
 package pers.acp.core.tools;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
@@ -9,11 +18,14 @@ import pers.acp.core.task.threadpool.ThreadPoolService;
 import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by zhangbin on 2016/9/9.
@@ -309,7 +321,8 @@ public class CommonUtils {
         String result = src;
         int maxlength = src.length();
         for (int i = 0; i < maxlength / length; i++) {
-            result = result.substring(0, (i + 1) * length + (i * insertString.length())) + insertString + result.substring((i + 1) * length + (i * insertString.length()));
+            int endIndex = (i + 1) * length + (i * insertString.length());
+            result = result.substring(0, endIndex) + insertString + result.substring(endIndex);
         }
         if (result.lastIndexOf(insertString) == result.length() - insertString.length()) {
             result = result.substring(0, result.length() - insertString.length());
@@ -462,6 +475,165 @@ public class CommonUtils {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 字符串转JSON对象
+     *
+     * @param src 字符串
+     * @return json对象
+     */
+    public static JsonNode getJsonFromStr(String src) {
+        JsonNode jsonNode;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonNode = mapper.readTree(src);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            jsonNode = mapper.createObjectNode();
+        }
+        return jsonNode;
+    }
+
+    /**
+     * json对象转为java对象
+     *
+     * @param jsonObj json对象（JsonNode）
+     * @param cls     目标类
+     * @return 目标对象
+     */
+    public static <T> T jsonToObject(JsonNode jsonObj, Class<T> cls) {
+        return jsonToObject(PropertyNamingStrategy.SNAKE_CASE, jsonObj, cls);
+    }
+
+    /**
+     * json对象转为java对象
+     *
+     * @param propertyNamingStrategy 名称处理规则
+     * @param jsonObj                json对象（JsonNode）
+     * @param cls                    目标类
+     * @return 目标对象
+     */
+    public static <T> T jsonToObject(PropertyNamingStrategy propertyNamingStrategy, JsonNode jsonObj, Class<T> cls) {
+        PropertyNamingStrategy propertyNamingStrategyDefault = new PropertyNamingStrategy();
+        if (propertyNamingStrategy != null) {
+            propertyNamingStrategyDefault = propertyNamingStrategy;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        T instance = null;
+        try {
+            mapper.setPropertyNamingStrategy(propertyNamingStrategyDefault);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            instance = mapper.readValue(jsonObj.toString(), cls);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return instance;
+    }
+
+    /**
+     * 实体对象转换为json对象
+     *
+     * @param instance 实体对象（只持Map对象）
+     * @return json对象
+     */
+    public static JsonNode objectToJson(Object instance) {
+        return objectToJson(instance, null);
+    }
+
+    /**
+     * 实体对象转换为json对象
+     *
+     * @param instance 实体对象（只持Map对象）
+     * @param excludes 排除的实体成员
+     * @return json对象
+     */
+    public static JsonNode objectToJson(Object instance, String[] excludes) {
+        return objectToJson(PropertyNamingStrategy.SNAKE_CASE, instance, excludes);
+    }
+
+    /**
+     * 实体对象转换为json对象
+     *
+     * @param propertyNamingStrategy 名称处理规则
+     * @param instance               实体对象（只持Map对象）
+     * @param excludes               排除的实体成员
+     * @return json对象
+     */
+    public static JsonNode objectToJson(PropertyNamingStrategy propertyNamingStrategy, Object instance, String[] excludes) {
+        PropertyNamingStrategy propertyNamingStrategyDefault = new PropertyNamingStrategy();
+        if (propertyNamingStrategy != null) {
+            propertyNamingStrategyDefault = propertyNamingStrategy;
+        }
+        JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(true);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setNodeFactory(jsonNodeFactory);
+        JsonNode jsonNode;
+        try {
+            SimpleFilterProvider provider = new SimpleFilterProvider();
+            if (excludes != null) {
+                for (String exclude : excludes) {
+                    provider.addFilter(exclude, SimpleBeanPropertyFilter.serializeAllExcept(exclude));
+                }
+            }
+            mapper.setFilterProvider(provider);
+            mapper.setPropertyNamingStrategy(propertyNamingStrategyDefault);
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            String jsonStr = mapper.writeValueAsString(instance);
+            jsonNode = getJsonFromStr(jsonStr);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+            jsonNode = mapper.createObjectNode();
+        }
+        return jsonNode;
+    }
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param str 待处理字符串
+     * @return 转换后的字符串
+     */
+    public static StringBuffer toCamel(String str) {
+        //利用正则删除下划线，把下划线后一位改成大写
+        Pattern pattern = Pattern.compile("_(\\w)");
+        Matcher matcher = pattern.matcher(str);
+        StringBuffer sb = new StringBuffer(str);
+        if (matcher.find()) {
+            sb = new StringBuffer();
+            //将当前匹配子串替换为指定字符串，并且将替换后的子串以及其之前到上次匹配子串之后的字符串段添加到一个StringBuffer对象里。
+            //正则之前的字符和被替换的字符
+            matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+            //把之后的也添加到StringBuffer对象里
+            matcher.appendTail(sb);
+        } else {
+            return sb;
+        }
+        return toCamel(sb.toString());
+    }
+
+
+    /**
+     * 驼峰转下划线
+     *
+     * @param str 待处理字符串
+     * @return 转换后字符串
+     */
+    public static StringBuffer toUnderline(String str) {
+        Pattern pattern = Pattern.compile("[A-Z]");
+        Matcher matcher = pattern.matcher(str);
+        StringBuffer sb = new StringBuffer(str);
+        if (matcher.find()) {
+            sb = new StringBuffer();
+            //将当前匹配子串替换为指定字符串，并且将替换后的子串以及其之前到上次匹配子串之后的字符串段添加到一个StringBuffer对象里。
+            //正则之前的字符和被替换的字符
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+            //把之后的也添加到StringBuffer对象里
+            matcher.appendTail(sb);
+        } else {
+            return sb;
+        }
+        return toUnderline(sb.toString());
     }
 
 }

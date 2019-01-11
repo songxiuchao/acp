@@ -1,15 +1,8 @@
 package pers.acp.core;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import pers.acp.core.exceptions.OperateException;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.match.MoneyToCN;
@@ -20,7 +13,6 @@ import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
 import pers.acp.core.tools.CommonUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
@@ -322,15 +314,7 @@ public final class CommonTools {
      * @return json对象
      */
     public static JsonNode getJsonFromStr(String src) {
-        JsonNode jsonNode;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            jsonNode = mapper.readTree(src);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            jsonNode = mapper.createObjectNode();
-        }
-        return jsonNode;
+        return CommonUtils.getJsonFromStr(src);
     }
 
     /**
@@ -341,7 +325,7 @@ public final class CommonTools {
      * @return 目标对象
      */
     public static <T> T jsonToObject(JsonNode jsonObj, Class<T> cls) {
-        return jsonToObject(PropertyNamingStrategy.SNAKE_CASE, jsonObj, cls);
+        return CommonUtils.jsonToObject(jsonObj, cls);
     }
 
     /**
@@ -353,20 +337,7 @@ public final class CommonTools {
      * @return 目标对象
      */
     public static <T> T jsonToObject(PropertyNamingStrategy propertyNamingStrategy, JsonNode jsonObj, Class<T> cls) {
-        PropertyNamingStrategy propertyNamingStrategyDefault = new PropertyNamingStrategy();
-        if (propertyNamingStrategy != null) {
-            propertyNamingStrategyDefault = propertyNamingStrategy;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        T instance = null;
-        try {
-            mapper.setPropertyNamingStrategy(propertyNamingStrategyDefault);
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            instance = mapper.readValue(jsonObj.toString(), cls);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-        return instance;
+        return CommonUtils.jsonToObject(propertyNamingStrategy, jsonObj, cls);
     }
 
     /**
@@ -376,7 +347,7 @@ public final class CommonTools {
      * @return json对象
      */
     public static JsonNode objectToJson(Object instance) {
-        return objectToJson(instance, null);
+        return CommonUtils.objectToJson(instance);
     }
 
     /**
@@ -387,7 +358,7 @@ public final class CommonTools {
      * @return json对象
      */
     public static JsonNode objectToJson(Object instance, String[] excludes) {
-        return objectToJson(PropertyNamingStrategy.SNAKE_CASE, instance, excludes);
+        return CommonUtils.objectToJson(instance, excludes);
     }
 
     /**
@@ -399,31 +370,28 @@ public final class CommonTools {
      * @return json对象
      */
     public static JsonNode objectToJson(PropertyNamingStrategy propertyNamingStrategy, Object instance, String[] excludes) {
-        PropertyNamingStrategy propertyNamingStrategyDefault = new PropertyNamingStrategy();
-        if (propertyNamingStrategy != null) {
-            propertyNamingStrategyDefault = propertyNamingStrategy;
-        }
-        JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(true);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setNodeFactory(jsonNodeFactory);
-        JsonNode jsonNode;
-        try {
-            SimpleFilterProvider provider = new SimpleFilterProvider();
-            if (excludes != null) {
-                for (String exclude : excludes) {
-                    provider.addFilter(exclude, SimpleBeanPropertyFilter.serializeAllExcept(exclude));
-                }
-            }
-            mapper.setFilterProvider(provider);
-            mapper.setPropertyNamingStrategy(propertyNamingStrategyDefault);
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            String jsonStr = mapper.writeValueAsString(instance);
-            jsonNode = getJsonFromStr(jsonStr);
-        } catch (JsonProcessingException e) {
-            log.error(e.getMessage(), e);
-            jsonNode = mapper.createObjectNode();
-        }
-        return jsonNode;
+        return CommonUtils.objectToJson(propertyNamingStrategy, instance, excludes);
+    }
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param str 待处理字符串
+     * @return 转换后的字符串
+     */
+    public static String toCamel(String str) {
+        return CommonUtils.toCamel(str).toString();
+    }
+
+
+    /**
+     * 驼峰转下划线
+     *
+     * @param str 待处理字符串
+     * @return 转换后字符串
+     */
+    public static String toUnderline(String str) {
+        return CommonUtils.toUnderline(str).toString();
     }
 
     /**

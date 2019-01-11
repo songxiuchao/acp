@@ -25,6 +25,7 @@
 > - jackson 工具类增加 propertyNamingStrategy 参数
 > - 自定义 spring boot start 中使用内置 jackson 进行 json 操作
 > - 去除 Http Request 和 Response 的包裹封装，重写文件下载 controller
+> - 核心工具类增加驼峰和下划线命名规则之间互相转化的方法
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
