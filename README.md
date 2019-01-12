@@ -1,13 +1,13 @@
-# acp 
-###### v5.1.0 [版本更新日志](doc/version_history.md)
+me# acp 
+###### v5.1.2 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 ## 相关组件版本及官方文档
-- [Spring Boot 2.1.1.RELEASE](https://projects.spring.io/spring-boot)
-- [Spring Cloud Greenwich.RC1](http://projects.spring.io/spring-cloud)
+- [Spring Boot 2.1.2.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Cloud Greenwich.RC2](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 11
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8
-- gradle 5.0
+- gradle 5.1.1
 
 ## 二、gralde 配置及使用
 ### （一）配置文件
@@ -41,7 +41,7 @@ gradle全局参数：
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=4.10.2 --distribution-type=all
+    gradlew wrapper --gradle-version=5.1.1 --distribution-type=all
 ``
 
 ## 三、工程说明

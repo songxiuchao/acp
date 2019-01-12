@@ -1,6 +1,6 @@
 ## 版本更新记录
-##### v5.1.0
-> - 更新 SpringBoot 至 2.1.1.RELEASE
+##### v5.1.2
+> - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RC2
 > - 更新依赖包版本
 > - cloud 模块下 docker-compose-base.yml 文件修改，修改 zookeeper 端口号，增加 kafka-manager
@@ -11,7 +11,7 @@
 > - acp-file 去除 jxl 相关依赖，不再封装 jxl 相关操作
 > - 剥离订制工程 [management](https://github.com/zhangbin1010/acp-ace-php-back)
 > - 修改核心模块名称
-> - 更新 gradle 至 5.0
+> - 更新 gradle 至 5.1.1
 > - cloud 模块下 gateway-server 支持跨域
 > - 更新 spring boot admin 至 2.1.1
 > - cloud 模块下，oauth-server 优化 token 服务配置，方便自定义扩展
