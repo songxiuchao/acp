@@ -26,7 +26,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 @Component
-@ConfigurationProperties(prefix = "swagger")
+@ConfigurationProperties(prefix = "acp.swagger")
 public class SwaggerConfiguration {
 
     public boolean isEnabled() {

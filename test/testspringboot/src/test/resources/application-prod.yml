@@ -21,18 +21,18 @@ spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
     default-property-inclusion: non_null
-# ===============================
-# = JPA / HIBERNATE
-# ===============================
+  # ===============================
+  # = JPA / HIBERNATE
+  # ===============================
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-# ===============================
-# = DATA SOURCE
-# ===============================
+  # ===============================
+  # = DATA SOURCE
+  # ===============================
   datasource:
     primary:
       jdbc-url: jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
@@ -52,8 +52,9 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred
-####################################################### 定时任务 #####################################################
-# 支持：cron字符串、none、不配置
-schedule:
-  crons:
-    task1: 0 0/1 * * * ?
+acp:
+  ####################################################### 定时任务 #####################################################
+  # 支持：cron字符串、none、不配置
+  schedule:
+    crons:
+      task1: 0 0/1 * * * ?

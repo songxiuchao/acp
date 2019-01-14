@@ -1,6 +1,4 @@
 debug: false
-swagger:
-  enabled: true
 server:
   port: 9090
   tomcat:
@@ -54,8 +52,11 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred
-####################################################### 定时任务 #####################################################
-# 支持：cron字符串、none、不配置
-schedule:
-  crons:
-    task1: 0 0/1 * * * ?
+acp:
+  swagger:
+    enabled: true
+  ####################################################### 定时任务 #####################################################
+  # 支持：cron字符串、none、不配置
+  schedule:
+    crons:
+      task1: 0 0/1 * * * ?

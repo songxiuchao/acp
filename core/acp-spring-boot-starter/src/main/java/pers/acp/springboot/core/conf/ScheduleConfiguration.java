@@ -13,7 +13,7 @@ import java.util.Map;
  * @since JDK 11
  */
 @Component
-@ConfigurationProperties(prefix = "schedule")
+@ConfigurationProperties(prefix = "acp.schedule")
 public class ScheduleConfiguration {
 
     public Map<String, String> getCrons() {
@@ -24,6 +24,11 @@ public class ScheduleConfiguration {
         this.crons = crons;
     }
 
+    /**
+     * crons expression list
+     * key => bean name
+     * value => coron
+     */
     private Map<String, String> crons = new HashMap<>();
 
 }

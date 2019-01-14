@@ -89,3 +89,7 @@ hystrix:
             timeoutInMilliseconds: 11000
 ribbon:
   ServerListRefreshInterval: 5000
+acp:
+  cloud:
+    log-server:
+      enabled: true

@@ -13,7 +13,7 @@ import java.util.List;
  * @since JDK 11
  */
 @Component
-@ConfigurationProperties(prefix = "controller-aspect")
+@ConfigurationProperties(prefix = "acp.controller-aspect")
 public class ControllerAspectConfiguration {
 
     public boolean isEnabled() {
@@ -32,13 +32,10 @@ public class ControllerAspectConfiguration {
         this.noLogUriRegexes = noLogUriRegexes;
     }
 
-    /**
-     * 是否启用
-     */
     private boolean enabled = true;
 
     /**
-     * 不记录日志的URL正则表达式
+     * no log uri regexes
      */
     private List<String> noLogUriRegexes = new ArrayList<>();
 

@@ -93,3 +93,7 @@ ribbon:
   eager-load:
     enabled: true
     clients: atomic-hello,atomic-world
+acp:
+  cloud:
+    log-server:
+      enabled: true

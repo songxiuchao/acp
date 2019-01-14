@@ -1,6 +1,8 @@
 package pers.acp.springcloud.common;
 
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cloud.stream.config.BindingServiceConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,5 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan("pers.acp.springcloud.common")
 @ServletComponentScan({"pers.acp.springcloud.common"})
+@AutoConfigureBefore(BindingServiceConfiguration.class)
 public class AcpCloudAutoConfiguration {
 }
