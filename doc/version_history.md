@@ -28,6 +28,7 @@
 > - 核心工具类增加驼峰和下划线命名规则之间互相转化的方法
 > - 规范配置项 acp.*
 > - cloud 模块增加日志服务配置项
+> - acp-spring-cloud-starter-common 增加 acp.cloud.oauth.oauth-server 配置项，oauth-server 可直接引用并修改配置项，不再需要单独编写自己的 ResourceServerConfiguration
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2

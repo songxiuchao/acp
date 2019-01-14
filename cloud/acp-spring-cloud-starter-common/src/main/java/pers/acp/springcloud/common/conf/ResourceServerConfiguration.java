@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +16,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.CommonTools;
-import pers.acp.core.log.LogFactory;
 import pers.acp.springcloud.common.enums.RestPrefix;
+import pers.acp.springcloud.common.log.LogInstance;
 
 /**
  * Oauth2 资源服务配置
@@ -29,11 +31,27 @@ import pers.acp.springcloud.common.enums.RestPrefix;
  * @author zhangbin by 11/04/2018 15:13
  * @since JDK 11
  */
+@Component
 @Configuration
 @EnableResourceServer
+@ConfigurationProperties(prefix = "acp.cloud.oauth")
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private final LogFactory log = LogFactory.getInstance(this.getClass());
+    public boolean isOauthServer() {
+        return oauthServer;
+    }
+
+    public void setOauthServer(boolean oauthServer) {
+        this.oauthServer = oauthServer;
+    }
+
+    /**
+     * is oauth server
+     * default false
+     */
+    private boolean oauthServer = false;
+
+    private final LogInstance logInstance;
 
     private final OAuth2ClientProperties clientProperties;
 
@@ -42,7 +60,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private final String contextPath;
 
     @Autowired
-    public ResourceServerConfiguration(OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
+    public ResourceServerConfiguration(LogInstance logInstance, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
+        this.logInstance = logInstance;
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
@@ -79,7 +98,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
             });
             services.setRestTemplate(restTemplate);
         } catch (HttpException e) {
-            log.error(e.getMessage(), e);
+            logInstance.error(e.getMessage(), e);
         }
         services.setCheckTokenEndpointUrl(resourceServerProperties.getTokenInfoUri());
         services.setClientId(clientProperties.getClientId());
@@ -94,7 +113,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.tokenServices(remoteTokenServices());
+        if (!oauthServer) {
+            resources.tokenServices(remoteTokenServices());
+        }
     }
 
     /**
