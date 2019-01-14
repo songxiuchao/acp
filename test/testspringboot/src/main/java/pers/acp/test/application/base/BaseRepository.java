@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * @author zhangbin by 2018-1-15 16:59
- * @since JDK1.8
+ * @since JDK 11
  */
 @NoRepositoryBean
 public interface BaseRepository<T, ID extends Serializable> extends JpaSpecificationExecutor<T>, JpaRepository<T, ID> {

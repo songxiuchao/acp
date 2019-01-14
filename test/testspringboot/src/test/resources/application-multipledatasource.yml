@@ -18,6 +18,9 @@ management:
 spring:
   thymeleaf:
     cache: false
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
 # ===============================
 # = JPA / HIBERNATE
 # ===============================
@@ -32,16 +35,20 @@ spring:
 # ===============================
   datasource:
     primary:
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
       username: root
       password: test
-      driver-class-name: com.mysql.jdbc.Driver
-      data-source-properties.dialect: org.hibernate.dialect.MySQL55Dialect
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      data-source-properties.dialect: org.hibernate.dialect.MySQL8Dialect
       data-source-properties.scanpackage: pers.acp.test.application.entity.primary
     pg:
-      jdbc-url: jdbc:postgresql://127.0.0.1:5432/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+      jdbc-url: jdbc:postgresql://localhost:5432/test?autoReconnect=true&zeroDateTimeBehavior=convertToNull
       username: postgres
       password: test
       driver-class-name: org.postgresql.Driver
-      data-source-properties.dialect: org.hibernate.dialect.PostgreSQL9Dialect
+      data-source-properties.dialect: org.hibernate.dialect.PostgreSQLDialect
       data-source-properties.scanpackage:
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred

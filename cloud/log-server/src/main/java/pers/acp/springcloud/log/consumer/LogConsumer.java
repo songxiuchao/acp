@@ -1,5 +1,7 @@
 package pers.acp.springcloud.log.consumer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
@@ -13,17 +15,26 @@ import pers.acp.springcloud.common.log.LogConstant;
 import pers.acp.springcloud.common.log.LogInfo;
 import pers.acp.springcloud.common.log.LogInput;
 
+import java.io.IOException;
+
 /**
  * @author zhangbin by 11/07/2018 18:50
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 @EnableBinding(LogInput.class)
 public class LogConsumer {
 
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public LogConsumer(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @StreamListener(LogConstant.INPUT)
-    public void process(String message) {
-        LogInfo logInfo = CommonTools.jsonToObject(CommonTools.getJsonFromStr(message), LogInfo.class);
+    public void process(String message) throws IOException {
+        LogInfo logInfo = objectMapper.readValue(message, LogInfo.class);
         String logType = LogConstant.DEFAULT_TYPE;
         if (!CommonTools.isNullStr(logInfo.getLogType())) {
             logType = logInfo.getLogType();

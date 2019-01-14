@@ -18,7 +18,7 @@ import pers.acp.springcloud.oauth.domain.SecurityUserDetailsService;
 
 /**
  * @author zhangbin by 11/04/2018 15:16
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 @EnableWebSecurity
@@ -34,12 +34,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
 
-    @Bean
+    @Bean(name = "customerUserDetailsService")
     public UserDetailsService userDetailsService() {
         return new SecurityUserDetailsService();
     }
 
-    @Bean
+    @Bean(name = "customerClientDetailsService")
     public ClientDetailsService clientDetailsService() {
         return new SecurityClientDetailsService();
     }

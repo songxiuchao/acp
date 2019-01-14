@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author zhangbin by 11/07/2018 13:34
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 @Scope("prototype")

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean
 
 /**
   * @author zhangbin by 02/05/2018 16:44
-  * @since JDK1.8
+  * @since JDK 11
   */
 @SpringBootApplication
 class TestScalaApplication {

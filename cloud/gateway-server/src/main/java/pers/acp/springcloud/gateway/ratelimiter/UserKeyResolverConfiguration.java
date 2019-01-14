@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  * @author zhangbin by 21/06/2018 11:24
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 public class UserKeyResolverConfiguration {

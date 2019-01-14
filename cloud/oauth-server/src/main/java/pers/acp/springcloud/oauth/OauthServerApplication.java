@@ -1,15 +1,13 @@
 package pers.acp.springcloud.oauth;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import pers.acp.springcloud.common.annotation.AcpCloudOauthServerApplication;
 
 /**
  * @author zhangbin by 09/04/2018 16:11
- * @since JDK1.8
+ * @since JDK 11
  */
-@SpringBootApplication
-@EnableDiscoveryClient
+@AcpCloudOauthServerApplication
 public class OauthServerApplication {
 
     public static void main(String[] args) {

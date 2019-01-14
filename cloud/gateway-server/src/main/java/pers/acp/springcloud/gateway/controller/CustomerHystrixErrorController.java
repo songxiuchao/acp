@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * @author zhangbin by 26/04/2018 21:30
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 public class CustomerHystrixErrorController {
@@ -23,6 +23,7 @@ public class CustomerHystrixErrorController {
     @RequestMapping(value = "/hystrixhandle", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Mono<ResponseEntity<Object>> hystrixHandle() {
         ErrorVO errorVO = new ErrorVO();
+        errorVO.setCode(400);
         errorVO.setError("invalid service");
         errorVO.setErrorDescription("GateWay error, the service is invalid");
         return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorVO));

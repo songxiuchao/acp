@@ -12,7 +12,7 @@ import pers.acp.springcloud.common.annotation.AcpCloudAtomApplication;
 
 /**
  * @author zhangbin by 21/03/2018 10:10
- * @since JDK1.8
+ * @since JDK 11
  */
 @AcpCloudAtomApplication
 public class SpringCloudTestApplication {

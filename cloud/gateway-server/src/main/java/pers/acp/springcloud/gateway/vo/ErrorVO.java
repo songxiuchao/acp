@@ -1,8 +1,8 @@
 package pers.acp.springcloud.gateway.vo;
 
 /**
- * @author zhangbin by 26/04/2018 21:35
- * @since JDK1.8
+ * @author zhang by 27/12/2018 13:07
+ * @since JDK 11
  */
 public class ErrorVO {
 
@@ -21,6 +21,16 @@ public class ErrorVO {
     public void setErrorDescription(String errorDescription) {
         this.errorDescription = errorDescription;
     }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    private int code;
 
     private String error;
 

@@ -1,22 +1,14 @@
-# acp 
-###### v5.0.1
+me# acp 
+###### v5.1.2 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
+从 5.1.2 开始，小版本号与 SpringBoot 小版本号一致
 ## 相关组件版本及官方文档
-- [Spring Boot 2.0.6.RELEASE](https://projects.spring.io/spring-boot)
-- [Spring Cloud Finchley.SR2](http://projects.spring.io/spring-cloud)
+- [Spring Boot 2.1.2.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Cloud Greenwich.RC2](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 11
-    - 启动时会提示如下警告
-    ```log
-    WARNING: An illegal reflective access operation has occurred
-    WARNING: Illegal reflective access by org.springframework.cglib.core.ReflectUtils$1 (file:/C:/Users/zhangbin/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/5.0.8.RELEASE/dc39c49e3246cdf73d3786ac41119140aed3fa08/spring-core-5.0.8.RELEASE.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
-    WARNING: Please consider reporting this to the maintainers of org.springframework.cglib.core.ReflectUtils$1
-    WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-    WARNING: All illegal access operations will be denied in a future release
-    ```
-    暂时忽略，不影响程序正常运行，spring 官方回应待升级至 5.1.0 以后的版本，可解决此问题
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8
-- gradle 4.10.2
+- gradle 5.1.1
 
 ## 二、gralde 配置及使用
 ### （一）配置文件
@@ -50,15 +42,14 @@ gradle全局参数：
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=4.10.2 --distribution-type=all
+    gradlew wrapper --gradle-version=5.1.1 --distribution-type=all
 ``
 
 ## 三、工程说明
 - doc目录下的files文件夹，当需要用到时放到打包后的jar同目录下即可
 - 工程全局默认使用 UTF-8 字符集
 - acp 目录下为所有核心模块
-- application 目录下为管理端的后台服务（已弃用，待 5.1.0 版本时从工程中剔除）
-- cloud 目录下为基于 Spring Cloud 的一整套组建模块
+- cloud 目录下为基于 Spring Cloud 的一整套组件模块
 - gradle 目录下为相关配置文件
 - test 目录下为测试工程
 - swagger url : /swagger-ui.html
@@ -69,21 +60,21 @@ gradle全局参数：
 ##### 1. acp:acp-core 
     核心包，封装了常用工具类，包括jdbc、配置文件解析（xml、properties）、加解密算法、线程池、定时任务、四则运算、json处理、字符串处理
 ##### 2. acp:acp-core-orm
-    核心扩展包，自定义 ORM 组建；以 hibernate 的思想自己封装的组建，仅供娱乐，建议还是使用hibernate
+    核心扩展包，自定义 ORM 组件；以 hibernate 的思想自己封装的组件，仅供娱乐，建议还是使用hibernate
 ##### 3. acp:acp-packet
-    通讯打解包组建，依赖 acp-core；封装了http数据包、iso8583报文、xml报文的打解包操作
+    通讯打解包组件，依赖 acp-core；封装了http数据包、iso8583报文、xml报文的打解包操作
 ##### 4. acp:acp-client
-    客户端组建包，依赖 acp-packet；封装了http、https、tcp、udp、ftp、sftp协议的客户端
+    客户端组件包，依赖 acp-packet；封装了http、https、tcp、udp、ftp、sftp协议的客户端
 ##### 5. acp:acp-spring-boot-starter
-    springboot 应用扩展组建，依赖 acp-client；扩展支持 tcp、udp 等协议服务端开发；同时封装定时任务
+    springboot 应用扩展组件，依赖 acp-client；扩展支持 tcp、udp 等协议服务端开发；同时封装定时任务
 ##### 6. acp:acp-ftp
-    应用扩展组建，依赖 acp-core；封装支持 ftp/sftp 服务端及客户端
+    应用扩展组件，依赖 acp-core；封装支持 ftp/sftp 服务端及客户端
 ##### 7. acp:acp-webservice
-    应用扩展组建，依赖 acp-core；封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
+    应用扩展组件，依赖 acp-core；封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
 ##### 8. acp:acp-file
     文件处理组件包，依赖 acp-core；封装了excel、pdf、word、html、fremark模板文件的读写转换等操作
 ##### 9. acp:acp-message
-    消息处理组建包，依赖 acp-core；封装了发送email
+    消息处理组件包，依赖 acp-core；封装了发送email
 ### （二）快速开发 springboot 应用
     （1）参考 test:testspringboot
     （2）依赖 acp:acp-spring-boot-starter
@@ -137,7 +128,9 @@ gradle全局参数：
 > ```yaml
 > spring:
 >   zipkin:
->     base-url: http://localhost:9411/
+>     # base-url: http://localhost:9411/
+>     sender:
+>       type: kafka
 >   sleuth:
 >     sampler:
 >       probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
@@ -155,11 +148,11 @@ gradle全局参数：
 
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
-| /oauth/authorize      | 验证 basic认证保护      |
-| /oauth/token          | 获取token的服务 url中没有client_id和client_secret的，走basic认证保护 |
-| /oauth/check_token    | 资源服务器用来校验token basic认证保护 |
-| /oauth/confirm_access | 用户授权 basic认证保护  |
-| /oauth/error          | 认证失败 无认证保护     |
+| /oauth/authorize      | 申请授权，basic认证保护      |
+| /oauth/token          | 获取token的服务，url中没有client_id和client_secret的，走basic认证保护 |
+| /oauth/check_token    | 资源服务器用来校验token，basic认证保护 |
+| /oauth/confirm_access | 授权确认，basic认证保护  |
+| /oauth/error          | 认证失败，无认证保护     |
 
 [查看认证过程](doc/oauth2.0认证.md)
 
@@ -191,7 +184,7 @@ gradle全局参数：
 > ```bash
 > docker-compose -f docker-compose-base.yml down
 > ```
-### （三）组建开发
+### （三）组件开发
 ##### 1. 可视化监控
     cloud:admin-server
     （1）无需改动代码
@@ -221,7 +214,5 @@ gradle全局参数：
     （4）参考 cloud:hello、cloud:world、cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
 ## 六、打包为 docker 镜像
 自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
-## 七、版本记录
-[点击前往](doc/version_history.md)
-## 八、待完善内容
+## 七、待完善内容
 [详情](doc/TODO.md)

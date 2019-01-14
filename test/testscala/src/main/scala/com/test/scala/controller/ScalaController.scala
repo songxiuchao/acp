@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation._
 
 /**
   * @author zhangbin by 02/05/2018 21:50
-  * @since JDK1.8
+  * @since JDK 11
   */
 @RestController
 class ScalaController @Autowired()(private val tableOneDomain: TableOneDomain) {

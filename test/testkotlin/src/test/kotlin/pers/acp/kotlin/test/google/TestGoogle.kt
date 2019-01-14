@@ -5,7 +5,7 @@ import java.net.URLEncoder
 /**
  * @author zhangbin
  * @date 16/03/2018
- * @since JDK1.8
+ * @since JDK 11
  */
 fun main(args: Array<String>) {
 //    generateQRcode()

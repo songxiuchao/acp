@@ -1,0 +1,10 @@
+versions += [
+        javax_mail: "1.4.7"
+]
+
+dependencies {
+    compile project(":core:acp-core")
+
+    // email
+    compile "javax.mail:mail:$versions.javax_mail"
+}

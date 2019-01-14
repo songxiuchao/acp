@@ -13,5 +13,5 @@ dependencyManagement {
     }
 }
 dependencies {
-    implementation project(":cloud:acp-spring-cloud-starter-common")
+    compile project(":cloud:acp-spring-cloud-starter-common")
 }

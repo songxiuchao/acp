@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * @author zhangbin by 11/07/2018 14:54
- * @since JDK1.8
+ * @since JDK 11
  */
 public enum LogLevel {
 

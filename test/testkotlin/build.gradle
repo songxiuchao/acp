@@ -6,10 +6,10 @@ ext {
 
 buildscript {
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
-        classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}"
-        classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot" as Object
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}" as Object
+        classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}" as Object
+        classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}" as Object
     }
 }
 
@@ -31,7 +31,7 @@ compileTestKotlin {
 }
 
 dependencies {
-    compile project(":acp:acp-spring-boot-starter")
+    compile project(":core:acp-spring-boot-starter")
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
     compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"

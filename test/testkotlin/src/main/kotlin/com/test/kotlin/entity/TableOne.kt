@@ -6,7 +6,7 @@ import javax.persistence.*
 
 /**
  * @author zhangbin by 28/04/2018 12:57
- * @since JDK1.8
+ * @since JDK 11
  */
 @Entity
 @Table(name = "table1")

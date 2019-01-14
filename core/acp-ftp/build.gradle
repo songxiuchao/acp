@@ -1,0 +1,17 @@
+versions += [
+        ftpserver  : "1.1.1",
+        sftp       : "0.11.0",
+        commons_net: "3.6",
+        jsch       : "0.1.54"
+]
+dependencies {
+    compile project(":core:acp-core")
+    // ftp client
+    compile "commons-net:commons-net:$versions.commons_net"
+    // sftp client
+    compile "com.jcraft:jsch:$versions.jsch"
+    // ftp server
+    compile "org.apache.ftpserver:ftpserver-core:$versions.ftpserver"
+    // sftp server
+    compile "org.apache.sshd:sshd-sftp:$versions.sftp"
+}

@@ -9,7 +9,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 
 /**
  * @author zhangbin by 14/09/2018 13:14
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 public class AdminServerSecurityConfiguration extends WebSecurityConfigurerAdapter {

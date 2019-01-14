@@ -5,7 +5,7 @@ import pers.acp.springcloud.common.annotation.AcpCloudAtomApplication;
 
 /**
  * @author zhangbin by 2018-3-5 13:56
- * @since JDK1.8
+ * @since JDK 11
  */
 @AcpCloudAtomApplication
 public class WorldApplication {

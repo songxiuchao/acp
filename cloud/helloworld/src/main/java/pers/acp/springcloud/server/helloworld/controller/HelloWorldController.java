@@ -1,18 +1,21 @@
 package pers.acp.springcloud.server.helloworld.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import pers.acp.springboot.core.handle.HttpServletRequestAcp;
+import org.springframework.web.client.RestTemplate;
+import pers.acp.client.exceptions.HttpException;
 import pers.acp.springboot.core.tools.IpTools;
 import pers.acp.springcloud.common.log.LogInstance;
 import pers.acp.springcloud.server.helloworld.feign.HelloServer;
 import pers.acp.springcloud.server.helloworld.feign.WorldServer;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author zhangbin by 2018-3-6 15:34
- * @since JDK1.8
+ * @since JDK 11
  */
 @RestController
 public class HelloWorldController {
@@ -23,28 +26,39 @@ public class HelloWorldController {
 
     private final WorldServer worldServer;
 
+    private final RestTemplate restTemplate;
+
     @Autowired
-    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance) {
+    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance, @Qualifier(value = "customerRestTemplate") RestTemplate restTemplate) {
         this.helloServer = helloServer;
         this.worldServer = worldServer;
         this.logInstance = logInstance;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> helloWorld(@RequestBody String content) {
-        logInstance.info(helloServer.fromClient(content) + ";" + worldServer.fromClient(content));
-        return ResponseEntity.ok(helloServer.fromClient(content) + ";" + worldServer.fromClient(content));
+        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content);
+        logInstance.info(respon);
+        return ResponseEntity.ok(respon);
     }
 
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Object> helloWorldGet(@RequestParam String name) {
-        logInstance.info(helloServer.fromClient(name) + ";" + worldServer.fromClient(name));
-        return ResponseEntity.ok(helloServer.fromClient(name) + ";" + worldServer.fromClient(name));
+    public ResponseEntity<String> helloWorldGet(HttpServletRequest request, @RequestParam String name) throws HttpException {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Authorization", request.getHeader("Authorization"));
+        requestHeaders.add(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN_VALUE);
+        requestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, requestHeaders);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("http://atomic-world/world?name={1}", HttpMethod.GET, requestEntity, String.class, name);
+        System.out.println(responseEntity.getStatusCode());
+        System.out.println(responseEntity.getBody());
+        return responseEntity;
     }
 
     @GetMapping(value = "/open/ips", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Object> ips(HttpServletRequestAcp requestAcp) {
-        String ip = IpTools.getRemoteIP(requestAcp);
+    public ResponseEntity<Object> ips(HttpServletRequest request) {
+        String ip = IpTools.getRemoteIP(request);
         return ResponseEntity.ok(ip);
     }
 

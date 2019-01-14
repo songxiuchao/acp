@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * Feign 请求拦截器配置
  *
  * @author zhangbin by 12/04/2018 10:13
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 public class FeignOauthRequestInterceptorConfiguration {

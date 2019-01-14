@@ -12,7 +12,7 @@ import kotlin.experimental.and
 /**
  * @author zhangbin
  * @date 16/03/2018
- * @since JDK1.8
+ * @since JDK 11
  */
 object GoogleAuthenticatorUtils {
 
@@ -61,7 +61,7 @@ object GoogleAuthenticatorUtils {
   private fun setupParam(crypto: String, timeExcursionConfig: String?) {
     this.crypto = crypto
     if (!timeExcursionConfig.isNullOrBlank()) {
-      timeExcursion = timeExcursionConfig!!.toInt()
+      timeExcursion = timeExcursionConfig.toInt()
     }
   }
 

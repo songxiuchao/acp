@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * @author zhangbin by 11/04/2018 15:19
- * @since JDK1.8
+ * @since JDK 11
  */
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {

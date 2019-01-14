@@ -1,5 +1,5 @@
 versions += [
-        boot_admin: "2.0.3"
+        boot_admin: "2.1.1"
 ]
 buildscript {
     dependencies {
@@ -16,13 +16,13 @@ dependencyManagement {
     }
 }
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-security"
 
-    implementation "de.codecentric:spring-boot-admin-starter-server:$versions.boot_admin"
+    compile "de.codecentric:spring-boot-admin-starter-server:$versions.boot_admin"
 
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-turbine") {
+    compile("org.springframework.cloud:spring-cloud-starter-netflix-turbine") {
         exclude group: "junit", module: "junit"
     }
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard"
 }

@@ -2,7 +2,7 @@ package pers.acp.springcloud.common.enums;
 
 /**
  * @author zhangbin by 19/06/2018 18:48
- * @since JDK1.8
+ * @since JDK 11
  */
 public enum RestPrefix {
 

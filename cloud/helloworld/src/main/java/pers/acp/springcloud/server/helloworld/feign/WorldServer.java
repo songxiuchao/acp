@@ -9,7 +9,7 @@ import pers.acp.springcloud.server.helloworld.hystrix.WorldServerHystrix;
 
 /**
  * @author zhangbin by 2018-3-6 15:32
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 @FeignClient(value = "atomic-world", fallbackFactory = WorldServerHystrix.class)

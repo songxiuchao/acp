@@ -2,26 +2,26 @@ package pers.acp.test.application.conf;
 
 import com.zaxxer.hikari.HikariConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.Objects;
 
 /**
  * @author zhangbin by 2018-1-15 15:29
- * @since JDK1.8
+ * @since JDK 11
  */
 @Configuration
 @EnableTransactionManagement
@@ -32,9 +32,12 @@ public class JpaPgConfig {
 
     private final JpaProperties jpaProperties;
 
+    private final HibernateProperties hibernateProperties;
+
     @Autowired
-    public JpaPgConfig(JpaProperties jpaProperties) {
+    public JpaPgConfig(JpaProperties jpaProperties, HibernateProperties hibernateProperties) {
         this.jpaProperties = jpaProperties;
+        this.hibernateProperties = hibernateProperties;
     }
 
     @Bean
@@ -50,24 +53,23 @@ public class JpaPgConfig {
     }
 
     @Bean(name = "entityManagerFactoryPg")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary(EntityManagerFactoryBuilder builder) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary() {
         HikariConfig hikariConfig = pgConfig();
-        jpaProperties.getProperties().put("hibernate.dialect", hikariConfig.getDataSourceProperties().getProperty("dialect"));
-        return builder.dataSource(pgDataSource())
-                .packages(hikariConfig.getDataSourceProperties().getProperty("scanpackage").split(","))
-                .persistenceUnit("persistenceUnitPg")
-                .properties(jpaProperties.getHibernateProperties(new HibernateSettings()))
-                .build();
-    }
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(pgDataSource());
+        em.setPackagesToScan(hikariConfig.getDataSourceProperties().getProperty("scanpackage").split(","));
 
-    @Bean(name = "entityManagerPg")
-    public EntityManager entityManagerPg(EntityManagerFactoryBuilder builder) {
-        return Objects.requireNonNull(entityManagerFactoryPrimary(builder).getObject()).createEntityManager();
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        jpaProperties.getProperties().put("hibernate.dialect", hikariConfig.getDataSourceProperties().getProperty("dialect"));
+        em.setJpaPropertyMap(hibernateProperties.determineHibernateProperties(jpaProperties.getProperties(), new HibernateSettings()));
+        em.setPersistenceUnitName("persistenceUnitPg");
+        return em;
     }
 
     @Bean(name = "transactionManagerPg")
-    public PlatformTransactionManager transactionManagerPrimary(EntityManagerFactoryBuilder builder) {
-        return new JpaTransactionManager(Objects.requireNonNull(entityManagerFactoryPrimary(builder).getObject()));
+    public PlatformTransactionManager transactionManagerPrimary() {
+        return new JpaTransactionManager(Objects.requireNonNull(entityManagerFactoryPrimary().getObject()));
     }
 
 }

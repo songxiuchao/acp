@@ -1,9 +1,11 @@
 package pers.acp.springcloud.common.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -14,25 +16,29 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.CommonTools;
-import pers.acp.core.log.LogFactory;
 import pers.acp.springcloud.common.enums.RestPrefix;
+import pers.acp.springcloud.common.log.LogInstance;
 
 /**
  * Oauth2 资源服务配置
  *
  * @author zhangbin by 11/04/2018 15:13
- * @since JDK1.8
+ * @since JDK 11
  */
+@Component
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private final LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogInstance logInstance;
+
+    private final AcpOauthConfiguration acpOauthConfiguration;
 
     private final OAuth2ClientProperties clientProperties;
 
@@ -41,10 +47,19 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private final String contextPath;
 
     @Autowired
-    public ResourceServerConfiguration(OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
+    public ResourceServerConfiguration(LogInstance logInstance, AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
+        this.logInstance = logInstance;
+        this.acpOauthConfiguration = acpOauthConfiguration;
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
+    }
+
+    @LoadBalanced
+    @Bean("acpSpringCloudRestTemplate")
+    @ConditionalOnExpression("!'${acp.cloud.oauth.oauth-server}'.equals('true')")
+    public RestTemplate acpSpringCloudRestTemplate() throws HttpException {
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
     }
 
     /**
@@ -53,11 +68,12 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      * @return 远程 token 认证服务实例
      */
     @Primary
-    @Bean
+    @Bean("acpResourceServerRemoteTokenServices")
+    @ConditionalOnExpression("!'${acp.cloud.oauth.oauth-server}'.equals('true')")
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
         try {
-            RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+            RestTemplate restTemplate = acpSpringCloudRestTemplate();
             // 自定义错误处理类，所有错误放行统一交由 oauth 模块进行进出
             restTemplate.setErrorHandler(new ResponseErrorHandler() {
                 @Override
@@ -72,7 +88,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
             });
             services.setRestTemplate(restTemplate);
         } catch (HttpException e) {
-            log.error(e.getMessage(), e);
+            logInstance.error(e.getMessage(), e);
         }
         services.setCheckTokenEndpointUrl(resourceServerProperties.getTokenInfoUri());
         services.setClientId(clientProperties.getClientId());
@@ -87,7 +103,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.tokenServices(remoteTokenServices());
+        if (!acpOauthConfiguration.isOauthServer()) {
+            resources.tokenServices(remoteTokenServices());
+        }
     }
 
     /**
@@ -112,6 +130,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/webjars/**",
                 contextPath + "/swagger-resources/configuration/ui",
                 contextPath + "/hystrix.stream",
+                contextPath + "/oauth/authorize",
+                contextPath + "/oauth/token",
+                contextPath + "/oauth/error",
                 contextPath + RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
                 .anyRequest().authenticated();
     }

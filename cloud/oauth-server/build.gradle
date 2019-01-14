@@ -13,9 +13,7 @@ dependencyManagement {
     }
 }
 dependencies {
-    implementation project(":acp:acp-spring-boot-starter")
+    compile project(":cloud:acp-spring-cloud-starter-common")
 
-    implementation "org.springframework.boot:spring-boot-starter-data-redis"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
-    implementation "org.springframework.cloud:spring-cloud-starter-oauth2"
+    compile "org.springframework.boot:spring-boot-starter-data-redis"
 }

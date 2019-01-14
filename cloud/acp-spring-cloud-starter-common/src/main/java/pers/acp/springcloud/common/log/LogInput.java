@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author zhangbin by 11/07/2018 14:34
- * @since JDK1.8
+ * @since JDK 11
  */
 @Component
 public interface LogInput {
 
     @Input(LogConstant.INPUT)
-    SubscribableChannel getMessage();
+    SubscribableChannel input();
 
 }

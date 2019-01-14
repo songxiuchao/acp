@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 
 /**
  * @author zhangbin by 11/04/2018 15:21
- * @since JDK1.8
+ * @since JDK 11
  */
 @Service
 public class SecurityClientDetailsService implements ClientDetailsService {
