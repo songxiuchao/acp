@@ -21,7 +21,7 @@
 > - 优化 REST 日志切片
 > - 修改 jdbc mysql 链接字符串，支持 utf8mb4 字符集
 > - 修改 DockerFile 内容，通过 kafka 传递信息给 zipkin server，gateway-server 去除 zipkin 相关依赖
-> - testspringboot 中增加 swagger 开关配置
+> - 增加 swagger 开关配置
 > - jackson 工具类增加 propertyNamingStrategy 参数
 > - 自定义 spring boot start 中使用内置 jackson 进行 json 操作
 > - 去除 Http Request 和 Response 的包裹封装，重写文件下载 controller
