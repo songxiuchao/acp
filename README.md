@@ -128,7 +128,9 @@ gradle全局参数：
 > ```yaml
 > spring:
 >   zipkin:
->     base-url: http://localhost:9411/
+>     # base-url: http://localhost:9411/
+>     sender:
+>       type: kafka
 >   sleuth:
 >     sampler:
 >       probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。

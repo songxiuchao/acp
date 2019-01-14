@@ -3,7 +3,6 @@ package pers.acp.springcloud.common.log;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
@@ -20,26 +19,25 @@ import java.util.Date;
  * @since JDK 11
  */
 @Component
-@EnableBinding(LogOutput.class)
 public class LogInstance {
 
     private static final LogFactory log = LogFactory.getInstance(LogInstance.class);
 
-    private final LogOutput logOutput;
+    private LogToBinding logToBinding;
 
     private final ObjectMapper objectMapper;
 
     private final LogServerConfiguration logServerConfiguration;
 
     @Autowired
-    public LogInstance(LogOutput logOutput, ObjectMapper objectMapper, LogServerConfiguration logServerConfiguration) {
-        this.logOutput = logOutput;
+    public LogInstance(ObjectMapper objectMapper, LogServerConfiguration logServerConfiguration) {
         this.objectMapper = objectMapper;
         this.logServerConfiguration = logServerConfiguration;
     }
 
     private LogInfo generateLogInfo() {
         if (logServerConfiguration.isEnabled()) {
+            logToBinding = SpringBeanFactory.getBean(LogToBinding.class);
             LogInfo logInfo = SpringBeanFactory.getBean(LogInfo.class);
             if (logInfo != null) {
                 String logType = logServerConfiguration.getLogType();
@@ -66,7 +64,7 @@ public class LogInstance {
         logInfo.setLineno(lineno);
         logInfo.setClassName(className);
         try {
-            logOutput.sendMessage().send(MessageBuilder.withPayload(objectMapper.writeValueAsString(logInfo)).build());
+            logToBinding.getLogOutput().sendMessage().send(MessageBuilder.withPayload(objectMapper.writeValueAsString(logInfo)).build());
         } catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);
         }

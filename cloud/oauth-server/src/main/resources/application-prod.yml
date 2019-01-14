@@ -23,6 +23,26 @@ spring:
     default-property-inclusion: non_null
   redis:
     url: redis://127.0.0.1:6379
+  sleuth:
+    sampler:
+      probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
+  cloud:
+    stream:
+      default-binder: kafka
+      kafka:
+        binder:
+          brokers: 127.0.0.1:9092
+      bindings:
+        log_output:
+          binder: kafka
+          consumer:
+            headerMode: raw
+          producer:
+            headerMode: raw
+          # topic
+          destination: test-log
+          group: log-server-group
+          content-type: application/json
 # ===============================
 # = Eureka Config
 # ===============================

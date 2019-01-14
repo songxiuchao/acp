@@ -1,10 +1,10 @@
 package pers.acp.springcloud.common.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,24 +34,11 @@ import pers.acp.springcloud.common.log.LogInstance;
 @Component
 @Configuration
 @EnableResourceServer
-@ConfigurationProperties(prefix = "acp.cloud.oauth")
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    public boolean isOauthServer() {
-        return oauthServer;
-    }
-
-    public void setOauthServer(boolean oauthServer) {
-        this.oauthServer = oauthServer;
-    }
-
-    /**
-     * is oauth server
-     * default false
-     */
-    private boolean oauthServer = false;
-
     private final LogInstance logInstance;
+
+    private final AcpOauthConfiguration acpOauthConfiguration;
 
     private final OAuth2ClientProperties clientProperties;
 
@@ -60,8 +47,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private final String contextPath;
 
     @Autowired
-    public ResourceServerConfiguration(LogInstance logInstance, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
+    public ResourceServerConfiguration(LogInstance logInstance, AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
         this.logInstance = logInstance;
+        this.acpOauthConfiguration = acpOauthConfiguration;
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
@@ -69,6 +57,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @LoadBalanced
     @Bean("acpSpringCloudRestTemplate")
+    @ConditionalOnExpression("!'${acp.cloud.oauth.oauth-server}'.equals('true')")
     public RestTemplate acpSpringCloudRestTemplate() throws HttpException {
         return new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
     }
@@ -80,6 +69,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      */
     @Primary
     @Bean("acpResourceServerRemoteTokenServices")
+    @ConditionalOnExpression("!'${acp.cloud.oauth.oauth-server}'.equals('true')")
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
         try {
@@ -113,7 +103,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        if (!oauthServer) {
+        if (!acpOauthConfiguration.isOauthServer()) {
             resources.tokenServices(remoteTokenServices());
         }
     }
@@ -140,6 +130,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/webjars/**",
                 contextPath + "/swagger-resources/configuration/ui",
                 contextPath + "/hystrix.stream",
+                contextPath + "/oauth/authorize",
+                contextPath + "/oauth/token",
+                contextPath + "/oauth/error",
                 contextPath + RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
                 .anyRequest().authenticated();
     }
