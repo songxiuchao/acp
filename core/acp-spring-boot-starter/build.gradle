@@ -12,8 +12,6 @@ dependencyManagement {
 dependencies {
     compile project(":core:acp-client")
 
-    compile "org.javassist:javassist:$versions.javassist"
-    compile "org.mockito:mockito-core:$versions.mockito"
     compile "org.glassfish.jaxb:jaxb-runtime:$versions.jaxb_runtime"
     // spring boot
 //    compile("org.springframework.boot:spring-boot-starter-web") {
