@@ -73,7 +73,7 @@ public abstract class BaseDBInstance {
      * @param dbType      数据库类型
      * @param connection  数据库连接对象
      * @param tableName   表名
-     * @param whereValues 字段名称=>字段值
+     * @param whereValues key:字段名称,value:字段值
      * @param lobColName  lob字段名称
      * @param input       lob数据流
      */
@@ -109,7 +109,7 @@ public abstract class BaseDBInstance {
      * @param dbType      数据库类型
      * @param connection  数据库连接对象
      * @param tableName   表名
-     * @param whereValues 字段名称=>字段值
+     * @param whereValues key:字段名称,value:字段值
      * @param lobColName  lob字段名称
      * @param input       lob数据流
      */

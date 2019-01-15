@@ -763,7 +763,7 @@ public final class ConnectionFactory {
      * 查询LOB数据
      *
      * @param tableName   表名
-     * @param whereValues 字段名称=>字段值
+     * @param whereValues key:字段名称,value:字段值
      * @param lobColName  lob字段名称
      * @return 输入流
      */
@@ -803,7 +803,7 @@ public final class ConnectionFactory {
      * 查询CLOB数据
      *
      * @param tableName   表名
-     * @param whereValues 字段名称=>字段值
+     * @param whereValues key:字段名称,value:字段值
      * @param lobColName  lob字段名称
      * @return 结果字符串
      */
@@ -921,7 +921,7 @@ public final class ConnectionFactory {
      * 插入LOB数据
      *
      * @param tableName   表名
-     * @param whereValues 字段名称=>字段值
+     * @param whereValues key:字段名称,value:字段值
      * @param lobColName  lob字段名称
      * @param input       lob数据流
      * @return 成功或失败
@@ -952,7 +952,7 @@ public final class ConnectionFactory {
      * 更新LOB数据
      *
      * @param tableName   表名
-     * @param whereValues 字段名称=>字段值
+     * @param whereValues key:字段名称,value:字段值
      * @param lobColName  lob字段名称
      * @param input       lob数据流
      * @return 成功或失败
