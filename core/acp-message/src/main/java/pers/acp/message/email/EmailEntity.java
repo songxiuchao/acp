@@ -261,7 +261,7 @@ public class EmailEntity {
     }
 
     /**
-     * 设置邮件图片 Map:ContentID=>图片路径（绝对路径或相对于webroot以"/"开头的路径）
+     * 设置邮件图片 Map: key:ContentID,value:图片路径（绝对路径或相对于webroot以"/"开头的路径）
      *
      * @param images 图片
      */

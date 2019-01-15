@@ -133,7 +133,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/oauth/authorize",
                 contextPath + "/oauth/token",
                 contextPath + "/oauth/error",
-                contextPath + RestPrefix.OPEN.getUrlPrefix() + "/**").permitAll()
+                contextPath + RestPrefix.OPEN + "/**").permitAll()
                 .anyRequest().authenticated();
     }
 

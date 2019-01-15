@@ -160,7 +160,7 @@ public final class KeyManagement {
      * @param traitid   申请者身份标识字符串
      * @param delaytime 密钥使用延迟时间
      * @param exptime   密钥过期时间
-     * @return Object[] [0]=>RSAPublicKey,[1]=>RSAPrivateKey
+     * @return Object[] [0]:RSAPublicKey,[1]:RSAPrivateKey
      */
     public static Object[] getTempRSAKeys(String traitid, long delaytime, long exptime) throws Exception {
         KeyEntity entity = getEntity(KeyType.RSA, traitid, delaytime, exptime, 0);
@@ -176,7 +176,7 @@ public final class KeyManagement {
      * @param traitid   申请者身份标识字符串
      * @param delaytime 密钥使用延迟时间
      * @param exptime   密钥过期时间
-     * @return Object[] [0]=>DSAPublicKey,[1]=>DSAPrivateKey
+     * @return Object[] [0]:DSAPublicKey,[1]:DSAPrivateKey
      */
     public static Object[] getTempDSAKeys(String traitid, long delaytime, long exptime) throws Exception {
         KeyEntity entity = getEntity(KeyType.DSA, traitid, delaytime, exptime, 0);
@@ -254,7 +254,7 @@ public final class KeyManagement {
     /**
      * 生成RSA公钥和私钥
      *
-     * @return Object[] [0]=>RSAPublicKey,[1]=>RSAPrivateKey
+     * @return Object[] [0]:RSAPublicKey,[1]:RSAPrivateKey
      */
     public static Object[] getRSAKeys() throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
@@ -271,7 +271,7 @@ public final class KeyManagement {
     /**
      * 生成DSA公钥和私钥
      *
-     * @return Object[] [0]=>DSAPublicKey,[1]=>DSAPrivateKey
+     * @return Object[] [0]:DSAPublicKey,[1]:DSAPrivateKey
      */
     public static Object[] getDSAKeys() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("DSA");
