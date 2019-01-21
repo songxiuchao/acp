@@ -28,8 +28,9 @@ public class SecurityClientDetailsService implements ClientDetailsService {
         InMemoryClientDetailsServiceBuilder builder = new InMemoryClientDetailsServiceBuilder();
         builder.withClient("test")
                 .secret("test")
-                .authorizedGrantTypes("password", "client_credentials", "refresh_token")
+                .authorizedGrantTypes("authorization_code", "password", "client_credentials", "refresh_token")
                 .authorities("ROLE_ADMIN")
+                .redirectUris("http://www.baidu.com")
                 .scopes("ALL")
                 .accessTokenValiditySeconds(600)
                 .refreshTokenValiditySeconds(86400)

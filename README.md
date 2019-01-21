@@ -156,6 +156,10 @@ gradle全局参数：
 
 [查看认证过程](doc/oauth2.0认证.md)
 
+> cloud:oauth-server 中增加 authorization_code 方式配置，详见 pers.acp.springcloud.oauth.conf.WebSecurityConfiguration 注释
+
+> 注：使用 authorization_code 方式时，认证请求时需要直接访问 oauth-server 不能通过 gateway
+
 ##### 6. cloud:log-server
 日志服务，使用 kafka 作为日志消息队列
 ##### 7. cloud:helloworld 

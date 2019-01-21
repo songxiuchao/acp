@@ -9,6 +9,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.CommonTools;
+import pers.acp.springcloud.common.constant.ConfigurationOrder;
 import pers.acp.springcloud.common.enums.RestPrefix;
 import pers.acp.springcloud.common.log.LogInstance;
 
@@ -34,6 +36,7 @@ import pers.acp.springcloud.common.log.LogInstance;
 @Component
 @Configuration
 @EnableResourceServer
+@Order(ConfigurationOrder.resourceServerConfiguration)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
     private final LogInstance logInstance;
@@ -134,7 +137,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 contextPath + "/oauth/token",
                 contextPath + "/oauth/error",
                 contextPath + RestPrefix.OPEN + "/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and().formLogin().permitAll();
     }
 
 }
