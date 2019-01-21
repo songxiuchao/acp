@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import pers.acp.core.CommonTools;
+import pers.acp.springcloud.common.constant.ConfigurationOrder;
 import pers.acp.springcloud.oauth.component.UserPasswordEncoder;
 import pers.acp.springcloud.oauth.domain.SecurityClientDetailsService;
 import pers.acp.springcloud.oauth.domain.SecurityUserDetailsService;
@@ -22,6 +24,8 @@ import pers.acp.springcloud.oauth.domain.SecurityUserDetailsService;
  */
 @Configuration
 @EnableWebSecurity
+@Order(ConfigurationOrder.resourceServerConfiguration + 1)
+// 如果使用 authorization_code 方式，需要 ConfigurationOrder.resourceServerConfiguration - 1 ， 反之则需要 ConfigurationOrder.resourceServerConfiguration + 1
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final String contextPath;
@@ -70,6 +74,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 contextPath + "/actuator/**",
                 contextPath + "/oauth/**").permitAll()
                 .anyRequest().authenticated();
+        // 如果使用 authorization_code 方式，则放开以下两行注释
+//                .and()
+//                .formLogin().permitAll();
     }
 
 }
