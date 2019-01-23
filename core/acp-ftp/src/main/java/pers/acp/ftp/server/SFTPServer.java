@@ -27,7 +27,7 @@ public class SFTPServer implements Runnable, IDaemonService {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    private List<SFTPServerUser> userList = null;
+    private List<SFTPServerUser> userList;
 
     private SFTPConfig.Listen listen;
 

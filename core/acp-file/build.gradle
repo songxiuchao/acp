@@ -1,9 +1,9 @@
 versions += [
         freemarker   : "2.3.28",
-        flying_saucer: "9.1.9",
+        flying_saucer: "9.1.16",
         jsoup        : "1.11.3",
         batik        : "1.10",
-        poi          : "3.17"
+        poi          : "4.0.1"
 ]
 
 dependencies {
