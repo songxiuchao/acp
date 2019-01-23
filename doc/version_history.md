@@ -1,8 +1,7 @@
 ## 版本更新记录
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
-> - 更新 SpringCloud 至 Greenwich.RC2
-> - 更新依赖包版本
+> - 更新 SpringCloud 至 Greenwich.RELEASE
 > - cloud 模块下 docker-compose-base.yml 文件修改，修改 zookeeper 端口号，增加 kafka-manager
 > - 更新 spring-data-jpa 数据库连接配置及多数据源写法
 > - 修改 spring boot 中 logback 配置
@@ -31,6 +30,12 @@
 > - acp-spring-cloud-starter-common 增加 acp.cloud.oauth.oauth-server 配置项，oauth-server 可直接引用并修改配置项，不再需要单独编写自己的 ResourceServerConfiguration
 > - 去除无用的依赖
 > - cloud:oauth-server 中增加 authorization_code 方式配置 demo
+> - 更新依赖包版本：
+>   - commons_text (1.6)
+>   - xstream (1.4.11.1)
+>   - jackson (2.9.8)
+>   - poi (4.0.1)
+>   - flying-saucer-pdf-itext5 (9.1.16)
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2

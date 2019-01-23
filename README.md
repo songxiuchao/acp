@@ -4,7 +4,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
 从 5.1.2 开始，小版本号与 SpringBoot 小版本号一致
 ## 相关组件版本及官方文档
 - [Spring Boot 2.1.2.RELEASE](https://projects.spring.io/spring-boot)
-- [Spring Cloud Greenwich.RC2](http://projects.spring.io/spring-cloud)
+- [Spring Cloud Greenwich.RELEASE](http://projects.spring.io/spring-cloud)
 ## 一、环境要求
 - jdk 11
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8

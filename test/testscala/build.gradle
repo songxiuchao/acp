@@ -33,7 +33,6 @@ dependencies {
 }
 
 task scaladocJar(type: Jar, dependsOn: scaladoc) {
-    classifier = 'scaladoc'
     from scaladoc.destinationDir
 }
 

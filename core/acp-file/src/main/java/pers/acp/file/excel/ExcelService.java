@@ -79,7 +79,7 @@ public final class ExcelService {
                         for (int j = 0; j < colCount; j++) {
                             Cell cell = row.getCell(j);
                             if (cell != null) {
-                                if (!cell.getCellTypeEnum().equals(CellType.BLANK)) {
+                                if (!cell.getCellType().equals(CellType.BLANK)) {
                                     cell.setCellValue(CommonTools.replaceVar(cell.getStringCellValue(), data));
                                 }
                             }
@@ -299,7 +299,7 @@ public final class ExcelService {
                         }
                         Cell cell = row.getCell(j);
                         if (cell != null) {
-                            switch (cell.getCellTypeEnum()) {
+                            switch (cell.getCellType()) {
                                 case STRING:
                                     cellData.put("type", "string");
                                     cellData.put("value", cell.getStringCellValue());
