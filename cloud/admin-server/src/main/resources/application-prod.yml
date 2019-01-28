@@ -4,6 +4,8 @@ server:
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
+logging:
+  path: logs/adminserver
 management:
   endpoints:
     web:
@@ -29,8 +31,8 @@ spring:
     admin:
       ui:
         resource-locations:
-        - "classpath:/META-INF/spring-boot-admin-server-ui/"
-        - "classpath:/static/"
+          - "classpath:/META-INF/spring-boot-admin-server-ui/"
+          - "classpath:/static/"
 # ===============================
 # = Eureka Config
 # ===============================
