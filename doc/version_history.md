@@ -2,17 +2,23 @@
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE
+> - 更新依赖包版本：
+>   - spring boot admin (2.1.2)
+>   - commons_text (1.6)
+>   - xstream (1.4.11.1)
+>   - jackson (2.9.8)
+>   - poi (4.0.1)
+>   - flying-saucer-pdf-itext5 (9.1.16)
+> - 更新 gradle 至 5.1.1
+> - 更新 kotlin 至 1.3.11
 > - cloud 模块下 docker-compose-base.yml 文件修改，修改 zookeeper 端口号，增加 kafka-manager
 > - 更新 spring-data-jpa 数据库连接配置及多数据源写法
 > - 修改 spring boot 中 logback 配置
-> - 更新 kotlin 至 1.3.11
 > - 优化定时器配置
 > - acp-file 去除 jxl 相关依赖，不再封装 jxl 相关操作
 > - 剥离订制工程 [management](https://github.com/zhangbin1010/acp-ace-php-back)
 > - 修改核心模块名称
-> - 更新 gradle 至 5.1.1
 > - cloud 模块下 gateway-server 支持跨域
-> - 更新 spring boot admin 至 2.1.1
 > - cloud 模块下，oauth-server 优化 token 服务配置，方便自定义扩展
 > - 优化全局异常处理，增加 ErrorVO
 > - 优化 oauth2 demo
@@ -30,12 +36,6 @@
 > - acp-spring-cloud-starter-common 增加 acp.cloud.oauth.oauth-server 配置项，oauth-server 可直接引用并修改配置项，不再需要单独编写自己的 ResourceServerConfiguration
 > - 去除无用的依赖
 > - cloud:oauth-server 中增加 authorization_code 方式配置 demo
-> - 更新依赖包版本：
->   - commons_text (1.6)
->   - xstream (1.4.11.1)
->   - jackson (2.9.8)
->   - poi (4.0.1)
->   - flying-saucer-pdf-itext5 (9.1.16)
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
