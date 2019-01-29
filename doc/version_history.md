@@ -1,8 +1,4 @@
 ## 版本更新记录
-##### v5.x
-> - 更新 cloud 下所有服务的 eureka 相关配置
-> - 更新 spring boot admin 相关配置
-> - 更新 docker-compose-base.yml 文件，集成 ELK 收集、监控日志
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE
@@ -40,6 +36,9 @@
 > - acp-spring-cloud-starter-common 增加 acp.cloud.oauth.oauth-server 配置项，oauth-server 可直接引用并修改配置项，不再需要单独编写自己的 ResourceServerConfiguration
 > - 去除无用的依赖
 > - cloud:oauth-server 中增加 authorization_code 方式配置 demo
+> - 更新 cloud 下所有服务的 eureka 相关配置
+> - 更新 spring boot admin 相关配置
+> - 更新 docker-compose-base.yml 文件，集成 ELK 收集、监控日志
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
