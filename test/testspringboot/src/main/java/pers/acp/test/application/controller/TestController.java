@@ -16,6 +16,8 @@ import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -37,8 +39,8 @@ public class TestController {
 
     @ApiOperation(value = "测试 hello", notes = "返回项目绝对路径")
     @RequestMapping(value = "hello", method = RequestMethod.GET)
-    public ResponseEntity<Object> home() {
-        return ResponseEntity.ok("home，" + CommonTools.getProjectAbsPath());
+    public ResponseEntity<Object> home() throws UnknownHostException {
+        return ResponseEntity.ok("home，" + CommonTools.getProjectAbsPath() + "，" + InetAddress.getLocalHost().getHostAddress());
     }
 
     @ApiOperation(value = "测试 rest 接口1", notes = "返回数据库中记录")

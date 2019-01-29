@@ -3,6 +3,7 @@ package pers.acp.springcloud.common.log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import pers.acp.core.CommonTools;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,7 +19,16 @@ import java.util.List;
 public class LogInfo {
 
     public String getServerIp() {
-        return serverIp;
+        if (CommonTools.isNullStr(serverIp)) {
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                return "";
+            }
+        } else {
+            return serverIp;
+        }
     }
 
     public String getServerName() {
@@ -89,16 +99,8 @@ public class LogInfo {
         this.params = params;
     }
 
-    static {
-        try {
-            serverIp = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            serverIp = "";
-        }
-    }
-
-    private static String serverIp;
+    @Value("${server.address}")
+    private String serverIp;
 
     @Value("${spring.application.name}")
     private String serverName;

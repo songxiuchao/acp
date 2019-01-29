@@ -1,3 +1,6 @@
+versions += [
+        logstash: "5.3"
+]
 buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
@@ -14,4 +17,5 @@ dependencyManagement {
 }
 dependencies {
     compile project(":cloud:acp-spring-cloud-starter-common")
+    compile "net.logstash.logback:logstash-logback-encoder:$versions.logstash"
 }
