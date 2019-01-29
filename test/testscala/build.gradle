@@ -33,6 +33,7 @@ dependencies {
 }
 
 task scaladocJar(type: Jar, dependsOn: scaladoc) {
+    archiveClassifier.set("javadoc")
     from scaladoc.destinationDir
 }
 
