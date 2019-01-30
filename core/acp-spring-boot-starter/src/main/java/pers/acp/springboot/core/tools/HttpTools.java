@@ -79,10 +79,7 @@ public final class HttpTools {
      * @return true|false
      */
     public static boolean isBeIdentifiedUri(String uri, String regex) {
-        if (CommonTools.isNullStr(regex)) {
-            return false;
-        }
-        return Pattern.compile(regex).matcher(uri).matches();
+        return CommonTools.regexPattern(regex, uri);
     }
 
 }

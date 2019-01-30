@@ -122,7 +122,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         // match 匹配的url，赋予全部权限（不进行拦截）
         http.csrf().disable().authorizeRequests().antMatchers(
                 contextPath + "/error",
-                contextPath + "/download",
                 contextPath + "/actuator",
                 contextPath + "/actuator/**",
                 contextPath + "/v2/api-docs",

@@ -153,6 +153,17 @@ public final class CommonTools {
     }
 
     /**
+     * 正则表达式匹配字符串
+     *
+     * @param regex  正则表达式
+     * @param srcStr 待匹配字符串
+     * @return true|false
+     */
+    public static boolean regexPattern(String regex, String srcStr) {
+        return CommonUtils.regexPattern(regex, srcStr);
+    }
+
+    /**
      * 判断是否空字符串
      *
      * @param src 源字符串

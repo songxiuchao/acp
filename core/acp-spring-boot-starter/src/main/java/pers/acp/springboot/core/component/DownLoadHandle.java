@@ -1,10 +1,8 @@
-package pers.acp.springboot.core.endpoints;
+package pers.acp.springboot.core.component;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 import pers.acp.springboot.core.exceptions.ServerException;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
@@ -13,19 +11,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zhangbin by 2018-1-21 1:30
  * @since JDK 11
  */
-@RestController
-public class DownLoadController {
+@Component
+public class DownLoadHandle {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    @GetMapping("/download")
-    public ResponseEntity<Object> service(HttpServletRequest request, HttpServletResponse response, @RequestParam String path, @RequestParam boolean isDelete) throws ServerException {
-        if (pathFilter(path)) {
+    public ResponseEntity<Object> doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete) throws ServerException {
+        return doDownLoad(request, response, path, isDelete, null);
+    }
+
+    public ResponseEntity<Object> doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
+        List<String> filterRegex = new ArrayList<>();
+        if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
+            filterRegex.addAll(Arrays.asList("/files/tmp/", "/files/upload/", "/files/download/"));
+        } else {
+            filterRegex.addAll(allowPathRegexList);
+        }
+        if (pathFilter(filterRegex, path)) {
             try {
                 File file = new File(CommonTools.getProjectAbsPath() + path.replace("/", File.separator).replace("\\", File.separator));
                 if (!file.exists()) {
@@ -63,11 +73,17 @@ public class DownLoadController {
     /**
      * 文件路径过滤
      *
-     * @param path 路径
+     * @param filterRegex 路径
+     * @param path        待匹配路径
      * @return true-允许下载 false-不允许下载
      */
-    private boolean pathFilter(String path) {
-        return path.startsWith("/files/tmp/") || path.startsWith("/files/upload/") || path.startsWith("/files/download/");
+    private boolean pathFilter(List<String> filterRegex, String path) {
+        for (String regex : filterRegex) {
+            if (CommonTools.regexPattern(regex, path)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
