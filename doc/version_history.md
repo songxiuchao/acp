@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v5.x
+> - 优化 cloud demo 中 logstash 配置
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE
