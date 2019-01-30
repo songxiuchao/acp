@@ -1,7 +1,4 @@
 ## 版本更新记录
-##### v5.x
-> - 优化 CommonTools 工具类中文件删除方法的逻辑
-> - Feign 传递 Authorization 时，Authorization 为空优化
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE
@@ -43,6 +40,8 @@
 > - 更新 spring boot admin 相关配置
 > - 更新 docker-compose-base.yml 文件，集成 ELK 收集、监控日志
 > - acp-spring-boot-starter 中去除 /download endpoint
+> - 优化 CommonTools 工具类中文件删除方法的逻辑
+> - Feign 传递 Authorization 时，Authorization 为空优化
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
