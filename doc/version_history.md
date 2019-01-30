@@ -1,6 +1,7 @@
 ## 版本更新记录
 ##### v5.x
 > - 优化 CommonTools 工具类中文件删除方法的逻辑
+> - Feign 传递 Authorization 时，Authorization 为空优化
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE

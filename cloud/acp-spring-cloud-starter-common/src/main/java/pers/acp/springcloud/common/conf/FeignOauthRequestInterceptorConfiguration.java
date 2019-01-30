@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import pers.acp.core.CommonTools;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,7 +34,10 @@ public class FeignOauthRequestInterceptorConfiguration {
             ServletRequestAttributes sra = (ServletRequestAttributes) ra;
             if (sra != null) {
                 HttpServletRequest request = sra.getRequest();
-                template.header("Authorization", request.getHeader("Authorization"));
+                String authorization = request.getHeader("Authorization");
+                if (!CommonTools.isNullStr(authorization)) {
+                    template.header("Authorization", authorization);
+                }
             }
         };
     }
