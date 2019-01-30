@@ -499,7 +499,7 @@ public final class CommonTools {
             } else {
                 try {
                     if (file.exists()) {
-                        if (file.delete()) {
+                        if (doDeleteDir(file)) {
                             log.info("delete file [" + file.getAbsolutePath() + "] success!");
                         } else {
                             log.info("delete file [" + file.getAbsolutePath() + "] failed!");
@@ -538,7 +538,7 @@ public final class CommonTools {
                 log.info("ready delete file [" + file.getAbsolutePath() + "],waitting " + (waitTime) / 1000 + " seconds");
                 FileDelete.sleep(waitTime);
                 if (file.exists()) {
-                    if (file.delete()) {
+                    if (doDeleteDir(file)) {
                         log.info("delete file [" + file.getAbsolutePath() + "] success!");
                     } else {
                         log.info("delete file [" + file.getAbsolutePath() + "] failed!");
