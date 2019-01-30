@@ -2,9 +2,42 @@
 ###### v5.1.2 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 从 5.1.2 开始，小版本号与 SpringBoot 小版本号一致
+
 ## 相关组件版本及官方文档
 - [Spring Boot 2.1.2.RELEASE](https://projects.spring.io/spring-boot)
 - [Spring Cloud Greenwich.RELEASE](http://projects.spring.io/spring-cloud)
+
+## 技术栈
+- apache httpclient
+- mina
+- xstream
+- hibernate
+- jackson
+- poi
+- freemarker
+- flying-saucer-pdf-itext5
+- swagger2
+- junit5
+- spring-cloud
+    - spring-boot
+        - spring-aop
+        - spring-data-jpa
+        - spring-security
+        - spring-security-oauth2
+        - spring-data-redis
+        - spring-boot-actuator
+    - spring-data-redis-reactive
+    - spring-boot-admin-server
+    - spring-cloud-netflix-eureka-server
+    - spring-cloud-netflix-eureka-client
+    - spring-cloud-netflix-hystrix
+    - spring-cloud-netflix-dashboard
+    - spring-cloud-netflix-turbine
+    - spring-cloud-gateway
+    - spring-cloud-stream-binder-kafka
+    - spring-cloud-openfeign
+    - spring-cloud-sleuth-zipkin
+    
 ## 一、环境要求
 - jdk 11
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8
@@ -76,6 +109,7 @@ gradle全局参数：
 ##### 9. acp:acp-message
     消息处理组件包，依赖 acp-core；封装了发送email
 ### （二）快速开发 springboot 应用
+##### 1. 开发说明
     （1）参考 test:testspringboot
     （2）依赖 acp:acp-spring-boot-starter
     （3）src/main/java/resources 中增加配置文件（测试配置文件在 src/test/resources）
@@ -89,6 +123,31 @@ gradle全局参数：
     （10）pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
     （11）udp 同 tcp 的开发
     （12）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
+##### 2. 配置说明
+- 定制开发的 api 接口，开启 swagger 文档
+```yaml
+acp:
+  swagger:
+    enabled: true
+```
+
+- 配置定时任务
+```yaml
+acp:
+  schedule:
+    crons:
+      task1: 0 0/1 * * * ?
+```
+key-value 形式，其中 key:task1 为任务 beanName，value:0 0/1 * * * ? 为定时执行规则。可配置多个
+
+- 输出 controller 日志
+```yaml
+acp:
+  controller-aspect:
+    enabled: true        #是否开启controller日志输出，默认true
+    no-log-uri-regexes:
+      - /oauth/.*        #不进行日志输出的 url 正则表达式，可配置多个
+```
 ### （三）启停 springboot 应用
 - [jvm 参考参数](doc/jvm-params.txt)
 - [启停脚本(Linux) server.sh](doc/script/server.sh)，根据实际情况修改第2行 APP_NAME 和第3行 JVM_PARAM 的值即可，和 SpringBoot 应用的 .jar 放在同一路径下
@@ -169,7 +228,7 @@ gradle全局参数：
 ##### 9. cloud:world 
 原子服务
 ### （二）基础中间件环境搭建
-基础中间件包括：redis、zookeeper、kafka、zoonavigator-api、zoonavigator-web、elasticsearch、zipkin、zipkin-dependencies、prometheus、grafana、setup_grafana_datasource
+基础中间件包括：redis、zookeeper、kafka、kafka-manager、elasticsearch、kibana、logstash、zipkin、zipkin-dependencies、zoonavigator-api、zoonavigator-web、prometheus、grafana、setup_grafana_datasource
 > - 启动服务
 > 
 > 命令模式进入dockerfile目录，执行启动命令
@@ -193,11 +252,29 @@ gradle全局参数：
 >    - docker exec -it [容器Id] /bin/sh
 >    - elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.5.4/elasticsearch-analysis-ik-6.5.4.zip
 >    - elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v6.5.4/elasticsearch-analysis-pinyin-6.5.4.zip
+##### 1. zipkin
+http://127.0.0.1:9411
+![Architecture diagram](doc/images/zipkin.png)
+##### 2. kafka-manager
+http://127.0.0.1:9000
+![Architecture diagram](doc/images/kafka-manager.png)
+##### 3. zoonavigator
+http://127.0.0.1:8004
+![Architecture diagram](doc/images/zoonavigator.png)
+##### 4. prometheus
+http://127.0.0.1:9090
+![Architecture diagram](doc/images/prometheus.png)
+##### 5. kibana
+http://127.0.0.1:5601
+![Architecture diagram](doc/images/kibana.png)
 ### （三）组件开发
+##### 全局说明
+> - 统一注入 pers.acp.springcloud.common.log.LogInstance 进行日志记录
 ##### 1. 可视化监控
     cloud:admin-server
     （1）无需改动代码
     （2）修改 yml 配置即可
+![Architecture diagram](doc/images/admin-server.png)
 ##### 2. 服务注册发现（支持高可用eureka集群）
     cloud:eureka-server
     （1）无需改动代码
@@ -206,21 +283,42 @@ gradle全局参数：
     需依赖 git 环境，如有需要参照网上教程
 ##### 4. 网关服务
     cloud:gateway-server
-    （1）需自定义限流策略
-    （2）修改 yml 进行路由配置
+    （1）需自定义限流策略（需依赖 Redis）
+    （2）修改 yml 进行路由配置；若没有 Redis 请不要配置限流策略
 ##### 5. 认证服务
     cloud:oauth-server
-    （1）需定制 UserPasswordEncoder 用户密码编码器，配置进 WebSecurityConfiguration
-    （2）需定制用户（信息、角色、权限）初始化和查询方式 SecurityUserDetailsService，配置进 AuthorizationServerConfiguration
-    （3）需定制客户端（信息）初始化和查询方式 SecurityClientDetailsService，配置进 AuthorizationServerConfiguration
-    （4）token 持久化方式为 Redis，配置在 AuthorizationServerConfiguration
-##### 6. 日志服务
-    （1）修改 yml kafka 相关配置
-##### 7. 原子服务
+    （1）引入 cloud:acp-spring-cloud-starter-common，按需引入 org.springframework.boot:spring-boot-starter-data-redis
+    （2）入口类增加注解 @AcpCloudOauthServerApplication
+    （3）配置中增加
+    acp:
+      cloud:
+        oauth:
+          oauth-server: true
+    （3）需定制 UserPasswordEncoder 用户密码编码器，配置进 WebSecurityConfiguration
+    （4）需定制用户（信息、角色、权限）初始化和查询方式 SecurityUserDetailsService，配置进 AuthorizationServerConfiguration
+    （5）需定制客户端（信息）初始化和查询方式 SecurityClientDetailsService，配置进 AuthorizationServerConfiguration
+    （6）token 持久化方式为 Redis，配置在 AuthorizationServerConfiguration；若没有 Redis 可根据注释持久化到内存，也可自行开发其他持久化方式
+##### 6. 原子服务
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）参考 四、开发 SpringBoot 应用
     （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置
     （4）参考 cloud:hello、cloud:world、cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
+    （5）如果存在日志服务，则需进行配置
+    acp:
+      cloud:
+        log-server:
+          enabled: true #是否启用日志服务
+          log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
+    （6）如果不存在日志服务，需要排除依赖
+    exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
+##### 7. 日志服务（依赖 kafka）
+    （1）引入 cloud:acp-spring-cloud-starter-common
+    （2）入口类增加注解 @AcpCloudAtomApplication
+    （3）修改 yml kafka 相关配置
+    （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
+        a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
+        b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender
+        c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.path 一致，方便统一管理
 ## 六、打包为 docker 镜像
 自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
 ## 七、待完善内容

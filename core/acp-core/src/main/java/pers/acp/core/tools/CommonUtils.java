@@ -210,6 +210,20 @@ public class CommonUtils {
     }
 
     /**
+     * 正则表达式匹配字符串
+     *
+     * @param regex  正则表达式
+     * @param srcStr 待匹配字符串
+     * @return true|false
+     */
+    public static boolean regexPattern(String regex, String srcStr) {
+        if (isNullStr(regex)) {
+            return false;
+        }
+        return Pattern.compile(regex).matcher(srcStr).matches();
+    }
+
+    /**
      * 表达式变量替换
      *
      * @param varFormula 变量表达式:格式“${变量名}” 或带有变量格式的字符串

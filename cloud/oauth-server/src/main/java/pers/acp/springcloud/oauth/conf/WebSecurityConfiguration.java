@@ -69,10 +69,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers(
                 contextPath + "/error",
-                contextPath + "/download",
                 contextPath + "/actuator",
                 contextPath + "/actuator/**",
-                contextPath + "/oauth/**").permitAll()
+                contextPath + "/oauth/authorize",
+                contextPath + "/oauth/token",
+                contextPath + "/oauth/check_token",
+                contextPath + "/oauth/confirm_access",
+                contextPath + "/oauth/error").permitAll()
                 .anyRequest().authenticated();
         // 如果使用 authorization_code 方式，则放开以下两行注释
 //                .and()

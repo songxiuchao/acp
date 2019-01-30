@@ -39,6 +39,7 @@
 > - 更新 cloud 下所有服务的 eureka 相关配置
 > - 更新 spring boot admin 相关配置
 > - 更新 docker-compose-base.yml 文件，集成 ELK 收集、监控日志
+> - acp-spring-boot-starter 中去除 /download endpoint
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
