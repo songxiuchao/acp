@@ -42,6 +42,7 @@
 > - acp-spring-boot-starter 中去除 /download endpoint
 > - 优化 CommonTools 工具类中文件删除方法的逻辑
 > - Feign 传递 Authorization 时，Authorization 为空优化
+> - acp-file 修复zip压缩和解压文件夹时的bug
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2

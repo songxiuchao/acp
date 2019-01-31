@@ -583,4 +583,16 @@ public final class FileTools {
         FileOperation.ZIPToFiles(CommonTools.getAbsPath(zipFileName), CommonTools.getAbsPath(parentFold), isDeleteFile);
     }
 
+    /**
+     * 解压缩文件
+     *
+     * @param zipFileName  zip压缩文件名
+     * @param parentFold   解压目标文件夹
+     * @param charSet      字符编码
+     * @param isDeleteFile 解压完成是否删除压缩文件
+     */
+    public static void ZIPToFiles(String zipFileName, String parentFold, String charSet, boolean isDeleteFile) {
+        FileOperation.ZIPToFiles(CommonTools.getAbsPath(zipFileName), CommonTools.getAbsPath(parentFold), charSet, isDeleteFile);
+    }
+
 }
