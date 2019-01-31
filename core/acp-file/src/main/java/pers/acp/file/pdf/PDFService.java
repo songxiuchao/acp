@@ -54,11 +54,7 @@ public final class PDFService {
                     os.close();
                 }
                 File file = new File(fileName);
-                if (file.exists()) {
-                    if (!file.delete()) {
-                        log.error("delete file failed : " + file.getAbsolutePath());
-                    }
-                }
+                CommonTools.doDeleteFile(file, false, 0);
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }
@@ -192,9 +188,7 @@ public final class PDFService {
             }
             document.close();
             if (isDeleteFile) {
-                if (!new File(pdfFilePath).delete()) {
-                    log.error("delete file failed : " + pdfFilePath);
-                }
+                CommonTools.doDeleteFile(new File(pdfFilePath), false, 0);
             }
             log.info("add page number success");
             return resultFileName;
@@ -276,9 +270,7 @@ public final class PDFService {
             }
             stamp.close();// 关闭
             if (isDeleteFile) {
-                if (!new File(pdfFilePath).delete()) {
-                    log.error("delete file failed : " + pdfFilePath);
-                }
+                CommonTools.doDeleteFile(new File(pdfFilePath), false, 0);
             }
             log.info("PDF encrypt success");
             return resultFileName;
@@ -322,9 +314,7 @@ public final class PDFService {
                         copy.addPage(page);
                     }
                     if (isDeleteFile) {
-                        if (!new File(file).delete()) {
-                            log.error("delete file failed : " + file);
-                        }
+                        CommonTools.doDeleteFile(new File(file), false, 0);
                     }
                 }
                 document.close();
