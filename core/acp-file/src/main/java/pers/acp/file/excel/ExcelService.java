@@ -21,12 +21,8 @@ public final class ExcelService {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
 
-    private void fillFIlePath(File file) {
-        if (file.exists()) {
-            if (!file.delete()) {
-                log.error("delete file failed : " + file.getAbsolutePath());
-            }
-        }
+    private void fillFilePath(File file) {
+        CommonTools.doDeleteFile(file, false, 0);
         if (!file.getParentFile().exists()) {
             if (!file.getParentFile().mkdirs()) {
                 log.error("mkdirs failed : " + file.getParent());
@@ -64,11 +60,7 @@ public final class ExcelService {
                 }
                 /* 目标文件 */
                 File targetFile = new File(filename);
-                if (targetFile.exists()) {
-                    if (!targetFile.delete()) {
-                        log.error("delete file failed : " + targetFile.getAbsolutePath());
-                    }
-                }
+                CommonTools.doDeleteFile(targetFile, false, 0);
                 /* 源文件内容导入目标文件 */
                 for (int s = 0; s < wb.getNumberOfSheets(); s++) {
                     Sheet sheet = wb.getSheetAt(s);
@@ -122,7 +114,7 @@ public final class ExcelService {
         File file = new File(filename);
         Workbook wb;
         try {
-            fillFIlePath(file);
+            fillFilePath(file);
             if (file.createNewFile()) {
                 wb = getWorkbook(fileType);
                 if (wb == null) {
@@ -146,11 +138,7 @@ public final class ExcelService {
             }
         } catch (Exception e) {
             log.error("generate Excel Exception:" + e.getMessage(), e);
-            if (file.exists()) {
-                if (!file.delete()) {
-                    log.error("delete file failed : " + file.getAbsolutePath());
-                }
-            }
+            CommonTools.doDeleteFile(file, false, 0);
             return "";
         }
     }
@@ -194,7 +182,7 @@ public final class ExcelService {
         }
         File file = new File(fileName);
         try {
-            fillFIlePath(file);
+            fillFilePath(file);
             if (file.createNewFile()) {
                 wb = getWorkbook(fileType);
                 if (wb == null) {
@@ -229,11 +217,7 @@ public final class ExcelService {
             }
         } catch (Exception e) {
             log.error("generate Excel Exception:" + e.getMessage());
-            if (file.exists()) {
-                if (!file.delete()) {
-                    log.error("delete file failed : " + file.getAbsolutePath());
-                }
-            }
+            CommonTools.doDeleteFile(file, false, 0);
             return "";
         }
     }
@@ -339,18 +323,12 @@ public final class ExcelService {
                     result.add(rowData);
                 }
                 if (isDelete) {
-                    if (!excelFile.delete()) {
-                        log.error("delete file failed : " + excelFile.getAbsolutePath());
-                    }
+                    CommonTools.doDeleteFile(excelFile, false, 0);
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 if (isDelete) {
-                    if (excelFile.exists()) {
-                        if (!excelFile.delete()) {
-                            log.error("delete file failed : " + excelFile.getAbsolutePath());
-                        }
-                    }
+                    CommonTools.doDeleteFile(excelFile, false, 0);
                 }
                 result = mapper.createArrayNode();
             }

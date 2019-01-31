@@ -135,10 +135,8 @@ public class FileOperation {
             } catch (IOException e1) {
                 log.error(e1.getMessage(), e1);
             } finally {
-                if (tmpFile != null && tmpFile.exists()) {
-                    if (!tmpFile.delete()) {
-                        log.error("delete file failed : " + tmpFile.getAbsolutePath());
-                    }
+                if (tmpFile != null) {
+                    CommonTools.doDeleteFile(tmpFile, false, 0);
                 }
             }
             fileAbsPath = "";
@@ -199,9 +197,7 @@ public class FileOperation {
                 File srcfile = new File(filename);
                 compress(srcfile, out, srcfile.getName());
                 if (isDeleteFile) {
-                    if (!srcfile.delete()) {
-                        log.error("delete file failed : " + srcfile.getAbsolutePath());
-                    }
+                    CommonTools.doDeleteFile(srcfile, false, 0);
                 }
             }
             out.close();
@@ -213,9 +209,7 @@ public class FileOperation {
                 if (out != null) {
                     out.closeEntry();
                 }
-                if (!new File(resultFileName).delete()) {
-                    log.error("delete file failed : " + resultFileName);
-                }
+                CommonTools.doDeleteFile(new File(resultFileName), false, 0);
             } catch (Exception ex) {
                 log.error("file compress Exception:" + ex.getMessage(), ex);
             }
@@ -317,9 +311,7 @@ public class FileOperation {
             bin.close();
             zin.close();
             if (isDeleteFile) {
-                if (!new File(zipFileName).delete()) {
-                    log.error("delete file failed : " + zipFileName);
-                }
+                CommonTools.doDeleteFile(new File(zipFileName), false, 0);
             }
             log.info("decompress success");
             endTime = System.currentTimeMillis();

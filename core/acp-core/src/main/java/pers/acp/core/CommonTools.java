@@ -441,13 +441,11 @@ public final class CommonTools {
      * @param dir 将要删除的文件目录
      */
     public static void doDeleteDir(File dir) {
-        if (dir.exists()) {
-            boolean result = FileDelete.doDeleteDir(dir);
-            if (result) {
-                log.info("delete fold [" + dir.getAbsolutePath() + "] success!");
-            } else {
-                log.info("delete fold [" + dir.getAbsolutePath() + "] failed!");
-            }
+        boolean result = FileDelete.doDeleteDir(dir);
+        if (result) {
+            log.info("delete fold [" + dir.getAbsolutePath() + "] success!");
+        } else {
+            log.info("delete fold [" + dir.getAbsolutePath() + "] failed!");
         }
     }
 
@@ -498,12 +496,10 @@ public final class CommonTools {
                 }
             } else {
                 try {
-                    if (file.exists()) {
-                        if (doDeleteDir(file)) {
-                            log.info("delete file [" + file.getAbsolutePath() + "] success!");
-                        } else {
-                            log.info("delete file [" + file.getAbsolutePath() + "] failed!");
-                        }
+                    if (doDeleteDir(file)) {
+                        log.info("delete file [" + file.getAbsolutePath() + "] success!");
+                    } else {
+                        log.info("delete file [" + file.getAbsolutePath() + "] failed!");
                     }
                 } catch (Exception e) {
                     log.error("delete file Exception:" + e.getMessage(), e);
@@ -518,18 +514,22 @@ public final class CommonTools {
          * @return true|false
          */
         static boolean doDeleteDir(File dir) {
-            if (dir.isDirectory()) {
-                String[] children = dir.list();
-                if (children != null) {
-                    for (String aChildren : children) {
-                        boolean success = doDeleteDir(new File(dir, aChildren));
-                        if (!success) {
-                            return false;
+            if (dir.exists()) {
+                if (dir.isDirectory()) {
+                    String[] children = dir.list();
+                    if (children != null) {
+                        for (String aChildren : children) {
+                            boolean success = doDeleteDir(new File(dir, aChildren));
+                            if (!success) {
+                                return false;
+                            }
                         }
                     }
                 }
+                return dir.delete();
+            } else {
+                return true;
             }
-            return dir.delete();
         }
 
         @Override
@@ -537,12 +537,10 @@ public final class CommonTools {
             try {
                 log.info("ready delete file [" + file.getAbsolutePath() + "],waitting " + (waitTime) / 1000 + " seconds");
                 FileDelete.sleep(waitTime);
-                if (file.exists()) {
-                    if (doDeleteDir(file)) {
-                        log.info("delete file [" + file.getAbsolutePath() + "] success!");
-                    } else {
-                        log.info("delete file [" + file.getAbsolutePath() + "] failed!");
-                    }
+                if (doDeleteDir(file)) {
+                    log.info("delete file [" + file.getAbsolutePath() + "] success!");
+                } else {
+                    log.info("delete file [" + file.getAbsolutePath() + "] failed!");
                 }
             } catch (Exception e) {
                 log.error("delete file Exception:" + e.getMessage(), e);
