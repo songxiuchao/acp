@@ -7,6 +7,7 @@ import pers.acp.core.log.LogFactory;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -188,22 +189,15 @@ public class FileOperation {
      * @return 目标文件绝对路径
      */
     public static String filesToZIP(String[] fileNames, String resultFileName, boolean isDeleteFile) {
-        byte[] buf = new byte[1024];
-        FileInputStream in = null;
+        long startTime = System.currentTimeMillis();
+        long endTime = 0;
         ZipOutputStream out = null;
         try {
             out = new ZipOutputStream(new FileOutputStream(resultFileName));
             for (String fileName : fileNames) {
                 String filename = fileName.replace("\\", File.separator).replace("/", File.separator);
                 File srcfile = new File(filename);
-                in = new FileInputStream(filename);
-                out.putNextEntry(new ZipEntry(srcfile.getName()));
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-                out.closeEntry();
-                in.close();
+                compress(srcfile, out, srcfile.getName());
                 if (isDeleteFile) {
                     if (!srcfile.delete()) {
                         log.error("delete file failed : " + srcfile.getAbsolutePath());
@@ -212,14 +206,12 @@ public class FileOperation {
             }
             out.close();
             log.info("compress success");
+            endTime = System.currentTimeMillis();
             return resultFileName;
         } catch (Exception e) {
             try {
                 if (out != null) {
                     out.closeEntry();
-                }
-                if (in != null) {
-                    in.close();
                 }
                 if (!new File(resultFileName).delete()) {
                     log.error("delete file failed : " + resultFileName);
@@ -228,7 +220,50 @@ public class FileOperation {
                 log.error("file compress Exception:" + ex.getMessage(), ex);
             }
             log.error("file compress Exception:" + e.getMessage(), e);
+            endTime = System.currentTimeMillis();
             return "";
+        } finally {
+            log.info("time consuming : " + (endTime - startTime) + " ms");
+        }
+    }
+
+    /**
+     * 递归压缩
+     *
+     * @param sourceFile 源文件
+     * @param zos        zip输出流
+     * @param name       压缩后的名称
+     * @throws Exception 异常
+     */
+    private static void compress(File sourceFile, ZipOutputStream zos, String name) throws Exception {
+        byte[] buf = new byte[1024];
+        FileInputStream in = null;
+        try {
+            if (sourceFile.isFile()) {
+                zos.putNextEntry(new ZipEntry(name));
+                int len;
+                in = new FileInputStream(sourceFile);
+                while ((len = in.read(buf)) != -1) {
+                    zos.write(buf, 0, len);
+                }
+                zos.closeEntry();
+                in.close();
+                in = null;
+            } else {
+                File[] listFiles = sourceFile.listFiles();
+                if (listFiles == null || listFiles.length == 0) {
+                    zos.putNextEntry(new ZipEntry(name + "/"));
+                    zos.closeEntry();
+                } else {
+                    for (File file : listFiles) {
+                        compress(file, zos, name + "/" + file.getName());
+                    }
+                }
+            }
+        } finally {
+            if (in != null) {
+                in.close();
+            }
         }
     }
 
@@ -240,9 +275,29 @@ public class FileOperation {
      * @param isDeleteFile 解压完成是否删除压缩文件
      */
     public static void ZIPToFiles(String zipFileName, String parentFold, boolean isDeleteFile) {
+        ZIPToFiles(zipFileName, parentFold, null, isDeleteFile);
+    }
+
+    /**
+     * 解压缩文件
+     *
+     * @param zipFileName  zip压缩文件名
+     * @param parentFold   解压目标文件夹
+     * @param charSet      字符编码
+     * @param isDeleteFile 解压完成是否删除压缩文件
+     */
+    public static void ZIPToFiles(String zipFileName, String parentFold, String charSet, boolean isDeleteFile) {
+        long startTime = System.currentTimeMillis();
+        long endTime = 0;
+        ZipInputStream zin = null;
+        BufferedInputStream bin = null;
+        BufferedOutputStream bout = null;
         try {
-            ZipInputStream zin = new ZipInputStream(new FileInputStream(zipFileName));
-            BufferedInputStream bin = new BufferedInputStream(zin);
+            if (CommonTools.isNullStr(charSet)) {
+                charSet = CommonTools.getDefaultCharset();
+            }
+            zin = new ZipInputStream(new FileInputStream(zipFileName), Charset.forName(charSet));
+            bin = new BufferedInputStream(zin);
             File fOut;
             ZipEntry entry;
             while ((entry = zin.getNextEntry()) != null && !entry.isDirectory()) {
@@ -252,15 +307,12 @@ public class FileOperation {
                         log.error("mkdirs failed : " + fOut.getParent());
                     }
                 }
-                FileOutputStream out = new FileOutputStream(fOut);
-                BufferedOutputStream Bout = new BufferedOutputStream(out);
+                bout = new BufferedOutputStream(new FileOutputStream(fOut));
                 int b;
                 while ((b = bin.read()) != -1) {
-                    Bout.write(b);
+                    bout.write(b);
                 }
-                Bout.close();
-                out.close();
-                System.out.println(fOut + "解压成功");
+                bout.close();
             }
             bin.close();
             zin.close();
@@ -270,8 +322,25 @@ public class FileOperation {
                 }
             }
             log.info("decompress success");
+            endTime = System.currentTimeMillis();
         } catch (Exception e) {
-            log.error("file Exception:" + e.getMessage(), e);
+            try {
+                if (bout != null) {
+                    bout.close();
+                }
+                if (bin != null) {
+                    bin.close();
+                }
+                if (zin != null) {
+                    zin.close();
+                }
+            } catch (Exception ex) {
+                log.error("file decompress Exception:" + ex.getMessage(), ex);
+            }
+            log.error("file decompress Exception:" + e.getMessage(), e);
+            endTime = System.currentTimeMillis();
+        } finally {
+            log.info("time consuming : " + (endTime - startTime) + " ms");
         }
     }
 
