@@ -154,7 +154,7 @@ public class FileOperation {
         File file = new File(webRootAdsPath + File.separator + "files"
                 + File.separator + "tmp");
         if (!file.exists()) {
-            if (!file.mkdir()) {
+            if (!file.mkdirs()) {
                 log.error("mkdir failed : " + file.getAbsolutePath());
             }
         }
@@ -171,7 +171,7 @@ public class FileOperation {
         File file = new File(webRootAdsPath + File.separator + "files"
                 + File.separator + "template");
         if (!file.exists()) {
-            if (!file.mkdir()) {
+            if (!file.mkdirs()) {
                 log.error("mkdir failed : " + file.getAbsolutePath());
             }
         }
@@ -191,6 +191,12 @@ public class FileOperation {
         long endTime = 0;
         ZipOutputStream out = null;
         try {
+            File resultFileParent = new File(resultFileName).getParentFile();
+            if (!resultFileParent.exists()) {
+                if (!resultFileParent.mkdirs()) {
+                    log.error("mkdir failed : " + resultFileParent.getAbsolutePath());
+                }
+            }
             out = new ZipOutputStream(new FileOutputStream(resultFileName));
             for (String fileName : fileNames) {
                 String filename = fileName.replace("\\", File.separator).replace("/", File.separator);
