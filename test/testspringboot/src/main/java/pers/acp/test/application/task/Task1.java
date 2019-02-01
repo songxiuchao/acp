@@ -1,6 +1,7 @@
 package pers.acp.test.application.task;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pers.acp.springboot.core.base.BaseSpringBootScheduledTask;
@@ -10,7 +11,7 @@ import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
 @Component("task1")
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class Task1 extends BaseSpringBootScheduledTask {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
