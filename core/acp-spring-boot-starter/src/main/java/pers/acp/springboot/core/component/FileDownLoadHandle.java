@@ -1,7 +1,6 @@
 package pers.acp.springboot.core.component;
 
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import pers.acp.springboot.core.exceptions.ServerException;
 import pers.acp.core.CommonTools;
@@ -20,15 +19,15 @@ import java.util.List;
  * @since JDK 11
  */
 @Component
-public class DownLoadHandle {
+public class FileDownLoadHandle {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    public ResponseEntity<Object> doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete) throws ServerException {
-        return doDownLoad(request, response, path, isDelete, null);
+    public void doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete) throws ServerException {
+        doDownLoad(request, response, path, isDelete, null);
     }
 
-    public ResponseEntity<Object> doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
+    public void doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
         List<String> filterRegex = new ArrayList<>();
         if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
             filterRegex.addAll(Arrays.asList("/files/tmp/", "/files/upload/", "/files/download/"));
@@ -60,7 +59,6 @@ public class DownLoadHandle {
                 if (isDelete) {
                     CommonTools.doDeleteFile(file, true);
                 }
-                return ResponseEntity.ok("download successful");
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 throw new ServerException(e.getMessage());

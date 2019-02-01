@@ -44,6 +44,8 @@
 > - Feign 传递 Authorization 时，Authorization 为空优化
 > - acp-file 修复zip压缩和解压文件夹时的bug
 > - 优化代码，减少冗余计算
+> - 优化全局异常捕获
+> - 优化文件下载 FileDownLoadHandle
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
