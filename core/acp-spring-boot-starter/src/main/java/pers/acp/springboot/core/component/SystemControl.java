@@ -1,6 +1,7 @@
 package pers.acp.springboot.core.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pers.acp.springboot.core.daemon.DaemonServiceManager;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @since JDK 11
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SystemControl implements IDaemonService {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());

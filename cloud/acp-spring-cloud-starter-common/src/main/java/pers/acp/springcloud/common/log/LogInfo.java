@@ -1,6 +1,7 @@
 package pers.acp.springcloud.common.log;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
@@ -15,7 +16,7 @@ import java.util.List;
  * @since JDK 11
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LogInfo {
 
     public String getServerIp() {

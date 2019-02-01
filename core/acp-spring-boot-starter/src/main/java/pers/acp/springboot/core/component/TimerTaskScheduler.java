@@ -1,6 +1,7 @@
 package pers.acp.springboot.core.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -21,7 +22,7 @@ import java.util.concurrent.ScheduledFuture;
  * Create by zhangbin on 2017-10-27 22:42
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class TimerTaskScheduler implements ITimerTaskScheduler {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
