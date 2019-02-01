@@ -23,22 +23,26 @@ public class FileDownLoadHandle {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    public void doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete) throws ServerException {
-        doDownLoad(request, response, path, isDelete, null);
+    public void downLoadForWeb(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete) throws ServerException {
+        downLoadForWeb(request, response, path, isDelete, null);
     }
 
-    public void doDownLoad(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
+    public void downLoadForWeb(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
+        downLoadFile(request, response, CommonTools.getProjectAbsPath() + path.replace("/", File.separator).replace("\\", File.separator), isDelete, allowPathRegexList);
+    }
+
+    public void downLoadFile(HttpServletRequest request, HttpServletResponse response, String filePath, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
         List<String> filterRegex = new ArrayList<>();
         if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
-            filterRegex.addAll(Arrays.asList("/files/tmp/", "/files/upload/", "/files/download/"));
+            filterRegex.addAll(Arrays.asList(CommonTools.getProjectAbsPath() + "/files/tmp/", CommonTools.getProjectAbsPath() + "/files/upload/", CommonTools.getProjectAbsPath() + "/files/download/"));
         } else {
             filterRegex.addAll(allowPathRegexList);
         }
-        if (pathFilter(filterRegex, path)) {
+        if (pathFilter(filterRegex, filePath)) {
             try {
-                File file = new File(CommonTools.getProjectAbsPath() + path.replace("/", File.separator).replace("\\", File.separator));
+                File file = new File(filePath);
                 if (!file.exists()) {
-                    throw new ServerException("the file [" + path + "] is not exists");
+                    throw new ServerException("the file [" + filePath + "] is not exists");
                 }
                 String filename = file.getName();
                 InputStream fis = new BufferedInputStream(new FileInputStream(file));
@@ -76,8 +80,9 @@ public class FileDownLoadHandle {
      * @return true-允许下载 false-不允许下载
      */
     private boolean pathFilter(List<String> filterRegex, String path) {
+        path = path.replace("\\", "/");
         for (String regex : filterRegex) {
-            if (CommonTools.regexPattern(regex, path)) {
+            if (CommonTools.regexPattern(regex.replace("\\", "/"), path)) {
                 return true;
             }
         }
