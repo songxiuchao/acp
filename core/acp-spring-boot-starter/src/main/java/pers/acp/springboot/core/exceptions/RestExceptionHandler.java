@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +16,8 @@ import pers.acp.springboot.core.tools.PackageTools;
 import pers.acp.core.exceptions.EnumValueUndefinedException;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.vo.ErrorVO;
+
+import javax.validation.ConstraintViolationException;
 
 /**
  * Create by zhangbin on 2017-8-10 16:26
@@ -30,12 +33,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param ex 异常类
      * @return 响应对象
      */
-    @ExceptionHandler(value = ServerException.class)
-    protected ResponseEntity<Object> handleServerException(ServerException ex) {
+    @ExceptionHandler({ServerException.class, ConstraintViolationException.class})
+    protected ResponseEntity<Object> handleServerException(Exception ex) {
         log.error(ex.getMessage(), ex);
         ResponseCode responseCode;
         try {
-            responseCode = ResponseCode.getEnum(ex.getCode());
+            if (ex instanceof ConstraintViolationException) {
+                responseCode = ResponseCode.invalidParameter;
+            } else {
+                responseCode = ResponseCode.getEnum(((ServerException) ex).getCode());
+            }
         } catch (EnumValueUndefinedException e) {
             responseCode = ResponseCode.otherError;
         }
@@ -65,6 +72,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 responseCode = ResponseCode.otherError;
             }
             errorVO = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
+        } else if (ex instanceof MethodArgumentNotValidException) {
+            errorVO = PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage());
         } else {
             errorVO = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, ex.getMessage());
         }
