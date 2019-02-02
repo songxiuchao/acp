@@ -34,7 +34,7 @@ public class FileDownLoadHandle {
     public void downLoadFile(HttpServletRequest request, HttpServletResponse response, String filePath, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
         List<String> filterRegex = new ArrayList<>();
         if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
-            filterRegex.addAll(Arrays.asList(CommonTools.getProjectAbsPath() + "/files/tmp/", CommonTools.getProjectAbsPath() + "/files/upload/", CommonTools.getProjectAbsPath() + "/files/download/"));
+            filterRegex.addAll(Arrays.asList(CommonTools.getProjectAbsPath().replace("\\", "/") + "/files/tmp/.*", CommonTools.getProjectAbsPath() + "/files/upload/.*", CommonTools.getProjectAbsPath() + "/files/download/.*"));
         } else {
             filterRegex.addAll(allowPathRegexList);
         }
@@ -82,7 +82,7 @@ public class FileDownLoadHandle {
     private boolean pathFilter(List<String> filterRegex, String path) {
         path = path.replace("\\", "/");
         for (String regex : filterRegex) {
-            if (CommonTools.regexPattern(regex.replace("\\", "/"), path)) {
+            if (CommonTools.regexPattern(regex, path)) {
                 return true;
             }
         }

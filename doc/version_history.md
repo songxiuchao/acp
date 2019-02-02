@@ -46,6 +46,7 @@
 > - 优化代码，减少冗余计算
 > - 优化全局异常捕获
 > - 优化文件下载 FileDownLoadHandle
+> - 优化文件下载正则表达式匹配
 ##### v5.0.1
 > - 更新 SpringBoot 至 2.0.6.RELEASE
 > - 更新 SpringCloud 至 Finchley.SR2
