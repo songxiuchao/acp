@@ -1,5 +1,5 @@
 ## 版本更新记录
-##### v5.x
+##### v5.1.2.1
 > - 使用 acp cloud 相关配置的 bean 增加 @RefreshScope 注解
 > - kotlin 更新至 1.3.21
 > - tcp/udp server 相关配置移入 yml 中

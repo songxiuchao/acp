@@ -1,6 +1,7 @@
 package pers.acp.springcloud.common.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import pers.acp.springcloud.common.log.LogConstant;
 
@@ -9,6 +10,7 @@ import pers.acp.springcloud.common.log.LogConstant;
  * @since JDK 11
  */
 @Component
+@RefreshScope
 @ConfigurationProperties(prefix = "acp.cloud.log-server")
 public class LogServerConfiguration {
 
