@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProper
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -36,6 +37,7 @@ import pers.acp.springcloud.common.log.LogInstance;
 @Component
 @Configuration
 @EnableResourceServer
+@RefreshScope
 @Order(ConfigurationOrder.resourceServerConfiguration)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 

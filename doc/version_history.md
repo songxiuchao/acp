@@ -1,4 +1,7 @@
 ## 版本更新记录
+##### v5.x
+> - 使用 acp cloud 相关配置的 bean 增加 @RefreshScope 注解
+> - kotlin 更新至 1.3.21
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE
