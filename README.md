@@ -335,6 +335,12 @@ http://127.0.0.1:5601
           log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
     （6）如果不存在日志服务，需要排除依赖
     exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
+    （7）如有特殊需要不进行认证的url（例如"/customer"），则增加配置
+    acp:
+      cloud:
+        oauth:
+          resource-server-permit-all-path: 
+            - /customer
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication
