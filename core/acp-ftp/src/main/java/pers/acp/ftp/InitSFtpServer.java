@@ -22,7 +22,7 @@ public class InitSFtpServer {
     private static final LogFactory log = LogFactory.getInstance(InitSFtpServer.class);
 
     public static List<IDaemonService> startSFtpServer() {
-        log.info("start sftp servers...");
+        log.info("start sftp servers ...");
         List<IDaemonService> sftpServers = new ArrayList<>();
         try {
             SFTPConfig sftpConfig = SFTPConfig.getInstance();
@@ -33,8 +33,7 @@ public class InitSFtpServer {
                         if (listen.isEnabled()) {
                             String classname = listen.getUserFactoryClass();
                             if (!CommonTools.isNullStr(classname)) {
-                                Class<?> cls = Class.forName(classname);
-                                UserFactory userFactory = (UserFactory) cls.getDeclaredConstructor().newInstance();
+                                UserFactory userFactory = (UserFactory) Class.forName(classname).getDeclaredConstructor().newInstance();
                                 SFTPServer sftpServer = new SFTPServer(userFactory.generateSFtpUserList(), listen);
                                 Thread sub = new Thread(sftpServer);
                                 sub.setDaemon(true);
@@ -52,6 +51,8 @@ public class InitSFtpServer {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        } finally {
+            log.info("start sftp servers finished!");
         }
         return sftpServers;
     }

@@ -12,6 +12,7 @@ public class InitWebService {
     private static final LogFactory log = LogFactory.getInstance(InitWebService.class);// 日志对象
 
     public static void publishWebService() {
+        log.info("publish webservice begin ...");
         try {
             WSConfig wsConfig = WSConfig.getInstance();
             if (wsConfig != null) {
@@ -32,6 +33,8 @@ public class InitWebService {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        } finally {
+            log.info("publish webservice finished!");
         }
     }
 }

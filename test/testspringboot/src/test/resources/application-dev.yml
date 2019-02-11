@@ -77,3 +77,13 @@ acp:
   schedule:
     crons:
       task1: 0 0/1 * * * ?
+  tcp-server:
+    listeners:
+      - name: testSocket
+        enabled: false
+        keepAlive: true
+        hex: true
+        port: 9999
+        charset: gbk
+  udp-server:
+    listeners:

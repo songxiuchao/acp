@@ -117,10 +117,10 @@ gradle全局参数：
     （4）yml配置文件中增加数据源配置（单数据源或多数据源），数据库操作遵循 spring-data-jpa 标准，使用 hibernate 进行实例化
     （5）单数据源应用的话无需增加额外配置类，正常编写domain、repo、entity即可
     （6）多数据源应用需要增加对应每个数据源的 Jpa 配置类，并创建对应数据源的 repo、entity 包，之后再在对应包中编写 repo 和 entity
-    （7）定时任务参考 pers.acp.test.application.task.Task1，继承 pers.acp.springboot.core.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
+    （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.springboot.core.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
     （8）自定义系统初始化任务，新增任务类，继承 pers.acp.springboot.core.base.BaseInitialization 类
     （9）自定义可控制监听器，新增监听器类，实现 pers.acp.springboot.core.interfaces.IListener 接口
-    （10）pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
+    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
     （11）udp 同 tcp 的开发
     （12）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
 ##### 2. 配置说明
@@ -148,6 +148,30 @@ acp:
     no-log-uri-regexes:
       - /oauth/.*        #不进行日志输出的 url 正则表达式，可配置多个
 ```
+
+- tcp 服务端
+```yaml
+acp:
+  tcp-server:
+    listeners:
+      - name: testSocket                  #监听服务名称
+        enabled: false                    #是否启用，默认false
+        keepAlive: true                   #是否为长连接，默认false
+        idletime: 10000                   #连接进入空闲状态的等待时间单位毫秒，默认10000
+        hex: true                         #接收报文是否是十六进制，默认false
+        port: 9999                        #端口号
+        responseBean: TestTcpHandle       #报文接收处理的 Bean 名称
+        responsable: true                 #报文是否需要进行原路响应，默认true
+        charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集
+```
+
+- udp 服务端
+```yaml
+acp:
+  udp-server:
+    listeners:                            #监听列表配置同 tcp-server
+```
+
 ### （三）启停 springboot 应用
 - [jvm 参考参数](doc/jvm-params.txt)
 - [启停脚本(Linux) server.sh](doc/script/server.sh)，根据实际情况修改第2行 APP_NAME 和第3行 JVM_PARAM 的值即可，和 SpringBoot 应用的 .jar 放在同一路径下

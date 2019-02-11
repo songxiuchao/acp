@@ -22,7 +22,7 @@ public class InitFtpServer {
     private static final LogFactory log = LogFactory.getInstance(InitFtpServer.class);
 
     public static List<IDaemonService> startFtpServer() {
-        log.info("start ftp servers...");
+        log.info("start ftp servers ...");
         List<IDaemonService> ftpServers = new ArrayList<>();
         try {
             FTPConfig ftpConfig = FTPConfig.getInstance();
@@ -33,8 +33,7 @@ public class InitFtpServer {
                         if (listen.isEnabled()) {
                             String classname = listen.getUserFactoryClass();
                             if (!CommonTools.isNullStr(classname)) {
-                                Class<?> cls = Class.forName(classname);
-                                UserFactory userFactory = (UserFactory) cls.getDeclaredConstructor().newInstance();
+                                UserFactory userFactory = (UserFactory) Class.forName(classname).getDeclaredConstructor().newInstance();
                                 FTPServer ftpServer = new FTPServer(userFactory.generateFtpUserList(), listen);
                                 Thread sub = new Thread(ftpServer);
                                 sub.setDaemon(true);
@@ -52,6 +51,8 @@ public class InitFtpServer {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        } finally {
+            log.info("start ftp servers finished!");
         }
         return ftpServers;
     }

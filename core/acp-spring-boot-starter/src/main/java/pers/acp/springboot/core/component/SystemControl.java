@@ -40,15 +40,18 @@ public class SystemControl implements IDaemonService {
     }
 
     public void start() throws Exception {
+        log.info("start listener begin ...");
         Map<String, IListener> listenerMap = SpringBeanFactory.getApplicationContext().getBeansOfType(IListener.class);
         listenerMap.forEach((key, listener) -> {
             log.info("开始启动监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
             listener.startListener();
         });
+        log.info("start listener finished!");
         timerTaskScheduler.controlSchedule(ITimerTaskScheduler.START);
     }
 
     public void stop() {
+        log.info("stop listener begin ...");
         try {
             Map<String, IListener> listenerMap = SpringBeanFactory.getApplicationContext().getBeansOfType(IListener.class);
             listenerMap.forEach((key, listener) -> {
@@ -58,6 +61,8 @@ public class SystemControl implements IDaemonService {
             timerTaskScheduler.controlSchedule(ITimerTaskScheduler.STOP);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        } finally {
+            log.info("stop listener finished!");
         }
     }
 

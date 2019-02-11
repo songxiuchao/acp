@@ -10,7 +10,7 @@ import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import pers.acp.springboot.core.socket.base.ISocketServerHandle;
-import pers.acp.springboot.core.socket.config.ListenConfig;
+import pers.acp.springboot.core.conf.SocketListenerConfiguration;
 import pers.acp.core.log.LogFactory;
 
 import java.net.InetSocketAddress;
@@ -21,7 +21,7 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
 
     private int port;
 
-    private ListenConfig listenConfig;
+    private SocketListenerConfiguration socketListenerConfiguration;
 
     private ISocketServerHandle socketServerHandle;
 
@@ -29,12 +29,12 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
      * 构造函数
      *
      * @param port               端口
-     * @param listenConfig       监听服务配置
+     * @param socketListenerConfiguration       监听服务配置
      * @param socketServerHandle 接收报文处理对象
      */
-    public TcpServer(int port, ListenConfig listenConfig, ISocketServerHandle socketServerHandle) {
+    public TcpServer(int port, SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle) {
         this.port = port;
-        this.listenConfig = listenConfig;
+        this.socketListenerConfiguration = socketListenerConfiguration;
         this.socketServerHandle = socketServerHandle;
     }
 
@@ -71,13 +71,13 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
         byte[] byten = new byte[bbuf.limit()];
         bbuf.get(byten, bbuf.position(), bbuf.limit());
         String recvStr;
-        if (listenConfig.isHex()) {
+        if (socketListenerConfiguration.isHex()) {
             recvStr = ByteUtils.toHexString(byten);
         } else {
-            recvStr = new String(byten, listenConfig.getCharset());
+            recvStr = new String(byten, socketListenerConfiguration.getCharset());
         }
         log.debug("tcp receive:" + recvStr);
-        TcpServerHandle handle = new TcpServerHandle(session, listenConfig, socketServerHandle, recvStr);
+        TcpServerHandle handle = new TcpServerHandle(session, socketListenerConfiguration, socketServerHandle, recvStr);
         Thread thread = new Thread(handle);
         thread.setDaemon(true);
         thread.start();
@@ -105,7 +105,7 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
     @Override
     public void messageSent(IoSession session, Object obj) throws Exception {
         super.messageSent(session, obj);
-        if (!listenConfig.isKeepAlive()) {
+        if (!socketListenerConfiguration.isKeepAlive()) {
             if (session != null) {
                 session.closeNow();
             }
@@ -116,11 +116,11 @@ public final class TcpServer extends IoHandlerAdapter implements Runnable {
     public void sessionCreated(IoSession session) throws Exception {
         super.sessionCreated(session);
         SocketSessionConfig config = (SocketSessionConfig) session.getConfig();
-        config.setBothIdleTime((int) (listenConfig.getIdletime() / 1000));
-        config.setWriterIdleTime((int) (listenConfig.getIdletime() / 1000));
-        config.setReaderIdleTime((int) (listenConfig.getIdletime() / 1000));
-        config.setKeepAlive(listenConfig.isKeepAlive());
-        if (listenConfig.isKeepAlive()) {
+        config.setBothIdleTime((int) (socketListenerConfiguration.getIdletime() / 1000));
+        config.setWriterIdleTime((int) (socketListenerConfiguration.getIdletime() / 1000));
+        config.setReaderIdleTime((int) (socketListenerConfiguration.getIdletime() / 1000));
+        config.setKeepAlive(socketListenerConfiguration.isKeepAlive());
+        if (socketListenerConfiguration.isKeepAlive()) {
             config.setSoLinger(0);
         }
         socketServerHandle.sessionCreated(session);

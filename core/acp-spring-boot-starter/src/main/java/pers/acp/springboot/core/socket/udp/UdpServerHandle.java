@@ -5,7 +5,7 @@ import org.apache.mina.core.session.IoSession;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import pers.acp.core.CommonTools;
 import pers.acp.springboot.core.socket.base.ISocketServerHandle;
-import pers.acp.springboot.core.socket.config.ListenConfig;
+import pers.acp.springboot.core.conf.SocketListenerConfiguration;
 import pers.acp.core.log.LogFactory;
 
 /**
@@ -19,30 +19,30 @@ public final class UdpServerHandle implements Runnable {
 
     private IoSession session;
 
-    private ListenConfig listenConfig;
+    private SocketListenerConfiguration socketListenerConfiguration;
 
     private ISocketServerHandle socketServerHandle;
 
     private String recvStr;
 
-    UdpServerHandle(IoSession session, ListenConfig listenConfig, ISocketServerHandle socketServerHandle, String recvStr) {
+    UdpServerHandle(IoSession session, SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle, String recvStr) {
         super();
         this.session = session;
-        this.listenConfig = listenConfig;
+        this.socketListenerConfiguration = socketListenerConfiguration;
         this.socketServerHandle = socketServerHandle;
         this.recvStr = recvStr;
     }
 
     public void run() {
         String responseStr = this.socketServerHandle.doResponse(recvStr);
-        if (listenConfig.isResponsable()) {
+        if (socketListenerConfiguration.isResponsable()) {
             responseStr = CommonTools.isNullStr(responseStr) ? "" : responseStr;
             try {
                 byte[] bts;
-                if (listenConfig.isHex()) {
+                if (socketListenerConfiguration.isHex()) {
                     bts = ByteUtils.fromHexString(responseStr);
                 } else {
-                    bts = responseStr.getBytes(listenConfig.getCharset());
+                    bts = responseStr.getBytes(socketListenerConfiguration.getCharset());
                 }
                 IoBuffer buffer = IoBuffer.allocate(bts.length);
                 buffer.setAutoExpand(true);
