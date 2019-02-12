@@ -14,7 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 public class FileOperation {
 
-    private static final LogFactory log = LogFactory.getInstance(CommonTools.class);
+    private static final LogFactory log = LogFactory.getInstance(FileOperation.class);
 
     /**
      * 获取文件基路径

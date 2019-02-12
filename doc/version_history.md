@@ -4,6 +4,7 @@
 > - kotlin 更新至 1.3.21
 > - tcp/udp server 相关配置移入 yml 中
 > - 增加资源服务器不进行认证的url配置
+> - core:acp-file gradle脚本中删除冗余的依赖
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE
