@@ -124,7 +124,7 @@ public final class FileTools {
      * @return webroot绝对路径
      */
     public static String getWebRootAbsPath() {
-        return CommonTools.getProjectAbsPath();
+        return CommonTools.getWebRootAbsPath();
     }
 
     /**

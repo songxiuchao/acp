@@ -20,7 +20,7 @@ public class ISO8583FieldProperties extends BaseProperties {
     public static ISO8583FieldProperties getInstance() {
         try {
             String propertiesFileName = "/iso8583.properties";
-            return (ISO8583FieldProperties) getInstance(ISO8583FieldProperties.class, propertiesFileName, CommonUtils.getProjectAbsPath() + propertiesFileName);
+            return (ISO8583FieldProperties) getInstance(ISO8583FieldProperties.class, propertiesFileName, CommonUtils.getWebRootAbsPath() + propertiesFileName);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return null;

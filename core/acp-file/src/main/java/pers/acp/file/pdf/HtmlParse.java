@@ -61,7 +61,7 @@ class HtmlParse {
      */
     private static String buildHtmlStr(String htmlstr) {
         String tmp = htmlstr;
-        String webRootAdsPath = CommonTools.getProjectAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         tmp = tmp.replace("&nbsp;", " ").replace("rowSpan", "rowspan")
                 .replace("colSpan", "colspan").replace("&ldquo;", "&quot;")
                 .replace("&rdquo;", "&quot;")
