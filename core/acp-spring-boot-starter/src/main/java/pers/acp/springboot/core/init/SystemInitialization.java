@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.base.BaseInitialization;
 import pers.acp.springboot.core.component.SystemControl;
+import pers.acp.springboot.core.daemon.DaemonServiceManager;
 
 /**
  * Created by zhangbin on 2017-6-16.
@@ -17,9 +18,12 @@ public class SystemInitialization extends BaseInitialization {
 
     private final SystemControl systemControl;
 
+    private final InitServer initServer;
+
     @Autowired
-    public SystemInitialization(SystemControl systemControl) {
+    public SystemInitialization(SystemControl systemControl, InitServer initServer) {
         this.systemControl = systemControl;
+        this.initServer = initServer;
     }
 
     @Override
@@ -29,10 +33,13 @@ public class SystemInitialization extends BaseInitialization {
 
     @Override
     public void start() {
-        log.info("****************** system is starting... ******************");
+        log.info(">>>>>>>>>>>>>>>>>>>> system is starting ...");
         /* 启动初始化服务 */
-        InitServer.startNow();
+        initServer.startNow();
+        /* 启动 listener 及定时任务 */
         systemControl.initialization();
+        Runtime.getRuntime().addShutdownHook(new Thread(DaemonServiceManager::stopAllService));
+        log.info(">>>>>>>>>>>>>>>>>>>> system start finished!");
     }
 
     @Override

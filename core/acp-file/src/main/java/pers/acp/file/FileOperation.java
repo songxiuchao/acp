@@ -14,7 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 public class FileOperation {
 
-    private static final LogFactory log = LogFactory.getInstance(CommonTools.class);
+    private static final LogFactory log = LogFactory.getInstance(FileOperation.class);
 
     /**
      * 获取文件基路径
@@ -25,7 +25,7 @@ public class FileOperation {
     public static String getFileBaseURL(String filePath) {
         try {
             if (CommonTools.isNullStr(filePath)) {
-                filePath = CommonTools.getProjectAbsPath();
+                filePath = CommonTools.getWebRootAbsPath();
             }
             return new File(filePath).toURI().toURL().toString();
         } catch (Exception e) {
@@ -106,7 +106,7 @@ public class FileOperation {
         String fileAbsPath;
         File tmpFile = null;
         FileOutputStream out = null;
-        String webRootAbsPath = CommonTools.getProjectAbsPath();
+        String webRootAbsPath = CommonTools.getWebRootAbsPath();
         try {
             if (PathFlag == 0) {
                 tmpFile = new File(webRootAbsPath + File.separator + "files" + File.separator + "tmp" + File.separator + FileName + "." + ExtensionsName);
@@ -150,7 +150,7 @@ public class FileOperation {
      * @return 临时文件夹绝对路径
      */
     public static String buildTmpDir() {
-        String webRootAdsPath = CommonTools.getProjectAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         File file = new File(webRootAdsPath + File.separator + "files"
                 + File.separator + "tmp");
         if (!file.exists()) {
@@ -167,7 +167,7 @@ public class FileOperation {
      * @return 模板文件夹绝对路径
      */
     public static String buildTemplateDir() {
-        String webRootAdsPath = CommonTools.getProjectAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         File file = new File(webRootAdsPath + File.separator + "files"
                 + File.separator + "template");
         if (!file.exists()) {

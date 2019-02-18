@@ -1,22 +1,37 @@
 package pers.acp.springboot.core.init;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
 import pers.acp.core.DBConTools;
 import pers.acp.core.log.LogFactory;
-import pers.acp.springboot.core.daemon.DaemonServiceManager;
 import pers.acp.springboot.core.init.task.InitTcpServer;
 import pers.acp.springboot.core.init.task.InitUdpServer;
 
-class InitServer {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+public class InitServer {
 
-    private static final LogFactory log = LogFactory.getInstance(InitServer.class);// 日志对象
+    private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
+
+    private final InitTcpServer initTcpServer;
+
+    private final InitUdpServer initUdpServer;
+
+    @Autowired
+    public InitServer(InitTcpServer initTcpServer, InitUdpServer initUdpServer) {
+        this.initTcpServer = initTcpServer;
+        this.initUdpServer = initUdpServer;
+    }
 
     /**
      * 主线程中进行系统初始化
      */
-    static void startNow() {
+    void startNow() {
         try {
-            InitSource.getInstance().run();
+            InitSource.getInstance(initTcpServer, initUdpServer).run();
         } catch (Exception e) {
             log.error("system startup Exception:" + e.getMessage());
         }
@@ -25,9 +40,9 @@ class InitServer {
     /**
      * 新线程中进行系统初始化
      */
-    static void startDelay() {
+    void startDelay() {
         try {
-            InitSource.getInstance().start();
+            InitSource.getInstance(initTcpServer, initUdpServer).start();
         } catch (Exception e) {
             log.error("system startup Exception:" + e.getMessage());
         }
@@ -40,15 +55,21 @@ class InitSource extends Thread {
 
     private static InitSource handle = null;
 
-    private InitSource() {
+    private final InitTcpServer initTcpServer;
+
+    private final InitUdpServer initUdpServer;
+
+    private InitSource(InitTcpServer initTcpServer, InitUdpServer initUdpServer) {
         this.setDaemon(true);
+        this.initTcpServer = initTcpServer;
+        this.initUdpServer = initUdpServer;
     }
 
-    protected static InitSource getInstance() {
+    protected static InitSource getInstance(InitTcpServer initTcpServer, InitUdpServer initUdpServer) {
         if (handle == null) {
             synchronized (InitSource.class) {
                 if (handle == null) {
-                    handle = new InitSource();
+                    handle = new InitSource(initTcpServer, initUdpServer);
                 }
             }
         }
@@ -56,27 +77,21 @@ class InitSource extends Thread {
     }
 
     public void run() {
-        log.info("begin start-up...");
         try {
-            /* 初始化系统 start *******/
             /* 初始化系统服务 */
-            InitTcpServer.startTcpServer();
-            InitUdpServer.startUdpServer();
+            initTcpServer.startTcpServer();
+            initUdpServer.startUdpServer();
             initTools();
-            log.info("finish start-up");
-            log.info("****************** system is started ******************");
-            /* 初始化系统 end *******/
-            Runtime.getRuntime().addShutdownHook(new Thread(DaemonServiceManager::stopAllService));
         } catch (Exception e) {
             log.error("init service Exception:" + e.getMessage(), e);
         }
     }
 
     private void initTools() {
-        log.info("Tools init begin...");
+        log.info("tools init begin ...");
         CommonTools.initTools();
         DBConTools.initTools();
-        log.info("Tools init finished!");
+        log.info("tools init finished!");
     }
 
 }

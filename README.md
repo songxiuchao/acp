@@ -1,10 +1,10 @@
 # acp 
-###### v5.1.2 [版本更新日志](doc/version_history.md)
+###### v5.1.3 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 从 5.1.2 开始，小版本号与 SpringBoot 小版本号一致
 
 ## 相关组件版本及官方文档
-- [Spring Boot 2.1.2.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Boot 2.1.3.RELEASE](https://projects.spring.io/spring-boot)
 - [Spring Cloud Greenwich.RELEASE](http://projects.spring.io/spring-cloud)
 
 ## 技术栈
@@ -41,7 +41,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
 ## 一、环境要求
 - jdk 11
     - 注：kotlin 和 scala 目前仅支持 jdk 1.8
-- gradle 5.1.1
+- gradle 5.2.1
 
 ## 二、gralde 配置及使用
 ### （一）配置文件
@@ -75,7 +75,7 @@ gradle全局参数：
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.1.1 --distribution-type=all
+    gradlew wrapper --gradle-version=5.2.1 --distribution-type=all
 ``
 
 ## 三、工程说明
@@ -117,10 +117,10 @@ gradle全局参数：
     （4）yml配置文件中增加数据源配置（单数据源或多数据源），数据库操作遵循 spring-data-jpa 标准，使用 hibernate 进行实例化
     （5）单数据源应用的话无需增加额外配置类，正常编写domain、repo、entity即可
     （6）多数据源应用需要增加对应每个数据源的 Jpa 配置类，并创建对应数据源的 repo、entity 包，之后再在对应包中编写 repo 和 entity
-    （7）定时任务参考 pers.acp.test.application.task.Task1，继承 pers.acp.springboot.core.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
+    （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.springboot.core.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
     （8）自定义系统初始化任务，新增任务类，继承 pers.acp.springboot.core.base.BaseInitialization 类
     （9）自定义可控制监听器，新增监听器类，实现 pers.acp.springboot.core.interfaces.IListener 接口
-    （10）pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
+    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
     （11）udp 同 tcp 的开发
     （12）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
 ##### 2. 配置说明
@@ -148,6 +148,30 @@ acp:
     no-log-uri-regexes:
       - /oauth/.*        #不进行日志输出的 url 正则表达式，可配置多个
 ```
+
+- tcp 服务端
+```yaml
+acp:
+  tcp-server:
+    listeners:
+      - name: testSocket                  #监听服务名称
+        enabled: false                    #是否启用，默认false
+        keepAlive: true                   #是否为长连接，默认false
+        idletime: 10000                   #连接进入空闲状态的等待时间单位毫秒，默认10000
+        hex: true                         #接收报文是否是十六进制，默认false
+        port: 9999                        #端口号
+        responseBean: TestTcpHandle       #报文接收处理的 Bean 名称
+        responsable: true                 #报文是否需要进行原路响应，默认true
+        charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集
+```
+
+- udp 服务端
+```yaml
+acp:
+  udp-server:
+    listeners:                            #监听列表配置同 tcp-server
+```
+
 ### （三）启停 springboot 应用
 - [jvm 参考参数](doc/jvm-params.txt)
 - [启停脚本(Linux) server.sh](doc/script/server.sh)，根据实际情况修改第2行 APP_NAME 和第3行 JVM_PARAM 的值即可，和 SpringBoot 应用的 .jar 放在同一路径下
@@ -311,6 +335,12 @@ http://127.0.0.1:5601
           log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
     （6）如果不存在日志服务，需要排除依赖
     exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
+    （7）如有特殊需要不进行认证的url（例如"/customer"），则增加配置
+    acp:
+      cloud:
+        oauth:
+          resource-server-permit-all-path: 
+            - /customer
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication

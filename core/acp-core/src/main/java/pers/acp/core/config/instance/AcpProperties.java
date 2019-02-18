@@ -19,7 +19,7 @@ public class AcpProperties extends BaseProperties {
     public static AcpProperties getInstance() {
         try {
             String propertiesFileName = "/acp.properties";
-            return (AcpProperties) getInstance(AcpProperties.class, propertiesFileName, CommonUtils.getProjectAbsPath() + propertiesFileName);
+            return (AcpProperties) getInstance(AcpProperties.class, propertiesFileName, CommonUtils.getWebRootAbsPath() + propertiesFileName);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return null;

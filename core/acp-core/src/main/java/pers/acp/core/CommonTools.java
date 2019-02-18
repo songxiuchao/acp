@@ -98,12 +98,22 @@ public final class CommonTools {
     }
 
     /**
+     * 将相对路径格式化为绝对路径，相对于 java path
+     *
+     * @param path 相对路径
+     * @return 绝对路径
+     */
+    public static String formatAbsPath(String path) {
+        return CommonUtils.formatAbsPath(path);
+    }
+
+    /**
      * 获取webroot绝对路径
      *
      * @return webroot绝对路径
      */
-    public static String getProjectAbsPath() {
-        return CommonUtils.getProjectAbsPath();
+    public static String getWebRootAbsPath() {
+        return CommonUtils.getWebRootAbsPath();
     }
 
     /**

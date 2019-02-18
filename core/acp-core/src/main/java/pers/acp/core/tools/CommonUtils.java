@@ -140,9 +140,23 @@ public class CommonUtils {
             if (path.startsWith(prefix)) {
                 return System.getProperty("user.home") + path.substring(prefix.length());
             } else {
-                return getProjectAbsPath() + path;
+                return formatAbsPath(path);
             }
         }
+    }
+
+    /**
+     * 将相对路径格式化为绝对路径，相对于 java path
+     *
+     * @param path 相对路径
+     * @return 绝对路径
+     */
+    public static String formatAbsPath(String path) {
+        String srcPath = path.replace("\\", File.separator).replace("/", File.separator);
+        if (srcPath.startsWith(File.separator)) {
+            srcPath = srcPath.substring(File.separator.length());
+        }
+        return new File(srcPath).getAbsolutePath();
     }
 
     /**
@@ -150,7 +164,7 @@ public class CommonUtils {
      *
      * @return webroot绝对路径
      */
-    public static String getProjectAbsPath() {
+    public static String getWebRootAbsPath() {
         try {
             String classPath = URLDecoder.decode(CommonUtils.class.getResource("/").getPath(), DEFAULT_CHARSET);
             int indexWEB_INF = classPath.indexOf("WEB-INF");

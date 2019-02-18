@@ -18,24 +18,13 @@ dependencies {
 
     // batik
     compile "org.apache.xmlgraphics:batik-anim:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-awt-util:$versions.batik"
     compile "org.apache.xmlgraphics:batik-bridge:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-css:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-dom:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-ext:$versions.batik"
     compile "org.apache.xmlgraphics:batik-extension:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-gvt:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-parser:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-script:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-svg-dom:$versions.batik"
     compile "org.apache.xmlgraphics:batik-svggen:$versions.batik"
     compile "org.apache.xmlgraphics:batik-transcoder:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-util:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-xml:$versions.batik"
 
     compile "org.apache.poi:poi:$versions.poi"
     compile "org.apache.poi:poi-ooxml:$versions.poi"
-    compile "org.apache.poi:poi-ooxml-schemas:$versions.poi"
     compile "org.apache.poi:poi-scratchpad:$versions.poi"
 
 }

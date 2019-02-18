@@ -28,13 +28,13 @@ public class FileDownLoadHandle {
     }
 
     public void downLoadForWeb(HttpServletRequest request, HttpServletResponse response, String path, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
-        downLoadFile(request, response, CommonTools.getProjectAbsPath() + path.replace("/", File.separator).replace("\\", File.separator), isDelete, allowPathRegexList);
+        downLoadFile(request, response, CommonTools.getWebRootAbsPath() + path.replace("/", File.separator).replace("\\", File.separator), isDelete, allowPathRegexList);
     }
 
     public void downLoadFile(HttpServletRequest request, HttpServletResponse response, String filePath, boolean isDelete, List<String> allowPathRegexList) throws ServerException {
         List<String> filterRegex = new ArrayList<>();
         if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
-            filterRegex.addAll(Arrays.asList(CommonTools.getProjectAbsPath().replace("\\", "/") + "/files/tmp/.*", CommonTools.getProjectAbsPath() + "/files/upload/.*", CommonTools.getProjectAbsPath() + "/files/download/.*"));
+            filterRegex.addAll(Arrays.asList(CommonTools.getWebRootAbsPath().replace("\\", "/") + "/files/tmp/.*", CommonTools.getWebRootAbsPath() + "/files/upload/.*", CommonTools.getWebRootAbsPath() + "/files/download/.*"));
         } else {
             filterRegex.addAll(allowPathRegexList);
         }

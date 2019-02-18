@@ -9,7 +9,7 @@ import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import pers.acp.springboot.core.socket.base.ISocketServerHandle;
-import pers.acp.springboot.core.socket.config.ListenConfig;
+import pers.acp.springboot.core.conf.SocketListenerConfiguration;
 import pers.acp.core.log.LogFactory;
 
 import java.net.InetSocketAddress;
@@ -20,7 +20,7 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
 
     private int port;
 
-    private ListenConfig listenConfig;
+    private SocketListenerConfiguration socketListenerConfiguration;
 
     private ISocketServerHandle socketServerHandle;
 
@@ -28,12 +28,12 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
      * 构造函数
      *
      * @param port               端口
-     * @param listenConfig       监听服务配置
+     * @param socketListenerConfiguration       监听服务配置
      * @param socketServerHandle 接收报文处理对象
      */
-    public UdpServer(int port, ListenConfig listenConfig, ISocketServerHandle socketServerHandle) {
+    public UdpServer(int port, SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle) {
         this.port = port;
-        this.listenConfig = listenConfig;
+        this.socketListenerConfiguration = socketListenerConfiguration;
         this.socketServerHandle = socketServerHandle;
     }
 
@@ -71,13 +71,13 @@ public final class UdpServer extends IoHandlerAdapter implements Runnable {
         byte[] byten = new byte[bbuf.limit()];
         bbuf.get(byten, bbuf.position(), bbuf.limit());
         String recvStr;
-        if (listenConfig.isHex()) {
+        if (socketListenerConfiguration.isHex()) {
             recvStr = ByteUtils.toHexString(byten);
         } else {
-            recvStr = new String(byten, listenConfig.getCharset());
+            recvStr = new String(byten, socketListenerConfiguration.getCharset());
         }
         log.debug("udp receive:" + recvStr);
-        UdpServerHandle handle = new UdpServerHandle(session, listenConfig, socketServerHandle, recvStr);
+        UdpServerHandle handle = new UdpServerHandle(session, socketListenerConfiguration, socketServerHandle, recvStr);
         Thread thread = new Thread(handle);
         thread.setDaemon(true);
         thread.start();

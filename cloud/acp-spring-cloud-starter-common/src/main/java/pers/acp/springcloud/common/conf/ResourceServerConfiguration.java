@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProper
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -27,6 +28,9 @@ import pers.acp.springcloud.common.constant.ConfigurationOrder;
 import pers.acp.springcloud.common.enums.RestPrefix;
 import pers.acp.springcloud.common.log.LogInstance;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Oauth2 资源服务配置
  *
@@ -36,6 +40,7 @@ import pers.acp.springcloud.common.log.LogInstance;
 @Component
 @Configuration
 @EnableResourceServer
+@RefreshScope
 @Order(ConfigurationOrder.resourceServerConfiguration)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
@@ -119,23 +124,25 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        List<String> permitAll = new ArrayList<>();
+        permitAll.add(contextPath + "/error");
+        permitAll.add(contextPath + "/actuator");
+        permitAll.add(contextPath + "/actuator/**");
+        permitAll.add(contextPath + "/v2/api-docs");
+        permitAll.add(contextPath + "/configuration/ui");
+        permitAll.add(contextPath + "/swagger-resources/**");
+        permitAll.add(contextPath + "/configuration/security");
+        permitAll.add(contextPath + "/swagger-ui.html");
+        permitAll.add(contextPath + "/webjars/**");
+        permitAll.add(contextPath + "/swagger-resources/configuration/ui");
+        permitAll.add(contextPath + "/hystrix.stream");
+        permitAll.add(contextPath + "/oauth/authorize");
+        permitAll.add(contextPath + "/oauth/token");
+        permitAll.add(contextPath + "/oauth/error");
+        acpOauthConfiguration.getResourceServerPermitAllPath().forEach(path -> permitAll.add(contextPath + path));
+        permitAll.add(contextPath + RestPrefix.OPEN + "/**");
         // match 匹配的url，赋予全部权限（不进行拦截）
-        http.csrf().disable().authorizeRequests().antMatchers(
-                contextPath + "/error",
-                contextPath + "/actuator",
-                contextPath + "/actuator/**",
-                contextPath + "/v2/api-docs",
-                contextPath + "/configuration/ui",
-                contextPath + "/swagger-resources/**",
-                contextPath + "/configuration/security",
-                contextPath + "/swagger-ui.html",
-                contextPath + "/webjars/**",
-                contextPath + "/swagger-resources/configuration/ui",
-                contextPath + "/hystrix.stream",
-                contextPath + "/oauth/authorize",
-                contextPath + "/oauth/token",
-                contextPath + "/oauth/error",
-                contextPath + RestPrefix.OPEN + "/**").permitAll()
+        http.csrf().disable().authorizeRequests().antMatchers(permitAll.toArray(new String[]{})).permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().permitAll();
     }
