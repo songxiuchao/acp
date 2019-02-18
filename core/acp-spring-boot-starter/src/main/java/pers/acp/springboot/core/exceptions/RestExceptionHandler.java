@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +19,7 @@ import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.vo.ErrorVO;
 
 import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 /**
  * Create by zhangbin on 2017-8-10 16:26
@@ -64,7 +66,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()));
+        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
+        StringBuilder errorMsg = new StringBuilder();
+        errors.forEach(error -> errorMsg.append(error.getDefaultMessage()).append(";"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, errorMsg.toString()));
     }
 
     /**
