@@ -28,7 +28,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     /**
-     * 处理异常错误请求
+     * 处理自定义异常
      *
      * @param ex 异常类
      * @return 响应对象
@@ -38,10 +38,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(ex.getMessage(), ex);
         ResponseCode responseCode;
         try {
-            if (ex instanceof ConstraintViolationException) {
+            if (ex instanceof ServerException) {
+                responseCode = ResponseCode.getEnum(((ServerException) ex).getCode());
+            } else if (ex instanceof ConstraintViolationException || ex instanceof MethodArgumentNotValidException) {
                 responseCode = ResponseCode.invalidParameter;
             } else {
-                responseCode = ResponseCode.getEnum(((ServerException) ex).getCode());
+                responseCode = ResponseCode.otherError;
             }
         } catch (EnumValueUndefinedException e) {
             responseCode = ResponseCode.otherError;
@@ -51,33 +53,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * 处理异常错误请求
+     * 处理 MethodArgumentNotValidException 异常，参数校验不通过
      *
-     * @param ex      异常类
-     * @param body    协议体
+     * @param ex      MethodArgumentNotValidException
      * @param headers 请求头
      * @param status  请求状态
      * @param request 请求对象
      * @return 响应对象
      */
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
-        ErrorVO errorVO;
-        if (ex instanceof ServerException) {
-            ResponseCode responseCode;
-            try {
-                responseCode = ResponseCode.getEnum(((ServerException) ex).getCode());
-            } catch (EnumValueUndefinedException e) {
-                responseCode = ResponseCode.otherError;
-            }
-            errorVO = PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage());
-        } else if (ex instanceof MethodArgumentNotValidException) {
-            errorVO = PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage());
-        } else {
-            errorVO = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, ex.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(errorVO);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()));
     }
 
     /**
@@ -108,6 +95,23 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(PackageTools.buildErrorResponsePackage(ResponseCode.invalidParameter, ex.getMessage()));
+    }
+
+    /**
+     * 处理通用异常
+     *
+     * @param ex      异常类
+     * @param body    协议体
+     * @param headers 请求头
+     * @param status  请求状态
+     * @param request 请求对象
+     * @return 响应对象
+     */
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        log.error(ex.getMessage(), ex);
+        ErrorVO errorVO = PackageTools.buildErrorResponsePackage(ResponseCode.otherError, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE).body(errorVO);
     }
 
 }
