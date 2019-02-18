@@ -6,6 +6,7 @@
 > - 增加资源服务器不进行认证的url配置
 > - core:acp-file gradle脚本中删除冗余的依赖
 > - gradle 更新至 5.2.1
+> - 优化全局异常处理
 > - 更新 SpringBoot 至 2.1.3.RELEASE
 > - 更新依赖包版本：
 >   - spring boot admin (2.1.3)
