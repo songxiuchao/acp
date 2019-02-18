@@ -1,10 +1,17 @@
 ## 版本更新记录
-##### v5.1.2.1
+##### v5.1.3
 > - 使用 acp cloud 相关配置的 bean 增加 @RefreshScope 注解
 > - kotlin 更新至 1.3.21
 > - tcp/udp server 相关配置移入 yml 中
 > - 增加资源服务器不进行认证的url配置
 > - core:acp-file gradle脚本中删除冗余的依赖
+> - gradle 更新至 5.2.1
+> - 更新 SpringBoot 至 2.1.3.RELEASE
+> - 更新依赖包版本：
+>   - spring boot admin (2.1.3)
+>   - httpclient (4.5.7)
+>   - jaxws-rt (2.3.2)
+>   - mysql-connector-java (8.0.15)
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE
