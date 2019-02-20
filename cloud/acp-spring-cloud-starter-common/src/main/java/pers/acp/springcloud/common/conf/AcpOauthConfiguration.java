@@ -24,6 +24,14 @@ public class AcpOauthConfiguration {
         this.oauthServer = oauthServer;
     }
 
+    public boolean isResourceServer() {
+        return resourceServer;
+    }
+
+    public void setResourceServer(boolean resourceServer) {
+        this.resourceServer = resourceServer;
+    }
+
     public List<String> getResourceServerPermitAllPath() {
         return resourceServerPermitAllPath;
     }
@@ -37,6 +45,12 @@ public class AcpOauthConfiguration {
      * default false
      */
     private boolean oauthServer = false;
+
+    /**
+     * is resource server
+     * default true
+     */
+    private boolean resourceServer = true;
 
     private List<String> resourceServerPermitAllPath = new ArrayList<>();
 

@@ -3,6 +3,7 @@
 > - 使用 acp cloud 相关配置的 bean 增加 @RefreshScope 注解
 > - kotlin 更新至 1.3.21
 > - tcp/udp server 相关配置移入 yml 中
+> - 增加资源服务器开关配置，默认为 true
 > - 增加资源服务器不进行认证的url配置
 > - core:acp-file gradle脚本中删除冗余的依赖
 > - gradle 更新至 5.2.1
