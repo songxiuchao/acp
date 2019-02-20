@@ -304,7 +304,7 @@ http://127.0.0.1:5601
     （1）无需改动代码
     （2）修改 yml 配置即可
 ##### 3. 统一配置管理
-    需依赖 git 环境，如有需要参照网上教程
+    需依赖 git 或数据库，如有需要参考官网进行定制开发
 ##### 4. 网关服务
     cloud:gateway-server
     （1）需自定义限流策略（需依赖 Redis）
@@ -341,6 +341,11 @@ http://127.0.0.1:5601
         oauth:
           resource-server-permit-all-path: 
             - /customer
+    （8）如果原子服务不需要加入统一认证体系中，即不需要进行访问权限验证，则增加配置
+    acp:
+      cloud:
+        oauth:
+          resource-server: false #是否是资源服务器
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication

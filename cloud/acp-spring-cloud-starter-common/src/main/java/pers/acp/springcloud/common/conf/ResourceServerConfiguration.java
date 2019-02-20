@@ -125,22 +125,29 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @Override
     public void configure(HttpSecurity http) throws Exception {
         List<String> permitAll = new ArrayList<>();
-        permitAll.add(contextPath + "/error");
-        permitAll.add(contextPath + "/actuator");
-        permitAll.add(contextPath + "/actuator/**");
-        permitAll.add(contextPath + "/v2/api-docs");
-        permitAll.add(contextPath + "/configuration/ui");
-        permitAll.add(contextPath + "/swagger-resources/**");
-        permitAll.add(contextPath + "/configuration/security");
-        permitAll.add(contextPath + "/swagger-ui.html");
-        permitAll.add(contextPath + "/webjars/**");
-        permitAll.add(contextPath + "/swagger-resources/configuration/ui");
-        permitAll.add(contextPath + "/hystrix.stream");
-        permitAll.add(contextPath + "/oauth/authorize");
-        permitAll.add(contextPath + "/oauth/token");
-        permitAll.add(contextPath + "/oauth/error");
-        acpOauthConfiguration.getResourceServerPermitAllPath().forEach(path -> permitAll.add(contextPath + path));
-        permitAll.add(contextPath + RestPrefix.OPEN + "/**");
+        if (acpOauthConfiguration.isResourceServer()) {
+            logInstance.info("resource server = true");
+            permitAll.add(contextPath + "/error");
+            permitAll.add(contextPath + "/actuator");
+            permitAll.add(contextPath + "/actuator/**");
+            permitAll.add(contextPath + "/v2/api-docs");
+            permitAll.add(contextPath + "/configuration/ui");
+            permitAll.add(contextPath + "/swagger-resources/**");
+            permitAll.add(contextPath + "/configuration/security");
+            permitAll.add(contextPath + "/swagger-ui.html");
+            permitAll.add(contextPath + "/webjars/**");
+            permitAll.add(contextPath + "/swagger-resources/configuration/ui");
+            permitAll.add(contextPath + "/hystrix.stream");
+            permitAll.add(contextPath + "/oauth/authorize");
+            permitAll.add(contextPath + "/oauth/token");
+            permitAll.add(contextPath + "/oauth/error");
+            acpOauthConfiguration.getResourceServerPermitAllPath().forEach(path -> permitAll.add(contextPath + path));
+            permitAll.add(contextPath + RestPrefix.OPEN + "/**");
+        } else {
+            logInstance.info("resource server = false");
+            permitAll.add(contextPath + "/**");
+        }
+        permitAll.forEach(uri -> logInstance.info("permitAll uri: " + uri));
         // match 匹配的url，赋予全部权限（不进行拦截）
         http.csrf().disable().authorizeRequests().antMatchers(permitAll.toArray(new String[]{})).permitAll()
                 .anyRequest().authenticated()
