@@ -1,7 +1,6 @@
 package pers.acp.springcloud.common.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import java.util.List;
  * @since JDK 11
  */
 @Component
-@RefreshScope
 @ConfigurationProperties(prefix = "acp.cloud.oauth")
 public class AcpOauthConfiguration {
 

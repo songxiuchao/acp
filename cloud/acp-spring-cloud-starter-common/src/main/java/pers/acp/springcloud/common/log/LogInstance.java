@@ -3,7 +3,6 @@ package pers.acp.springcloud.common.log;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
@@ -20,7 +19,6 @@ import java.util.Date;
  * @since JDK 11
  */
 @Component
-@RefreshScope
 public class LogInstance {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());

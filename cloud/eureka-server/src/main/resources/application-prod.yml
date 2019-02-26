@@ -1,10 +1,7 @@
 debug: false
 server:
-  address: ${info.ip-address}
-  port: ${info.server-port}
-  tomcat:
-    max-threads: 1000
-    uri-encoding: UTF-8
+  address: 127.0.0.1
+  port: 8761
 # ===============================
 # = Log To File Config
 # ===============================
@@ -15,20 +12,12 @@ logging:
   file:
     max-size: 5MB
     max-history: 30
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
 # ===============================
-# = Spring Config
+# = Eureka Config
 # ===============================
-spring:
-  thymeleaf:
-    cache: false
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-    default-property-inclusion: non_null
+eureka:
+  instance:
+    ip-address: ${server.address}
+  client:
+    service-url:
+      defaultZone: http://${server.address}:${server.port}/eureka/

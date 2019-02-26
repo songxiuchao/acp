@@ -1,10 +1,7 @@
 debug: false
 server:
-  address: ${info.ip-address}
-  port: ${info.server-port}
-  tomcat:
-    max-threads: 1000
-    uri-encoding: UTF-8
+  address: 127.0.0.1
+  port: 8999
 # ===============================
 # = Log To File Config
 # ===============================
@@ -15,23 +12,20 @@ logging:
   file:
     max-size: 5MB
     max-history: 30
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
+# ===============================
+# = Eureka Config
+# ===============================
+eureka:
+  instance:
+    ip-address: ${server.address}
+    instance-id: ${spring.application.name}(${server.address}:${server.port}):v${info.version}:${spring.profiles.active}
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
 # ===============================
 # = Spring Config
 # ===============================
 spring:
-  thymeleaf:
-    cache: false
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-    default-property-inclusion: non_null
   redis:
     url: redis://127.0.0.1:6379
   sleuth:
@@ -54,7 +48,3 @@ spring:
           destination: test-log
           group: log-server-group
           content-type: application/json
-acp:
-  cloud:
-    oauth:
-      oauth-server: true

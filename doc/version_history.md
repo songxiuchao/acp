@@ -1,6 +1,5 @@
 ## 版本更新记录
 ##### v5.1.3
-> - [Upgrade] 使用 acp cloud 相关配置的 bean 增加 @RefreshScope 注解
 > - [Upgrade] kotlin 更新至 1.3.21
 > - [Upgrade] tcp/udp server 相关配置移入 yml 中
 > - [Upgrade] 增加资源服务器开关配置，默认为 true
@@ -15,6 +14,7 @@
 >   - mysql-connector-java (8.0.15)
 > - [Upgrade] gradle 公共脚本中增加部署至 maven 仓库任务配置（包含本地和远程）
 > - [Upgrade] 更新文档
+> - [Upgrade] 规范各 demo 的 yml 配置文件书写
 > - [Fix] 优化全局异常处理，调整对应异常响应的 HttpStatus
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE

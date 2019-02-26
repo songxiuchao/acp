@@ -4,9 +4,9 @@ server:
     uri-encoding: UTF-8
 spring:
   profiles:
-    active: prod
+    active: singledatasource
   application:
-    name: server-eureka
+    name: testscala
   thymeleaf:
     cache: false
   jackson:
@@ -28,16 +28,3 @@ management:
   endpoint:
     health:
       show-details: always
-# ===============================
-# = Eureka Config
-# ===============================
-eureka:
-  server:
-    enable-self-preservation: true
-    eviction-interval-timer-in-ms: 3000
-    response-cache-update-interval-ms: 3000
-  instance:
-    prefer-ip-address: true
-  client:
-    register-with-eureka: false
-    fetch-registry: false

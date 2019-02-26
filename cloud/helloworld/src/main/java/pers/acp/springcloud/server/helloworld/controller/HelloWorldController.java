@@ -2,6 +2,8 @@ package pers.acp.springcloud.server.helloworld.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * @since JDK 11
  */
 @RestController
+@RefreshScope
 public class HelloWorldController {
 
     private final LogInstance logInstance;
@@ -27,6 +30,9 @@ public class HelloWorldController {
     private final WorldServer worldServer;
 
     private final RestTemplate restTemplate;
+
+    @Value("${acp.test.properties}")
+    private String properties;
 
     @Autowired
     public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance, @Qualifier(value = "customerRestTemplate") RestTemplate restTemplate) {
@@ -38,7 +44,7 @@ public class HelloWorldController {
 
     @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> helloWorld(@RequestBody String content) {
-        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content);
+        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content) + "; properties=" + properties;
         logInstance.info(respon);
         return ResponseEntity.ok(respon);
     }
