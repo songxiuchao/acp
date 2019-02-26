@@ -6,8 +6,24 @@ spring:
 info:
   version: 1.0.0
   app-name: ${spring.application.name}
+  ip-address: 127.0.0.1
+  server-port: 8999
   tags:
     environment: ${spring.profiles.active}
   build:
     author: zhangbin
     active: ${spring.profiles.active}
+# ===============================
+# = Eureka Config
+# ===============================
+eureka:
+  instance:
+    ip-address: ${info.ip-address}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+    instance-id: ${spring.application.name}(${info.ip-address}:${info.server-port}):v${info.version}:${spring.profiles.active}
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/

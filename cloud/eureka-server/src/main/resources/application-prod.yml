@@ -1,7 +1,7 @@
 debug: false
 server:
-  address: 127.0.0.1
-  port: 8761
+  address: ${info.ip-address}
+  port: ${info.server-port}
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
@@ -32,19 +32,3 @@ spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
     default-property-inclusion: non_null
-# ===============================
-# = Eureka Config
-# ===============================
-eureka:
-  server:
-    enable-self-preservation: true
-    eviction-interval-timer-in-ms: 3000
-    response-cache-update-interval-ms: 3000
-  instance:
-    ip-address: ${server.address}
-    prefer-ip-address: true
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

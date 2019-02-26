@@ -23,7 +23,7 @@ import java.util.Date;
 @RefreshScope
 public class LogInstance {
 
-    private static final LogFactory log = LogFactory.getInstance(LogInstance.class);
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private LogToBinding logToBinding;
 

@@ -24,9 +24,9 @@ import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.CommonTools;
+import pers.acp.core.log.LogFactory;
 import pers.acp.springcloud.common.constant.ConfigurationOrder;
 import pers.acp.springcloud.common.enums.RestPrefix;
-import pers.acp.springcloud.common.log.LogInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ import java.util.List;
 @Order(ConfigurationOrder.resourceServerConfiguration)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private final LogInstance logInstance;
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private final AcpOauthConfiguration acpOauthConfiguration;
 
@@ -55,8 +55,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private final String contextPath;
 
     @Autowired
-    public ResourceServerConfiguration(LogInstance logInstance, AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
-        this.logInstance = logInstance;
+    public ResourceServerConfiguration(AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
         this.acpOauthConfiguration = acpOauthConfiguration;
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
@@ -96,7 +95,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
             });
             services.setRestTemplate(restTemplate);
         } catch (HttpException e) {
-            logInstance.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         services.setCheckTokenEndpointUrl(resourceServerProperties.getTokenInfoUri());
         services.setClientId(clientProperties.getClientId());
@@ -126,7 +125,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         List<String> permitAll = new ArrayList<>();
         if (acpOauthConfiguration.isResourceServer()) {
-            logInstance.info("resource server = true");
+            log.info("resource server = true");
             permitAll.add(contextPath + "/error");
             permitAll.add(contextPath + "/actuator");
             permitAll.add(contextPath + "/actuator/**");
@@ -144,10 +143,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
             acpOauthConfiguration.getResourceServerPermitAllPath().forEach(path -> permitAll.add(contextPath + path));
             permitAll.add(contextPath + RestPrefix.OPEN + "/**");
         } else {
-            logInstance.info("resource server = false");
+            log.info("resource server = false");
             permitAll.add(contextPath + "/**");
         }
-        permitAll.forEach(uri -> logInstance.info("permitAll uri: " + uri));
+        permitAll.forEach(uri -> log.info("permitAll uri: " + uri));
         // match 匹配的url，赋予全部权限（不进行拦截）
         http.csrf().disable().authorizeRequests().antMatchers(permitAll.toArray(new String[]{})).permitAll()
                 .anyRequest().authenticated()

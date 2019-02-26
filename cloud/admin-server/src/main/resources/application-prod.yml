@@ -1,7 +1,7 @@
 debug: false
 server:
-  address: 127.0.0.1
-  port: 8090
+  address: ${info.ip-address}
+  port: ${info.server-port}
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
@@ -31,8 +31,8 @@ spring:
     cache: false
   security:
     user:
-      name: admin
-      password: 888888
+      name: ${eureka.instance.metadata-map.user.name}
+      password: ${eureka.instance.metadata-map.user.password}
   # ===============================
   # = Spring Boot Admin
   # ===============================
@@ -42,23 +42,6 @@ spring:
         resource-locations:
           - "classpath:/META-INF/spring-boot-admin-server-ui/"
           - "classpath:/static/"
-# ===============================
-# = Eureka Config
-# ===============================
-eureka:
-  instance:
-    ip-address: ${server.address}
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 15
-    instance-id: ${spring.application.name}(${eureka.instance.ip-address}:${server.port}):v${info.version}:${spring.profiles.active}
-    metadata-map:
-      user.name: ${spring.security.user.name}
-      user.password: ${spring.security.user.password}
-  client:
-    registry-fetch-interval-seconds: 5
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka/
 # ===============================
 # = Turbine Config
 # ===============================

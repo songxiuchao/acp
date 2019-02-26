@@ -1,7 +1,7 @@
 debug: false
 server:
-  address: 127.0.0.1
-  port: 8770
+  address: ${info.ip-address}
+  port: ${info.server-port}
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
@@ -23,20 +23,6 @@ management:
   endpoint:
     health:
       show-details: always
-# ===============================
-# = Eureka Config
-# ===============================
-eureka:
-  instance:
-    ip-address: ${server.address}
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 15
-    instance-id: ${spring.application.name}(${eureka.instance.ip-address}:${server.port}):v${info.version}:${spring.profiles.active}
-  client:
-    registry-fetch-interval-seconds: 5
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka/
 # ===============================
 # = Ribbon Config
 # ===============================

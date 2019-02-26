@@ -1,7 +1,7 @@
 debug: false
 server:
-  address: 127.0.0.1
-  port: 9003
+  address: ${info.ip-address}
+  port: ${info.server-port}
   tomcat:
     max-threads: 1000
     uri-encoding: UTF-8
@@ -15,14 +15,6 @@ logging:
   file:
     max-size: 5MB
     max-history: 30
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
 # ===============================
 # = Spring Config
 # ===============================
@@ -58,20 +50,6 @@ spring:
           group: log-server-group
           content-type: application/json
 # ===============================
-# = Eureka Config
-# ===============================
-eureka:
-  instance:
-    ip-address: ${server.address}
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 15
-    instance-id: ${spring.application.name}(${eureka.instance.ip-address}:${server.port}):v${info.version}:${spring.profiles.active}
-  client:
-    registry-fetch-interval-seconds: 5
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka/
-# ===============================
 # = Security Config
 # ===============================
 security:
@@ -81,35 +59,3 @@ security:
       client-secret: client
     resource:
       token-info-uri: http://server-oauth2/oauth/check_token
-# ===============================
-# = Ribbon Config
-# ===============================
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 10000
-        readTimeout: 10000
-        loggerLevel: full
-  hystrix:
-    enabled: true
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 11000
-ribbon:
-  ServerListRefreshInterval: 5000
-  # 开启懒加载后，如果使用随机端口，注册到 eureka 的端口号永远都是 0，必须使用固定端口号才行
-  eager-load:
-    enabled: true
-    clients: atomic-hello,atomic-world
-acp:
-  cloud:
-    log-server:
-      enabled: true
-    oauth:
-      resource-server-permit-all-path:
-        - /customer

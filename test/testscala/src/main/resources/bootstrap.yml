@@ -6,6 +6,8 @@ spring:
 info:
   version: 1.0.0
   app-name: ${spring.application.name}
+  ip-address: 127.0.0.1
+  server-port: 9090
   tags:
     environment: ${spring.profiles.active}
   build:
