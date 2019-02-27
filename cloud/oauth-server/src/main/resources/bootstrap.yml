@@ -12,7 +12,6 @@ spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
     default-property-inclusion: non_null
-    # ==== zipkin 链路监控，需要时放开注释
 info:
   version: 1.0.0
   app-name: ${spring.application.name}

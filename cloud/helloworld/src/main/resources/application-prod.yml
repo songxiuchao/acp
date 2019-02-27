@@ -53,6 +53,3 @@ security:
     client:
       client-id: client
       client-secret: client
-acp:
-  test:
-    properties: 123

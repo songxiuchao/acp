@@ -13,6 +13,7 @@
 >   - jaxws-rt (2.3.2)
 >   - mysql-connector-java (8.0.15)
 > - [Upgrade] gradle 公共脚本中增加部署至 maven 仓库任务配置（包含本地和远程）
+> - [Upgrade] cloud 下新增配置中心 demo
 > - [Upgrade] 更新文档
 > - [Upgrade] 规范各 demo 的 yml 配置文件书写
 > - [Fix] 优化全局异常处理，调整对应异常响应的 HttpStatus
