@@ -2,9 +2,6 @@ debug: false
 server:
   address: 127.0.0.1
   port: 8780
-  tomcat:
-    max-threads: 1000
-    uri-encoding: UTF-8
 # ===============================
 # = Log To File Config
 # ===============================
@@ -15,23 +12,20 @@ logging:
   file:
     max-size: 5MB
     max-history: 30
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
+# ===============================
+# = Eureka Config
+# ===============================
+eureka:
+  instance:
+    ip-address: ${server.address}
+    instance-id: ${spring.application.name}(${server.address}:${server.port}):v${info.version}:${spring.profiles.active}
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
 # ===============================
 # = Spring Config
 # ===============================
 spring:
-  thymeleaf:
-    cache: false
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-    default-property-inclusion: non_null
   cloud:
     stream:
       default-binder: kafka
@@ -83,20 +77,6 @@ spring:
 #                      brokers: name85:9094
 #                      zkNodes: name85:2181,name86:2181,name87:2181/kafkatest0101
 # ===============================
-# = Eureka Config
-# ===============================
-eureka:
-  instance:
-    ip-address: ${server.address}
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 15
-    instance-id: ${spring.application.name}(${eureka.instance.ip-address}:${server.port}):v${info.version}:${spring.profiles.active}
-  client:
-    registry-fetch-interval-seconds: 5
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka/
-# ===============================
 # = Security Config
 # ===============================
 security:
@@ -104,5 +84,3 @@ security:
     client:
       client-id: client
       client-secret: client
-    resource:
-      token-info-uri: http://server-oauth2/oauth/check_token

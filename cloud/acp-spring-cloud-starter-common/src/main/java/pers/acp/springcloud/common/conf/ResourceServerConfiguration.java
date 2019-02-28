@@ -1,18 +1,20 @@
 package pers.acp.springcloud.common.conf;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -24,9 +26,9 @@ import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.CommonTools;
+import pers.acp.core.log.LogFactory;
 import pers.acp.springcloud.common.constant.ConfigurationOrder;
 import pers.acp.springcloud.common.enums.RestPrefix;
-import pers.acp.springcloud.common.log.LogInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +42,10 @@ import java.util.List;
 @Component
 @Configuration
 @EnableResourceServer
-@RefreshScope
 @Order(ConfigurationOrder.resourceServerConfiguration)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private final LogInstance logInstance;
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private final AcpOauthConfiguration acpOauthConfiguration;
 
@@ -52,22 +53,43 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     private final ResourceServerProperties resourceServerProperties;
 
+    private final ObjectMapper objectMapper;
+
     private final String contextPath;
 
     @Autowired
-    public ResourceServerConfiguration(LogInstance logInstance, AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ServerProperties serverProperties) {
-        this.logInstance = logInstance;
+    public ResourceServerConfiguration(AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ObjectMapper objectMapper, ServerProperties serverProperties) {
         this.acpOauthConfiguration = acpOauthConfiguration;
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
+        this.objectMapper = objectMapper;
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
 
     @LoadBalanced
-    @Bean("acpSpringCloudRestTemplate")
-    @ConditionalOnExpression("!'${acp.cloud.oauth.oauth-server}'.equals('true')")
-    public RestTemplate acpSpringCloudRestTemplate() throws HttpException {
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+    @Bean("acpSpringCloudOauth2ClientRestTemplate")
+    public RestTemplate acpSpringCloudOauth2ClientRestTemplate() throws HttpException {
+        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter(objectMapper));
+        return restTemplate;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ServerProperties serverProperties() {
+        return new ServerProperties();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public OAuth2ClientProperties oAuth2ClientProperties() {
+        return new OAuth2ClientProperties();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ResourceServerProperties resourceServerProperties() {
+        return new ResourceServerProperties();
     }
 
     /**
@@ -80,9 +102,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @ConditionalOnExpression("!'${acp.cloud.oauth.oauth-server}'.equals('true')")
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices services = new RemoteTokenServices();
+        // 自定义错误处理类，所有错误放行统一交由 oauth 模块进行进出
         try {
-            RestTemplate restTemplate = acpSpringCloudRestTemplate();
-            // 自定义错误处理类，所有错误放行统一交由 oauth 模块进行进出
+            RestTemplate restTemplate = acpSpringCloudOauth2ClientRestTemplate();
             restTemplate.setErrorHandler(new ResponseErrorHandler() {
                 @Override
                 public boolean hasError(ClientHttpResponse response) {
@@ -95,8 +117,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 }
             });
             services.setRestTemplate(restTemplate);
-        } catch (HttpException e) {
-            logInstance.error(e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
         services.setCheckTokenEndpointUrl(resourceServerProperties.getTokenInfoUri());
         services.setClientId(clientProperties.getClientId());
@@ -125,8 +147,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @Override
     public void configure(HttpSecurity http) throws Exception {
         List<String> permitAll = new ArrayList<>();
+        List<String> security = new ArrayList<>();
         if (acpOauthConfiguration.isResourceServer()) {
-            logInstance.info("resource server = true");
+            log.info("resource server = true");
             permitAll.add(contextPath + "/error");
             permitAll.add(contextPath + "/actuator");
             permitAll.add(contextPath + "/actuator/**");
@@ -142,14 +165,19 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
             permitAll.add(contextPath + "/oauth/token");
             permitAll.add(contextPath + "/oauth/error");
             acpOauthConfiguration.getResourceServerPermitAllPath().forEach(path -> permitAll.add(contextPath + path));
+            acpOauthConfiguration.getResourceServerSecurityPath().forEach(path -> security.add(contextPath + path));
             permitAll.add(contextPath + RestPrefix.OPEN + "/**");
         } else {
-            logInstance.info("resource server = false");
+            log.info("resource server = false");
             permitAll.add(contextPath + "/**");
         }
-        permitAll.forEach(uri -> logInstance.info("permitAll uri: " + uri));
+        permitAll.forEach(uri -> log.info("permitAll uri: " + uri));
+        security.forEach(uri -> log.info("security uri: " + uri));
+        log.info("security uri: other any");
         // match 匹配的url，赋予全部权限（不进行拦截）
-        http.csrf().disable().authorizeRequests().antMatchers(permitAll.toArray(new String[]{})).permitAll()
+        http.csrf().disable().authorizeRequests()
+                .antMatchers(security.toArray(new String[]{})).authenticated()
+                .antMatchers(permitAll.toArray(new String[]{})).permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().permitAll();
     }

@@ -20,7 +20,7 @@ public class HelloWorldApplication {
         SpringApplication.run(HelloWorldApplication.class, args);
     }
 
-    @Bean("customerRestTemplate")
+    @Bean("customerRestTemplateTest")
     @LoadBalanced
     public RestTemplate restTemplate() throws HttpException {
         return new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));

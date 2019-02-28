@@ -1,7 +1,6 @@
 package pers.acp.springcloud.common.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import java.util.List;
  * @since JDK 11
  */
 @Component
-@RefreshScope
 @ConfigurationProperties(prefix = "acp.cloud.oauth")
 public class AcpOauthConfiguration {
 
@@ -40,6 +38,14 @@ public class AcpOauthConfiguration {
         this.resourceServerPermitAllPath = resourceServerPermitAllPath;
     }
 
+    public List<String> getResourceServerSecurityPath() {
+        return resourceServerSecurityPath;
+    }
+
+    public void setResourceServerSecurityPath(List<String> resourceServerSecurityPath) {
+        this.resourceServerSecurityPath = resourceServerSecurityPath;
+    }
+
     /**
      * is oauth server
      * default false
@@ -52,6 +58,14 @@ public class AcpOauthConfiguration {
      */
     private boolean resourceServer = true;
 
+    /**
+     * permitAll path, effective when resourceServer=true
+     */
     private List<String> resourceServerPermitAllPath = new ArrayList<>();
+
+    /**
+     * security path, effective when resourceServer=true
+     */
+    private List<String> resourceServerSecurityPath = new ArrayList<>();
 
 }
