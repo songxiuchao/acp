@@ -74,13 +74,15 @@ final class ClientSender {
     /**
      * 构造函数
      *
-     * @param isHttps     是否https请求，默认false
-     * @param maxperRoute 连接池最大连接数，默认100
-     * @param timeOut     超时时间
+     * @param isHttps      是否https请求，默认false
+     * @param maxTotalConn 最大链接数，默认1000
+     * @param maxPerRoute  路由并发数，默认50
+     * @param timeOut      超时时间
      */
-    ClientSender(boolean isHttps, int maxperRoute, int timeOut) throws HttpException {
+    ClientSender(boolean isHttps, int maxTotalConn, int maxPerRoute, int timeOut) throws HttpException {
         this.https = isHttps;
-        this.maxperRoute = maxperRoute;
+        this.maxTotalConn = maxTotalConn;
+        this.maxPerRoute = maxPerRoute;
         this.timeOut = timeOut;
         createHttpClient();
     }
@@ -91,7 +93,9 @@ final class ClientSender {
 
     private boolean https;
 
-    private int maxperRoute;
+    private int maxTotalConn;
+
+    private int maxPerRoute;
 
     private int timeOut;
 
@@ -127,8 +131,12 @@ final class ClientSender {
         return timeOut;
     }
 
-    int getMaxperRoute() {
-        return maxperRoute;
+    int getMaxTotalConn() {
+        return maxTotalConn;
+    }
+
+    int getMaxPerRoute() {
+        return maxPerRoute;
     }
 
     /**
@@ -288,8 +296,8 @@ final class ClientSender {
                     socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.INSTANCE).build();
                 }
                 PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-                connectionManager.setMaxTotal(maxperRoute);
-                connectionManager.setDefaultMaxPerRoute(connectionManager.getMaxTotal());
+                connectionManager.setMaxTotal(maxTotalConn);
+                connectionManager.setDefaultMaxPerRoute(maxPerRoute);
                 client = HttpClients.custom().setDefaultCookieStore(cookieStore).setConnectionManager(connectionManager).setDefaultRequestConfig(requestConfig).build();
             }
         } catch (Exception e) {
