@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class BeansDefine {
 
     @Bean
-    @ConditionalOnMissingBean(HibernateExceptionTranslator.class)
+    @ConditionalOnMissingBean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }

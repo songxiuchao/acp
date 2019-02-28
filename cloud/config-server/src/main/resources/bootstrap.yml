@@ -51,6 +51,13 @@ spring:
     name: server-config
   thymeleaf:
     cache: false
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+  zipkin:
+    #    base-url: http://localhost:9411/
+    sender:
+      type: kafka
   sleuth:
     sampler:
       probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。

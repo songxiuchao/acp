@@ -33,6 +33,8 @@ public class TestController {
 
     private final TableRepo tableRepo;
 
+    private final ObjectMapper mapper;
+
     @Value("${logging.path}")
     private String s1;
 
@@ -43,8 +45,9 @@ public class TestController {
     private String s3;
 
     @Autowired
-    public TestController(TableRepo tableRepo) {
+    public TestController(TableRepo tableRepo, ObjectMapper mapper) {
         this.tableRepo = tableRepo;
+        this.mapper = mapper;
     }
 
     @ApiOperation(value = "测试 hello", notes = "返回项目绝对路径")
@@ -71,7 +74,6 @@ public class TestController {
     public ResponseEntity<Object> post2(@PathVariable String name, @RequestParam String pwd) {
         log.info("name2:" + name + ",pwd2:" + pwd);
         log.info(CommonTools.getWebRootAbsPath());
-        ObjectMapper mapper = new ObjectMapper();
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("result2", name + pwd);
         return ResponseEntity.ok(objectNode.toString());
@@ -82,7 +84,6 @@ public class TestController {
     public ResponseEntity<Object> post2(@ApiParam(value = "str", required = true) @NotEmpty(message = "str不能为空") @RequestBody String str) {
         log.info("str:" + str);
         log.info(CommonTools.getWebRootAbsPath());
-        ObjectMapper mapper = new ObjectMapper();
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("result2", str);
         return ResponseEntity.ok(objectNode.toString());

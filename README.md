@@ -37,6 +37,8 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
     - spring-cloud-stream-binder-kafka
     - spring-cloud-openfeign
     - spring-cloud-sleuth-zipkin
+    - spring-cloud-config-server
+    - spring-cloud-bus-kafka
     
 ## 一、环境要求
 - jdk 11
@@ -205,6 +207,7 @@ acp:
     （4）hystrix 断路器
     （5）封装日志服务客户端，发送日志消息至 kafka
     （6）zipkin 链路追踪客户端
+    （7）自定义 PropertySourceLocator
 ##### 2. cloud:admin-server 
 ###### 2.1 可视化监控，监控服务状态、信息聚合
 |          url          |  描述                   |
@@ -252,13 +255,15 @@ acp:
 
 > 注：使用 authorization_code 方式时，认证请求时需要直接访问 oauth-server 不能通过 gateway
 
-##### 6. cloud:log-server
+##### 6. cloud:config-server
+配置服务，统一配置中心，从数据库读取配置信息
+##### 7. cloud:log-server
 日志服务，使用 kafka 作为日志消息队列
-##### 7. cloud:helloworld 
+##### 8. cloud:helloworld 
 原子服务，分别调用 hello 和 world
-##### 8. cloud:hello 
+##### 9. cloud:hello 
 原子服务
-##### 9. cloud:world 
+##### 10. cloud:world 
 原子服务
 ### （二）基础中间件环境搭建
 基础中间件包括：redis、zookeeper、kafka、kafka-manager、elasticsearch、kibana、logstash、zipkin、zipkin-dependencies、zoonavigator-api、zoonavigator-web、prometheus、grafana、setup_grafana_datasource
@@ -313,7 +318,9 @@ http://127.0.0.1:5601
     （1）无需改动代码
     （2）修改 yml 配置即可
 ##### 3. 统一配置管理
-    需依赖 git 或数据库，如有需要参考官网进行定制开发
+    cloud:config-server
+    （1）额外功能根据实际需求自定义
+    （2）修改 yml 配置即可
 ##### 4. 网关服务
     cloud:gateway-server
     （1）需自定义限流策略（需依赖 Redis）
@@ -344,12 +351,14 @@ http://127.0.0.1:5601
           log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
     （6）如果不存在日志服务，需要排除依赖
     exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
-    （7）如有特殊需要不进行认证的url（例如"/customer"），则增加配置
+    （7）如有特殊需要不进行认证的url（例如"/customer"），则增加resource-server-permit-all-path配置；如有需要进行认证的url（例如"/customer2"），则增加resource-server-security-path配置
     acp:
       cloud:
         oauth:
           resource-server-permit-all-path: 
             - /customer
+          resource-server-security-path:
+            - /customer2
     （8）如果原子服务不需要加入统一认证体系中，即不需要进行访问权限验证，则增加配置
     acp:
       cloud:

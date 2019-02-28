@@ -35,7 +35,7 @@ public class HelloWorldController {
     private String properties;
 
     @Autowired
-    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance, @Qualifier(value = "customerRestTemplate") RestTemplate restTemplate) {
+    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance, @Qualifier(value = "customerRestTemplateTest") RestTemplate restTemplate) {
         this.helloServer = helloServer;
         this.worldServer = worldServer;
         this.logInstance = logInstance;

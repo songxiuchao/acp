@@ -26,7 +26,6 @@ spring:
         service-id: server-config          #指定配置中心的service-id，便于扩展为高可用配置集群。
         enabled: true
       fail-fast: true
-      request-read-timeout: 10000
 info:
   version: 1.0.0
   app-name: ${spring.application.name}
