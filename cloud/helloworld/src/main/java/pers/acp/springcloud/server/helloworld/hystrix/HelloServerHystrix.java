@@ -16,9 +16,7 @@ public class HelloServerHystrix implements FallbackFactory<HelloServer> {
 
     @Override
     public HelloServer create(Throwable cause) {
-        if (!(cause instanceof RuntimeException)) {
-            log.error("HelloServer hystrix caused by: " + cause.getMessage(), cause);
-        }
+        log.error("HelloServer hystrix caused by: " + cause.getMessage(), cause);
         return name -> "Hello service Hystrix[" + name + "]";
     }
 

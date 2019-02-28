@@ -15,9 +15,11 @@
 > - [Upgrade] gradle 公共脚本中增加部署至 maven 仓库任务配置（包含本地和远程）
 > - [Upgrade] cloud 下新增配置中心demo，其余服务连接配置中心获取配置信息，并通过bus进行动态刷新
 > - [Upgrade] acp-spring-cloud-starter-common 添加自定义 PropertySourceLocator，供 config-client 获取配置信息
+> - [Upgrade] 自定义的 RestTemplate 使用 HttpClient，且加载 feign httpclient 配置
 > - [Upgrade] 更新文档
 > - [Upgrade] 规范各 demo 的 yml 配置文件书写
 > - [Upgrade] 优化 acp-client 中 HttpClientBuilder
+> - [Delete] 删除无用测试代码
 > - [Fix] 优化全局异常处理，调整对应异常响应的 HttpStatus
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE

@@ -2,6 +2,7 @@ package pers.acp.springcloud.common.component;
 
 import org.springframework.cloud.config.client.ConfigClientProperties;
 import org.springframework.cloud.config.client.ConfigServicePropertySourceLocator;
+import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -27,16 +28,19 @@ public class CustomerConfigServicePropertySourceLocator extends ConfigServicePro
 
     private final ConfigurableEnvironment environment;
 
-    public CustomerConfigServicePropertySourceLocator(ConfigurableEnvironment environment, ConfigClientProperties clientProperties) {
+    public CustomerConfigServicePropertySourceLocator(ConfigurableEnvironment environment, ConfigClientProperties clientProperties, FeignHttpClientProperties feignHttpClientProperties) {
         super(clientProperties);
         this.environment = environment;
-        setRestTemplate(customerConfigClientRestTemplate(clientProperties));
+        setRestTemplate(customerConfigClientRestTemplate(clientProperties, feignHttpClientProperties));
         log.info("Start Up Cloud, Configuration CustomerConfigServicePropertySourceLocator For ACP");
     }
 
-    private RestTemplate customerConfigClientRestTemplate(ConfigClientProperties clientProperties) {
+    private RestTemplate customerConfigClientRestTemplate(ConfigClientProperties clientProperties, FeignHttpClientProperties feignHttpClientProperties) {
         try {
-            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient());
+            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(
+                    new HttpClientBuilder().maxTotalConn(feignHttpClientProperties.getMaxConnections())
+                            .maxPerRoute(feignHttpClientProperties.getMaxConnectionsPerRoute())
+                            .timeOut(feignHttpClientProperties.getConnectionTimeout()).build().getHttpClient());
             if (clientProperties.getRequestReadTimeout() < 0) {
                 throw new IllegalStateException("Invalid Value for Read Timeout set.");
             }
