@@ -17,6 +17,7 @@
 > - [Upgrade] acp-spring-cloud-starter-common 添加自定义 PropertySourceLocator，供 config-client 获取配置信息
 > - [Upgrade] 更新文档
 > - [Upgrade] 规范各 demo 的 yml 配置文件书写
+> - [Upgrade] 优化 acp-client 中 HttpClientBuilder
 > - [Fix] 优化全局异常处理，调整对应异常响应的 HttpStatus
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE

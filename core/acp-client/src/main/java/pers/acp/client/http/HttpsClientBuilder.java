@@ -9,8 +9,14 @@ public class HttpsClientBuilder extends ClientBuilder {
         setHttps(true);
     }
 
-    public HttpsClientBuilder maxperRoute(int maxperRoute) {
-        setMaxperRoute(maxperRoute);
+
+    public HttpsClientBuilder maxTotalConn(int maxTotalConn) {
+        setMaxTotalConn(maxTotalConn);
+        return this;
+    }
+
+    public HttpsClientBuilder maxPerRoute(int maxPerRoute) {
+        setMaxPerRoute(maxPerRoute);
         return this;
     }
 

@@ -10,7 +10,9 @@ public class ClientBuilder {
 
     private boolean https = false;
 
-    private int maxperRoute = 100;
+    private int maxTotalConn = 1000;
+
+    private int maxPerRoute = 50;
 
     private int timeOut = 60000;
 
@@ -18,23 +20,31 @@ public class ClientBuilder {
         return https;
     }
 
-    public int getMaxperRoute() {
-        return maxperRoute;
+    public int getMaxPerRoute() {
+        return maxPerRoute;
     }
 
     public int getTimeOut() {
         return timeOut;
     }
 
-    public void setHttps(boolean https) {
+    void setHttps(boolean https) {
         this.https = https;
     }
 
-    public void setMaxperRoute(int maxperRoute) {
-        this.maxperRoute = maxperRoute;
+    public int getMaxTotalConn() {
+        return maxTotalConn;
     }
 
-    public void setTimeOut(int timeOut) {
+    void setMaxTotalConn(int maxTotalConn) {
+        this.maxTotalConn = maxTotalConn;
+    }
+
+    void setMaxPerRoute(int maxPerRoute) {
+        this.maxPerRoute = maxPerRoute;
+    }
+
+    void setTimeOut(int timeOut) {
         this.timeOut = timeOut;
     }
 
@@ -42,7 +52,7 @@ public class ClientBuilder {
      * 创建客户端实例
      */
     public AcpClient build() throws HttpException {
-        return new AcpClient(false, maxperRoute, timeOut);
+        return new AcpClient(false, maxTotalConn, maxPerRoute, timeOut);
     }
 
 }

@@ -68,8 +68,12 @@ public class AcpClient {
         return client.getTimeOut();
     }
 
+    public int getMaxTotalConn() {
+        return client.getMaxTotalConn();
+    }
+
     public int getMaxperRoute() {
-        return client.getMaxperRoute();
+        return client.getMaxPerRoute();
     }
 
     public String getUserAgent() {
@@ -195,13 +199,14 @@ public class AcpClient {
     /**
      * http 构造函数
      *
-     * @param isHttps     是否https请求
-     * @param maxperRoute 连接池最大连接数，默认100
-     * @param timeOut     超时时间
+     * @param isHttps      是否https请求，默认false
+     * @param maxTotalConn 最大链接数，默认1000
+     * @param maxPerRoute  路由并发数，默认50
+     * @param timeOut      超时时间
      */
-    AcpClient(boolean isHttps, int maxperRoute, int timeOut) throws HttpException {
+    AcpClient(boolean isHttps, int maxTotalConn, int maxPerRoute, int timeOut) throws HttpException {
         super();
-        client = new ClientSender(isHttps, maxperRoute, timeOut);
+        client = new ClientSender(isHttps, maxTotalConn, maxPerRoute, timeOut);
     }
 
     /**
