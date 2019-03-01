@@ -16,9 +16,7 @@ public class WorldServerHystrix implements FallbackFactory<WorldServer> {
 
     @Override
     public WorldServer create(Throwable cause) {
-        if (!(cause instanceof RuntimeException)) {
-            log.error("WorldServerHystrix hystrix caused by: " + cause.getMessage(), cause);
-        }
+        log.error("WorldServerHystrix hystrix caused by: " + cause.getMessage(), cause);
         return name -> "World service Hystrix[" + name + "]";
     }
 

@@ -2,6 +2,7 @@ package pers.acp.springcloud.server.helloworld;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +23,11 @@ public class HelloWorldApplication {
 
     @Bean("customerRestTemplateTest")
     @LoadBalanced
-    public RestTemplate restTemplate() throws HttpException {
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+    public RestTemplate restTemplate(FeignHttpClientProperties feignHttpClientProperties) throws HttpException {
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(
+                new HttpClientBuilder().maxTotalConn(feignHttpClientProperties.getMaxConnections())
+                        .maxPerRoute(feignHttpClientProperties.getMaxConnectionsPerRoute())
+                        .timeOut(feignHttpClientProperties.getConnectionTimeout()).build().getHttpClient()));
     }
 
 }

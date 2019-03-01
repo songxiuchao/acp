@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProper
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -53,15 +54,18 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     private final ResourceServerProperties resourceServerProperties;
 
+    private final FeignHttpClientProperties feignHttpClientProperties;
+
     private final ObjectMapper objectMapper;
 
     private final String contextPath;
 
     @Autowired
-    public ResourceServerConfiguration(AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, ObjectMapper objectMapper, ServerProperties serverProperties) {
+    public ResourceServerConfiguration(AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, FeignHttpClientProperties feignHttpClientProperties, ObjectMapper objectMapper, ServerProperties serverProperties) {
         this.acpOauthConfiguration = acpOauthConfiguration;
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
+        this.feignHttpClientProperties = feignHttpClientProperties;
         this.objectMapper = objectMapper;
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
@@ -69,7 +73,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @LoadBalanced
     @Bean("acpSpringCloudOauth2ClientRestTemplate")
     public RestTemplate acpSpringCloudOauth2ClientRestTemplate() throws HttpException {
-        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(new HttpClientBuilder().build().getHttpClient()));
+        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(
+                new HttpClientBuilder().maxTotalConn(feignHttpClientProperties.getMaxConnections())
+                        .maxPerRoute(feignHttpClientProperties.getMaxConnectionsPerRoute())
+                        .timeOut(feignHttpClientProperties.getConnectionTimeout()).build().getHttpClient()));
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter(objectMapper));
         return restTemplate;
     }
@@ -78,12 +85,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @ConditionalOnMissingBean
     public ServerProperties serverProperties() {
         return new ServerProperties();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public OAuth2ClientProperties oAuth2ClientProperties() {
-        return new OAuth2ClientProperties();
     }
 
     @Bean
