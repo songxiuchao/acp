@@ -1,5 +1,6 @@
 package pers.acp.client.http;
 
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.HttpClient;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.core.CommonTools;
@@ -77,7 +78,7 @@ public class AcpClient {
     }
 
     public String getUserAgent() {
-        return headers.get("User-Agent");
+        return headers.get(HttpHeaders.USER_AGENT);
     }
 
     public String getCookie() {
@@ -115,7 +116,7 @@ public class AcpClient {
      * @return 跳转地址
      */
     public String getRefer() {
-        return headers.get("Referer");
+        return headers.get(HttpHeaders.REFERER);
     }
 
     public AcpClient url(String url) {
@@ -134,12 +135,12 @@ public class AcpClient {
      * @param referer 跳转地址
      */
     public AcpClient referer(String referer) {
-        headers.put("Referer", referer);
+        headers.put(HttpHeaders.REFERER, referer);
         return this;
     }
 
     public AcpClient userAgent(String userAgent) {
-        headers.put("User-Agent", userAgent);
+        headers.put(HttpHeaders.USER_AGENT, userAgent);
         return this;
     }
 

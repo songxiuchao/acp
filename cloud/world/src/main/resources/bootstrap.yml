@@ -75,6 +75,8 @@ hystrix:
             timeoutInMilliseconds: 11000
 ribbon:
   ServerListRefreshInterval: 5000
+  ReadTimeout: ${hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds}
+  ConnectTimeout: ${hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds}
 # ===============================
 # = Security Config
 # ===============================
