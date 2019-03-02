@@ -62,6 +62,11 @@ feign:
         connectTimeout: 10000
         readTimeout: 10000
         loggerLevel: full
+  httpclient:
+    enabled: true
+    connection-timeout: ${feign.client.config.default.connectTimeout}
+    max-connections: 1000
+    max-connections-per-route: 50
   hystrix:
     enabled: true
 hystrix:
