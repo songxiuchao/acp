@@ -53,7 +53,7 @@ class InitSource extends Thread {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
 
-    private static InitSource handle = null;
+    private volatile static InitSource handle = null;
 
     private final InitTcpServer initTcpServer;
 

@@ -19,8 +19,9 @@
 > - [Upgrade] 规范各 demo 的 yml 配置文件书写
 > - [Upgrade] 优化 acp-client 中 HttpClientBuilder
 > - [Upgrade] 更新文档
+> - [Upgrade] 优化线程池、任务代码，最少开销的情况下保证原子性
 > - [Delete] 删除无用测试代码
-> - [Fix] 优化全局异常处理，调整对应异常响应的 HttpStatus
+> - [Fix] 规范全局异常处理，调整对应异常响应的 HttpStatus
 ##### v5.1.2
 > - 更新 SpringBoot 至 2.1.2.RELEASE
 > - 更新 SpringCloud 至 Greenwich.RELEASE

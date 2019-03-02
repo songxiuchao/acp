@@ -23,7 +23,7 @@ public class PoolWorkerDispatch implements Runnable {
 
     private final long spacingTime;
 
-    private boolean isRunning = false;
+    private volatile boolean isRunning = false;
 
     private Class<? extends ThreadPoolWorker> poolWorkerClass;
 

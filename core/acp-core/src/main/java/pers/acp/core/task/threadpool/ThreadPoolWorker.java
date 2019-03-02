@@ -19,7 +19,7 @@ public abstract class ThreadPoolWorker extends Thread {
     /**
      * 该工作线程是否正在工作
      */
-    private boolean isRunning = true;
+    private volatile boolean isRunning = true;
 
     /**
      * 该工作线程是否可以执行新任务
