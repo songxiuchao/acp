@@ -26,12 +26,12 @@ public abstract class BaseTask implements IBaseTask, Runnable {
     /**
      * 任务名称
      */
-    private String taskName = null;
+    private String taskName;
 
     /**
      * 创建时间
      */
-    private Date generateTime = null;
+    private Date generateTime;
 
     /**
      * 提交执行时间
@@ -61,7 +61,7 @@ public abstract class BaseTask implements IBaseTask, Runnable {
     /**
      * 任务是否处于正在执行状态
      */
-    private boolean isRunning = false;
+    private volatile boolean isRunning = false;
 
     /**
      * 创建任务
