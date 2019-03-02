@@ -1,7 +1,7 @@
 package pers.acp.client.http;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
+import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
@@ -12,9 +12,6 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.BasicNameValuePair;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.core.CommonTools;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -327,8 +324,8 @@ final class ClientSender {
                             log.error("model is sendXML,but content is null!");
                             throw new HttpException("model is sendXML,but content is null!");
                         }
-                        request.addHeader("content-Type", "application/xml;charset=" + clientCharset);
-                        request.addHeader("Accept-Charset", clientCharset);
+                        request.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml;charset=" + clientCharset);
+                        request.addHeader(HttpHeaders.ACCEPT_CHARSET, clientCharset);
                         if (params != null && !params.isEmpty()) {
                             String xmlData = HttpPacket.buildPostXMLParam(params, rootName, clientCharset);
                             ((HttpPost) request).setEntity(new StringEntity(xmlData, clientCharset));
@@ -340,29 +337,29 @@ final class ClientSender {
                             log.error("model is sendJSONStr,but JSONString is null!");
                             throw new HttpException("model is sendJSONStr,but JSONString is null!");
                         }
-                        request.addHeader("content-Type", "application/json;charset=" + clientCharset);
-                        request.addHeader("Accept-Charset", clientCharset);
+                        request.addHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=" + clientCharset);
+                        request.addHeader(HttpHeaders.ACCEPT_CHARSET, clientCharset);
                         ((HttpPost) request).setEntity(new StringEntity(jsonString, clientCharset));
                     } else if (sendBytes) {
                         if (bytes == null || bytes.length == 0) {
                             log.error("model is sendBytes,but bytes is null!");
                             throw new HttpException("model is sendBytes,but bytes is null!");
                         }
-                        request.addHeader("content-Type", "application/octet-stream;charset=" + clientCharset);
-                        request.addHeader("Accept-Charset", clientCharset);
+                        request.addHeader(HttpHeaders.CONTENT_TYPE, "application/octet-stream;charset=" + clientCharset);
+                        request.addHeader(HttpHeaders.ACCEPT_CHARSET, clientCharset);
                         ((HttpPost) request).setEntity(new ByteArrayEntity(bytes));
                     } else if (sendSOAP) {
                         if (bytes == null || bytes.length == 0) {
                             log.error("model is sendSOAP,but bytes is null!");
                             throw new HttpException("model is sendSOAP,but bytes is null!");
                         }
-                        request.addHeader("content-Type", "application/soap+xml;charset=" + clientCharset);
-                        request.addHeader("Accept-Charset", clientCharset);
+                        request.addHeader(HttpHeaders.CONTENT_TYPE, "application/soap+xml;charset=" + clientCharset);
+                        request.addHeader(HttpHeaders.ACCEPT_CHARSET, clientCharset);
                         ((HttpPost) request).setEntity(new ByteArrayEntity(bytes));
                     } else {
                         List<NameValuePair> pairList = buildPostParam(params);
-                        request.addHeader("content-Type", "application/x-www-form-urlencoded;charset=" + clientCharset);
-                        request.addHeader("Accept-Charset", clientCharset);
+                        request.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=" + clientCharset);
+                        request.addHeader(HttpHeaders.ACCEPT_CHARSET, clientCharset);
                         ((HttpPost) request).setEntity(new UrlEncodedFormEntity(pairList, clientCharset));
                     }
                     response = client.execute(request, context);
@@ -370,7 +367,7 @@ final class ClientSender {
                     url = HttpPacket.buildGetParam(url, params, clientCharset);
                     HttpRequestBase origRequest = new HttpGet(url);
                     request = initHeader(origRequest, headers);
-                    request.addHeader("content-Type", "text/html; charset=" + clientCharset);
+                    request.addHeader(HttpHeaders.CONTENT_TYPE, "text/html; charset=" + clientCharset);
                     response = client.execute(request, context);
                 }
                 return convertResponse(response);

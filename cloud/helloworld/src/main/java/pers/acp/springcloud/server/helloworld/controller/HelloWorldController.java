@@ -52,7 +52,7 @@ public class HelloWorldController {
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> helloWorldGet(HttpServletRequest request, @RequestParam String name) throws HttpException {
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("Authorization", request.getHeader("Authorization"));
+        requestHeaders.add(HttpHeaders.AUTHORIZATION, request.getHeader(HttpHeaders.AUTHORIZATION));
         requestHeaders.add(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN_VALUE);
         requestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
         HttpEntity<String> requestEntity = new HttpEntity<>(null, requestHeaders);
