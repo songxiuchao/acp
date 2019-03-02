@@ -364,6 +364,11 @@ http://127.0.0.1:5601
       cloud:
         oauth:
           resource-server: false #是否是资源服务器
+    （9）特别需要注意：
+        即使不需要加入统一认证体系中，如果请求的 header 中包含 Authorization， oauth2 还是会进行身份认证！
+        所以仍然需要正确进行如下配置，否则 oauth2 进行身份认证时将会抛出异常
+        com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+        或调用端身份认证失败：status 401
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication
