@@ -2,14 +2,10 @@ package pers.acp.core.task.threadpool;
 
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
-import pers.acp.core.task.threadpool.worker.DefaultPoolWorker;
 import pers.acp.core.tools.CommonUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.*;
 
 /**
  * 线程池调度
@@ -22,116 +18,121 @@ public final class ThreadPoolService {
 
     private static final ConcurrentHashMap<String, ThreadPoolService> threadPoolInstanceMap = new ConcurrentHashMap<>();
 
-    String poolName;
+    private String poolName;
 
-    final CopyOnWriteArrayList<BaseThreadTask> taskQueue = new CopyOnWriteArrayList<>();
-
-    final List<ThreadPoolWorker> workers = new ArrayList<>();
-
-    private PoolWorkerDispatch workDispatch;
+    private ThreadPoolExecutor executor;
 
     /**
      * 获取线程池实例
      *
      * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
+     * @param querySize       队列容量
      * @return 线程池实例
      */
-    public static ThreadPoolService getInstance(int maxThreadNumber, long spacingTime) {
-        return getInstance(1, 60000, maxThreadNumber, spacingTime);
+    public static ThreadPoolService getInstance(int maxThreadNumber, int querySize) {
+        return getInstance(60000, maxThreadNumber, querySize);
     }
 
     /**
      * 获取线程池实例
      *
-     * @param minThreadNumber 最小线程数
-     * @param maxFreeTime     线程最大空闲时间
+     * @param maxFreeTime     线程最大空闲时间，单位毫秒
      * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
+     * @param querySize       队列容量
      * @return 线程池实例
      */
-    public static ThreadPoolService getInstance(int minThreadNumber, long maxFreeTime, int maxThreadNumber, long spacingTime) {
-        return getInstance(null, DefaultPoolWorker.class, minThreadNumber, maxFreeTime, maxThreadNumber, spacingTime);
-    }
-
-    /**
-     * 获取线程池实例
-     *
-     * @param poolName        线程池实例名
-     * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
-     * @return 线程池实例
-     */
-    public static ThreadPoolService getInstance(String poolName, long spacingTime, int maxThreadNumber) {
-        return getInstance(poolName, 1, 60000, maxThreadNumber, spacingTime);
+    public static ThreadPoolService getInstance(long maxFreeTime, int maxThreadNumber, int querySize) {
+        return getInstance(null, maxFreeTime, maxThreadNumber, querySize);
     }
 
     /**
      * 获取线程池实例
      *
      * @param poolName        线程池实例名
-     * @param minThreadNumber 最小线程数
-     * @param maxFreeTime     线程最大空闲时间
      * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
+     * @param querySize       队列容量
      * @return 线程池实例
      */
-    public static ThreadPoolService getInstance(String poolName, int minThreadNumber, long maxFreeTime, int maxThreadNumber, long spacingTime) {
-        return getInstance(poolName, DefaultPoolWorker.class, minThreadNumber, maxFreeTime, maxThreadNumber, spacingTime);
-    }
-
-    /**
-     * 获取线程池实例
-     *
-     * @param poolWorkerClass 工作线程类
-     * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
-     * @return 线程池实例
-     */
-    public static ThreadPoolService getInstance(Class<? extends ThreadPoolWorker> poolWorkerClass, long spacingTime, int maxThreadNumber) {
-        return getInstance(null, poolWorkerClass, 1, 60000, maxThreadNumber, spacingTime);
-    }
-
-    /**
-     * 获取线程池实例
-     *
-     * @param poolWorkerClass 工作线程类
-     * @param minThreadNumber 最小线程数
-     * @param maxFreeTime     线程最大空闲时间
-     * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
-     * @return 线程池实例
-     */
-    public static ThreadPoolService getInstance(Class<? extends ThreadPoolWorker> poolWorkerClass, int minThreadNumber, long maxFreeTime, int maxThreadNumber, long spacingTime) {
-        return getInstance(null, poolWorkerClass, minThreadNumber, maxFreeTime, maxThreadNumber, spacingTime);
+    public static ThreadPoolService getInstance(String poolName, int maxThreadNumber, int querySize) {
+        return getInstance(poolName, 60000, maxThreadNumber, querySize);
     }
 
     /**
      * 获取线程池实例
      *
      * @param poolName        线程池实例名
-     * @param poolWorkerClass 工作线程类
-     * @param minThreadNumber 最小线程数
      * @param maxFreeTime     线程最大空闲时间
      * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
+     * @param querySize       队列容量
      * @return 线程池实例
      */
-    public static ThreadPoolService getInstance(String poolName, Class<? extends ThreadPoolWorker> poolWorkerClass, int minThreadNumber, long maxFreeTime, int maxThreadNumber, long spacingTime) {
+    public static ThreadPoolService getInstance(String poolName, long maxFreeTime, int maxThreadNumber, int querySize) {
         ThreadPoolService instance;
         if (CommonUtils.isNullStr(poolName)) {
             poolName = "defaultThreadPool";
         }
         synchronized (ThreadPoolService.class) {
             if (!threadPoolInstanceMap.containsKey(poolName)) {
-                instance = new ThreadPoolService(poolName, poolWorkerClass, minThreadNumber, maxFreeTime, maxThreadNumber, spacingTime);
-                log.debug("init ThreadPool [" + poolName + "] success, max thread:" + maxThreadNumber);
+                instance = new ThreadPoolService(poolName, maxFreeTime, maxThreadNumber, querySize);
+                log.debug("init ThreadPool [" + poolName + "] success, maxThread:" + maxThreadNumber);
                 threadPoolInstanceMap.put(poolName, instance);
             } else {
                 instance = threadPoolInstanceMap.get(poolName);
             }
         }
         return instance;
+    }
+
+    /**
+     * 线程池实例构造函数
+     *
+     * @param poolName        线程池实例名
+     * @param maxFreeTime     线程最大空闲时间
+     * @param maxThreadNumber 最大线程数
+     *                        Integer.MAX_VALUE--无界线程数，直接提交
+     * @param querySize       队列容量；
+     *                        Integer.MAX_VALUE--无界队列，LinkedBlockingQueue
+     *                        else---------------有界队列，ArrayBlockingQueue
+     */
+    private ThreadPoolService(String poolName, long maxFreeTime, int maxThreadNumber, int querySize) {
+        this.poolName = poolName;
+        if (maxThreadNumber == Integer.MAX_VALUE) {// 直接提交
+            executor = new ThreadPoolExecutor(0, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
+        } else if (querySize == Integer.MAX_VALUE) {// 无界队列
+            executor = new ThreadPoolExecutor(maxThreadNumber, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+        } else {// 有界队列
+            executor = new ThreadPoolExecutor(0, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(querySize));
+        }
+    }
+
+    public synchronized void stop() {
+        this.executor.shutdown();
+        long start = System.currentTimeMillis();
+        try {
+            while (!this.executor.awaitTermination(1, TimeUnit.SECONDS)) {
+                log.info("pool [" + poolName + "] there are still unfinished tasks...");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        long end = System.currentTimeMillis();
+        threadPoolInstanceMap.remove(poolName);
+        log.info("thread pool [" + poolName + "] is stoped. It took " + (end - start) + " millisecond");
+    }
+
+    public synchronized void stopAll() {
+        synchronized (ThreadPoolService.class) {
+            threadPoolInstanceMap.forEach((key, poolService) -> poolService.stop());
+        }
+    }
+
+    /**
+     * 销毁线程池
+     */
+    public synchronized void destroy() {
+        this.executor.shutdownNow();
+        threadPoolInstanceMap.remove(poolName);
+        log.info("thread pool [" + poolName + "] is destroyed");
     }
 
     /**
@@ -144,63 +145,13 @@ public final class ThreadPoolService {
     }
 
     /**
-     * 线程池实例构造函数
-     *
-     * @param poolName        线程池实例名
-     * @param poolWorkerClass 工作线程类
-     * @param minThreadNumber 最小线程数
-     * @param maxFreeTime     线程最大空闲时间
-     * @param maxThreadNumber 最大线程数
-     * @param spacingTime     轮询队列的间隔时间
-     */
-    private ThreadPoolService(String poolName, Class<? extends ThreadPoolWorker> poolWorkerClass, int minThreadNumber, long maxFreeTime, int maxThreadNumber, long spacingTime) {
-        this.poolName = poolName;
-        workDispatch = new PoolWorkerDispatch(this, poolWorkerClass, minThreadNumber, maxFreeTime, maxThreadNumber, spacingTime);
-        Thread thread = new Thread(workDispatch);
-        thread.setDaemon(true);
-        thread.start();
-    }
-
-    /**
-     * 获取线程池信息
-     *
-     * @return 线程池信息
-     */
-    public String getInfo() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Thread Pool instance : ").append(poolName).append("\n");
-        sb.append("Task Queue Size : ").append(taskQueue.size()).append("\n");
-        for (BaseThreadTask aTaskQueue : taskQueue) {
-            sb.append("Task ").append(aTaskQueue.getTaskId()).append(" is ").append((aTaskQueue.isRunning()) ? "Running.\n" : "Waiting.\n");
-        }
-        sb.append("workerThread Number:").append(workers.size()).append("\n");
-        for (ThreadPoolWorker worker : workers) {
-            sb.append("WorkerThread ").append(worker.getIndex()).append(" is ").append(worker.isWaiting() ? "Waiting.\n" : "Running.\n");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 销毁线程池
-     */
-    public synchronized void destroy() {
-        taskQueue.clear();
-        workDispatch.stopWork();
-        threadPoolInstanceMap.remove(poolName);
-        log.debug("thread pool [" + poolName + "] is destroyed");
-    }
-
-    /**
      * 增加新的任务 每增加一个新任务,都要唤醒任务队列
      *
      * @param newTask 任务
      */
     public void addTask(BaseThreadTask newTask) {
-        synchronized (taskQueue) {
-            newTask.setSubmitTime(new Date());
-            taskQueue.add(newTask);
-            taskQueue.notifyAll();
-        }
+        newTask.setSubmitTime(new Date());
+        this.executor.execute(newTask);
         log.debug("thread pool [" + poolName + "] submit task[" + newTask.getTaskId() + "]: " + newTask.getTaskName());
     }
 
@@ -213,16 +164,13 @@ public final class ThreadPoolService {
         if (taskes == null || taskes.length == 0) {
             return;
         }
-        synchronized (taskQueue) {
-            for (BaseThreadTask taske : taskes) {
-                if (taske == null) {
-                    continue;
-                }
-                taske.setSubmitTime(new Date());
-                taskQueue.add(taske);
-                log.debug("thread pool [" + poolName + "] submit task[" + taske.getTaskId() + "]: " + taske.getTaskName());
+        for (BaseThreadTask taske : taskes) {
+            if (taske == null) {
+                continue;
             }
-            taskQueue.notifyAll();
+            taske.setSubmitTime(new Date());
+            this.executor.execute(taske);
+            log.debug("thread pool [" + poolName + "] submit task[" + taske.getTaskId() + "]: " + taske.getTaskName());
         }
     }
 
@@ -241,46 +189,7 @@ public final class ThreadPoolService {
      * @return 任务队列是否为空
      */
     public boolean isEmpty() {
-        return taskQueue.isEmpty();
-    }
-
-    /**
-     * 所有线程是否处于等待状态
-     *
-     * @return 是否处于等待状态
-     */
-    public boolean isWaitingAll() {
-        for (ThreadPoolWorker worker : workers) {
-            if (!worker.isWaiting()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 指定线程是否处于等待状态
-     *
-     * @param threadindex 线程编号
-     * @return 是否处于等待状态
-     */
-    public boolean isWaitingCurr(int threadindex) {
-        return workers.get(threadindex).isWaiting();
-    }
-
-    /**
-     * 指定线程以外的其他线程是否处于等待状态
-     *
-     * @param threadindex 线程编号
-     * @return 是否处于等待状态
-     */
-    public boolean isWaitingOther(int threadindex) {
-        for (ThreadPoolWorker worker : workers) {
-            if (worker.getIndex() != threadindex && !worker.isWaiting()) {
-                return false;
-            }
-        }
-        return true;
+        return this.executor.getQueue().isEmpty();
     }
 
 }

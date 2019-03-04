@@ -475,37 +475,6 @@ public class CommonUtils {
     }
 
     /**
-     * 在线程池中执行任务
-     *
-     * @param threadPool 线程池实例
-     * @param task       线程池任务
-     * @return 执行结果
-     */
-    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-    public static Object excuteTaskInThreadPool(ThreadPoolService threadPool, BaseThreadTask task) {
-        if (task != null && threadPool != null) {
-            threadPool.addTask(task);
-            try {
-                synchronized (task) {
-                    task.wait();
-                    if (task.getTaskResult() != null) {
-                        log.debug("excute task int threadpool [" + threadPool.getPoolName() + "] success:" + task.getTaskResult());
-                        return task.getTaskResult();
-                    } else {
-                        log.debug("excute task int threadpool [" + threadPool.getPoolName() + "] success");
-                        return null;
-                    }
-                }
-            } catch (Exception e) {
-                log.error("excute task int threadpool [" + threadPool.getPoolName() + "] failed:" + e.getMessage(), e);
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * 字符串转JSON对象
      *
      * @param src 字符串
@@ -662,6 +631,37 @@ public class CommonUtils {
             return sb;
         }
         return toUnderline(sb.toString());
+    }
+
+    /**
+     * 在线程池中执行任务
+     *
+     * @param threadPool 线程池实例
+     * @param task       线程池任务
+     * @return 执行结果
+     */
+    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
+    public static Object excuteTaskInThreadPool(ThreadPoolService threadPool, BaseThreadTask task) {
+        if (task != null && threadPool != null) {
+            threadPool.addTask(task);
+            try {
+                synchronized (task) {
+                    task.wait();
+                    if (task.getTaskResult() != null) {
+                        log.debug("excute task in threadpool success:" + task.getTaskResult());
+                        return task.getTaskResult();
+                    } else {
+                        log.debug("excute task in threadpool success");
+                        return null;
+                    }
+                }
+            } catch (Exception e) {
+                log.error("excute task in threadpool failed:" + e.getMessage(), e);
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
 }

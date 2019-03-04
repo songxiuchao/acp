@@ -1,4 +1,4 @@
-package pers.acp.core.task.base.interfaces;
+package pers.acp.core.task.base;
 
 /**
  * 任务接口

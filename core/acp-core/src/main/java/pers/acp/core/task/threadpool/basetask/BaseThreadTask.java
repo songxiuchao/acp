@@ -9,19 +9,6 @@ import pers.acp.core.task.base.BaseTask;
  */
 public abstract class BaseThreadTask extends BaseTask {
 
-    public int getThreadindex() {
-        return threadindex;
-    }
-
-    public void setThreadindex(int threadindex) {
-        this.threadindex = threadindex;
-    }
-
-    /**
-     * 线程编号
-     */
-    private int threadindex = -1;
-
     /**
      * 创建任务
      *

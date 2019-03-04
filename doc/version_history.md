@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v5.x
+> - [Upgrade] 优化线程池使用
 ##### v5.1.3
 > - [Upgrade] kotlin 更新至 1.3.21
 > - [Upgrade] tcp/udp server 相关配置移入 yml 中
