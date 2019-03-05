@@ -131,9 +131,8 @@ ext {
     （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.springboot.core.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
     （8）自定义系统初始化任务，新增任务类，继承 pers.acp.springboot.core.base.BaseInitialization 类
     （9）自定义可控制监听器，新增监听器类，实现 pers.acp.springboot.core.interfaces.IListener 接口
-    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp 服务端开发demo，并在 resources/config 中增加相应配置
-    （11）udp 同 tcp 的开发
-    （12）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
+    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 resources/config 中增加相应配置
+    （11）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
 ##### 2. 配置说明
 - 定制开发的 api 接口，开启 swagger 文档
 ```yaml
@@ -166,12 +165,14 @@ acp:
   tcp-server:
     listeners:
       - name: testSocket                  #监听服务名称
-        enabled: false                    #是否启用，默认false
-        keepAlive: true                   #是否为长连接，默认false
-        idletime: 10000                   #连接进入空闲状态的等待时间单位毫秒，默认10000
-        hex: true                         #接收报文是否是十六进制，默认false
-        port: 9999                        #端口号
-        responseBean: TestTcpHandle       #报文接收处理的 Bean 名称
+        enabled: true                     #是否启用，默认false
+        keepAlive: false                  #是否为长连接，默认false；TCP服务有效
+        idletime: 10000                   #连接进入空闲状态的等待时间单位毫秒，默认10000；TCP服务有效
+        messageDecoder: ""                #粘包拆包解码器 Bean 名称，默认不设置；TCP服务有效
+        threadNumber: 100                 #接收报文处理的最大线程数，为0或不设置则使用系统默认线程数；TCP服务有效
+        hex: false                        #接收报文是否是十六进制机器码，默认false
+        port: 9999                        #监听端口号
+        handleBean: TestTcpHandle         #报文接收处理的 Bean 名称
         responsable: true                 #报文是否需要进行原路响应，默认true
         charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集
 ```
@@ -180,7 +181,14 @@ acp:
 ```yaml
 acp:
   udp-server:
-    listeners:                            #监听列表配置同 tcp-server
+    listeners: 
+      - name: testSocket                  #监听服务名称
+        enabled: true                     #是否启用，默认false
+        hex: false                        #接收报文是否是十六进制机器码，默认false
+        port: 9999                        #监听端口号
+        handleBean: TestTcpHandle         #报文接收处理的 Bean 名称
+        responsable: true                 #报文是否需要进行原路响应，默认true
+        charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集
 ```
 
 ### （三）启停 springboot 应用

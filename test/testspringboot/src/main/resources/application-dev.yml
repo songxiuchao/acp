@@ -55,3 +55,16 @@ acp:
   schedule:
     crons:
       task1: 0 0/1 * * * ?
+  udp-server:
+    listeners:
+      - name: testSocket                  #监听服务名称
+        enabled: true                     #是否启用，默认false
+        keepAlive: false                  #是否为长连接，默认false；TCP服务有效
+        idletime: 10000                   #连接进入空闲状态的等待时间单位毫秒，默认10000；TCP服务有效
+        messageDecoder: ""                #粘包拆包解码器 Bean 名称，默认不设置；TCP服务有效
+        threadNumber: 100                 #接收报文处理的最大线程数，为0或不设置则使用系统默认线程数；TCP服务有效
+        hex: false                        #接收报文是否是十六进制机器码，默认false
+        port: 9999                        #监听端口号
+        handleBean: TestTcpHandle         #报文接收处理的 Bean 名称
+        responsable: true                 #报文是否需要进行原路响应，默认true
+        charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集

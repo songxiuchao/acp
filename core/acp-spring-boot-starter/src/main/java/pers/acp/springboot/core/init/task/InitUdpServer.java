@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.daemon.DaemonServiceManager;
 import pers.acp.springboot.core.socket.base.ISocketServerHandle;
 import pers.acp.springboot.core.conf.SocketListenerConfiguration;
 import pers.acp.springboot.core.conf.UdpServerConfiguration;
 import pers.acp.springboot.core.socket.udp.UdpServer;
 import pers.acp.springboot.core.tools.SpringBeanFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -32,9 +32,9 @@ public final class InitUdpServer {
             if (!listens.isEmpty()) {
                 for (SocketListenerConfiguration listen : listens) {
                     if (listen.isEnabled()) {
-                        String beanName = listen.getResponseBean();
+                        String beanName = listen.getHandleBean();
                         if (!CommonTools.isNullStr(beanName)) {
-                            Object responseBean = SpringBeanFactory.getBean(listen.getResponseBean());
+                            Object responseBean = SpringBeanFactory.getBean(listen.getHandleBean());
                             if (responseBean instanceof ISocketServerHandle) {
                                 ISocketServerHandle udpResponse = (ISocketServerHandle) responseBean;
                                 int port = listen.getPort();
@@ -42,6 +42,7 @@ public final class InitUdpServer {
                                 Thread sub = new Thread(server);
                                 sub.setDaemon(true);
                                 sub.start();
+                                DaemonServiceManager.addService(server);
                                 log.info("start udp listen service success [" + listen.getName() + "] , port:" + listen.getPort());
                             } else {
                                 log.error("udp response bean [" + beanName + "] is invalid!");

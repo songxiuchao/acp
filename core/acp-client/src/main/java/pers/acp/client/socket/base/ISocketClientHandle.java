@@ -1,16 +1,18 @@
-package pers.acp.springboot.core.socket.base;
+package pers.acp.client.socket.base;
 
 import io.netty.handler.timeout.IdleStateEvent;
 
-public interface ISocketServerHandle {
+/**
+ * Create by zhangbin on 2017-11-6 10:41
+ */
+public interface ISocketClientHandle {
 
     /**
-     * 对接收到的报文进行处理
+     * 接收消息
      *
-     * @param recvStr 接收到的报文
-     * @return 返回报文
+     * @param recvStr 接收的字符串
      */
-    String doResponse(String recvStr);
+    void receiveMsg(String recvStr);
 
     /**
      * 事件触发

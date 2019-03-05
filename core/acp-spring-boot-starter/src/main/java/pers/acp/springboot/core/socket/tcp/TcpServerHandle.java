@@ -1,62 +1,58 @@
 package pers.acp.springboot.core.socket.tcp;
 
-import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.mina.core.session.IoSession;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.timeout.IdleStateEvent;
 import pers.acp.core.CommonTools;
-import pers.acp.springboot.core.socket.base.ISocketServerHandle;
 import pers.acp.springboot.core.conf.SocketListenerConfiguration;
-import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.socket.base.ISocketServerHandle;
+import pers.acp.springboot.core.socket.base.SockertServerHandle;
+
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 
 /**
- * 报文处理类
- *
- * @author zhang
+ * @author zhang by 04/03/2019
+ * @since JDK 11
  */
-public final class TcpServerHandle implements Runnable {
+public class TcpServerHandle extends SockertServerHandle {
 
-    private final LogFactory log = LogFactory.getInstance(this.getClass());
-
-    private IoSession session;
-
-    private SocketListenerConfiguration socketListenerConfiguration;
-
-    private ISocketServerHandle socketServerHandle;
-
-    private String recvStr;
-
-    TcpServerHandle(IoSession session, SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle, String recvStr) {
-        super();
-        this.session = session;
-        this.socketListenerConfiguration = socketListenerConfiguration;
-        this.socketServerHandle = socketServerHandle;
-        this.recvStr = recvStr;
+    TcpServerHandle(SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle) {
+        super(socketListenerConfiguration, socketServerHandle);
     }
 
-    public void run() {
-        String responseStr = this.socketServerHandle.doResponse(recvStr);
-        if (socketListenerConfiguration.isResponsable()) {
-            responseStr = CommonTools.isNullStr(responseStr) ? "" : responseStr;
-            try {
-                byte[] bts;
-                if (socketListenerConfiguration.isHex()) {
-                    bts = ByteUtils.fromHexString(responseStr);
-                } else {
-                    bts = responseStr.getBytes(socketListenerConfiguration.getCharset());
-                }
-                IoBuffer buffer = IoBuffer.allocate(bts.length);
-                buffer.setAutoExpand(true);
-                buffer.setAutoShrink(true);
-                buffer.put(bts);
-                buffer.flip();
-                session.write(buffer);
-                log.debug("tcp return:" + responseStr);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                if (session != null) {
-                    session.closeNow();
-                }
-            }
+    @Override
+    protected ByteBuf beforeReadMessage(Object msg) {
+        return (ByteBuf) msg;
+    }
+
+    @Override
+    protected void afterSendMessage(ChannelHandlerContext ctx) {
+        if (!socketListenerConfiguration.isKeepAlive()) {
+            ctx.close();
         }
     }
+
+    @Override
+    protected void afterReadMessage(ChannelHandlerContext ctx) {
+        if (!socketListenerConfiguration.isKeepAlive()) {
+            ctx.close();
+        }
+    }
+
+    @Override
+    protected Object beforeSendMessage(ChannelHandlerContext ctx, Object requestMsg, String sendStr) throws Exception {
+        return ByteBufUtil.encodeString(ctx.alloc(), CharBuffer.wrap(sendStr), Charset.forName(socketListenerConfiguration.getCharset()));
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        IdleStateEvent event = (IdleStateEvent) evt;
+        String idelStr = socketServerHandle.userEventTriggered(event);
+        if (!CommonTools.isNullStr(idelStr)) {
+            doResponse(ctx, null, idelStr);
+        }
+    }
+
 }
