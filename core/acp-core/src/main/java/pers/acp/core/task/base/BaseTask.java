@@ -1,7 +1,6 @@
 package pers.acp.core.task.base;
 
 import pers.acp.core.log.LogFactory;
-import pers.acp.core.task.base.interfaces.IBaseTask;
 import pers.acp.core.tools.CommonUtils;
 
 import java.util.Date;

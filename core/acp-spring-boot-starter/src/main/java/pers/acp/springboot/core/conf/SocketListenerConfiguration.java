@@ -10,6 +10,14 @@ public class SocketListenerConfiguration {
         this.name = name;
     }
 
+    public int getThreadNumber() {
+        return threadNumber;
+    }
+
+    public void setThreadNumber(int threadNumber) {
+        this.threadNumber = threadNumber;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -50,12 +58,20 @@ public class SocketListenerConfiguration {
         this.port = port;
     }
 
-    public String getResponseBean() {
-        return responseBean;
+    public String getMessageDecoder() {
+        return messageDecoder;
     }
 
-    public void setResponseBean(String responseBean) {
-        this.responseBean = responseBean;
+    public void setMessageDecoder(String messageDecoder) {
+        this.messageDecoder = messageDecoder;
+    }
+
+    public String getHandleBean() {
+        return handleBean;
+    }
+
+    public void setHandleBean(String handleBean) {
+        this.handleBean = handleBean;
     }
 
     public boolean isResponsable() {
@@ -76,6 +92,8 @@ public class SocketListenerConfiguration {
 
     private String name;
 
+    private int threadNumber = 0;
+
     private boolean enabled = false;
 
     private boolean keepAlive = false;
@@ -86,7 +104,9 @@ public class SocketListenerConfiguration {
 
     private boolean hex = false;
 
-    private String responseBean;
+    private String messageDecoder;
+
+    private String handleBean;
 
     private boolean responsable = true;
 

@@ -38,7 +38,7 @@ public final class TimerTaskContainer implements Runnable {
     /**
      * 执行任务
      */
-    private BaseTimerTask task = null;
+    private BaseTimerTask task;
 
     /**
      * 是否需要启动时立即执行

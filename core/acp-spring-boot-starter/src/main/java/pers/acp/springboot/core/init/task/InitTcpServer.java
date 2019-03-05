@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.daemon.DaemonServiceManager;
 import pers.acp.springboot.core.socket.base.ISocketServerHandle;
 import pers.acp.springboot.core.conf.SocketListenerConfiguration;
 import pers.acp.springboot.core.conf.TcpServerConfiguration;
@@ -31,16 +32,17 @@ public final class InitTcpServer {
             if (!listens.isEmpty()) {
                 for (SocketListenerConfiguration listen : listens) {
                     if (listen.isEnabled()) {
-                        String beanName = listen.getResponseBean();
+                        String beanName = listen.getHandleBean();
                         if (!CommonTools.isNullStr(beanName)) {
-                            Object responseBean = SpringBeanFactory.getBean(listen.getResponseBean());
-                            if (responseBean instanceof ISocketServerHandle) {
-                                ISocketServerHandle tcpResponse = (ISocketServerHandle) responseBean;
+                            Object handleBean = SpringBeanFactory.getBean(beanName);
+                            if (handleBean instanceof ISocketServerHandle) {
+                                ISocketServerHandle handle = (ISocketServerHandle) handleBean;
                                 int port = listen.getPort();
-                                TcpServer server = new TcpServer(port, listen, tcpResponse);
-                                Thread sub = new Thread(server);
-                                sub.setDaemon(true);
-                                sub.start();
+                                TcpServer tcpServer = new TcpServer(port, listen, handle);
+                                Thread thread = new Thread(tcpServer);
+                                thread.setDaemon(true);
+                                thread.start();
+                                DaemonServiceManager.addService(tcpServer);
                                 log.info("start tcp listen service success [" + listen.getName() + "] , port:" + listen.getPort());
                             } else {
                                 log.error("tcp response bean [" + beanName + "] is invalid!");
