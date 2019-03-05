@@ -46,6 +46,22 @@ public class AcpOauthConfiguration {
         this.resourceServerSecurityPath = resourceServerSecurityPath;
     }
 
+    public String getAccessDeniedHandler() {
+        return accessDeniedHandler;
+    }
+
+    public void setAccessDeniedHandler(String accessDeniedHandler) {
+        this.accessDeniedHandler = accessDeniedHandler;
+    }
+
+    public String getAuthExceptionEntryPointBean() {
+        return authExceptionEntryPointBean;
+    }
+
+    public void setAuthExceptionEntryPointBean(String authExceptionEntryPointBean) {
+        this.authExceptionEntryPointBean = authExceptionEntryPointBean;
+    }
+
     /**
      * is oauth server
      * default false
@@ -57,6 +73,16 @@ public class AcpOauthConfiguration {
      * default true
      */
     private boolean resourceServer = true;
+
+    /**
+     * customer auth exception entry point bean name
+     */
+    private String authExceptionEntryPointBean;
+
+    /**
+     * customeer access denied handler
+     */
+    private String accessDeniedHandler;
 
     /**
      * permitAll path, effective when resourceServer=true

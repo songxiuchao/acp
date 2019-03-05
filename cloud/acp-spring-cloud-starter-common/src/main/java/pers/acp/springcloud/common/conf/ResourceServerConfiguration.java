@@ -21,6 +21,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +30,7 @@ import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.tools.SpringBeanFactory;
 import pers.acp.springcloud.common.constant.ConfigurationOrder;
 import pers.acp.springcloud.common.enums.RestPrefix;
 
@@ -136,6 +139,14 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(ResourceServerSecurityConfigurer resources) {
         if (!acpOauthConfiguration.isOauthServer()) {
             resources.tokenServices(remoteTokenServices());
+        }
+        // 自定义 token 异常处理
+        if (!CommonTools.isNullStr(acpOauthConfiguration.getAuthExceptionEntryPointBean())) {
+            resources.authenticationEntryPoint((AuthenticationEntryPoint) SpringBeanFactory.getBean(acpOauthConfiguration.getAuthExceptionEntryPointBean()));
+        }
+        // 自定义权限异常处理
+        if (!CommonTools.isNullStr(acpOauthConfiguration.getAccessDeniedHandler())) {
+            resources.accessDeniedHandler((AccessDeniedHandler) SpringBeanFactory.getBean(acpOauthConfiguration.getAccessDeniedHandler()));
         }
     }
 

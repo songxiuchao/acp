@@ -359,7 +359,15 @@ http://127.0.0.1:5601
           log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
     （6）如果不存在日志服务，需要排除依赖
     exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
-    （7）如有特殊需要不进行认证的url（例如"/customer"），则增加resource-server-permit-all-path配置；如有需要进行认证的url（例如"/customer2"），则增加resource-server-security-path配置
+    （7）可自定义token验证异常和权限异常返回信息
+    acp:
+      cloud:
+        log-server:
+          enabled: true
+        oauth:
+          auth-exception-entry-point-bean: AuthExceptionEntryPoint    #自定义 token 异常 bean 名称
+          access-denied-handler: CustomAccessDeniedHandler            #自定义权限异常 bean 名称
+    （8）如有特殊需要不进行认证的url（例如"/customer"），则增加resource-server-permit-all-path配置；如有需要进行认证的url（例如"/customer2"），则增加resource-server-security-path配置
     acp:
       cloud:
         oauth:
@@ -367,12 +375,12 @@ http://127.0.0.1:5601
             - /customer
           resource-server-security-path:
             - /customer2
-    （8）如果原子服务不需要加入统一认证体系中，即不需要进行访问权限验证，则增加配置
+    （9）如果原子服务不需要加入统一认证体系中，即不需要进行访问权限验证，则增加配置
     acp:
       cloud:
         oauth:
           resource-server: false #是否是资源服务器
-    （9）特别需要注意：
+    （10）特别需要注意：
         即使不需要加入统一认证体系中，如果请求的 header 中包含 Authorization， oauth2 还是会进行身份认证！
         所以仍然需要正确进行如下配置，否则 oauth2 进行身份认证时将会抛出异常
         com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server

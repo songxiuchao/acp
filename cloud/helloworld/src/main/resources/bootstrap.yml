@@ -98,5 +98,7 @@ acp:
     log-server:
       enabled: true
     oauth:
+      auth-exception-entry-point-bean: AuthExceptionEntryPoint
+      access-denied-handler: CustomAccessDeniedHandler
       resource-server-permit-all-path:
         - /customer
