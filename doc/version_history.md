@@ -1,8 +1,4 @@
 ## 版本更新记录
-##### v5.x
-> - [Upgrade] 优化线程池使用
-> - [Upgrade] acp-client 中 tcp 和 udp client 使用 netty 替换 mina
-> - [Upgrade] acp-spring-boot-starter 中 tcp 和 udp 服务端 使用 netty 替换 mina
 ##### v5.1.3
 > - [Upgrade] kotlin 更新至 1.3.21
 > - [Upgrade] tcp/udp server 相关配置移入 yml 中
@@ -24,6 +20,9 @@
 > - [Upgrade] 优化 acp-client 中 HttpClientBuilder
 > - [Upgrade] 更新文档
 > - [Upgrade] 优化线程池、任务代码，最少开销的情况下保证原子性
+> - [Upgrade] 优化线程池使用
+> - [Upgrade] acp-client 中 tcp 和 udp client 使用 netty 替换 mina
+> - [Upgrade] acp-spring-boot-starter 中 tcp 和 udp 服务端 使用 netty 替换 mina
 > - [Delete] 删除无用测试代码
 > - [Fix] 规范全局异常处理，调整对应异常响应的 HttpStatus
 ##### v5.1.2
