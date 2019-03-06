@@ -359,13 +359,11 @@ http://127.0.0.1:5601
           log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
     （6）如果不存在日志服务，需要排除依赖
     exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
-    （7）可自定义token验证异常和权限异常返回信息
+    （7）可自定义token验证异常（新建 Bean 实现 org.springframework.security.web.AuthenticationEntryPoint 接口）和权限异常（新建 Bean 实现 org.springframework.security.web.access.AccessDeniedHandler）返回信息，若有多个实现接口的 Bean，则需要通过如下配置显示指定
     acp:
       cloud:
-        log-server:
-          enabled: true
         oauth:
-          auth-exception-entry-point: AuthExceptionEntryPoint    #自定义 token 异常 bean 名称
+          auth-exception-entry-point: AuthExceptionEntryPoint         #自定义 token 异常 bean 名称
           access-denied-handler: CustomAccessDeniedHandler            #自定义权限异常 bean 名称
     （8）如有特殊需要不进行认证的url（例如"/customer"），则增加resource-server-permit-all-path配置；如有需要进行认证的url（例如"/customer2"），则增加resource-server-security-path配置
     acp:
