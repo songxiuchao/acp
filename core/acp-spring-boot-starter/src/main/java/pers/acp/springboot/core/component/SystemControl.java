@@ -9,7 +9,6 @@ import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.interfaces.IListener;
 import pers.acp.springboot.core.interfaces.ITimerTaskScheduler;
-import pers.acp.springboot.core.tools.SpringBeanFactory;
 
 import java.util.Map;
 
@@ -23,10 +22,13 @@ public class SystemControl implements IDaemonService {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
+    private final Map<String, IListener> listenerMap;
+
     private final TimerTaskScheduler timerTaskScheduler;
 
     @Autowired
-    public SystemControl(TimerTaskScheduler timerTaskScheduler) {
+    public SystemControl(Map<String, IListener> listenerMap, TimerTaskScheduler timerTaskScheduler) {
+        this.listenerMap = listenerMap;
         this.timerTaskScheduler = timerTaskScheduler;
     }
 
@@ -41,7 +43,6 @@ public class SystemControl implements IDaemonService {
 
     public void start() throws Exception {
         log.info("start listener begin ...");
-        Map<String, IListener> listenerMap = SpringBeanFactory.getApplicationContext().getBeansOfType(IListener.class);
         listenerMap.forEach((key, listener) -> {
             log.info("开始启动监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
             listener.startListener();
@@ -53,7 +54,6 @@ public class SystemControl implements IDaemonService {
     public void stop() {
         log.info("stop listener begin ...");
         try {
-            Map<String, IListener> listenerMap = SpringBeanFactory.getApplicationContext().getBeansOfType(IListener.class);
             listenerMap.forEach((key, listener) -> {
                 log.info("开始停止监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
                 listener.stopListener();

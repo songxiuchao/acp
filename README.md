@@ -365,7 +365,7 @@ http://127.0.0.1:5601
         log-server:
           enabled: true
         oauth:
-          auth-exception-entry-point-bean: AuthExceptionEntryPoint    #自定义 token 异常 bean 名称
+          auth-exception-entry-point: AuthExceptionEntryPoint    #自定义 token 异常 bean 名称
           access-denied-handler: CustomAccessDeniedHandler            #自定义权限异常 bean 名称
     （8）如有特殊需要不进行认证的url（例如"/customer"），则增加resource-server-permit-all-path配置；如有需要进行认证的url（例如"/customer2"），则增加resource-server-security-path配置
     acp:
