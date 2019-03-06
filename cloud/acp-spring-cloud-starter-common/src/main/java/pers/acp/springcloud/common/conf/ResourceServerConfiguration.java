@@ -30,12 +30,12 @@ import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
-import pers.acp.springboot.core.tools.SpringBeanFactory;
 import pers.acp.springcloud.common.constant.ConfigurationOrder;
 import pers.acp.springcloud.common.enums.RestPrefix;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Oauth2 资源服务配置
@@ -53,6 +53,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     private final AcpOauthConfiguration acpOauthConfiguration;
 
+    private final Map<String, AuthenticationEntryPoint> entryPointMap;
+
+    private final Map<String, AccessDeniedHandler> accessDeniedHandlerMap;
+
     private final OAuth2ClientProperties clientProperties;
 
     private final ResourceServerProperties resourceServerProperties;
@@ -64,8 +68,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private final String contextPath;
 
     @Autowired
-    public ResourceServerConfiguration(AcpOauthConfiguration acpOauthConfiguration, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, FeignHttpClientProperties feignHttpClientProperties, ObjectMapper objectMapper, ServerProperties serverProperties) {
+    public ResourceServerConfiguration(AcpOauthConfiguration acpOauthConfiguration, Map<String, AuthenticationEntryPoint> entryPointMap, Map<String, AccessDeniedHandler> accessDeniedHandlerMap, OAuth2ClientProperties clientProperties, ResourceServerProperties resourceServerProperties, FeignHttpClientProperties feignHttpClientProperties, ObjectMapper objectMapper, ServerProperties serverProperties) {
         this.acpOauthConfiguration = acpOauthConfiguration;
+        this.entryPointMap = entryPointMap;
+        this.accessDeniedHandlerMap = accessDeniedHandlerMap;
         this.clientProperties = clientProperties;
         this.resourceServerProperties = resourceServerProperties;
         this.feignHttpClientProperties = feignHttpClientProperties;
@@ -141,12 +147,28 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
             resources.tokenServices(remoteTokenServices());
         }
         // 自定义 token 异常处理
-        if (!CommonTools.isNullStr(acpOauthConfiguration.getAuthExceptionEntryPointBean())) {
-            resources.authenticationEntryPoint((AuthenticationEntryPoint) SpringBeanFactory.getBean(acpOauthConfiguration.getAuthExceptionEntryPointBean()));
+        if (!entryPointMap.isEmpty()) {
+            if (entryPointMap.size() > 1) {
+                if (!CommonTools.isNullStr(acpOauthConfiguration.getAuthExceptionEntryPoint())) {
+                    resources.authenticationEntryPoint(entryPointMap.get(acpOauthConfiguration.getAuthExceptionEntryPoint()));
+                } else {
+                    log.warn("Find more than one authenticationEntryPoint, please specify explicitly in the configuration 'acp.cloud.auth.auth-exception-entry-point'");
+                }
+            } else {
+                resources.authenticationEntryPoint(entryPointMap.entrySet().iterator().next().getValue());
+            }
         }
         // 自定义权限异常处理
-        if (!CommonTools.isNullStr(acpOauthConfiguration.getAccessDeniedHandler())) {
-            resources.accessDeniedHandler((AccessDeniedHandler) SpringBeanFactory.getBean(acpOauthConfiguration.getAccessDeniedHandler()));
+        if (!accessDeniedHandlerMap.isEmpty()) {
+            if (accessDeniedHandlerMap.size() > 1) {
+                if (!CommonTools.isNullStr(acpOauthConfiguration.getAccessDeniedHandler())) {
+                    resources.accessDeniedHandler(accessDeniedHandlerMap.get(acpOauthConfiguration.getAccessDeniedHandler()));
+                } else {
+                    log.warn("Find more than one accessDeniedHandler, please specify explicitly in the configuration 'acp.cloud.auth.access-denied-handler'");
+                }
+            } else {
+                resources.accessDeniedHandler(accessDeniedHandlerMap.entrySet().iterator().next().getValue());
+            }
         }
     }
 

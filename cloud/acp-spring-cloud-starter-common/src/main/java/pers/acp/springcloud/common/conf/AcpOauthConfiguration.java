@@ -54,12 +54,12 @@ public class AcpOauthConfiguration {
         this.accessDeniedHandler = accessDeniedHandler;
     }
 
-    public String getAuthExceptionEntryPointBean() {
-        return authExceptionEntryPointBean;
+    public String getAuthExceptionEntryPoint() {
+        return authExceptionEntryPoint;
     }
 
-    public void setAuthExceptionEntryPointBean(String authExceptionEntryPointBean) {
-        this.authExceptionEntryPointBean = authExceptionEntryPointBean;
+    public void setAuthExceptionEntryPoint(String authExceptionEntryPoint) {
+        this.authExceptionEntryPoint = authExceptionEntryPoint;
     }
 
     /**
@@ -77,7 +77,7 @@ public class AcpOauthConfiguration {
     /**
      * customer auth exception entry point bean name
      */
-    private String authExceptionEntryPointBean;
+    private String authExceptionEntryPoint;
 
     /**
      * customeer access denied handler

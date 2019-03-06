@@ -11,7 +11,6 @@ import pers.acp.springboot.core.conf.ScheduleConfiguration;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.interfaces.ITimerTaskScheduler;
-import pers.acp.springboot.core.tools.SpringBeanFactory;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -31,14 +30,17 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
 
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
+    private final Map<String, BaseSpringBootScheduledTask> baseSpringBootScheduledTaskMap;
+
     private final ConcurrentHashMap<String, BaseSpringBootScheduledTask> scheduledTaskMap = new ConcurrentHashMap<>();
 
     private final ConcurrentHashMap<String, ScheduledFuture<?>> futureMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public TimerTaskScheduler(ScheduleConfiguration scheduleConfiguration, ThreadPoolTaskScheduler threadPoolTaskScheduler) {
+    public TimerTaskScheduler(ScheduleConfiguration scheduleConfiguration, ThreadPoolTaskScheduler threadPoolTaskScheduler, Map<String, BaseSpringBootScheduledTask> baseSpringBootScheduledTaskMap) {
         this.scheduleConfiguration = scheduleConfiguration;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
+        this.baseSpringBootScheduledTaskMap = baseSpringBootScheduledTaskMap;
     }
 
     /**
@@ -48,8 +50,7 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
         if (!scheduledTaskMap.isEmpty() || !futureMap.isEmpty()) {
             stopSchedule();
         }
-        Map<String, BaseSpringBootScheduledTask> scheduledTaskMap_tmp = SpringBeanFactory.getApplicationContext().getBeansOfType(BaseSpringBootScheduledTask.class);
-        scheduledTaskMap_tmp.forEach((key, scheduledTask) -> {
+        baseSpringBootScheduledTaskMap.forEach((key, scheduledTask) -> {
             Map<String, String> crons = scheduleConfiguration.getCrons();
             if (crons != null && !crons.isEmpty() && crons.containsKey(key) && !CommonTools.isNullStr(crons.get(key)) && !"none".equalsIgnoreCase(crons.get(key))) {
                 String cron = crons.get(key);
