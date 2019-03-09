@@ -58,7 +58,7 @@ public final class TcpServer implements IDaemonService, Runnable {
                     .option(ChannelOption.SO_BACKLOG, 1024)
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     .childOption(ChannelOption.SO_KEEPALIVE, socketListenerConfiguration.isKeepAlive())
-                    .childHandler(new ChannelInitializer<>() {
+                    .childHandler(new ChannelInitializer<Channel>() {
                         @Override
                         protected void initChannel(Channel ch) {
                             if (finalMessageDecoder != null) {

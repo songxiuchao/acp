@@ -41,8 +41,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
     - spring-cloud-bus-kafka
     
 ## 一、环境要求
-- jdk 11
-    - 注：kotlin 和 scala 目前仅支持 jdk 1.8
+- jdk 1.8
 - gradle 5.2.1
 
 ## 二、gralde 配置及使用

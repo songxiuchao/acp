@@ -13,6 +13,5 @@ dependencyManagement {
     }
 }
 dependencies {
-    compile "org.glassfish.jaxb:jaxb-runtime:$versions.jaxb_runtime"
     compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-server"
 }

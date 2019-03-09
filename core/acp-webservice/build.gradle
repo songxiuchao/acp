@@ -6,8 +6,8 @@ versions += [
 ]
 dependencies {
     compile project(":core:acp-core")
-    compile "javax.xml:webservices-api:$versions.webservices_api"
-    compile "javax.xml:jaxb-impl:$versions.jaxb_impl"
-    compile "javax.xml.soap:saaj-api:$versions.saaj_api"
-    compile "com.sun.xml.ws:jaxws-rt:$versions.jaxws_rt"
+//    compile "javax.xml:webservices-api:$versions.webservices_api"
+//    compile "javax.xml:jaxb-impl:$versions.jaxb_impl"
+//    compile "javax.xml.soap:saaj-api:$versions.saaj_api"
+//    compile "com.sun.xml.ws:jaxws-rt:$versions.jaxws_rt"
 }
