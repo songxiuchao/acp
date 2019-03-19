@@ -1,9 +1,3 @@
-versions += [
-        webservices_api: "2.1-b16",
-        jaxb_impl      : "2.1",
-        jaxws_rt       : "2.3.2",
-        saaj_api       : "1.3.1"
-]
 dependencies {
     compile project(":core:acp-core")
 }
