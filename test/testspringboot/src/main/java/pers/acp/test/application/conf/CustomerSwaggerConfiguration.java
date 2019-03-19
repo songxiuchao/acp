@@ -3,7 +3,6 @@ package pers.acp.test.application.conf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import pers.acp.springboot.core.conf.SwaggerConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -20,7 +19,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-@Component
 public class CustomerSwaggerConfiguration {
 
     private final SwaggerConfiguration swaggerConfiguration;
