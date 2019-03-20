@@ -36,6 +36,10 @@ public class LogInfo {
         return serverName;
     }
 
+    public int getServerPort() {
+        return serverPort;
+    }
+
     public String getLogType() {
         return logType;
     }
@@ -105,6 +109,9 @@ public class LogInfo {
 
     @Value("${spring.application.name}")
     private String serverName;
+
+    @Value("${server.port}")
+    private int serverPort;
 
     /**
      * 日志类型字符串
