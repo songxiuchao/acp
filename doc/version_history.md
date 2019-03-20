@@ -1,7 +1,4 @@
 ## 版本更新记录
-##### v5.x
-> - [Upgrade] 更新文档
-> - [Upgrade] 优化代码
 ##### v5.1.3
 > - [Upgrade] kotlin 更新至 1.3.21
 > - [Upgrade] tcp/udp server 相关配置移入 yml 中
@@ -27,6 +24,7 @@
 > - [Upgrade] acp-client 中 tcp 和 udp client 使用 netty 替换 mina
 > - [Upgrade] acp-spring-boot-starter 中 tcp 和 udp 服务端 使用 netty 替换 mina
 > - [Upgrade] acp-spring-cloud-starter-common 增加自定义 token 异常和权限异常响应配置
+> - [Upgrade] 优化代码
 > - [Delete] 删除无用测试代码
 > - [Fix] 规范全局异常处理，调整对应异常响应的 HttpStatus
 ##### v5.1.2
