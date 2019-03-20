@@ -23,7 +23,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
@@ -43,7 +42,6 @@ import java.util.Map;
  * @author zhangbin by 11/04/2018 15:13
  * @since JDK 11
  */
-@Component
 @Configuration
 @EnableResourceServer
 @Order(ConfigurationOrder.resourceServerConfiguration)

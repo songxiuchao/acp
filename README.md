@@ -382,6 +382,13 @@ http://127.0.0.1:5601
         所以仍然需要正确进行如下配置，否则 oauth2 进行身份认证时将会抛出异常
         com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
         或调用端身份认证失败：status 401
+    security:
+      oauth2:
+        client:
+          client-id: ***
+          client-secret: ***
+        resource:
+          token-info-uri: http://oauth2-server/oauth/check_token
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication
