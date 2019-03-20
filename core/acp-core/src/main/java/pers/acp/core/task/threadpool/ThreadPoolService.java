@@ -120,7 +120,7 @@ public final class ThreadPoolService {
         log.info("thread pool [" + poolName + "] is stoped. It took " + (end - start) + " millisecond");
     }
 
-    public synchronized void stopAll() {
+    public static synchronized void stopAll() {
         synchronized (ThreadPoolService.class) {
             threadPoolInstanceMap.forEach((key, poolService) -> poolService.stop());
         }
@@ -138,7 +138,7 @@ public final class ThreadPoolService {
     /**
      * 销毁所有线程池
      */
-    public static void destroyAll() {
+    public static synchronized void destroyAll() {
         synchronized (ThreadPoolService.class) {
             threadPoolInstanceMap.forEach((key, poolService) -> poolService.destroy());
         }
