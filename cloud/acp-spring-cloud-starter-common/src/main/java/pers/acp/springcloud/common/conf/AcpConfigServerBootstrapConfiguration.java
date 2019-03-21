@@ -1,7 +1,13 @@
-package pers.acp.springcloud.common.component;
+package pers.acp.springcloud.common.conf;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.config.client.ConfigClientProperties;
 import org.springframework.cloud.config.client.ConfigServicePropertySourceLocator;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -18,20 +24,30 @@ import java.util.Map;
 import static org.springframework.cloud.config.client.ConfigClientProperties.AUTHORIZATION;
 
 /**
- * @author zhang by 28/02/2019
+ * @author zhang by 21/03/2019
  * @since JDK 11
  */
-public class CustomerConfigServicePropertySourceLocator extends ConfigServicePropertySourceLocator {
+@Configuration
+@EnableConfigurationProperties
+public class AcpConfigServerBootstrapConfiguration {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private final ConfigurableEnvironment environment;
 
-    public CustomerConfigServicePropertySourceLocator(ConfigurableEnvironment environment, ConfigClientProperties clientProperties) {
-        super(clientProperties);
+    @Autowired
+    public AcpConfigServerBootstrapConfiguration(ConfigurableEnvironment environment) {
         this.environment = environment;
-        setRestTemplate(customerConfigClientRestTemplate(clientProperties));
-        log.info("Start Up Cloud, Configuration CustomerConfigServicePropertySourceLocator For ACP");
+    }
+
+    @Primary
+    @Bean
+    @ConditionalOnProperty(value = "spring.cloud.config.enabled", matchIfMissing = true)
+    public ConfigServicePropertySourceLocator configServicePropertySource(ConfigClientProperties clientProperties) {
+        ConfigServicePropertySourceLocator locator = new ConfigServicePropertySourceLocator(clientProperties);
+        locator.setRestTemplate(customerConfigClientRestTemplate(clientProperties));
+        log.info("Start Up Cloud, Configuration ConfigServicePropertySourceLocator For ACP");
+        return locator;
     }
 
     private RestTemplate customerConfigClientRestTemplate(ConfigClientProperties clientProperties) {
@@ -59,7 +75,7 @@ public class CustomerConfigServicePropertySourceLocator extends ConfigServicePro
                 template.setInterceptors(Collections.singletonList(
                         new ConfigServicePropertySourceLocator.GenericRequestHeaderInterceptor(headers)));
             }
-            log.info("Created CustomerConfigClientRestTemplate For ACP");
+            log.info("Created ConfigClientRestTemplate For ACP");
             return template;
         } catch (Exception e) {
             log.error(e.getMessage(), e);

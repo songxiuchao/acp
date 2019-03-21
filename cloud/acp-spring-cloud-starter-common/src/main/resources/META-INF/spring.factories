@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=pers.acp.springcloud.common.AcpCloudAutoConfiguration
-org.springframework.cloud.bootstrap.BootstrapConfiguration=pers.acp.springcloud.common.component.CustomerConfigServicePropertySourceLocator
+org.springframework.cloud.bootstrap.BootstrapConfiguration=pers.acp.springcloud.common.conf.AcpConfigServerBootstrapConfiguration
