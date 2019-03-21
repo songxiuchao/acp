@@ -46,6 +46,7 @@ public class AcpConfigServerBootstrapConfiguration {
     public ConfigServicePropertySourceLocator configServicePropertySource(ConfigClientProperties clientProperties) {
         ConfigServicePropertySourceLocator locator = new ConfigServicePropertySourceLocator(clientProperties);
         locator.setRestTemplate(customerConfigClientRestTemplate(clientProperties));
+        log.info("Start Up Cloud, Configuration ConfigServicePropertySourceLocator For ACP");
         return locator;
     }
 
@@ -74,7 +75,7 @@ public class AcpConfigServerBootstrapConfiguration {
                 template.setInterceptors(Collections.singletonList(
                         new ConfigServicePropertySourceLocator.GenericRequestHeaderInterceptor(headers)));
             }
-            log.info("Created CustomerConfigClientRestTemplate For ACP");
+            log.info("Created ConfigClientRestTemplate For ACP");
             return template;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
