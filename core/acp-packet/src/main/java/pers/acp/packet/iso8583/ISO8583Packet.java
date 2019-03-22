@@ -498,7 +498,7 @@ public class ISO8583Packet {
             } else {
                 byte[] valueStrByte;
                 //这里最好指定编码，不使用平台默认编码
-                if (encoding == null || encoding.trim().equals("")) {
+                if (encoding == null || encoding.strip().equals("")) {
                     valueStrByte = valueStr.getBytes();
                 } else {
                     valueStrByte = valueStr.getBytes(encoding);
@@ -538,7 +538,7 @@ public class ISO8583Packet {
             } else {
                 byte[] valueStrByte;
                 //这里最好指定编码，不使用平台默认编码
-                if (encoding == null || encoding.trim().equals("")) {
+                if (encoding == null || encoding.strip().equals("")) {
                     valueStrByte = valueStr.getBytes();
                 } else {
                     valueStrByte = valueStr.getBytes(encoding);
