@@ -46,7 +46,7 @@ public class ISO8583Packet {
 
     private static final LogFactory log = LogFactory.getInstance(ISO8583Packet.class);
 
-    private static String packet_encoding = "UTF-8";//报文编码 UTF-8 GBK
+    private static String packetEncoding = "UTF-8";//报文编码 UTF-8 GBK
 
     private static Map<String, String> map8583Definition = null;// 8583报文128域定义器
 
@@ -120,7 +120,7 @@ public class ISO8583Packet {
                 String value = (String) pacBody.get(key);
                 last128.append(value);
             }
-            byte[] bitContent = last128.toString().getBytes(packet_encoding);//域值
+            byte[] bitContent = last128.toString().getBytes(packetEncoding);//域值
 
             //组装
             byte[] package8583;
@@ -148,7 +148,7 @@ public class ISO8583Packet {
                         return null;
                     }
                     //将域值编码转换，保证报文编码统一
-                    fieldValue = new String(fieldValue.getBytes(packet_encoding), packet_encoding);
+                    fieldValue = new String(fieldValue.getBytes(packetEncoding), packetEncoding);
                     // 数据域名称FIELD开头的为128域
                     if (fieldName.startsWith("FIELD")) {
                         String fieldNo = fieldName.substring(5, 8);//例如005
@@ -164,7 +164,7 @@ public class ISO8583Packet {
                             isFixLen = false;
                             defLen = defLen.substring(3);//获取VAR2后面的2
                         }
-                        int fieldLen = fieldValue.getBytes(packet_encoding).length;//字段值得实际长度
+                        int fieldLen = fieldValue.getBytes(packetEncoding).length;//字段值得实际长度
 
                         // 判断是否为变长域
                         if (!isFixLen) {// 变长域(变长域最后组装成的效果：例如变长3位，定义var3，这里的3是指长度值占3位，字段值是123456，最后结果就是006123456)
@@ -185,7 +185,7 @@ public class ISO8583Packet {
                                 fieldValue = getFixFieldValue(fieldValue, defLen2);//定长处理
                             }
                         }
-                        log.info("组装后报文域 {" + fieldName + "}==" + fieldValue + "==,域长度:" + fieldValue.getBytes(packet_encoding).length);
+                        log.info("组装后报文域 {" + fieldName + "}==" + fieldValue + "==,域长度:" + fieldValue.getBytes(packetEncoding).length);
                     }
 
                     // 返回结果赋值
@@ -249,16 +249,16 @@ public class ISO8583Packet {
                     // 截取该域信息
                     if (!isFixLen) {//变长域
                         int defLen1 = Integer.valueOf(defLen);//VAR2后面的2
-                        String realLen1 = new String(content8583, pos, defLen1, packet_encoding);//报文中实际记录域长,例如16,023
+                        String realLen1 = new String(content8583, pos, defLen1, packetEncoding);//报文中实际记录域长,例如16,023
                         int realAllLen = defLen1 + Integer.valueOf(realLen1);//该字段总长度（包括长度值占的长度）
-//						filedValue = new String(content8583, pos+defLen1, Integer.valueOf(realLen1), packet_encoding);
+//						filedValue = new String(content8583, pos+defLen1, Integer.valueOf(realLen1), packetEncoding);
                         byte[] filedValueByte = new byte[Integer.valueOf(realLen1)];
                         System.arraycopy(content8583, pos + defLen1, filedValueByte, 0, filedValueByte.length);
-                        filedValue = new String(filedValueByte, packet_encoding);
+                        filedValue = new String(filedValueByte, packetEncoding);
                         pos += realAllLen;//记录当前位置
                     } else {//定长域
                         int defLen2 = Integer.valueOf(defLen);//长度值占的位数
-                        filedValue = new String(content8583, pos, defLen2, packet_encoding);
+                        filedValue = new String(content8583, pos, defLen2, packetEncoding);
                         pos += defLen2;//记录当前位置
                     }
                     filedMap.put(filedName, filedValue);
@@ -306,7 +306,7 @@ public class ISO8583Packet {
         byte[] res = new byte[set.length];
         byte[] setContent;
         try {
-            setContent = setContentStr.getBytes(packet_encoding);
+            setContent = setContentStr.getBytes(packetEncoding);
             res = setToByte(res, setContent);
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);
@@ -408,7 +408,7 @@ public class ISO8583Packet {
                 return null;
             }
             // 128域位图二进制字符串转16位16进制
-            byte[] tmp = str_128.getBytes(packet_encoding);
+            byte[] tmp = str_128.getBytes(packetEncoding);
             int weight;//权重
             byte[] strout = new byte[128];
             int i, j, w = 0;
@@ -487,7 +487,7 @@ public class ISO8583Packet {
      * @return 结果
      */
     private static String getVaryLengthValue(String valueStr, int defLen) {
-        return getVaryLengthValue(valueStr, defLen, packet_encoding);
+        return getVaryLengthValue(valueStr, defLen, packetEncoding);
     }
 
     private static String getVaryLengthValue(String valueStr, int defLen, String encoding) {
@@ -527,7 +527,7 @@ public class ISO8583Packet {
      * @return 结果
      */
     private static String getFixFieldValue(String valueStr, int defLen) {
-        return getFixFieldValue(valueStr, defLen, packet_encoding);
+        return getFixFieldValue(valueStr, defLen, packetEncoding);
     }
 
     private static String getFixFieldValue(String valueStr, int defLen, String encoding) {
@@ -559,12 +559,12 @@ public class ISO8583Packet {
     }
 
 
-    public static String getPacket_encoding() {
-        return packet_encoding;
+    public static String getPacketEncoding() {
+        return packetEncoding;
     }
 
-    public static void setPacket_encoding(String packet_encoding) {
-        ISO8583Packet.packet_encoding = packet_encoding;
+    public static void setPacketEncoding(String packetEncoding) {
+        ISO8583Packet.packetEncoding = packetEncoding;
     }
 
     public static Map getMap8583Definition() {
