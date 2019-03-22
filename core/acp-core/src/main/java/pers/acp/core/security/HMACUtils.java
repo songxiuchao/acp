@@ -48,13 +48,9 @@ public final class HMACUtils {
         if (CommonUtils.isNullStr(cryptType)) {
             cryptType = CRYPT_TYPE;
         }
-        String encryptText;
-        byte[] encrypt;
         Mac mac = Mac.getInstance(cryptType);
         mac.init(key);
-        encrypt = mac.doFinal(plainText.getBytes(encode));
-        encryptText = ByteUtils.toHexString(encrypt).trim();
-        return encryptText;
+        return ByteUtils.toHexString(mac.doFinal(plainText.getBytes(encode))).trim();
     }
 
 }

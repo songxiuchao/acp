@@ -26,8 +26,8 @@ public final class AESUtils {
     /**
      * 加密
      *
-     * @param plainText  待加密字符串
-     * @param key        密钥
+     * @param plainText 待加密字符串
+     * @param key       密钥
      * @param cryptType 加密类型，默认 AES/ECB/PKCS5Padding
      * @return 密文
      */
@@ -35,13 +35,9 @@ public final class AESUtils {
         if (CommonUtils.isNullStr(cryptType)) {
             cryptType = CRYPT_TYPE;
         }
-        String encryptText;
-        byte[] encrypt;
         Cipher cipher = Cipher.getInstance(cryptType);
         cipher.init(Cipher.ENCRYPT_MODE, key);
-        encrypt = cipher.doFinal(plainText.getBytes(encode));
-        encryptText = Base64.toBase64String(encrypt).trim();
-        return encryptText;
+        return Base64.toBase64String(cipher.doFinal(plainText.getBytes(encode))).trim();
     }
 
     /**

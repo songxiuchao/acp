@@ -115,8 +115,8 @@ public class DESUtils {
     /**
      * 加密
      *
-     * @param plainText  待加密数据
-     * @param key        秘钥
+     * @param plainText 待加密数据
+     * @param key       秘钥
      * @param cryptType 加密类型，默认 DESede/ECB/PKCS5Padding
      * @return 加密结果
      */
@@ -131,11 +131,7 @@ public class DESUtils {
             IvParameterSpec iv = new IvParameterSpec(ZERO_IVC);
             cipher.init(Cipher.ENCRYPT_MODE, key, iv);
         }
-        String encryptText;
-        byte[] encrypt;
-        encrypt = cipher.doFinal(plainText.getBytes(encode));
-        encryptText = Base64.toBase64String(encrypt).trim();
-        return encryptText;
+        return Base64.toBase64String(cipher.doFinal(plainText.getBytes(encode))).trim();
     }
 
     /**
@@ -143,7 +139,7 @@ public class DESUtils {
      *
      * @param encryptedText 待解密数据
      * @param key           秘钥
-     * @param cryptType    加密类型，默认 DESede/ECB/PKCS5Padding
+     * @param cryptType     加密类型，默认 DESede/ECB/PKCS5Padding
      * @return 解密结果
      */
     public static String decrypt(String encryptedText, Key key, String cryptType) throws Exception {
@@ -157,11 +153,7 @@ public class DESUtils {
             IvParameterSpec iv = new IvParameterSpec(ZERO_IVC);
             cipher.init(Cipher.DECRYPT_MODE, key, iv);
         }
-        String decryptText;
-        byte[] decrypt;
-        decrypt = cipher.doFinal(Base64.decode(encryptedText));
-        decryptText = new String(decrypt, encode).trim();
-        return decryptText;
+        return new String(cipher.doFinal(Base64.decode(encryptedText)), encode).trim();
     }
 
 }

@@ -32,10 +32,7 @@ public class SignatureUtils {
     public static String encrypt(String plainText, String algorithm) {
         String encryptText;
         try {
-            MessageDigest digest = MessageDigest.getInstance(algorithm);
-            byte[] byteArray = plainText.getBytes(encode);
-            byte[] digestBytes = digest.digest(byteArray);
-            encryptText = ByteUtils.toHexString(digestBytes);
+            encryptText = ByteUtils.toHexString(MessageDigest.getInstance(algorithm).digest(plainText.getBytes(encode)));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             encryptText = "";
