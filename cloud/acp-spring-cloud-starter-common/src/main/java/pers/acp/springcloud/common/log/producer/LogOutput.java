@@ -1,7 +1,8 @@
-package pers.acp.springcloud.common.log;
+package pers.acp.springcloud.common.log.producer;
 
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
+import pers.acp.springcloud.common.log.LogConstant;
 
 /**
  * @author zhangbin by 11/07/2018 14:34
