@@ -97,4 +97,5 @@ security:
 acp:
   cloud:
     log-server:
-      enabled: true
+      client:
+        enabled: true

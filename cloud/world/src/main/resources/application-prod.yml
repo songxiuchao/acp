@@ -35,17 +35,6 @@ spring:
       kafka:
         binder:
           brokers: 127.0.0.1:9092
-      bindings:
-        log_output:
-          binder: kafka
-          consumer:
-            headerMode: raw
-          producer:
-            headerMode: raw
-          # topic
-          destination: test-log
-          group: log-server-group
-          content-type: application/json
 # ===============================
 # = Security Config
 # ===============================

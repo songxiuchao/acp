@@ -1,2 +1,5 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=pers.acp.springcloud.common.AcpCloudAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  pers.acp.springcloud.common.AcpCloudAutoConfiguration,\
+  pers.acp.springcloud.common.log.LogServerAutoConfiguration,\
+  pers.acp.springcloud.common.log.LogServerClientAutoConfiguration
 org.springframework.cloud.bootstrap.BootstrapConfiguration=pers.acp.springcloud.common.conf.AcpConfigServerBootstrapConfiguration

@@ -8,8 +8,8 @@ public interface LogConstant {
 
     String DEFAULT_TYPE = "ALL";
 
-    String INPUT = "log_input";
+    String INPUT = "acp_cloud_log_server_input";
 
-    String OUTPUT = "log_output";
+    String OUTPUT = "acp_cloud_log_server_output";
 
 }
