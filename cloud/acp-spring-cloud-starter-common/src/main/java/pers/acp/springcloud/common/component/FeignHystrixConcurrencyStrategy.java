@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import pers.acp.springcloud.common.log.LogInstance;
+import pers.acp.core.log.LogFactory;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -31,13 +31,12 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
-    private final LogInstance logInstance;
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
     private HystrixConcurrencyStrategy delegate;
 
     @Autowired
-    public FeignHystrixConcurrencyStrategy(LogInstance logInstance) {
-        this.logInstance = logInstance;
+    public FeignHystrixConcurrencyStrategy() {
         try {
             this.delegate = HystrixPlugins.getInstance().getConcurrencyStrategy();
             if (this.delegate instanceof FeignHystrixConcurrencyStrategy) {
@@ -53,18 +52,18 @@ public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy 
             HystrixPlugins.getInstance().registerMetricsPublisher(metricsPublisher);
             HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
         } catch (Exception e) {
-            this.logInstance.error("Failed to register Sleuth Hystrix Concurrency Strategy", e);
+            this.log.error("Failed to register Sleuth Hystrix Concurrency Strategy", e);
         }
     }
 
     private void logCurrentStateOfHystrixPlugins(HystrixEventNotifier eventNotifier,
                                                  HystrixMetricsPublisher metricsPublisher,
                                                  HystrixPropertiesStrategy propertiesStrategy) {
-        logInstance.debug("Current Hystrix plugins configuration is ["
+        log.debug("Current Hystrix plugins configuration is ["
                 + "concurrencyStrategy [" + this.delegate + "]," + "eventNotifier ["
                 + eventNotifier + "]," + "metricPublisher [" + metricsPublisher + "],"
                 + "propertiesStrategy [" + propertiesStrategy + "]," + "]");
-        logInstance.debug("Registering Sleuth Hystrix Concurrency Strategy.");
+        log.debug("Registering Sleuth Hystrix Concurrency Strategy.");
     }
 
     @Override

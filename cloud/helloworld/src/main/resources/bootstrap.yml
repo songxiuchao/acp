@@ -98,7 +98,8 @@ security:
 acp:
   cloud:
     log-server:
-      enabled: true
+      client:
+        enabled: true
     oauth:
       resource-server-permit-all-path:
         - /customer

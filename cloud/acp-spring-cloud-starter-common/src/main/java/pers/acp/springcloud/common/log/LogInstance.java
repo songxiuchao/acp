@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.springboot.core.tools.SpringBeanFactory;
-import pers.acp.springcloud.common.conf.LogServerConfiguration;
+import pers.acp.springcloud.common.conf.LogServerCientConfiguration;
 import pers.acp.springcloud.common.enums.LogLevel;
+import pers.acp.springcloud.common.log.producer.LogProducer;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -23,33 +24,26 @@ public class LogInstance {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    private LogToBinding logToBinding;
-
     private final ObjectMapper objectMapper;
 
-    private final LogServerConfiguration logServerConfiguration;
+    private final LogServerCientConfiguration logServerCientConfiguration;
 
     @Autowired
-    public LogInstance(ObjectMapper objectMapper, LogServerConfiguration logServerConfiguration) {
+    public LogInstance(ObjectMapper objectMapper, LogServerCientConfiguration logServerCientConfiguration) {
         this.objectMapper = objectMapper;
-        this.logServerConfiguration = logServerConfiguration;
+        this.logServerCientConfiguration = logServerCientConfiguration;
     }
 
     private LogInfo generateLogInfo() {
-        if (logServerConfiguration.isEnabled()) {
-            logToBinding = SpringBeanFactory.getBean(LogToBinding.class);
-            LogInfo logInfo = SpringBeanFactory.getBean(LogInfo.class);
-            if (logInfo != null) {
-                String logType = logServerConfiguration.getLogType();
-                if (CommonTools.isNullStr(logType)) {
-                    logType = LogConstant.DEFAULT_TYPE;
-                }
-                logInfo.setLogType(logType);
+        LogInfo logInfo = SpringBeanFactory.getBean(LogInfo.class);
+        if (logInfo != null) {
+            String logType = logServerCientConfiguration.getLogType();
+            if (CommonTools.isNullStr(logType)) {
+                logType = LogConstant.DEFAULT_TYPE;
             }
-            return logInfo;
-        } else {
-            return null;
+            logInfo.setLogType(logType);
         }
+        return logInfo;
     }
 
     private void sendToLogServer(LogInfo logInfo) {
@@ -64,7 +58,12 @@ public class LogInstance {
         logInfo.setLineno(lineno);
         logInfo.setClassName(className);
         try {
-            logToBinding.getLogOutput().sendMessage().send(MessageBuilder.withPayload(objectMapper.writeValueAsString(logInfo)).build());
+            if (logServerCientConfiguration.isEnabled()) {
+                LogProducer logProducer = SpringBeanFactory.getBean(LogProducer.class);
+                if (logProducer != null) {
+                    logProducer.getLogOutput().sendMessage().send(MessageBuilder.withPayload(objectMapper.writeValueAsString(logInfo)).build());
+                }
+            }
         } catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);
         }
