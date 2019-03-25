@@ -1,5 +1,5 @@
 # acp 
-###### v5.1.3 [版本更新日志](doc/version_history.md)
+###### v5.1.3.1 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 从 5.1.2 开始，小版本号与 SpringBoot 小版本号一致
 
@@ -355,8 +355,9 @@ http://127.0.0.1:5601
     acp:
       cloud:
         log-server:
-          enabled: true #是否启用日志服务
-          log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
+          client:
+            enabled: true #是否启用日志服务
+            log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
     （6）如果不存在日志服务，需要排除依赖
     exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
     （7）可自定义token验证异常（新建 Bean 实现 org.springframework.security.web.AuthenticationEntryPoint 接口）和权限异常（新建 Bean 实现 org.springframework.security.web.access.AccessDeniedHandler）返回信息，若有多个实现接口的 Bean，则需要通过如下配置显示指定
@@ -393,11 +394,16 @@ http://127.0.0.1:5601
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication
-    （3）修改 yml kafka 相关配置
+    （3）如需自定义日志消息处理，新增Bean实现 pers.acp.springcloud.common.log.consumer.LogProcess 接口，并且增加 @Primary 注解
     （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
         a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
         b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender
         c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.path 一致，方便统一管理
+    （5）增加配置
+    acp:
+      cloud:
+        log-server:
+          enabled: true #是否开启日志服务
 ## 六、打包为 docker 镜像
 自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
 ## 七、待完善内容

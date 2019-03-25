@@ -67,17 +67,6 @@ spring:
       kafka:
         binder:
           brokers: 127.0.0.1:9092
-      bindings:
-        log_output:
-          binder: kafka
-          consumer:
-            headerMode: raw
-          producer:
-            headerMode: raw
-          # topic
-          destination: test-log
-          group: log-server-group
-          content-type: application/json
   # ===============================
   # = DATA SOURCE
   # ===============================
@@ -102,11 +91,19 @@ spring:
       repositories:
         bootstrap-mode: deferred
 # ===============================
+# = Security Config
+# ===============================
+security:
+  oauth2:
+    client:
+      client-id: client
+      client-secret: client
+    resource:
+      token-info-uri: http://server-oauth2/oauth/check_token
+# ===============================
 # = ACP Config
 # ===============================
 acp:
   cloud:
     oauth:
       resource-server: false
-    log-server:
-      enabled: true

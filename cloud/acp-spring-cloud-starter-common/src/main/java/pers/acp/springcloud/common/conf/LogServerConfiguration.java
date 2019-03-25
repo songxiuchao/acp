@@ -2,7 +2,6 @@ package pers.acp.springcloud.common.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import pers.acp.springcloud.common.log.LogConstant;
 
 /**
  * @author zhang by 14/01/2019 14:42
@@ -12,12 +11,12 @@ import pers.acp.springcloud.common.log.LogConstant;
 @ConfigurationProperties(prefix = "acp.cloud.log-server")
 public class LogServerConfiguration {
 
-    public String getLogType() {
-        return logType;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setLogType(String logType) {
-        this.logType = logType;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public boolean isEnabled() {
@@ -28,12 +27,18 @@ public class LogServerConfiguration {
         this.enabled = enabled;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    private String groupId = "acp_cloud_log_server_group_id";
+
     private boolean enabled = false;
 
-    /**
-     * log type
-     * default "ALL"
-     */
-    private String logType = LogConstant.DEFAULT_TYPE;
+    private String destination = "acp_cloud_log_server_logmessage_topic";
 
 }
