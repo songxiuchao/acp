@@ -42,8 +42,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
     
 ## 一、环境要求
 - jdk 11
-    - 注：kotlin 和 scala 目前仅支持 jdk 1.8
-- gradle 5.2.1
+- gradle 5.3
 
 ## 二、gralde 配置及使用
 ### （一）配置文件
@@ -62,8 +61,6 @@ gradle全局参数：
 - mavenCentralUrl：maven中央仓库地址
 - org.gradle.jvmargs：gradle执行时的jvm参数
 - javaVersion：jdk版本号
-- kotlinVersion：kotlin版本号
-- scalaVersion：scala版本号
     
 ##### 4.build.gradle
 公共构建脚本
@@ -86,7 +83,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.2.1 --distribution-type=all
+    gradlew wrapper --gradle-version=5.3 --distribution-type=all
 ``
 
 ## 三、工程说明
