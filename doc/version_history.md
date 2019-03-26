@@ -1,6 +1,6 @@
 ## 版本更新记录
 ##### v5.1.3.1
-> - [Upgrade] 更新 gradle 至 5.3
+> - [Upgrade] 升级 gradle 至 5.3
 > - [Upgrade] 优化重写 acp-spring-cloud-starter-common 中日志消息处理
 > - [Upgrade] 增加日志服务相关配置
 > - [Upgrade] 修改 demo 中日志服务相关配置
