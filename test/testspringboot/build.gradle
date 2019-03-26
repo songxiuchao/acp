@@ -12,7 +12,7 @@ dependencyManagement {
 }
 bootJar {
     manifest {
-        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Project': 'Acp Admin Cloud')
+        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Project': 'Acp')
     }
 }
 dependencies {
