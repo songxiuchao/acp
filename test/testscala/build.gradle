@@ -1,9 +1,3 @@
-ext {
-    scalaJvmVersion = "1.8"
-    println("scala target jvm is ${scalaJvmVersion}")
-    println("scala version is ${scalaVersion}")
-}
-
 buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
@@ -14,8 +8,8 @@ apply plugin: 'scala'
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 
-sourceCompatibility = "${scalaJvmVersion}"
-targetCompatibility = "${scalaJvmVersion}"
+sourceCompatibility = "${javaVersion}"
+targetCompatibility = "${javaVersion}"
 
 dependencies {
     compile project(":core:acp-spring-boot-starter")
