@@ -7,7 +7,11 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
-
+bootJar {
+    manifest {
+        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Project': 'Acp')
+    }
+}
 sourceCompatibility = "${javaVersion}"
 targetCompatibility = "${javaVersion}"
 
@@ -26,7 +30,7 @@ dependencies {
     }
 }
 
-task scaladocJar(type: Jar, dependsOn: scaladoc) {
+task("scaladocJar", type: Jar, dependsOn: scaladoc) {
     archiveClassifier.set("javadoc")
     from scaladoc.destinationDir
 }

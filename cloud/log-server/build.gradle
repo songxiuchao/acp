@@ -15,6 +15,11 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:$versions.spring_cloud"
     }
 }
+bootJar {
+    manifest {
+        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Project': 'Acp')
+    }
+}
 dependencies {
     compile project(":cloud:acp-spring-cloud-starter-common")
     compile "net.logstash.logback:logstash-logback-encoder:$versions.logstash"

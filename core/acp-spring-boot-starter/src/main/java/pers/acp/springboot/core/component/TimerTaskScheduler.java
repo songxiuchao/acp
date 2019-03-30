@@ -2,6 +2,7 @@ package pers.acp.springboot.core.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.autoconfigure.task.TaskSchedulingProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -37,10 +38,13 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
     private final ConcurrentHashMap<String, ScheduledFuture<?>> futureMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public TimerTaskScheduler(ScheduleConfiguration scheduleConfiguration, ThreadPoolTaskScheduler threadPoolTaskScheduler, Map<String, BaseSpringBootScheduledTask> baseSpringBootScheduledTaskMap) {
+    public TimerTaskScheduler(TaskSchedulingProperties properties, ScheduleConfiguration scheduleConfiguration, Map<String, BaseSpringBootScheduledTask> baseSpringBootScheduledTaskMap) {
         this.scheduleConfiguration = scheduleConfiguration;
-        this.threadPoolTaskScheduler = threadPoolTaskScheduler;
         this.baseSpringBootScheduledTaskMap = baseSpringBootScheduledTaskMap;
+        this.threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        this.threadPoolTaskScheduler.setPoolSize(properties.getPool().getSize());
+        this.threadPoolTaskScheduler.setThreadNamePrefix(properties.getThreadNamePrefix());
+        this.threadPoolTaskScheduler.initialize();
     }
 
     /**
