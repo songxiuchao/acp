@@ -1,6 +1,7 @@
 ## 版本更新记录
 ##### v5.1.3.2
 > - [Upgrade] 升级 Spring Cloud 至 Greenwich.SR1
+> - [Upgrade] 升级 gradle 至 5.3.1
 > - [Fix] 修复定时任务线程池使用，兼容最新版本
 ##### v5.1.3.1
 > - [Upgrade] 升级 gradle 至 5.3
