@@ -42,7 +42,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
     
 ## 一、环境要求
 - jdk 11
-- gradle 5.3
+- gradle 5.3.1
 
 ## 二、gralde 配置及使用
 ### （一）配置文件
@@ -83,7 +83,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.3 --distribution-type=all
+    gradlew wrapper --gradle-version=5.3.1 --distribution-type=all
 ``
 
 ## 三、工程说明
