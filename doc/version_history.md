@@ -1,4 +1,9 @@
 ## 版本更新记录
+##### v5.1.4
+> - [Upgrade] 升级 Spring Boot 至 2.1.4.RELEASE
+> - [Upgrade] 更新依赖包版本：
+>   - jaxb_runtime (2.3.2)
+>   - httpclient (4.5.8)
 ##### v5.1.3.2
 > - [Upgrade] 升级 Spring Cloud 至 Greenwich.SR1
 > - [Upgrade] 升级 gradle 至 5.3.1
