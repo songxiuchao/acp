@@ -403,5 +403,3 @@ http://127.0.0.1:5601
           enabled: true #是否开启日志服务
 ## 六、打包为 docker 镜像
 自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
-## 七、待完善内容
-[详情](doc/TODO.md)
