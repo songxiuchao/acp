@@ -67,12 +67,14 @@ public final class ExcelService {
                     int rowCount = sheet.getLastRowNum() + 1;
                     for (int i = 0; i < rowCount; i++) {
                         Row row = sheet.getRow(i);
-                        int colCount = row.getLastCellNum() + 1;
-                        for (int j = 0; j < colCount; j++) {
-                            Cell cell = row.getCell(j);
-                            if (cell != null) {
-                                if (!cell.getCellType().equals(CellType.BLANK)) {
-                                    cell.setCellValue(CommonTools.replaceVar(cell.getStringCellValue(), data));
+                        if (row != null) {
+                            int colCount = row.getLastCellNum() + 1;
+                            for (int j = 0; j < colCount; j++) {
+                                Cell cell = row.getCell(j);
+                                if (cell != null) {
+                                    if (!cell.getCellType().equals(CellType.BLANK)) {
+                                        cell.setCellValue(CommonTools.replaceVar(cell.getStringCellValue(), data));
+                                    }
                                 }
                             }
                         }
