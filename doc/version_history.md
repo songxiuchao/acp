@@ -1,4 +1,9 @@
 ## 版本更新记录
+##### v5.1.4.1
+> - [Upgrade] 升级 docker 镜像版本
+> - [Upgrade] 优化 testspringboot 中多数据源配置写法
+> - [Upgrade] 更新文档
+> - [Upgrade] 修复通过模板文件生成 excel 时，偶尔出现 NullPointException 的问题
 ##### v5.1.4
 > - [Upgrade] 升级 Spring Boot 至 2.1.4.RELEASE
 > - [Upgrade] 更新依赖包版本：
