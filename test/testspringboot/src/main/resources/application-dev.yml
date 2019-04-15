@@ -34,6 +34,11 @@ spring:
       username: root
       password: test
       driver-class-name: com.mysql.cj.jdbc.Driver
+#      maximum-pool-size: 5
+#      minimum-idle: 5
+#      pool-name: SpringBootHikariCPPrimary
+#      max-lifetime: 1765000
+#      read-only: false
       data-source-properties.dialect: org.hibernate.dialect.MySQL8Dialect
       data-source-properties.scanpackage: pers.acp.test.application.entity.primary
     pg:
@@ -41,6 +46,11 @@ spring:
       username: postgres
       password: test
       driver-class-name: org.postgresql.Driver
+#      maximum-pool-size: 5
+#      minimum-idle: 5
+#      pool-name: SpringBootHikariCPPG
+#      max-lifetime: 1765000
+#      read-only: false
       data-source-properties.dialect: org.hibernate.dialect.PostgreSQLDialect
       data-source-properties.scanpackage: pers.acp.test.application.entity.pg
   data:
