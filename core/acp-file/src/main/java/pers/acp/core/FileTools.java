@@ -78,27 +78,6 @@ public final class FileTools {
     }
 
     /**
-     * 获取配置信息
-     *
-     * @param key 键
-     * @return 值
-     */
-    public static String getProperties(String key) {
-        return CommonTools.getProperties(key);
-    }
-
-    /**
-     * 获取配置信息
-     *
-     * @param key          键
-     * @param defaultValue 默认值
-     * @return 值
-     */
-    public static String getProperties(String key, String defaultValue) {
-        return CommonTools.getProperties(key, defaultValue);
-    }
-
-    /**
      * 判断路径是否是绝对路径
      *
      * @param path 路径
@@ -543,56 +522,6 @@ public final class FileTools {
         String resultfile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
         return pdfService.PDFToMerge(fileNames, resultfile, isDeleteFile).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
-    }
-
-    /**
-     * 压缩文件
-     *
-     * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于webroot的路径
-     * @param isDeleteFile   压缩完后是否删除原文件
-     * @param resultFileName 目标文件名
-     * @return 相对于webroot的压缩文件位置
-     */
-    public static String filesToZIP(String[] fileNames, String resultFileName, boolean isDeleteFile) {
-        resultFileName = formatFileName(resultFileName);
-        String nowstr = generateNowTimeString();
-        String webRootAdsPath = getWebRootAbsPath();
-        String zipfile;
-        if (CommonTools.isNullStr(resultFileName)) {
-            zipfile = FileOperation.buildTmpDir() + File.separator + nowstr + ".zip";
-        } else if (!CommonTools.isAbsPath(resultFileName)) {
-            zipfile = FileOperation.buildTmpDir() + File.separator + resultFileName + ".zip";
-        } else {
-            zipfile = CommonTools.getAbsPath(resultFileName) + ".zip";
-        }
-        String[] files = new String[fileNames.length];
-        for (int i = 0; i < fileNames.length; i++) {
-            files[i] = CommonTools.getAbsPath(fileNames[i]);
-        }
-        return FileOperation.filesToZIP(files, zipfile, isDeleteFile).replace(webRootAdsPath, "").replaceAll("\\\\", "/");
-    }
-
-    /**
-     * 解压缩文件
-     *
-     * @param zipFileName  zip压缩文件名
-     * @param parentFold   解压目标文件夹
-     * @param isDeleteFile 解压完成是否删除压缩文件
-     */
-    public static void ZIPToFiles(String zipFileName, String parentFold, boolean isDeleteFile) {
-        FileOperation.ZIPToFiles(CommonTools.getAbsPath(zipFileName), CommonTools.getAbsPath(parentFold), isDeleteFile);
-    }
-
-    /**
-     * 解压缩文件
-     *
-     * @param zipFileName  zip压缩文件名
-     * @param parentFold   解压目标文件夹
-     * @param charSet      字符编码
-     * @param isDeleteFile 解压完成是否删除压缩文件
-     */
-    public static void ZIPToFiles(String zipFileName, String parentFold, String charSet, boolean isDeleteFile) {
-        FileOperation.ZIPToFiles(CommonTools.getAbsPath(zipFileName), CommonTools.getAbsPath(parentFold), charSet, isDeleteFile);
     }
 
 }

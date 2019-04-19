@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public final class CommonTools {
 
@@ -414,6 +413,41 @@ public final class CommonTools {
      */
     public static String toUnderline(String str) {
         return CommonUtils.toUnderline(str).toString();
+    }
+
+    /**
+     * 压缩文件
+     *
+     * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于webroot的路径
+     * @param resultFileName 生成的目标文件全路径
+     * @param isDeleteFile   压缩完后是否删除原文件
+     * @return 目标文件绝对路径
+     */
+    public static String filesToZIP(String[] fileNames, String resultFileName, boolean isDeleteFile) {
+        return CommonUtils.filesToZIP(fileNames, resultFileName, isDeleteFile);
+    }
+
+    /**
+     * 解压缩文件
+     *
+     * @param zipFileName  zip压缩文件名
+     * @param parentFold   解压目标文件夹
+     * @param isDeleteFile 解压完成是否删除压缩文件
+     */
+    public static void ZIPToFiles(String zipFileName, String parentFold, boolean isDeleteFile) {
+        CommonUtils.ZIPToFiles(zipFileName, parentFold, isDeleteFile);
+    }
+
+    /**
+     * 解压缩文件
+     *
+     * @param zipFileName  zip压缩文件名
+     * @param parentFold   解压目标文件夹
+     * @param charSet      字符编码
+     * @param isDeleteFile 解压完成是否删除压缩文件
+     */
+    public static void ZIPToFiles(String zipFileName, String parentFold, String charSet, boolean isDeleteFile) {
+        CommonUtils.ZIPToFiles(zipFileName, parentFold, charSet, isDeleteFile);
     }
 
     /**
