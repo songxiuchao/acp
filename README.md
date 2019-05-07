@@ -291,10 +291,7 @@ acp:
 > docker-compose -f docker-compose-base.yml down
 > ```
 > - docker-compose 文件：cloud/dockerfile/docker-compose-base.yml
-> - elasticsearch 的插件安装：
->    - docker exec -it [容器Id] /bin/sh
->    - elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.5.4/elasticsearch-analysis-ik-6.5.4.zip
->    - elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v6.5.4/elasticsearch-analysis-pinyin-6.5.4.zip
+
 ##### 1. zipkin
 http://127.0.0.1:9411
 ![Architecture diagram](doc/images/zipkin.png)
