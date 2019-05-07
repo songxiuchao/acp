@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v5.x
+> - [Upgrade] 升级 gradle 至 5.4.1
 ##### v5.1.4.2
 > - [Upgrade] 文件压缩解压公共方法从 acp-file 迁移到 acp-core，使用 CommonTools 类
 > - [Upgrade] 升级 gradle 至 5.4
