@@ -69,44 +69,6 @@ public final class FileTools {
     }
 
     /**
-     * 获取系统默认字符集
-     *
-     * @return 默认字符集
-     */
-    public static String getDefaultCharset() {
-        return CommonTools.getDefaultCharset();
-    }
-
-    /**
-     * 判断路径是否是绝对路径
-     *
-     * @param path 路径
-     * @return 是否是绝对路径
-     */
-    public static boolean isAbsPath(String path) {
-        return CommonTools.isAbsPath(path);
-    }
-
-    /**
-     * 获取绝对路径
-     *
-     * @param srcPath 路径
-     * @return 绝对路径
-     */
-    public static String getAbsPath(String srcPath) {
-        return CommonTools.getAbsPath(srcPath);
-    }
-
-    /**
-     * 获取webroot绝对路径
-     *
-     * @return webroot绝对路径
-     */
-    public static String getWebRootAbsPath() {
-        return CommonTools.getWebRootAbsPath();
-    }
-
-    /**
      * 获取文件中的内容
      *
      * @param filePath 文件绝对路径
@@ -154,7 +116,7 @@ public final class FileTools {
         try {
             fileName = formatFileName(fileName);
             String nowstr = generateNowTimeString();
-            String webRootAdsPath = getWebRootAbsPath();
+            String webRootAdsPath = CommonTools.getWebRootAbsPath();
             String exName = getFileExt(templatePath);
             String resultfile;
             if (CommonTools.isNullStr(fileName)) {
@@ -186,7 +148,7 @@ public final class FileTools {
         if (CommonTools.isNullStr(filePath)) {
             filePath = "/files/tmp/html";
         }
-        String webRootAdsPath = getWebRootAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         if (CommonTools.isNullStr(foldPath)) {
             foldPath = FileOperation.buildTmpDir() + File.separator + "html";
         } else {
@@ -254,7 +216,7 @@ public final class FileTools {
      * @return 相对于webroot路径
      */
     public static String readExcelData(String filePath, int sheetNo, int beginRow, int beginCol, int rowNo, int colNo, boolean isDelete) {
-        String excelPath = (getWebRootAbsPath() + filePath).replace("\\", File.separator).replace("/", File.separator);
+        String excelPath = (CommonTools.getWebRootAbsPath() + filePath).replace("\\", File.separator).replace("/", File.separator);
         ExcelService excelService = new ExcelService();
         JsonNode result = excelService.readExcelData(excelPath, sheetNo, beginRow, beginCol, rowNo, colNo, isDelete);
         return result.toString();
@@ -274,7 +236,7 @@ public final class FileTools {
      * @return 相对于webroot的文件位置
      */
     public static String exportToExcelByJson(ExcelType fileType, String jsonStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
-        String webRootAdsPath = getWebRootAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String filename = generateExcelResultFileName(fileType, null);
         ExcelService es = new ExcelService();
         String filepath = es.createExcelFile(filename, CommonTools.getJsonFromStr(jsonStr), names, titleCtrl, bodyCtrl, footCtrl, showBodyHead, isHorizontal, 0, 0);
@@ -295,7 +257,7 @@ public final class FileTools {
      * @return 相对于webroot的文件位置
      */
     public static String exportToExcel(ExcelType fileType, String sqlStr, String names, String titleCtrl, String bodyCtrl, String footCtrl, boolean showBodyHead, boolean isHorizontal) {
-        String webRootAdsPath = getWebRootAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String filename = generateExcelResultFileName(fileType, null);
         ConnectionFactory dbcon = new ConnectionFactory();
         ExcelService es = new ExcelService();
@@ -335,7 +297,7 @@ public final class FileTools {
      * @return 相对于webroot路径
      */
     public static String exportToExcel(ExcelType fileType, String jsonStr, String fileName) {
-        String webRootAdsPath = getWebRootAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String resultfile = generateExcelResultFileName(fileType, fileName);
         ExcelService es = new ExcelService();
         String filepath = es.createExcelFile(resultfile, CommonTools.getJsonFromStr(jsonStr));
@@ -352,7 +314,7 @@ public final class FileTools {
      * @return 相对于webroot路径
      */
     public static String exportToExcel(ExcelType fileType, String templatePath, Map<String, String> data, String fileName) {
-        String webRootAdsPath = getWebRootAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String resultfile = generateExcelResultFileName(fileType, fileName);
         ExcelService es = new ExcelService();
         String filepath = es.createExcelFile(resultfile, templatePath, data);
@@ -392,7 +354,7 @@ public final class FileTools {
     public static String htmlToPDF(String htmlstr, String fileName) {
         String resultfile = generatePDFResultFileName(fileName);
         PDFService pdfService = new PDFService();
-        return pdfService.htmlToPDF(htmlstr, resultfile, null).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
+        return pdfService.htmlToPDF(htmlstr, resultfile, null).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
     }
 
     /**
@@ -404,7 +366,7 @@ public final class FileTools {
      * @return 相对于webroot路径
      */
     public static String htmlFileToPDF(String htmlFilePath, String fileName, String basePath, boolean isDelete) {
-        String webRootAdsPath = getWebRootAbsPath();
+        String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String resultfile = generatePDFResultFileName(fileName);
         htmlFilePath = CommonTools.getAbsPath(htmlFilePath);
         File htmlFile = new File(htmlFilePath);
@@ -444,7 +406,7 @@ public final class FileTools {
     public static String htmlToPDFFromTemplete(String templatePath, Map<String, Object> data, String fileName) {
         String resultfile = generatePDFResultFileName(fileName);
         PDFService pdfService = new PDFService();
-        return pdfService.htmlToPDFForTemplate(resultfile, templatePath, data).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
+        return pdfService.htmlToPDFForTemplate(resultfile, templatePath, data).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
     }
 
     /**
@@ -463,7 +425,7 @@ public final class FileTools {
     public static String ImageToPDF(String[] imageFileNames, String resultFileName, int flag, boolean isHorizontal, float left, float right, float top, float bottom) {
         String resultfile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
-        return pdfService.ImageToPDF(imageFileNames, resultfile, flag, isHorizontal, left, right, top, bottom).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
+        return pdfService.ImageToPDF(imageFileNames, resultfile, flag, isHorizontal, left, right, top, bottom).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
     }
 
     /**
@@ -478,7 +440,7 @@ public final class FileTools {
     public static String PDFAddPageNumber(String pdfFilePath, String resultFileName, boolean isDeleteFile, int orientation) {
         String resultfile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
-        return pdfService.PDFAddPageEvent(pdfFilePath, resultfile, new PageNumberHandle(), isDeleteFile, orientation).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
+        return pdfService.PDFAddPageEvent(pdfFilePath, resultfile, new PageNumberHandle(), isDeleteFile, orientation).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
     }
 
     /**
@@ -493,7 +455,7 @@ public final class FileTools {
     public static String PDFAddWaterMark(String pdfFilePath, String waterMarkPath, String resultFileName, boolean isDeleteFile) {
         String resultfile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
-        return pdfService.PDFAddWaterMark(pdfFilePath, waterMarkPath, resultfile, isDeleteFile).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
+        return pdfService.PDFAddWaterMark(pdfFilePath, waterMarkPath, resultfile, isDeleteFile).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
     }
 
     /**
@@ -507,7 +469,7 @@ public final class FileTools {
     public static String PDFEncrypt(String pdfFilePath, String resultFileName, boolean isDeleteFile) {
         String resultfile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
-        return pdfService.PDFEncrypt(pdfFilePath, "", resultfile, true, null, PDFService.PDFOWNERPASSWORD, PermissionType.ALLOW_COPY.getValue() | PermissionType.ALLOW_PRINTING.getValue(), isDeleteFile).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
+        return pdfService.PDFEncrypt(pdfFilePath, "", resultfile, true, null, PDFService.PDFOWNERPASSWORD, PermissionType.ALLOW_COPY.getValue() | PermissionType.ALLOW_PRINTING.getValue(), isDeleteFile).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
     }
 
     /**
@@ -521,7 +483,7 @@ public final class FileTools {
     public static String PDFToMerge(String[] fileNames, String resultFileName, boolean isDeleteFile) {
         String resultfile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
-        return pdfService.PDFToMerge(fileNames, resultfile, isDeleteFile).replace(getWebRootAbsPath(), "").replaceAll("\\\\", "/");
+        return pdfService.PDFToMerge(fileNames, resultfile, isDeleteFile).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
     }
 
 }
