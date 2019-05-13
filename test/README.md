@@ -12,3 +12,5 @@
 使用 scala 语言，引入脚手架开发的 springboot 应用
 - jvm 目前仅支持 1.8
 - spring-data-jpa
+## cloud
+使用 java 语言，引入脚手架开发的 spring cloud 应用群 demo
