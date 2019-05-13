@@ -1,4 +1,9 @@
 ## 版本更新记录
+##### v5.1.4.3
+> - [Upgrade] 升级 gradle 至 5.4.1
+> - [Upgrade] cloud 下的 demo 模块全部移入 test/cloud 中
+> - [Upgrade] 更新文档
+> - [Upgrade] 优化 acp-file 模块，去除无用代码
 ##### v5.1.4.2
 > - [Upgrade] 文件压缩解压公共方法从 acp-file 迁移到 acp-core，使用 CommonTools 类
 > - [Upgrade] 升级 gradle 至 5.4

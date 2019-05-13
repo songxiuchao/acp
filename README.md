@@ -1,5 +1,5 @@
 # acp 
-###### v5.1.4.2 [版本更新日志](doc/version_history.md)
+###### v5.1.4.3 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 从 5.1.2 开始，小版本号与 SpringBoot 小版本号一致
 
@@ -83,7 +83,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.4 --distribution-type=all
+    gradlew wrapper --gradle-version=5.4.1 --distribution-type=all
 ``
 
 ## 三、工程说明
@@ -213,7 +213,7 @@ acp:
     （5）封装日志服务客户端，发送日志消息至 kafka
     （6）zipkin 链路追踪客户端
     （7）自定义 PropertySourceLocator
-##### 2. cloud:admin-server 
+##### 2. test:cloud:admin-server 
 ###### 2.1 可视化监控，监控服务状态、信息聚合
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
@@ -235,15 +235,15 @@ acp:
 >     sampler:
 >       probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
 > ```
-##### 3. cloud:eureka-server 
+##### 3. test:cloud:eureka-server 
 服务注册发现
 
 |          url          |  描述                   |
 | --------------------- | ----------------------- | 
 | /                     | 服务状态监控界面        |
-##### 4. cloud:gateway-server 
+##### 4. test:cloud:gateway-server 
 网关服务
-##### 5. cloud:oauth-server 
+##### 5. test:cloud:oauth-server 
 统一认证服务：token 存储于 Redis，user 及 client 信息可扩展配置
 
 |          url          |  描述                   |
@@ -256,19 +256,19 @@ acp:
 
 [查看认证过程](doc/oauth2.0认证.md)
 
-> cloud:oauth-server 中增加 authorization_code 方式配置，详见 pers.acp.springcloud.oauth.conf.WebSecurityConfiguration 注释
+> test:cloud:oauth-server 中增加 authorization_code 方式配置，详见 pers.acp.springcloud.oauth.conf.WebSecurityConfiguration 注释
 
 > 注：使用 authorization_code 方式时，认证请求时需要直接访问 oauth-server 不能通过 gateway
 
-##### 6. cloud:config-server
+##### 6. test:cloud:config-server
 配置服务，统一配置中心，从数据库读取配置信息
-##### 7. cloud:log-server
+##### 7. test:cloud:log-server
 日志服务，使用 kafka 作为日志消息队列
-##### 8. cloud:helloworld 
+##### 8. test:cloud:helloworld 
 原子服务，分别调用 hello 和 world
-##### 9. cloud:hello 
+##### 9. test:cloud:hello 
 原子服务
-##### 10. cloud:world 
+##### 10. test:cloud:world 
 原子服务
 ### （二）基础中间件环境搭建
 基础中间件包括：redis、zookeeper、kafka、kafka-manager、elasticsearch、kibana、logstash、zipkin、zipkin-dependencies、zoonavigator-api、zoonavigator-web、prometheus、grafana、setup_grafana_datasource
@@ -291,10 +291,7 @@ acp:
 > docker-compose -f docker-compose-base.yml down
 > ```
 > - docker-compose 文件：cloud/dockerfile/docker-compose-base.yml
-> - elasticsearch 的插件安装：
->    - docker exec -it [容器Id] /bin/sh
->    - elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.5.4/elasticsearch-analysis-ik-6.5.4.zip
->    - elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v6.5.4/elasticsearch-analysis-pinyin-6.5.4.zip
+
 ##### 1. zipkin
 http://127.0.0.1:9411
 ![Architecture diagram](doc/images/zipkin.png)
@@ -314,24 +311,24 @@ http://127.0.0.1:5601
 ##### 全局说明
 > - 统一注入 pers.acp.springcloud.common.log.LogInstance 进行日志记录
 ##### 1. 可视化监控
-    cloud:admin-server
+    test:cloud:admin-server
     （1）无需改动代码
     （2）修改 yml 配置即可
 ![Architecture diagram](doc/images/admin-server.png)
 ##### 2. 服务注册发现（支持高可用eureka集群）
-    cloud:eureka-server
+    test:cloud:eureka-server
     （1）无需改动代码
     （2）修改 yml 配置即可
 ##### 3. 统一配置管理
-    cloud:config-server
+    test:cloud:config-server
     （1）额外功能根据实际需求自定义
     （2）修改 yml 配置即可
 ##### 4. 网关服务
-    cloud:gateway-server
+    test:cloud:gateway-server
     （1）需自定义限流策略（需依赖 Redis）
     （2）修改 yml 进行路由配置；若没有 Redis 请不要配置限流策略
 ##### 5. 认证服务
-    cloud:oauth-server
+    test:cloud:oauth-server
     （1）引入 cloud:acp-spring-cloud-starter-common，按需引入 org.springframework.boot:spring-boot-starter-data-redis
     （2）入口类增加注解 @AcpCloudOauthServerApplication
     （3）配置中增加
@@ -347,7 +344,7 @@ http://127.0.0.1:5601
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）参考 四、开发 SpringBoot 应用
     （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置
-    （4）参考 cloud:hello、cloud:world、cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
+    （4）参考 test:cloud:hello、test:cloud:world、test:cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
     （5）如果存在日志服务，则需进行配置
     acp:
       cloud:
