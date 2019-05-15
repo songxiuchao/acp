@@ -99,7 +99,7 @@ public final class ThreadPoolService {
         if (maxThreadNumber == Integer.MAX_VALUE) {// 直接提交
             executor = new ThreadPoolExecutor(0, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
         } else if (querySize == Integer.MAX_VALUE) {// 无界队列
-            executor = new ThreadPoolExecutor(maxThreadNumber, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+            executor = new ThreadPoolExecutor(0, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
         } else {// 有界队列
             executor = new ThreadPoolExecutor(0, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(querySize));
         }
