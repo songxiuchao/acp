@@ -24,7 +24,7 @@ public class TestSimple {
     }
 
     private static void testThreadPool() throws InterruptedException {
-        ThreadPoolService threadPoolService = ThreadPoolService.getInstance(Integer.MAX_VALUE, 10);
+        ThreadPoolService threadPoolService = ThreadPoolService.getInstance(10, Integer.MAX_VALUE, 10);
 //        for (int i = 0; i < 10000; i++) {
 //            threadPoolService.addTask(new BaseThreadTask(i + "") {
 //                @Override

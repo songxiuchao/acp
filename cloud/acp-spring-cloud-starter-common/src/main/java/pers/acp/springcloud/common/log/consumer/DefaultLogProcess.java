@@ -17,7 +17,7 @@ public class DefaultLogProcess implements LogProcess {
     @Override
     public void process(LogInfo logInfo) {
         // 每个日志类型启动一个线程池，池中仅有一个线程，保证每个类型的消息顺序处理
-        ThreadPoolService threadPoolService = ThreadPoolService.getInstance(logInfo.getLogType() + "_log", 3000, 1);
+        ThreadPoolService threadPoolService = ThreadPoolService.getInstance(logInfo.getLogType() + "_log", 3000, 0, 1, Integer.MAX_VALUE);
         threadPoolService.addTask(new BaseThreadTask(logInfo.getLogType() + "_log") {
             @Override
             public boolean beforeExcuteFun() {
