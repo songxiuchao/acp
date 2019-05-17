@@ -12,18 +12,22 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
-import pers.acp.core.CommonTools;
+import org.joda.time.DateTime;
 import pers.acp.core.config.instance.AcpProperties;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.task.threadpool.ThreadPoolService;
 import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
+import pers.acp.core.task.timer.container.Calculation;
 
 import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -118,9 +122,9 @@ public class CommonUtils {
      * @return 是否是绝对路径
      */
     public static boolean isAbsPath(String path) {
-        String prefix = getProperties("abspath.prefix", "abs:");
-        String prefixu = getProperties("userpath.prefix", "user:");
-        return path.startsWith(prefix) || !(path.startsWith(prefixu) || path.startsWith("/") || path.startsWith("\\") || path.startsWith(File.separator));
+        String prefix = getProperties("absPath.prefix", "abs:");
+        String prefixU = getProperties("userPath.prefix", "user:");
+        return path.startsWith(prefix) || !(path.startsWith(prefixU) || path.startsWith("/") || path.startsWith("\\") || path.startsWith(File.separator));
     }
 
     /**
@@ -132,14 +136,14 @@ public class CommonUtils {
     public static String getAbsPath(String srcPath) {
         String path = srcPath.replace("\\", File.separator).replace("/", File.separator);
         if (isAbsPath(path)) {
-            String prefix = getProperties("abspath.prefix", "abs:");
+            String prefix = getProperties("absPath.prefix", "abs:");
             if (path.startsWith(prefix)) {
                 return path.substring(prefix.length());
             } else {
                 return path;
             }
         } else {
-            String prefix = getProperties("userpath.prefix", "user:");
+            String prefix = getProperties("userPath.prefix", "user:");
             if (path.startsWith(prefix)) {
                 return System.getProperty("user.home") + path.substring(prefix.length());
             } else {
@@ -163,9 +167,9 @@ public class CommonUtils {
     }
 
     /**
-     * 获取webroot绝对路径
+     * 获取 WebRoot 绝对路径
      *
-     * @return webroot绝对路径
+     * @return WebRoot 绝对路径
      */
     public static String getWebRootAbsPath() {
         try {
@@ -444,19 +448,27 @@ public class CommonUtils {
     /**
      * 获取指定格式的时间字符串
      *
-     * @param date       Date实例
-     * @param dateFormat 格式
+     * @param dateTime       DateTime 实例
+     * @param dateTimeFormat 格式
      * @return 格式化的时间格式
      */
-    public static String getDateTimeString(Date date, String dateFormat) {
-        if (date == null) {
-            date = new Date(); // 当前时间
+    public static String getDateTimeString(DateTime dateTime, String dateTimeFormat) {
+        if (dateTime == null) {
+            dateTime = getNowDateTime();
         }
-        if (isNullStr(dateFormat)) {
-            dateFormat = "yyyy-MM-dd HH:mm:ss"; // 默认时间格式化模式
+        if (isNullStr(dateTimeFormat)) {
+            dateTimeFormat = Calculation.DATETIME_FORMAT; // 默认时间格式化模式
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
-        return simpleDateFormat.format(date);
+        return dateTime.toString(dateTimeFormat);
+    }
+
+    /**
+     * 获取当前时刻的 DateTime 实例
+     *
+     * @return DateTime 实例
+     */
+    public static DateTime getNowDateTime() {
+        return new DateTime();
     }
 
     /**
@@ -465,7 +477,7 @@ public class CommonUtils {
      * @return 日期字符串
      */
     public static String getNowString() {
-        return getDateTimeString(null, "yyyy-MM-dd");
+        return getDateTimeString(null, Calculation.DATE_FORMAT);
     }
 
     /**
@@ -474,7 +486,7 @@ public class CommonUtils {
      * @return 日期时间字符串
      */
     public static String getNowTimeString() {
-        return getDateTimeString(null, "yyyy-MM-dd HH:mm:ss");
+        return getDateTimeString(null, Calculation.DATETIME_FORMAT);
     }
 
     /**
@@ -644,22 +656,22 @@ public class CommonUtils {
      * @return 执行结果
      */
     @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-    public static Object excuteTaskInThreadPool(ThreadPoolService threadPool, BaseThreadTask task) {
+    public static Object executeTaskInThreadPool(ThreadPoolService threadPool, BaseThreadTask task) {
         if (task != null && threadPool != null) {
             threadPool.addTask(task);
             try {
                 synchronized (task) {
                     task.wait();
                     if (task.getTaskResult() != null) {
-                        log.debug("excute task in threadpool success:" + task.getTaskResult());
+                        log.debug("execute task in threadPool success:" + task.getTaskResult());
                         return task.getTaskResult();
                     } else {
-                        log.debug("excute task in threadpool success");
+                        log.debug("execute task in threadPool success");
                         return null;
                     }
                 }
             } catch (Exception e) {
-                log.error("excute task in threadpool failed:" + e.getMessage(), e);
+                log.error("execute task in threadPool failed:" + e.getMessage(), e);
                 return null;
             }
         } else {
@@ -670,7 +682,7 @@ public class CommonUtils {
     /**
      * 压缩文件
      *
-     * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于webroot的路径
+     * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于WebRoot的路径
      * @param resultFileName 生成的目标文件全路径
      * @param isDeleteFile   压缩完后是否删除原文件
      * @return 目标文件绝对路径
@@ -689,10 +701,10 @@ public class CommonUtils {
             out = new ZipOutputStream(new FileOutputStream(resultFileName));
             for (String fileName : fileNames) {
                 String filename = fileName.replace("\\", File.separator).replace("/", File.separator);
-                File srcfile = new File(filename);
-                compress(srcfile, out, srcfile.getName());
+                File srcFile = new File(filename);
+                compress(srcFile, out, srcFile.getName());
                 if (isDeleteFile) {
-                    CommonTools.doDeleteFile(srcfile, false, 0);
+                    doDeleteFile(srcFile, false, 0);
                 }
             }
             out.close();
@@ -704,7 +716,7 @@ public class CommonUtils {
                 if (out != null) {
                     out.closeEntry();
                 }
-                CommonTools.doDeleteFile(new File(resultFileName), false, 0);
+                doDeleteFile(new File(resultFileName), false, 0);
             } catch (Exception ex) {
                 log.error("file compress Exception:" + ex.getMessage(), ex);
             }
@@ -782,8 +794,8 @@ public class CommonUtils {
         BufferedInputStream bin = null;
         BufferedOutputStream bout = null;
         try {
-            if (CommonTools.isNullStr(charSet)) {
-                charSet = CommonTools.getDefaultCharset();
+            if (isNullStr(charSet)) {
+                charSet = getDefaultCharset();
             }
             zin = new ZipInputStream(new FileInputStream(zipFileName), Charset.forName(charSet));
             bin = new BufferedInputStream(zin);
@@ -793,7 +805,7 @@ public class CommonUtils {
                 fOut = new File(parentFold, entry.getName());
                 if (!fOut.exists()) {
                     if (!fOut.getParentFile().mkdirs()) {
-                        log.error("mkdirs failed : " + fOut.getParent());
+                        log.error("mkDirs failed : " + fOut.getParent());
                     }
                 }
                 bout = new BufferedOutputStream(new FileOutputStream(fOut));
@@ -806,7 +818,7 @@ public class CommonUtils {
             bin.close();
             zin.close();
             if (isDeleteFile) {
-                CommonTools.doDeleteFile(new File(zipFileName), false, 0);
+                doDeleteFile(new File(zipFileName), false, 0);
             }
             log.info("decompress success");
             endTime = System.currentTimeMillis();
@@ -828,6 +840,139 @@ public class CommonUtils {
             endTime = System.currentTimeMillis();
         } finally {
             log.info("time consuming : " + (endTime - startTime) + " ms");
+        }
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param file   待删除文件
+     * @param isSync 是否异步删除
+     */
+    public static void doDeleteFile(final File file, boolean isSync) {
+        String waitTimeStr = getProperties("deleteFile.waitTime");
+        if (isNullStr(waitTimeStr)) {
+            waitTimeStr = "1200000";
+        }
+        if (isSync && Long.valueOf(waitTimeStr) >= 0) {
+            long waitTime = Long.valueOf(waitTimeStr);
+            doDeleteFile(file, true, waitTime);
+        } else {
+            doDeleteFile(file, false, 0);
+        }
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param file     待删除文件
+     * @param isSync   是否异步删除
+     * @param waitTime 异步删除等待时间
+     */
+    public static void doDeleteFile(final File file, boolean isSync, long waitTime) {
+        FileDelete.doDeleteFile(file, isSync, waitTime);
+    }
+
+    /**
+     * 删除文件夹
+     *
+     * @param dir 将要删除的文件目录
+     */
+    public static void doDeleteDir(File dir) {
+        boolean result = FileDelete.doDeleteDir(dir);
+        if (result) {
+            log.info("delete fold [" + dir.getAbsolutePath() + "] success!");
+        } else {
+            log.info("delete fold [" + dir.getAbsolutePath() + "] failed!");
+        }
+    }
+
+    private static class FileDelete extends Thread {
+
+        private static final LogFactory log = LogFactory.getInstance(FileDelete.class);
+
+        private final File file;
+
+        /**
+         * 删除文件等待时间，单位:毫秒，默认1200000毫秒（20分钟）
+         */
+        private long waitTime = 1200000;
+
+        private FileDelete(final File file) {
+            this.file = file;
+            this.setDaemon(true);
+        }
+
+        private FileDelete(final File file, long waitTime) {
+            this(file);
+            this.waitTime = waitTime;
+        }
+
+        /**
+         * 删除文件
+         *
+         * @param file     待删除的文件
+         * @param isSync   是否异步删除
+         * @param waitTime 异步删除等待时间
+         */
+        static void doDeleteFile(File file, boolean isSync, long waitTime) {
+            if (isSync) {
+                if (waitTime == 0) {
+                    new FileDelete(file).start();
+                } else {
+                    new FileDelete(file, waitTime).start();
+                }
+            } else {
+                try {
+                    if (doDeleteDir(file)) {
+                        log.info("delete file [" + file.getAbsolutePath() + "] success!");
+                    } else {
+                        log.info("delete file [" + file.getAbsolutePath() + "] failed!");
+                    }
+                } catch (Exception e) {
+                    log.error("delete file Exception:" + e.getMessage(), e);
+                }
+            }
+        }
+
+        /**
+         * 删除文件夹
+         *
+         * @param dir 将要删除的文件目录
+         * @return true|false
+         */
+        static boolean doDeleteDir(File dir) {
+            if (dir.exists()) {
+                if (dir.isDirectory()) {
+                    String[] children = dir.list();
+                    if (children != null) {
+                        for (String aChildren : children) {
+                            boolean success = doDeleteDir(new File(dir, aChildren));
+                            if (!success) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return dir.delete();
+            } else {
+                return true;
+            }
+        }
+
+        @Override
+        public void run() {
+            try {
+                log.info("ready delete file [" + file.getAbsolutePath() + "],waiting " + (waitTime) / 1000 + " seconds");
+                FileDelete.sleep(waitTime);
+                if (doDeleteDir(file)) {
+                    log.info("delete file [" + file.getAbsolutePath() + "] success!");
+                } else {
+                    log.info("delete file [" + file.getAbsolutePath() + "] failed!");
+                }
+            } catch (Exception e) {
+                log.error("delete file Exception:" + e.getMessage(), e);
+            }
         }
     }
 

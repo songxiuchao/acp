@@ -1,120 +1,129 @@
 package pers.acp.core;
 
-import pers.acp.core.exceptions.TimerException;
+import org.joda.time.DateTime;
 import pers.acp.core.task.timer.container.Calculation;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public final class CalendarTools {
 
     /**
-     * 获取日历对象
+     * 根据时间戳获取日期对象
      *
-     * @return 日历对象
+     * @param instant 时间戳
+     * @return 日期对象
      */
-    public static Calendar getCalendar() throws TimerException {
-        return new Calculation().getCalendar();
+    public static DateTime getCalendar(long instant) {
+        return Calculation.getCalendar(instant);
     }
 
     /**
-     * 获取日历对象
+     * 获取日期对象
      *
-     * @param dateStr 日期字符串（yyyy-MM-dd）
-     * @return 日历对象
+     * @param dateTimeStr 日期字符串（yyyy-MM-dd）
+     * @return 日期对象
      */
-    public static Calendar getCalendar(String dateStr) throws TimerException {
-        return new Calculation().getCalendar(dateStr);
+    public static DateTime getCalendar(String dateTimeStr) {
+        return Calculation.getCalendar(dateTimeStr);
+    }
+
+    /**
+     * 获取日期对象
+     *
+     * @param dateTimeStr    日期字符串
+     * @param dateTimeFormat 格式字符串
+     * @return 日期对象
+     */
+    public static DateTime getCalendar(String dateTimeStr, String dateTimeFormat) {
+        return Calculation.getCalendar(dateTimeStr, dateTimeFormat);
     }
 
     /**
      * 获取指定日期的后一天
      *
-     * @param calendar 日历对象
-     * @return 日历对象
+     * @param dateTime 日期对象
+     * @return 日期对象
      */
-    public static Calendar getNextDay(Calendar calendar) {
-        return new Calculation().getNextDay(calendar);
+    public static DateTime getNextDay(DateTime dateTime) {
+        return Calculation.getNextDay(dateTime);
     }
 
     /**
      * 获取指定日期前一天
      *
-     * @param calendar 日历对象
-     * @return 日历对象
+     * @param dateTime 日期对象
+     * @return 日期对象
      */
-    public static Calendar getPrevDay(Calendar calendar) {
-        return new Calculation().getPrevDay(calendar);
+    public static DateTime getPrevDay(DateTime dateTime) {
+        return Calculation.getPrevDay(dateTime);
     }
 
     /**
      * 获取指定日期是一周中第几天
      *
-     * @param calendar 日历对象
-     * @return 日历对象
+     * @param dateTime 日期对象
+     * @return 结果（1-7）,其中sunday是7
      */
-    public static int getWeekNo(Calendar calendar) {
-        return new Calculation().getWeekNo(calendar);
+    public static int getWeekNo(DateTime dateTime) {
+        return Calculation.getWeekNo(dateTime);
     }
 
     /**
      * 获取指定日期日号
      *
-     * @param calendar 日历对象
+     * @param dateTime 日期对象
      * @return 日号（1-31）
      */
-    public static int getDayNo(Calendar calendar) {
-        return new Calculation().getDayNo(calendar);
+    public static int getDayNo(DateTime dateTime) {
+        return Calculation.getDayNo(dateTime);
     }
 
     /**
      * 获取指定月号
      *
-     * @param calendar 日历对象
+     * @param dateTime 日期对象
      * @return 月号（1-12）
      */
-    public static int getMonthNo(Calendar calendar) {
-        return new Calculation().getMonthNo(calendar);
+    public static int getMonthNo(DateTime dateTime) {
+        return Calculation.getMonthNo(dateTime);
     }
 
     /**
      * 获取指定月所在季度内的月号
      *
-     * @param calendar 日历对象
-     * @return 季度号（1, 2, 3）
+     * @param dateTime 日期对象
+     * @return 季度号（1, 2, 3, 4）
      */
-    public static int getMontNoInQuarter(Calendar calendar) {
-        return new Calculation().getMontNoInQuarter(calendar);
+    public static int getMonthNoInQuarter(DateTime dateTime) {
+        return Calculation.getMonthNoInQuarter(dateTime);
     }
 
     /**
      * 获取指定月最后一天日号
      *
-     * @param calendar 日历对象
+     * @param dateTime 日期对象
      * @return 日号
      */
-    public static int getLastDayInMonthNo(Calendar calendar) {
-        return new Calculation().getLastDayInMonthNo(calendar);
+    public static int getLastDayInMonthNo(DateTime dateTime) {
+        return Calculation.getLastDayInMonthNo(dateTime);
     }
 
     /**
      * 判断当前时间是否是工作日
      *
-     * @param now 日期对象
+     * @param dateTime 日期对象
      * @return 是否是工作日
      */
-    public static boolean isWeekDay(Date now) {
-        return new Calculation().isWeekDay(now);
+    public static boolean isWeekDay(DateTime dateTime) {
+        return Calculation.isWeekDay(dateTime);
     }
 
     /**
      * 判断当前时间是否是周末
      *
-     * @param now 日期对象
+     * @param dateTime 日期对象
      * @return 是否是周末
      */
-    public static boolean isWeekend(Date now) {
-        return new Calculation().isWeekend(now);
+    public static boolean isWeekend(DateTime dateTime) {
+        return Calculation.isWeekend(dateTime);
     }
 
     /**
@@ -125,8 +134,8 @@ public final class CalendarTools {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public static boolean validateDay(Date now, Date contrast, String rule) {
-        return new Calculation().validateDay(now, contrast, rule);
+    public static boolean validateDay(DateTime now, DateTime contrast, String rule) {
+        return Calculation.validateDay(now, contrast, rule);
     }
 
     /**
@@ -137,8 +146,8 @@ public final class CalendarTools {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public static boolean validateWeek(Date now, Date contrast, String rule) {
-        return new Calculation().validateWeek(now, contrast, rule);
+    public static boolean validateWeek(DateTime now, DateTime contrast, String rule) {
+        return Calculation.validateWeek(now, contrast, rule);
     }
 
     /**
@@ -149,8 +158,8 @@ public final class CalendarTools {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public static boolean validateMonth(Date now, Date contrast, String rule) {
-        return new Calculation().validateMonth(now, contrast, rule);
+    public static boolean validateMonth(DateTime now, DateTime contrast, String rule) {
+        return Calculation.validateMonth(now, contrast, rule);
     }
 
     /**
@@ -161,8 +170,8 @@ public final class CalendarTools {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public static boolean validateQuarter(Date now, Date contrast, String rule) {
-        return new Calculation().validateQuarter(now, contrast, rule);
+    public static boolean validateQuarter(DateTime now, DateTime contrast, String rule) {
+        return Calculation.validateQuarter(now, contrast, rule);
     }
 
     /**
@@ -173,8 +182,8 @@ public final class CalendarTools {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public static boolean validateYear(Date now, Date contrast, String rule) {
-        return new Calculation().validateYear(now, contrast, rule);
+    public static boolean validateYear(DateTime now, DateTime contrast, String rule) {
+        return Calculation.validateYear(now, contrast, rule);
     }
 
 }

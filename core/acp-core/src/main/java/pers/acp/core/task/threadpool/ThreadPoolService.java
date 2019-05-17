@@ -1,10 +1,11 @@
 package pers.acp.core.task.threadpool;
 
+import org.joda.time.DateTime;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
 import pers.acp.core.tools.CommonUtils;
 
-import java.util.Date;
+;
 import java.util.concurrent.*;
 
 /**
@@ -185,7 +186,7 @@ public final class ThreadPoolService {
      * @param newTask 任务
      */
     public void addTask(BaseThreadTask newTask) {
-        newTask.setSubmitTime(new Date());
+        newTask.setSubmitTime(CommonUtils.getNowDateTime());
         this.executor.execute(newTask);
         log.debug("thread pool [" + poolName + "] submit task[" + newTask.getTaskId() + "]: " + newTask.getTaskName());
     }
@@ -203,7 +204,7 @@ public final class ThreadPoolService {
             if (taske == null) {
                 continue;
             }
-            taske.setSubmitTime(new Date());
+            taske.setSubmitTime(CommonUtils.getNowDateTime());
             this.executor.execute(taske);
             log.debug("thread pool [" + poolName + "] submit task[" + taske.getTaskId() + "]: " + taske.getTaskName());
         }

@@ -316,7 +316,7 @@ public final class ConnectionFactory {
      * @param param 参数
      * @return 结果
      */
-    private ResultSet doExcute(String sql, Object[] param) throws SQLException {
+    private ResultSet doExecute(String sql, Object[] param) throws SQLException {
         getConnection();
         stmt.clearBatch();
         log.debug("sql=" + sql);
@@ -858,7 +858,7 @@ public final class ConnectionFactory {
      */
     public boolean doUpdate(String sql) {
         try {
-            doExcute(sql, null);
+            doExecute(sql, null);
             if (connection.getAutoCommit()) {
                 this.close();
             }
@@ -880,7 +880,7 @@ public final class ConnectionFactory {
      */
     public boolean doUpdate(String sql, Object[] param) {
         try {
-            doExcute(sql, param);
+            doExecute(sql, param);
             if (connection.getAutoCommit()) {
                 this.close();
             }
@@ -903,7 +903,7 @@ public final class ConnectionFactory {
     public List<Map<String, Object>> doUpdateWithFill(String sql, Object[] param) {
         List<Map<String, Object>> result;
         try {
-            ResultSet rs = doExcute(sql, param);
+            ResultSet rs = doExecute(sql, param);
             result = resultSetToList(rs);
             if (connection.getAutoCommit()) {
                 this.close();

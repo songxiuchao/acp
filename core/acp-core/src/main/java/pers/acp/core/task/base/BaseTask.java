@@ -1,9 +1,8 @@
 package pers.acp.core.task.base;
 
+import org.joda.time.DateTime;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.tools.CommonUtils;
-
-import java.util.Date;
 
 /**
  * 任务基类
@@ -30,22 +29,22 @@ public abstract class BaseTask implements IBaseTask, Runnable {
     /**
      * 创建时间
      */
-    private Date generateTime;
+    private DateTime generateTime;
 
     /**
      * 提交执行时间
      */
-    private Date submitTime = null;
+    private DateTime submitTime = null;
 
     /**
      * 开始执行时间
      */
-    private Date beginExceuteTime = null;
+    private DateTime beginExecuteTime = null;
 
     /**
      * 执行完成时间
      */
-    private Date finishTime = null;
+    private DateTime finishTime = null;
 
     /**
      * 任务执行结果
@@ -69,7 +68,7 @@ public abstract class BaseTask implements IBaseTask, Runnable {
      */
     public BaseTask(String taskName) {
         this.taskId = CommonUtils.getUuid();
-        this.generateTime = new Date();
+        this.generateTime = CommonUtils.getNowDateTime();
         this.taskName = taskName;
     }
 
@@ -81,7 +80,7 @@ public abstract class BaseTask implements IBaseTask, Runnable {
      */
     public BaseTask(String taskName, boolean needExecuteImmediate) {
         this.taskId = CommonUtils.getUuid();
-        this.generateTime = new Date();
+        this.generateTime = CommonUtils.getNowDateTime();
         this.taskName = taskName;
         this.needExecuteImmediate = needExecuteImmediate;
     }
@@ -89,13 +88,13 @@ public abstract class BaseTask implements IBaseTask, Runnable {
     @Override
     public void run() {
         this.isRunning = true;
-        this.beginExceuteTime = new Date();
+        this.beginExecuteTime = new DateTime();
         try {
-            if (this.beforeExcuteFun()) {
-                Object result = this.excuteFun();
+            if (this.beforeExecuteFun()) {
+                Object result = this.executeFun();
                 this.setTaskResult(result);
                 if (result != null) {
-                    this.afterExcuteFun(result);
+                    this.afterExecuteFun(result);
                 } else {
                     this.setTaskResult(null);
                 }
@@ -104,7 +103,7 @@ public abstract class BaseTask implements IBaseTask, Runnable {
             log.error(e.getMessage(), e);
             this.setTaskResult(null);
         }
-        this.finishTime = new Date();
+        this.finishTime = CommonUtils.getNowDateTime();
         this.isRunning = false;
         synchronized (this) {
             this.notifyAll();
@@ -116,7 +115,7 @@ public abstract class BaseTask implements IBaseTask, Runnable {
      *
      * @return 执行结果对象
      */
-    public Object doExcute() {
+    public Object doExecute() {
         this.run();
         return this.taskResult;
     }
@@ -133,23 +132,23 @@ public abstract class BaseTask implements IBaseTask, Runnable {
         this.taskName = taskName;
     }
 
-    public Date getGenerateTime() {
+    public DateTime getGenerateTime() {
         return generateTime;
     }
 
-    public Date getSubmitTime() {
+    public DateTime getSubmitTime() {
         return submitTime;
     }
 
-    public void setSubmitTime(Date submitTime) {
+    public void setSubmitTime(DateTime submitTime) {
         this.submitTime = submitTime;
     }
 
-    public Date getBeginExceuteTime() {
-        return beginExceuteTime;
+    public DateTime getBeginExecuteTime() {
+        return beginExecuteTime;
     }
 
-    public Date getFinishTime() {
+    public DateTime getFinishTime() {
         return finishTime;
     }
 
