@@ -1,5 +1,7 @@
 ## 版本更新记录
-##### v5.1.4.3
+##### v5.1.5
+> - [Upgrade] 升级 Spring Boot 至 2.1.5.RELEASE
+> - [Upgrade] 升级依赖项
 > - [Upgrade] 升级 gradle 至 5.4.1
 > - [Upgrade] cloud 下的 demo 模块全部移入 test/cloud 中
 > - [Upgrade] 更新文档
