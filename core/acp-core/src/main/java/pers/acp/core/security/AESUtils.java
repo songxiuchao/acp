@@ -56,20 +56,16 @@ public final class AESUtils {
      *
      * @param encryptedText 加密字符串
      * @param key           密钥
-     * @param cryptType    加密类型，默认 AES/ECB/PKCS5Padding
+     * @param cryptType     加密类型，默认 AES/ECB/PKCS5Padding
      * @return 明文
      */
     public static String decrypt(String encryptedText, Key key, String cryptType) throws Exception {
         if (CommonUtils.isNullStr(cryptType)) {
             cryptType = CRYPT_TYPE;
         }
-        String decryptText;
-        byte[] decrypt;
         Cipher cipher = Cipher.getInstance(cryptType);
         cipher.init(Cipher.DECRYPT_MODE, key);
-        decrypt = cipher.doFinal(Base64.decode(encryptedText));
-        decryptText = new String(decrypt, encode).trim();
-        return decryptText;
+        return new String(cipher.doFinal(Base64.decode(encryptedText)), encode).trim();
     }
 
 }
