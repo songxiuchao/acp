@@ -1,11 +1,9 @@
 package pers.acp.core.task.threadpool;
 
-import org.joda.time.DateTime;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
 import pers.acp.core.tools.CommonUtils;
 
-;
 import java.util.concurrent.*;
 
 /**

@@ -1,6 +1,5 @@
 package pers.acp.core.task.timer;
 
-import org.joda.time.DateTime;
 import pers.acp.core.exceptions.TimerException;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.task.timer.basetask.BaseTimerTask;
