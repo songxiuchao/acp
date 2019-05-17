@@ -3,6 +3,7 @@ package pers.acp.core;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import org.joda.time.DateTime;
 import pers.acp.core.exceptions.OperateException;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.match.MoneyToCN;
@@ -14,7 +15,7 @@ import pers.acp.core.tools.CommonUtils;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -108,9 +109,9 @@ public final class CommonTools {
     }
 
     /**
-     * 获取webroot绝对路径
+     * 获取WebRoot绝对路径
      *
-     * @return webroot绝对路径
+     * @return WebRoot绝对路径
      */
     public static String getWebRootAbsPath() {
         return CommonUtils.getWebRootAbsPath();
@@ -270,12 +271,21 @@ public final class CommonTools {
     /**
      * 获取指定格式的时间字符串
      *
-     * @param date       Date实例
-     * @param dateFormat 格式
+     * @param dateTime       DateTime 实例
+     * @param dateTimeFormat 格式
      * @return 格式化的时间格式
      */
-    public static String getDateTimeString(Date date, String dateFormat) {
-        return CommonUtils.getDateTimeString(date, dateFormat);
+    public static String getDateTimeString(DateTime dateTime, String dateTimeFormat) {
+        return CommonUtils.getDateTimeString(dateTime, dateTimeFormat);
+    }
+
+    /**
+     * 获取当前时刻的 DateTime 实例
+     *
+     * @return DateTime 实例
+     */
+    public static DateTime getNowDateTime() {
+        return CommonUtils.getNowDateTime();
     }
 
     /**
@@ -299,12 +309,12 @@ public final class CommonTools {
     /**
      * 计算四则运算表达式结果
      *
-     * @param caculateStr 表达式字符串
+     * @param calculateStr 表达式字符串
      * @return 结果
      */
-    public static double doCaculate(String caculateStr) throws OperateException {
+    public static double doCalculate(String calculateStr) throws OperateException {
         Operate operate = new Operate();
-        return operate.caculate(caculateStr);
+        return operate.caculate(calculateStr);
     }
 
     /**
@@ -324,8 +334,8 @@ public final class CommonTools {
      * @param task       线程池任务
      * @return 执行结果
      */
-    public static Object excuteTaskInThreadPool(ThreadPoolService threadPool, BaseThreadTask task) {
-        return CommonUtils.excuteTaskInThreadPool(threadPool, task);
+    public static Object executeTaskInThreadPool(ThreadPoolService threadPool, BaseThreadTask task) {
+        return CommonUtils.executeTaskInThreadPool(threadPool, task);
     }
 
     /**
@@ -418,7 +428,7 @@ public final class CommonTools {
     /**
      * 压缩文件
      *
-     * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于webroot的路径
+     * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于WebRoot的路径
      * @param resultFileName 生成的目标文件全路径
      * @param isDeleteFile   压缩完后是否删除原文件
      * @return 目标文件绝对路径
@@ -457,16 +467,7 @@ public final class CommonTools {
      * @param isSync 是否异步删除
      */
     public static void doDeleteFile(final File file, boolean isSync) {
-        String waitTimeStr = getProperties("deletefile.waittime");
-        if (isNullStr(waitTimeStr)) {
-            waitTimeStr = "1200000";
-        }
-        if (isSync && Long.valueOf(waitTimeStr) >= 0) {
-            long waittime = Long.valueOf(waitTimeStr);
-            doDeleteFile(file, true, waittime);
-        } else {
-            doDeleteFile(file, false, 0);
-        }
+        CommonUtils.doDeleteFile(file, isSync);
     }
 
     /**
@@ -477,7 +478,7 @@ public final class CommonTools {
      * @param waitTime 异步删除等待时间
      */
     public static void doDeleteFile(final File file, boolean isSync, long waitTime) {
-        FileDelete.doDeleteFile(file, isSync, waitTime);
+        CommonUtils.doDeleteFile(file, isSync, waitTime);
     }
 
     /**
@@ -486,111 +487,7 @@ public final class CommonTools {
      * @param dir 将要删除的文件目录
      */
     public static void doDeleteDir(File dir) {
-        boolean result = FileDelete.doDeleteDir(dir);
-        if (result) {
-            log.info("delete fold [" + dir.getAbsolutePath() + "] success!");
-        } else {
-            log.info("delete fold [" + dir.getAbsolutePath() + "] failed!");
-        }
-    }
-
-    private static class FileDelete extends Thread {
-
-        private static final LogFactory log = LogFactory.getInstance(FileDelete.class);
-
-        private final File file;
-
-        /**
-         * 删除文件等待时间，单位:毫秒，默认1200000毫秒（20分钟）
-         */
-        private long waitTime = 1200000;
-
-        private FileDelete(final File file) {
-            this.file = file;
-            this.setDaemon(true);
-        }
-
-        private FileDelete(final File file, long waitTime) {
-            this(file);
-            this.waitTime = waitTime;
-        }
-
-        /**
-         * 删除文件
-         *
-         * @param file   待删除的文件
-         * @param isSync 是否异步删除
-         */
-        static void doDeleteFile(File file, boolean isSync) {
-            doDeleteFile(file, isSync, 0);
-        }
-
-        /**
-         * 删除文件
-         *
-         * @param file     待删除的文件
-         * @param isSync   是否异步删除
-         * @param waitTime 异步删除等待时间
-         */
-        static void doDeleteFile(File file, boolean isSync, long waitTime) {
-            if (isSync) {
-                if (waitTime == 0) {
-                    new FileDelete(file).start();
-                } else {
-                    new FileDelete(file, waitTime).start();
-                }
-            } else {
-                try {
-                    if (doDeleteDir(file)) {
-                        log.info("delete file [" + file.getAbsolutePath() + "] success!");
-                    } else {
-                        log.info("delete file [" + file.getAbsolutePath() + "] failed!");
-                    }
-                } catch (Exception e) {
-                    log.error("delete file Exception:" + e.getMessage(), e);
-                }
-            }
-        }
-
-        /**
-         * 删除文件夹
-         *
-         * @param dir 将要删除的文件目录
-         * @return true|false
-         */
-        static boolean doDeleteDir(File dir) {
-            if (dir.exists()) {
-                if (dir.isDirectory()) {
-                    String[] children = dir.list();
-                    if (children != null) {
-                        for (String aChildren : children) {
-                            boolean success = doDeleteDir(new File(dir, aChildren));
-                            if (!success) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-                return dir.delete();
-            } else {
-                return true;
-            }
-        }
-
-        @Override
-        public void run() {
-            try {
-                log.info("ready delete file [" + file.getAbsolutePath() + "],waitting " + (waitTime) / 1000 + " seconds");
-                FileDelete.sleep(waitTime);
-                if (doDeleteDir(file)) {
-                    log.info("delete file [" + file.getAbsolutePath() + "] success!");
-                } else {
-                    log.info("delete file [" + file.getAbsolutePath() + "] failed!");
-                }
-            } catch (Exception e) {
-                log.error("delete file Exception:" + e.getMessage(), e);
-            }
-        }
+        CommonUtils.doDeleteDir(dir);
     }
 
 }

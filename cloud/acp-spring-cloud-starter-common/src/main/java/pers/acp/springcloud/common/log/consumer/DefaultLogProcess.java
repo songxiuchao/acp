@@ -20,18 +20,18 @@ public class DefaultLogProcess implements LogProcess {
         ThreadPoolService threadPoolService = ThreadPoolService.getInstance(logInfo.getLogType() + "_log", 3000, 0, 1, Integer.MAX_VALUE);
         threadPoolService.addTask(new BaseThreadTask(logInfo.getLogType() + "_log") {
             @Override
-            public boolean beforeExcuteFun() {
+            public boolean beforeExecuteFun() {
                 return true;
             }
 
             @Override
-            public Object excuteFun() {
+            public Object executeFun() {
                 doLog(logInfo);
                 return true;
             }
 
             @Override
-            public void afterExcuteFun(Object result) {
+            public void afterExecuteFun(Object result) {
 
             }
         });

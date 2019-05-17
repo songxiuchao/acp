@@ -11,7 +11,7 @@ import pers.acp.core.interfaces.IEnumValue;
  *
  * @author zhangbin
  */
-public enum ExcuteType implements IEnumValue {
+public enum ExecuteType implements IEnumValue {
 
     WeekDay("WeekDay", 0),
 
@@ -23,20 +23,20 @@ public enum ExcuteType implements IEnumValue {
 
     private Integer value;
 
-    private static Map<Integer, ExcuteType> map;
+    private static Map<Integer, ExecuteType> map;
 
-    private static Map<String, ExcuteType> nameMap;
+    private static Map<String, ExecuteType> nameMap;
 
     static {
         map = new HashMap<>();
         nameMap = new HashMap<>();
-        for (ExcuteType type : values()) {
+        for (ExecuteType type : values()) {
             map.put(type.getValue(), type);
             nameMap.put(type.getName(), type);
         }
     }
 
-    ExcuteType(String name, Integer value) {
+    ExecuteType(String name, Integer value) {
         this.name = name.toLowerCase();
         this.value = value;
     }
@@ -56,18 +56,18 @@ public enum ExcuteType implements IEnumValue {
         return this.value.equals(value);
     }
 
-    public static ExcuteType getEnum(Integer value) throws EnumValueUndefinedException {
+    public static ExecuteType getEnum(Integer value) throws EnumValueUndefinedException {
         if (map.containsKey(value)) {
             return map.get(value);
         }
-        throw new EnumValueUndefinedException(ExcuteType.class, value);
+        throw new EnumValueUndefinedException(ExecuteType.class, value);
     }
 
-    public static ExcuteType getEnum(String name) throws EnumValueUndefinedException {
+    public static ExecuteType getEnum(String name) throws EnumValueUndefinedException {
         if (nameMap.containsKey(name.toLowerCase())) {
             return nameMap.get(name.toLowerCase());
         }
-        throw new EnumValueUndefinedException(ExcuteType.class, name);
+        throw new EnumValueUndefinedException(ExecuteType.class, name);
     }
 
 }

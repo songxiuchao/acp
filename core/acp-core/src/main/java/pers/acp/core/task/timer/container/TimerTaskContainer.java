@@ -1,12 +1,12 @@
 package pers.acp.core.task.timer.container;
 
+import org.joda.time.DateTime;
 import pers.acp.core.exceptions.TimerException;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.task.timer.basetask.BaseTimerTask;
 import pers.acp.core.task.timer.ruletype.CircleType;
-import pers.acp.core.task.timer.ruletype.ExcuteType;
-
-import java.util.Date;
+import pers.acp.core.task.timer.ruletype.ExecuteType;
+import pers.acp.core.tools.CommonUtils;
 
 /**
  * 定时器
@@ -33,7 +33,7 @@ public final class TimerTaskContainer implements Runnable {
     /**
      * 执行类型
      */
-    private ExcuteType excuteType;
+    private ExecuteType executeType;
 
     /**
      * 执行任务
@@ -48,21 +48,21 @@ public final class TimerTaskContainer implements Runnable {
     /**
      * 上次执行时间
      */
-    private Date lastExcuteDateTime;
+    private DateTime lastExecuteDateTime;
 
     /**
      * 定时任务容器构造函数
      *
-     * @param task       任务
-     * @param circleType 执行周期类型
-     * @param rules      执行规则
-     * @param excuteType 执行类型
+     * @param task        任务
+     * @param circleType  执行周期类型
+     * @param rules       执行规则
+     * @param executeType 执行类型
      */
-    public TimerTaskContainer(BaseTimerTask task, CircleType circleType, String rules, ExcuteType excuteType) {
-        this.lastExcuteDateTime = new Date();
+    public TimerTaskContainer(BaseTimerTask task, CircleType circleType, String rules, ExecuteType executeType) {
+        this.lastExecuteDateTime = CommonUtils.getNowDateTime();
         this.circleType = circleType;
         this.rules = rules;
-        this.excuteType = excuteType;
+        this.executeType = executeType;
         this.task = task;
         this.needExecuteImmediate = this.task.isNeedExecuteImmediate();
     }
@@ -102,14 +102,14 @@ public final class TimerTaskContainer implements Runnable {
      * 立即执行任务
      */
     public void immediateRun() {
-        this.task.doExcute();
+        this.task.doExecute();
     }
 
     @Override
     public void run() {
         try {
-            if (isExcute()) {
-                doExcrute();
+            if (isExecute()) {
+                doExecute();
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -119,33 +119,30 @@ public final class TimerTaskContainer implements Runnable {
     /**
      * 执行前函数
      */
-    private void beforeExcute() {
-        this.lastExcuteDateTime = new Date();
+    private void beforeExecute() {
+        this.lastExecuteDateTime = CommonUtils.getNowDateTime();
     }
 
     /**
      * 执行任务
      */
-    private void doExcrute() throws TimerException {
+    private void doExecute() throws TimerException {
         if (this.task != null) {
-            Calculation calculation = new Calculation();
-            log.info("begin TimerTask,taskname:["
+            log.info("begin TimerTask,taskName:["
                     + this.task.getTaskName()
-                    + "] classname:["
+                    + "] className:["
                     + this.task.getClass().getCanonicalName()
-                    + "] creattime:"
-                    + calculation.DATETIME_FORMAT.format(this.task
-                    .getGenerateTime())
-                    + " submittime:"
-                    + calculation.DATETIME_FORMAT.format(this.task
-                    .getSubmitTime()));
-            this.beforeExcute();
-            Object result = this.task.doExcute();
+                    + "] creatTime:"
+                    + this.task.getGenerateTime().toString(Calculation.DATETIME_FORMAT)
+                    + " submitTime:"
+                    + this.task.getSubmitTime().toString(Calculation.DATETIME_FORMAT));
+            this.beforeExecute();
+            Object result = this.task.doExecute();
             if (result == null) {
-                log.error("timertask[" + this.task.getTaskName() + "]excute failed...");
+                log.error("timerTask [" + this.task.getTaskName() + "] execute failed...");
             }
         } else {
-            throw new TimerException("timertask is null");
+            throw new TimerException("timerTask is null");
         }
     }
 
@@ -154,18 +151,17 @@ public final class TimerTaskContainer implements Runnable {
      *
      * @return 结果对象
      */
-    private boolean isExcute() {
-        boolean isexcute;
-        Calculation calculation = new Calculation();
-        Date now = new Date();
+    private boolean isExecute() {
+        boolean isExecute;
+        DateTime now = CommonUtils.getNowDateTime();
         try {
             boolean flag;
-            switch (this.excuteType) {
+            switch (this.executeType) {
                 case WeekDay:
-                    flag = calculation.isWeekDay(now);
+                    flag = Calculation.isWeekDay(now);
                     break;
                 case Weekend:
-                    flag = calculation.isWeekend(now);
+                    flag = Calculation.isWeekend(now);
                     break;
                 case All:
                     flag = true;
@@ -176,29 +172,29 @@ public final class TimerTaskContainer implements Runnable {
             }
             switch (this.circleType) {
                 case Time:
-                    isexcute = true;
+                    isExecute = true;
                     break;
                 case Day:
-                    boolean validate = calculation.validateDay(now, this.lastExcuteDateTime, this.rules);
-                    isexcute = flag && validate;
+                    boolean validate = Calculation.validateDay(now, this.lastExecuteDateTime, this.rules);
+                    isExecute = flag && validate;
                     break;
                 case Week:
-                    isexcute = calculation.validateWeek(now, this.lastExcuteDateTime, this.rules);
+                    isExecute = Calculation.validateWeek(now, this.lastExecuteDateTime, this.rules);
                     break;
                 case Month:
-                    isexcute = calculation.validateMonth(now, this.lastExcuteDateTime, this.rules);
+                    isExecute = Calculation.validateMonth(now, this.lastExecuteDateTime, this.rules);
                     break;
                 case Quarter:
-                    isexcute = calculation.validateQuarter(now, this.lastExcuteDateTime, this.rules);
+                    isExecute = Calculation.validateQuarter(now, this.lastExecuteDateTime, this.rules);
                     break;
                 case Year:
-                    isexcute = calculation.validateYear(now, this.lastExcuteDateTime, this.rules);
+                    isExecute = Calculation.validateYear(now, this.lastExecuteDateTime, this.rules);
                     break;
                 default:
                     log.error("circleType is not support:circleType=" + this.circleType.getName());
                     throw new TimerException("circleType is not support:circleType=" + this.circleType.getName());
             }
-            return isexcute;
+            return isExecute;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return false;

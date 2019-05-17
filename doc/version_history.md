@@ -5,6 +5,7 @@
 > - [Upgrade] 更新文档
 > - [Upgrade] 优化 acp-file 模块，去除无用代码
 > - [Upgrade] 优化 acp-core 中线程池相关参数及注释
+> - [Upgrade] 使用 joda-time 替换 jdk 日期时间及日历处理
 ##### v5.1.4.2
 > - [Upgrade] 文件压缩解压公共方法从 acp-file 迁移到 acp-core，使用 CommonTools 类
 > - [Upgrade] 升级 gradle 至 5.4

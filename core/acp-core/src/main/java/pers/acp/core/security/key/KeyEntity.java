@@ -1,5 +1,6 @@
 package pers.acp.core.security.key;
 
+import org.joda.time.DateTime;
 import pers.acp.core.security.HMACUtils;
 import pers.acp.core.security.key.enums.KeyType;
 import pers.acp.core.tools.CommonUtils;
@@ -10,7 +11,6 @@ import java.security.interfaces.DSAPrivateKey;
 import java.security.interfaces.DSAPublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Date;
 
 public class KeyEntity implements Serializable {
 
@@ -20,13 +20,13 @@ public class KeyEntity implements Serializable {
 
     private String traitId;
 
-    private Date generateTime;
+    private DateTime generateTime;
 
-    private Date lastuseTime;
+    private DateTime lastUseTime;
 
-    private long delaytime;
+    private long delayTime;
 
-    private long exptime;
+    private long expTime;
 
     private Key key;
 
@@ -48,20 +48,20 @@ public class KeyEntity implements Serializable {
         this.traitId = traitId;
     }
 
-    private void setGenerateTime(Date generateTime) {
+    private void setGenerateTime(DateTime generateTime) {
         this.generateTime = generateTime;
     }
 
-    private void setLastuseTime(Date lastuseTime) {
-        this.lastuseTime = lastuseTime;
+    private void setLastUseTime(DateTime lastUseTime) {
+        this.lastUseTime = lastUseTime;
     }
 
-    private void setDelaytime(long delaytime) {
-        this.delaytime = delaytime;
+    private void setDelayTime(long delayTime) {
+        this.delayTime = delayTime;
     }
 
-    private void setExptime(long exptime) {
-        this.exptime = exptime;
+    private void setExpTime(long expTime) {
+        this.expTime = expTime;
     }
 
     Key getKey() {
@@ -125,13 +125,13 @@ public class KeyEntity implements Serializable {
         if (keyType == null) {
             throw new SecurityException("key type is null,first use generateEntity function!");
         }
-        long generatetime = generateTime.getTime();
-        lastuseTime = new Date();
-        long nowtiime = lastuseTime.getTime();
-        if (generatetime + exptime < nowtiime) {
+        long generateTime = this.generateTime.toDate().getTime();
+        lastUseTime = CommonUtils.getNowDateTime();
+        long nowTime = lastUseTime.toDate().getTime();
+        if (generateTime + expTime < nowTime) {
             return -1;
-        } else if (generatetime + exptime < nowtiime + delaytime) {
-            return delaytime;
+        } else if (generateTime + expTime < nowTime + delayTime) {
+            return delayTime;
         }
         return 0;
     }
@@ -141,13 +141,13 @@ public class KeyEntity implements Serializable {
      *
      * @param keyType   密钥类型
      * @param cryptType 加密算法
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @param length    密钥长度（随机字符串密钥时有效）
      * @return 密钥实体
      */
-    static KeyEntity generateEntity(KeyType keyType, String cryptType, String traitid, long delaytime, long exptime, int length) throws Exception {
+    static KeyEntity generateEntity(KeyType keyType, String cryptType, String traitId, long delayTime, long expTime, int length) throws Exception {
         KeyEntity entity = new KeyEntity(keyType);
         switch (keyType) {
             case AES:
@@ -177,14 +177,14 @@ public class KeyEntity implements Serializable {
                 entity.setKey(key);
                 break;
             case RSA:
-                Object[] rsakeys = KeyManagement.getRSAKeys();
-                entity.setRsaPublicKey((RSAPublicKey) rsakeys[0]);
-                entity.setRsaPrivateKey((RSAPrivateKey) rsakeys[1]);
+                Object[] rsaKeys = KeyManagement.getRSAKeys();
+                entity.setRsaPublicKey((RSAPublicKey) rsaKeys[0]);
+                entity.setRsaPrivateKey((RSAPrivateKey) rsaKeys[1]);
                 break;
             case DSA:
-                Object[] dsakeys = KeyManagement.getDSAKeys();
-                entity.setDsaPublicKey((DSAPublicKey) dsakeys[0]);
-                entity.setDsaPrivateKey((DSAPrivateKey) dsakeys[1]);
+                Object[] dsaKeys = KeyManagement.getDSAKeys();
+                entity.setDsaPublicKey((DSAPublicKey) dsaKeys[0]);
+                entity.setDsaPrivateKey((DSAPrivateKey) dsaKeys[1]);
                 break;
             case RandomStr:
                 if (length <= 0) {
@@ -205,12 +205,12 @@ public class KeyEntity implements Serializable {
                 entity.setRandomString(KeyManagement.getRandomString(KeyManagement.RANDOM_CHAR, length));
                 break;
         }
-        entity.setTraitId(traitid);
-        Date now = new Date();
+        entity.setTraitId(traitId);
+        DateTime now = CommonUtils.getNowDateTime();
         entity.setGenerateTime(now);
-        entity.setLastuseTime(now);
-        entity.setDelaytime(delaytime);
-        entity.setExptime(exptime);
+        entity.setLastUseTime(now);
+        entity.setDelayTime(delayTime);
+        entity.setExpTime(expTime);
         return entity;
     }
 
