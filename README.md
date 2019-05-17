@@ -8,8 +8,9 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
 - [Spring Cloud Greenwich.SR1](http://projects.spring.io/spring-cloud)
 
 ## 技术栈
+- joda-time
 - apache httpclient
-- mina
+- netty
 - xstream
 - hibernate
 - jackson
