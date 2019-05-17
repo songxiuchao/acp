@@ -177,14 +177,14 @@ public class KeyEntity implements Serializable {
                 entity.setKey(key);
                 break;
             case RSA:
-                Object[] rsakeys = KeyManagement.getRSAKeys();
-                entity.setRsaPublicKey((RSAPublicKey) rsakeys[0]);
-                entity.setRsaPrivateKey((RSAPrivateKey) rsakeys[1]);
+                Object[] rsaKeys = KeyManagement.getRSAKeys();
+                entity.setRsaPublicKey((RSAPublicKey) rsaKeys[0]);
+                entity.setRsaPrivateKey((RSAPrivateKey) rsaKeys[1]);
                 break;
             case DSA:
-                Object[] dsakeys = KeyManagement.getDSAKeys();
-                entity.setDsaPublicKey((DSAPublicKey) dsakeys[0]);
-                entity.setDsaPrivateKey((DSAPrivateKey) dsakeys[1]);
+                Object[] dsaKeys = KeyManagement.getDSAKeys();
+                entity.setDsaPublicKey((DSAPublicKey) dsaKeys[0]);
+                entity.setDsaPrivateKey((DSAPrivateKey) dsaKeys[1]);
                 break;
             case RandomStr:
                 if (length <= 0) {

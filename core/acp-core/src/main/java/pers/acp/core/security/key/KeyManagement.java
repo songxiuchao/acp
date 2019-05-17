@@ -41,30 +41,30 @@ public final class KeyManagement {
      * 获取密钥实体
      *
      * @param keyType   密钥类型
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @param length    密钥长度（随机字符串密钥时有效）
      * @return 密钥实体
      */
-    private static KeyEntity getEntity(KeyType keyType, String traitid, long delaytime, long exptime, int length) throws Exception {
-        return getEntity(keyType, null, traitid, delaytime, exptime, length);
+    private static KeyEntity getEntity(KeyType keyType, String traitId, long delayTime, long expTime, int length) throws Exception {
+        return getEntity(keyType, null, traitId, delayTime, expTime, length);
     }
 
     /**
      * 获取密钥实体
      *
      * @param keyType   密钥类型
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @param length    密钥长度（随机字符串密钥时有效）
      * @return 密钥实体
      */
-    private static KeyEntity getEntity(KeyType keyType, String cryptType, String traitid, long delaytime, long exptime, int length) throws Exception {
-        delaytime = delaytime > 0 ? delaytime : 0;
-        exptime = exptime > 0 ? exptime : 0;
-        return KeyEntity.generateEntity(keyType, cryptType, traitid, delaytime, exptime, length);
+    private static KeyEntity getEntity(KeyType keyType, String cryptType, String traitId, long delayTime, long expTime, int length) throws Exception {
+        delayTime = delayTime > 0 ? delayTime : 0;
+        expTime = expTime > 0 ? expTime : 0;
+        return KeyEntity.generateEntity(keyType, cryptType, traitId, delayTime, expTime, length);
     }
 
     private static int decodeUInt32(byte[] key, int start_index) {
@@ -103,67 +103,67 @@ public final class KeyManagement {
     /**
      * 获取临时AES密钥，过期时间内再次获取则取到相同的值，剩余时间小于延迟时间则延迟过期；过期时间之后取到新的值
      *
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @return 临时密钥
      */
-    public static Key getTempAESKey(String traitid, long delaytime, long exptime) throws Exception {
-        KeyEntity entity = getEntity(KeyType.AES, traitid, delaytime, exptime, 0);
+    public static Key getTempAESKey(String traitId, long delayTime, long expTime) throws Exception {
+        KeyEntity entity = getEntity(KeyType.AES, traitId, delayTime, expTime, 0);
         return entity.getKey();
     }
 
     /**
      * 获取临时DES密钥，过期时间内再次获取则取到相同的值，剩余时间小于延迟时间则延迟过期；过期时间之后取到新的值
      *
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @return 临时密钥
      */
-    public static Key getTempDESKey(String traitid, long delaytime, long exptime) throws Exception {
-        KeyEntity entity = getEntity(KeyType.DES, traitid, delaytime, exptime, 0);
+    public static Key getTempDESKey(String traitId, long delayTime, long expTime) throws Exception {
+        KeyEntity entity = getEntity(KeyType.DES, traitId, delayTime, expTime, 0);
         return entity.getKey();
     }
 
     /**
      * 获取临时3DES密钥，过期时间内再次获取则取到相同的值，剩余时间小于延迟时间则延迟过期；过期时间之后取到新的值
      *
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @return 临时密钥
      */
-    public static Key getTemp3DESKey(String traitid, long delaytime, long exptime) throws Exception {
-        KeyEntity entity = getEntity(KeyType.DESede, traitid, delaytime, exptime, 0);
+    public static Key getTemp3DESKey(String traitId, long delayTime, long expTime) throws Exception {
+        KeyEntity entity = getEntity(KeyType.DESede, traitId, delayTime, expTime, 0);
         return entity.getKey();
     }
 
     /**
      * 获取临时密钥，过期时间内再次获取则取到相同的值，剩余时间小于延迟时间则延迟过期；过期时间之后取到新的值
      *
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @param cryptType 加密算法
      * @param length    密钥长度
      * @return 临时密钥
      */
-    public static Key getTempKey(String traitid, long delaytime, long exptime, String cryptType, int length) throws Exception {
-        KeyEntity entity = getEntity(KeyType.DESede, cryptType, traitid, delaytime, exptime, length);
+    public static Key getTempKey(String traitId, long delayTime, long expTime, String cryptType, int length) throws Exception {
+        KeyEntity entity = getEntity(KeyType.DESede, cryptType, traitId, delayTime, expTime, length);
         return entity.getKey();
     }
 
     /**
      * 获取临时RSA公私钥对，过期时间内再次获取则取到相同的值，剩余时间小于延迟时间则延迟过期；过期时间之后取到新的值
      *
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @return Object[] [0]:RSAPublicKey,[1]:RSAPrivateKey
      */
-    public static Object[] getTempRSAKeys(String traitid, long delaytime, long exptime) throws Exception {
-        KeyEntity entity = getEntity(KeyType.RSA, traitid, delaytime, exptime, 0);
+    public static Object[] getTempRSAKeys(String traitId, long delayTime, long expTime) throws Exception {
+        KeyEntity entity = getEntity(KeyType.RSA, traitId, delayTime, expTime, 0);
         Object[] keys = new Object[2];
         keys[0] = entity.getRsaPublicKey();
         keys[1] = entity.getRsaPrivateKey();
@@ -173,13 +173,13 @@ public final class KeyManagement {
     /**
      * 获取临时DSA公私钥对，过期时间内再次获取则取到相同的值，剩余时间小于延迟时间则延迟过期；过期时间之后取到新的值
      *
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 密钥使用延迟时间
-     * @param exptime   密钥过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 密钥使用延迟时间
+     * @param expTime   密钥过期时间
      * @return Object[] [0]:DSAPublicKey,[1]:DSAPrivateKey
      */
-    public static Object[] getTempDSAKeys(String traitid, long delaytime, long exptime) throws Exception {
-        KeyEntity entity = getEntity(KeyType.DSA, traitid, delaytime, exptime, 0);
+    public static Object[] getTempDSAKeys(String traitId, long delayTime, long expTime) throws Exception {
+        KeyEntity entity = getEntity(KeyType.DSA, traitId, delayTime, expTime, 0);
         Object[] keys = new Object[2];
         keys[0] = entity.getDsaPublicKey();
         keys[1] = entity.getDsaPrivateKey();
@@ -189,14 +189,14 @@ public final class KeyManagement {
     /**
      * 获取临时随机字符串，过期时间内再次获取则取到相同的值，剩余时间小于延迟时间则延迟过期；过期时间之后取到新的值
      *
-     * @param traitid   申请者身份标识字符串
-     * @param delaytime 使用延迟时间
-     * @param exptime   过期时间
+     * @param traitId   申请者身份标识字符串
+     * @param delayTime 使用延迟时间
+     * @param expTime   过期时间
      * @param flag      类型：RANDOM_STR | RANDOM_CHAR | RANDOM_NUMBER
      * @param length    随机字符串的长度
      * @return 临时随机字符串
      */
-    public static String getTempRandomString(String traitid, long delaytime, long exptime, int flag, int length) throws Exception {
+    public static String getTempRandomString(String traitId, long delayTime, long expTime, int flag, int length) throws Exception {
         KeyType keyType;
         if (flag == RANDOM_CHAR) {
             keyType = KeyType.RandomChar;
@@ -205,7 +205,7 @@ public final class KeyManagement {
         } else {
             keyType = KeyType.RandomStr;
         }
-        KeyEntity entity = getEntity(keyType, traitid, delaytime, exptime, length);
+        KeyEntity entity = getEntity(keyType, traitId, delayTime, expTime, length);
         return entity.getRandomString();
     }
 
@@ -446,30 +446,30 @@ public final class KeyManagement {
     /**
      * 生成DSA公钥
      *
-     * @param publickey y
+     * @param publicKey y
      * @param prime     p
-     * @param subprime  q
+     * @param subPrime  q
      * @param base      g
      * @return 公钥
      */
-    public static DSAPublicKey getDSAPublicKey(String publickey, String prime, String subprime, String base) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return getDSAPublicKey(publickey, prime, subprime, base, 10);
+    public static DSAPublicKey getDSAPublicKey(String publicKey, String prime, String subPrime, String base) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return getDSAPublicKey(publicKey, prime, subPrime, base, 10);
     }
 
     /**
      * 生成DSA公钥
      *
-     * @param publickey y
+     * @param publicKey y
      * @param prime     p
-     * @param subprime  q
+     * @param subPrime  q
      * @param base      g
      * @param radix     基数 2，8，10，16
      * @return 公钥
      */
-    public static DSAPublicKey getDSAPublicKey(String publickey, String prime, String subprime, String base, int radix) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        BigInteger y = new BigInteger(publickey, radix);
+    public static DSAPublicKey getDSAPublicKey(String publicKey, String prime, String subPrime, String base, int radix) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        BigInteger y = new BigInteger(publicKey, radix);
         BigInteger p = new BigInteger(prime, radix);
-        BigInteger q = new BigInteger(subprime, radix);
+        BigInteger q = new BigInteger(subPrime, radix);
         BigInteger g = new BigInteger(base, radix);
         KeyFactory keyFactory = KeyFactory.getInstance("DSA");
         DSAPublicKeySpec keySpec = new DSAPublicKeySpec(y, p, q, g);
@@ -479,30 +479,30 @@ public final class KeyManagement {
     /**
      * 生成DSA私钥
      *
-     * @param privatekey x
+     * @param privateKey x
      * @param prime      p
-     * @param subprime   q
+     * @param subPrime   q
      * @param base       g
      * @return 私钥
      */
-    public static DSAPrivateKey getDSAPrivateKey(String privatekey, String prime, String subprime, String base) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return getDSAPrivateKey(privatekey, prime, subprime, base, 10);
+    public static DSAPrivateKey getDSAPrivateKey(String privateKey, String prime, String subPrime, String base) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return getDSAPrivateKey(privateKey, prime, subPrime, base, 10);
     }
 
     /**
      * 使用模和指数生成DSA私钥
      *
-     * @param privatekey x
+     * @param privateKey x
      * @param prime      p
-     * @param subprime   q
+     * @param subPrime   q
      * @param base       g
      * @param radix      基数 2，8，10，16
      * @return 私钥
      */
-    public static DSAPrivateKey getDSAPrivateKey(String privatekey, String prime, String subprime, String base, int radix) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        BigInteger x = new BigInteger(privatekey, radix);
+    public static DSAPrivateKey getDSAPrivateKey(String privateKey, String prime, String subPrime, String base, int radix) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        BigInteger x = new BigInteger(privateKey, radix);
         BigInteger p = new BigInteger(prime, radix);
-        BigInteger q = new BigInteger(subprime, radix);
+        BigInteger q = new BigInteger(subPrime, radix);
         BigInteger g = new BigInteger(base, radix);
         KeyFactory keyFactory = KeyFactory.getInstance("DSA");
         DSAPrivateKeySpec keySpec = new DSAPrivateKeySpec(x, p, q, g);
