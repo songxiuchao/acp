@@ -10,7 +10,6 @@ import javax.mail.*;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -124,7 +123,7 @@ public class EmailSender {
             message.addRecipients(RecipientType.BCC, addressesBCC.toArray(new InternetAddress[addressesBCC.size()]));
         }
         message.setSubject(emailEntity.getMailSubject());
-        message.setSentDate(new Date());
+        message.setSentDate(CommonTools.getNowDateTime().toDate());
 
         /* 正文主体 */
         MimeBodyPart content = new MimeBodyPart();

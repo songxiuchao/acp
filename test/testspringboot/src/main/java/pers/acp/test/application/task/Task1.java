@@ -27,12 +27,12 @@ public class Task1 extends BaseSpringBootScheduledTask {
     }
 
     @Override
-    public boolean beforeExcuteFun() {
+    public boolean beforeExecuteFun() {
         return true;
     }
 
     @Override
-    public Object excuteFun() {
+    public Object executeFun() {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>我是定时任务1》》》》》》》》》》");
         log.info("table 1 >>>>> " + CommonTools.objectToJson(tableRepo.findAll()));
         log.info("table 2 >>>>> " + CommonTools.objectToJson(tableTwoRepo.findAll()));
@@ -40,7 +40,7 @@ public class Task1 extends BaseSpringBootScheduledTask {
     }
 
     @Override
-    public void afterExcuteFun(Object result) {
+    public void afterExecuteFun(Object result) {
 
     }
 }
