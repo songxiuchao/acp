@@ -1,13 +1,10 @@
 package pers.acp.core.task.timer.container;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import pers.acp.core.exceptions.TimerException;
 import pers.acp.core.task.timer.ruletype.CircleType;
-import pers.acp.core.tools.CommonUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * 日历计算类
@@ -19,57 +16,144 @@ public final class Calculation {
     /**
      * yyyy-MM-dd HH:mm:ss
      */
-    SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * yyyy-MM-dd
      */
-    private SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    public static String DATE_FORMAT = "yyyy-MM-dd";
 
     /**
      * HH:mm:ss
      */
-    private SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
+    public static String TIME_FORMAT = "HH:mm:ss";
 
     /**
-     * 获取日历对象
+     * 根据时间戳获取日期对象
      *
-     * @return 日历对象
+     * @param instant 时间戳
+     * @return 日期对象
      */
-    public Calendar getCalendar() throws TimerException {
-        return getCalendar(null);
+    public static DateTime getCalendar(long instant) {
+        return new DateTime(instant);
     }
 
     /**
-     * 获取日历对象
+     * 获取日期对象
      *
-     * @param dateStr 日期字符串（yyyy-MM-dd）
-     * @return 日历对象
+     * @param dateTimeStr 日期字符串（yyyy-MM-dd）
+     * @return 日期对象
      */
-    public Calendar getCalendar(String dateStr) throws TimerException {
-        try {
-            Calendar calendar = Calendar.getInstance();
-            if (!CommonUtils.isNullStr(dateStr)) {
-                Date date = DATE_FORMAT.parse(dateStr);
-                calendar.setTime(date);
-            }
-            return calendar;
-        } catch (Exception e) {
-            throw new TimerException("date string is need format for 'yyyy-MM-dd'");
+    public static DateTime getCalendar(String dateTimeStr) {
+        return getCalendar(dateTimeStr, Calculation.DATE_FORMAT);
+    }
+
+    /**
+     * 获取日期对象
+     *
+     * @param dateTimeStr    日期字符串
+     * @param dateTimeFormat 格式字符串
+     * @return 日期对象
+     */
+    public static DateTime getCalendar(String dateTimeStr, String dateTimeFormat) {
+        return DateTimeFormat.forPattern(dateTimeFormat).parseDateTime(dateTimeStr);
+    }
+
+    /**
+     * 获取指定日期的后一天
+     *
+     * @param dateTime 日期对象
+     * @return 日期对象
+     */
+    public static DateTime getNextDay(DateTime dateTime) {
+        return dateTime.plusDays(1);
+    }
+
+    /**
+     * 获取指定日期前一天
+     *
+     * @param dateTime 日期对象
+     * @return 日期对象
+     */
+    public static DateTime getPrevDay(DateTime dateTime) {
+        return dateTime.minusDays(1);
+    }
+
+    /**
+     * 获取指定日期是一周中第几天
+     *
+     * @param dateTime 日期对象
+     * @return 结果（1-7）,其中sunday是7
+     */
+    public static int getWeekNo(DateTime dateTime) {
+        return dateTime.getDayOfWeek();
+    }
+
+    /**
+     * 获取指定日期日号
+     *
+     * @param dateTime 日期对象
+     * @return 日号（1-31）
+     */
+    public static int getDayNo(DateTime dateTime) {
+        return dateTime.getDayOfMonth();
+    }
+
+    /**
+     * 获取指定月号
+     *
+     * @param dateTime 日期对象
+     * @return 月号（1-12）
+     */
+    public static int getMonthNo(DateTime dateTime) {
+        return dateTime.getMonthOfYear();
+    }
+
+    /**
+     * 获取指定月所在季度内的月号
+     *
+     * @param dateTime 日期对象
+     * @return 季度号（1, 2, 3, 4）
+     */
+    public static int getMonthNoInQuarter(DateTime dateTime) {
+        int month = getMonthNo(dateTime);
+        if (month >= 1 && month <= 12) {
+            return ((month + 2) / 3);
+        } else {
+            return -1;
         }
+    }
+
+    /**
+     * 获取指定月最后一天日号
+     *
+     * @param dateTime 日期对象
+     * @return 日号
+     */
+    public static int getLastDayInMonthNo(DateTime dateTime) {
+        return dateTime.dayOfMonth().withMaximumValue().getDayOfMonth();
     }
 
     /**
      * 判断当前时间是否是工作日
      *
-     * @param now 日期对象
+     * @param dateTime 日期对象
      * @return 是否是工作日
      */
-    public boolean isWeekDay(Date now) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now);
-        int nowIndex = getWeekNo(calendar);
+    public static boolean isWeekDay(DateTime dateTime) {
+        int nowIndex = getWeekNo(dateTime);
         return nowIndex < 6;
+    }
+
+    /**
+     * 判断当前时间是否是周末
+     *
+     * @param dateTime 日期对象
+     * @return 是否是周末
+     */
+    public static boolean isWeekend(DateTime dateTime) {
+        int nowIndex = getWeekNo(dateTime);
+        return nowIndex > 5;
     }
 
     /**
@@ -79,19 +163,20 @@ public final class Calculation {
      * @param rules      规则
      * @return long[]：[0]long-initialDelay开始执行延迟时间,[1]long-period执行间隔时间
      */
-    public long[] getTimerParam(CircleType circleType, String rules) throws TimerException {
-        Date now = new Date();
+    public static long[] getTimerParam(CircleType circleType, String rules) throws TimerException {
+        DateTime now = new DateTime();
         long[] param = new long[2];
         String[] rule = StringUtils.splitPreserveAllTokens(rules, "|");
         try {
             if (circleType.equals(CircleType.Time)) {
                 if (rule.length == 2 || rule.length == 1) {
                     if (rule.length == 1) {
-                        param[0] = now.getTime();
+                        param[0] = now.toDate().getTime();
                         param[1] = Long.valueOf(rule[0]);
                     } else {
-                        String time = DATE_FORMAT.format(now) + " " + rule[0];
-                        param[0] = DATETIME_FORMAT.parse(time).getTime();
+                        String time = now.toString(DATE_FORMAT) + " " + rule[0];
+                        DateTime dateTime = getCalendar(time, DATETIME_FORMAT);
+                        param[0] = dateTime.toDate().getTime();
                         param[1] = Long.valueOf(rule[1]);
                     }
                 } else {
@@ -99,36 +184,39 @@ public final class Calculation {
                 }
             } else if (circleType.equals(CircleType.Day)) {
                 if (rule.length == 1) {
-                    Calendar calendar = getNextDay(Calendar.getInstance());
-                    String time = DATE_FORMAT.format(calendar.getTime()) + " " + rule[0];
-                    param[0] = DATETIME_FORMAT.parse(time).getTime();
+                    DateTime nextDay = getNextDay(now);
+                    String time = nextDay.toString(DATE_FORMAT) + " " + rule[0];
+                    DateTime dateTime = getCalendar(time, DATETIME_FORMAT);
+                    param[0] = dateTime.toDate().getTime();
                 } else {
                     throw new TimerException("circleType is not support（circleType=" + CircleType.Day.getName() + ",rules=" + rules + "）");
                 }
                 param[1] = (long) (1000 * 60 * 60 * 24);
             } else if (circleType.equals(CircleType.Week) || circleType.equals(CircleType.Month)) {
                 if (rule.length == 2) {
-                    Calendar calendar = getNextDay(Calendar.getInstance());
-                    String time = DATE_FORMAT.format(calendar.getTime()) + " " + rule[1];
-                    param[0] = DATETIME_FORMAT.parse(time).getTime();
+                    DateTime nextDay = getNextDay(now);
+                    String time = nextDay.toString(DATE_FORMAT) + " " + rule[0];
+                    DateTime dateTime = getCalendar(time, DATETIME_FORMAT);
+                    param[0] = dateTime.toDate().getTime();
                 } else {
                     throw new TimerException("circleType is not support（circleType=" + CircleType.Week.getName() + ",rules=" + rules + "）");
                 }
                 param[1] = (long) (1000 * 60 * 60 * 24);
             } else if (circleType.equals(CircleType.Quarter) || circleType.equals(CircleType.Year)) {
                 if (rule.length == 3) {
-                    Calendar calendar = getNextDay(Calendar.getInstance());
-                    String time = DATE_FORMAT.format(calendar.getTime()) + " " + rule[2];
-                    param[0] = DATETIME_FORMAT.parse(time).getTime();
+                    DateTime nextDay = getNextDay(now);
+                    String time = nextDay.toString(DATE_FORMAT) + " " + rule[0];
+                    DateTime dateTime = getCalendar(time, DATETIME_FORMAT);
+                    param[0] = dateTime.toDate().getTime();
                 } else {
-                    throw new TimerException("circleType is not supportcircleType=" + CircleType.Week.getName() + ",rules=" + rules + "）");
+                    throw new TimerException("circleType is not support. circleType=" + CircleType.Week.getName() + ",rules=" + rules + "）");
                 }
                 param[1] = (long) (1000 * 60 * 60 * 24);
             } else {
                 throw new TimerException("circleType is not support（circleType error）");
             }
-            if (param[0] - now.getTime() > 0) {
-                param[0] = param[0] - now.getTime();
+            if (param[0] - now.toDate().getTime() > 0) {
+                param[0] = param[0] - now.toDate().getTime();
             } else {
                 param[0] = 0;
             }
@@ -139,19 +227,6 @@ public final class Calculation {
     }
 
     /**
-     * 判断当前时间是否是周末
-     *
-     * @param now 日期对象
-     * @return 是否是周末
-     */
-    public boolean isWeekend(Date now) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now);
-        int nowIndex = getWeekNo(calendar);
-        return nowIndex > 5;
-    }
-
-    /**
      * 以日为周期进行校验
      *
      * @param now      需校验的时间
@@ -159,24 +234,19 @@ public final class Calculation {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public boolean validateDay(Date now, Date contrast, String rule) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(contrast);
+    public static boolean validateDay(DateTime now, DateTime contrast, String rule) {
         String[] rules = StringUtils.splitPreserveAllTokens(rule, "|");
-        boolean isexcute = false;
+        boolean isExecute = false;
         if (rules.length == 1) {
-            // 后一天时间
-            calendar = getNextDay(calendar);
-            String afterday = DATE_FORMAT.format(calendar.getTime()) + " " + rules[0];
+            // 参照日期后一天
+            String afterDay = getNextDay(contrast).toString(DATE_FORMAT) + " " + rules[0];
             // 当前日期和时间
-            String nowday = DATETIME_FORMAT.format(now);
-            if (nowday.compareTo(afterday) >= 0) {
-                isexcute = true;
+            String nowDay = now.toString(DATETIME_FORMAT);
+            if (nowDay.compareTo(afterDay) >= 0) {
+                isExecute = true;
             }
-        } else {
-            isexcute = false;
         }
-        return isexcute;
+        return isExecute;
     }
 
     /**
@@ -187,31 +257,25 @@ public final class Calculation {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public boolean validateWeek(Date now, Date contrast, String rule) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(contrast);
+    public static boolean validateWeek(DateTime now, DateTime contrast, String rule) {
         String[] rules = StringUtils.splitPreserveAllTokens(rule, "|");
-        boolean isexcute = false;
+        boolean isExecute = false;
         if (rules.length == 2) {
-            // 后一天0点
-            calendar = getNextDay(calendar);
-            String afterday = DATE_FORMAT.format(calendar.getTime()) + " 00:00:00";
+            // 参照日期后一天0点
+            String afterDay = getNextDay(contrast).toString(DATE_FORMAT) + " 00:00:00";
             // 当前日期和时间
-            String nowday = DATETIME_FORMAT.format(now);
+            String nowDay = now.toString(DATETIME_FORMAT);
             // 当前时间
-            String nowtime = TIME_FORMAT.format(now);
+            String nowTime = now.toString(TIME_FORMAT);
 
-            calendar.setTime(now);
             int dayIndex = Integer.valueOf(rules[0]);// 一周中第几天
-            int nowIndex = getWeekNo(calendar);// 当前日期是一周中第几天
+            int nowIndex = getWeekNo(now);// 当前日期是一周中第几天
             // 比上次发送时间至少晚一天，符合一周中第几天，等于或超过配置的发送时间
-            if (nowday.compareTo(afterday) >= 0 && dayIndex == nowIndex && nowtime.compareTo(rules[1]) >= 0) {
-                isexcute = true;
+            if (nowDay.compareTo(afterDay) >= 0 && dayIndex == nowIndex && nowTime.compareTo(rules[1]) >= 0) {
+                isExecute = true;
             }
-        } else {
-            isexcute = false;
         }
-        return isexcute;
+        return isExecute;
     }
 
     /**
@@ -222,35 +286,29 @@ public final class Calculation {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public boolean validateMonth(Date now, Date contrast, String rule) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(contrast);
+    public static boolean validateMonth(DateTime now, DateTime contrast, String rule) {
         String[] rules = StringUtils.splitPreserveAllTokens(rule, "|");
-        boolean isexcute = false;
+        boolean isExecute = false;
         if (rules.length == 2) {
-            // 后一天0点
-            calendar = getNextDay(calendar);
-            String afterday = DATE_FORMAT.format(calendar.getTime()) + " 00:00:00";
-
-            calendar.setTime(now);
-            int dayIndex = Integer.valueOf(rules[0]);// 日号
-            int nowIndex = getDayNo(calendar);// 当前日期是几号
-            int maxday = getLastDayInMonthNo(calendar);// 当前日期所在月最后一天
-            if (maxday < dayIndex) {
-                dayIndex = maxday;
-            }
+            // 参照日期后一天0点
+            String afterDay = getNextDay(contrast).toString(DATE_FORMAT) + " 00:00:00";
             // 当前日期和时间
-            String nowday = DATETIME_FORMAT.format(now);
+            String nowDay = now.toString(DATETIME_FORMAT);
             // 当前时间
-            String nowtime = TIME_FORMAT.format(now);
-            // 比上次发送时间至少晚一天，符合月中日期，等于或超过配置的发送时间
-            if (nowday.compareTo(afterday) >= 0 && dayIndex == nowIndex && nowtime.compareTo(rules[1]) >= 0) {
-                isexcute = true;
+            String nowTime = now.toString(TIME_FORMAT);
+
+            int dayIndex = Integer.valueOf(rules[0]);// 日号
+            int nowIndex = getDayNo(now);// 当前日期是几号
+            int maxDay = getLastDayInMonthNo(now);// 当前日期所在月最后一天
+            if (maxDay < dayIndex) {
+                dayIndex = maxDay;
             }
-        } else {
-            isexcute = false;
+            // 比上次发送时间至少晚一天，符合月中日期，等于或超过配置的发送时间
+            if (nowDay.compareTo(afterDay) >= 0 && dayIndex == nowIndex && nowTime.compareTo(rules[1]) >= 0) {
+                isExecute = true;
+            }
         }
-        return isexcute;
+        return isExecute;
     }
 
     /**
@@ -261,38 +319,25 @@ public final class Calculation {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public boolean validateQuarter(Date now, Date contrast, String rule) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(contrast);
+    public static boolean validateQuarter(DateTime now, DateTime contrast, String rule) {
         String[] rules = StringUtils.splitPreserveAllTokens(rule, "|");
-        boolean isexcute = false;
+        boolean isExecute = false;
         if (rules.length == 3) {
-            // 后一天0点
-            calendar = getNextDay(calendar);
-            String afterday = DATE_FORMAT.format(calendar.getTime()) + " 00:00:00";
-
-            calendar.setTime(now);
-            int monthIndex = Integer.valueOf(rules[0]);// 季度内第几月
-            int month = getMontNoInQuarter(calendar);// 获取当前月所在季度内的月号
+            // 参照日期后一天0点
+            String afterDay = getNextDay(contrast).toString(DATE_FORMAT) + " 00:00:00";
 
             int dayIndex = Integer.valueOf(rules[1]);// 日号
-            int nowIndex = getDayNo(calendar);// 当前日期是几号
-            int maxday = getLastDayInMonthNo(calendar);// 当前日期所在月最后一天
-            if (maxday < dayIndex) {
-                dayIndex = maxday;
+            int nowIndex = getDayNo(now);// 当前日期是几号
+            int maxDay = getLastDayInMonthNo(now);// 当前日期所在月最后一天
+            if (maxDay < dayIndex) {
+                dayIndex = maxDay;
             }
-            // 当前日期和时间
-            String nowday = DATETIME_FORMAT.format(now);
-            // 当前时间
-            String nowtime = TIME_FORMAT.format(now);
             // 比上次发送时间至少晚一天，符合季度内月号，符合月内日号，等于或超过配置的发送时间
-            if (nowday.compareTo(afterday) >= 0 && month == monthIndex && dayIndex == nowIndex && nowtime.compareTo(rules[2]) >= 0) {
-                isexcute = true;
+            if (now.toString(DATETIME_FORMAT).compareTo(afterDay) >= 0 && getMonthNoInQuarter(now) == Integer.valueOf(rules[0]) && dayIndex == nowIndex && now.toString(TIME_FORMAT).compareTo(rules[2]) >= 0) {
+                isExecute = true;
             }
-        } else {
-            isexcute = false;
         }
-        return isexcute;
+        return isExecute;
     }
 
     /**
@@ -303,121 +348,25 @@ public final class Calculation {
      * @param rule     校验规则
      * @return 是否符合执行规则
      */
-    public boolean validateYear(Date now, Date contrast, String rule) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(contrast);
+    public static boolean validateYear(DateTime now, DateTime contrast, String rule) {
         String[] rules = StringUtils.splitPreserveAllTokens(rule, "|");
-        boolean isexcute = false;
+        boolean isExecute = false;
         if (rules.length == 3) {
-            // 后一天0点
-            calendar = getNextDay(calendar);
-            String afterday = DATE_FORMAT.format(calendar.getTime()) + " 00:00:00";
+            // 参照日期后一天0点
+            String afterDay = getNextDay(contrast).toString(DATE_FORMAT) + " 00:00:00";
 
-            calendar.setTime(now);
-            int monthIndex = Integer.valueOf(rules[0]);// 年内月号
             int dayIndex = Integer.valueOf(rules[1]);// 日号
-            int nowIndex = getDayNo(calendar);// 当前日期是几号
-            int nowMonthIndex = getMonthNo(calendar);// 当前日期月号
-            int maxday = getLastDayInMonthNo(calendar);// 当前日期所在月最后一天
-            if (maxday < dayIndex) {
-                dayIndex = maxday;
+            int nowIndex = getDayNo(now);// 当前日期是几号
+            int maxDay = getLastDayInMonthNo(now);// 当前日期所在月最后一天
+            if (maxDay < dayIndex) {
+                dayIndex = maxDay;
             }
-            // 当前日期和时间
-            String nowday = DATETIME_FORMAT.format(now);
-            // 当前时间
-            String nowtime = TIME_FORMAT.format(now);
             // 比上次发送时间至少晚一天，符合月号，符合月内日号，等于或超过配置的发送时间
-            if (nowday.compareTo(afterday) >= 0 && nowMonthIndex == monthIndex && dayIndex == nowIndex && nowtime.compareTo(rules[2]) >= 0) {
-                isexcute = true;
+            if (now.toString(DATETIME_FORMAT).compareTo(afterDay) >= 0 && getMonthNo(now) == Integer.valueOf(rules[0]) && dayIndex == nowIndex && now.toString(TIME_FORMAT).compareTo(rules[2]) >= 0) {
+                isExecute = true;
             }
-        } else {
-            isexcute = false;
         }
-        return isexcute;
-    }
-
-    /**
-     * 获取指定日期后一天
-     *
-     * @param calendar 日历对象
-     * @return 日历对象
-     */
-    public Calendar getNextDay(Calendar calendar) {
-        int day = calendar.get(Calendar.DATE);
-        calendar.set(Calendar.DATE, day + 1);
-        return calendar;
-    }
-
-    /**
-     * 获取指定日期前一天
-     *
-     * @param calendar 日历对象
-     * @return 日历对象
-     */
-    public Calendar getPrevDay(Calendar calendar) {
-        int day = calendar.get(Calendar.DATE);
-        calendar.set(Calendar.DATE, day - 1);
-        return calendar;
-    }
-
-    /**
-     * 获取指定日期是一周中第几天
-     *
-     * @param calendar 日历对象
-     * @return 日历对象
-     */
-    public int getWeekNo(Calendar calendar) {
-        int nowIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        if (nowIndex <= 0) {
-            nowIndex = 7;
-        }
-        return nowIndex;
-    }
-
-    /**
-     * 获取指定日期日号
-     *
-     * @param calendar 日历对象
-     * @return 日号（1-31）
-     */
-    public int getDayNo(Calendar calendar) {
-        return calendar.get(Calendar.DATE);
-    }
-
-    /**
-     * 获取指定月号
-     *
-     * @param calendar 日历对象
-     * @return 月号（1-12）
-     */
-    public int getMonthNo(Calendar calendar) {
-        return calendar.get(Calendar.MONTH) + 1;
-    }
-
-    /**
-     * 获取指定月所在季度内的月号
-     *
-     * @param calendar 日历对象
-     * @return 季度号（1, 2, 3）
-     */
-    public int getMontNoInQuarter(Calendar calendar) {
-        int month = getMonthNo(calendar) % 3;
-        if (month == 0) {
-            month = 3;
-        }
-        return month;
-    }
-
-    /**
-     * 获取指定月最后一天日号
-     *
-     * @param calendar 日历对象
-     * @return 日号
-     */
-    public int getLastDayInMonthNo(Calendar calendar) {
-        calendar.set(Calendar.DATE, 1);
-        calendar.roll(Calendar.DATE, -1);
-        return calendar.get(Calendar.DATE);
+        return isExecute;
     }
 
 }

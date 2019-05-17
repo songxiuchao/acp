@@ -19,7 +19,7 @@ public abstract class BaseSpringBootScheduledTask extends BaseTimerTask {
      * spring boot ScheduledTask 入口，注解需在此方法上
      */
     public void executeScheduledTask() {
-        this.doExcute();
+        this.doExecute();
     }
 
     /**

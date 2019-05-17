@@ -6,9 +6,10 @@ import pers.acp.core.task.timer.basetask.BaseTimerTask;
 import pers.acp.core.task.timer.container.Calculation;
 import pers.acp.core.task.timer.container.TimerTaskContainer;
 import pers.acp.core.task.timer.ruletype.CircleType;
-import pers.acp.core.task.timer.ruletype.ExcuteType;
+import pers.acp.core.task.timer.ruletype.ExecuteType;
+import pers.acp.core.tools.CommonUtils;
 
-import java.util.Date;
+;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +37,7 @@ public class TimerDriver extends ScheduledThreadPoolExecutor {
     /**
      * 执行类型:WeekDay, Weekend, All
      */
-    private ExcuteType excuteType = ExcuteType.All;
+    private ExecuteType executeType = ExecuteType.All;
 
     /**
      * 任务容器
@@ -71,11 +72,11 @@ public class TimerDriver extends ScheduledThreadPoolExecutor {
      * 构造函数（周期默认“日”,规则默认“00:00:00”）
      *
      * @param threadNumber 工作线程数
-     * @param excuteType   执行类型:WeekDay, Weekend, All
+     * @param executeType  执行类型:WeekDay, Weekend, All
      */
-    public TimerDriver(int threadNumber, ExcuteType excuteType) {
+    public TimerDriver(int threadNumber, ExecuteType executeType) {
         this(threadNumber);
-        this.excuteType = excuteType;
+        this.executeType = executeType;
     }
 
     /**
@@ -86,10 +87,10 @@ public class TimerDriver extends ScheduledThreadPoolExecutor {
      * @param rules        执行时间点规则: 时间-开始执行时间（HH:MI:SS）（没有则表示当前时间为开始时间）|执行间隔（单位毫秒）,
      *                     日-时间（HH:MI:SS）, 周-周几|时间（1|HH:MI:SS）, 月-几号|时间（31|HH:MI:SS）,
      *                     季度-季度内第几月|几号|时间（3|31|HH:MI:SS）, 年-第几月|几号|时间（12|31|HH:MI:SS）
-     * @param excuteType   执行类型:WeekDay, Weekend, All
+     * @param executeType  执行类型:WeekDay, Weekend, All
      */
-    public TimerDriver(int threadNumber, CircleType circleType, String rules, ExcuteType excuteType) {
-        this(threadNumber, excuteType);
+    public TimerDriver(int threadNumber, CircleType circleType, String rules, ExecuteType executeType) {
+        this(threadNumber, executeType);
         this.circleType = circleType;
         this.rules = rules;
     }
@@ -104,8 +105,8 @@ public class TimerDriver extends ScheduledThreadPoolExecutor {
             log.error("a TimerDriver can only receive one task");
             return null;
         }
-        task.setSubmitTime(new Date());
-        this.container = new TimerTaskContainer(task, this.circleType, this.rules, this.excuteType);
+        task.setSubmitTime(CommonUtils.getNowDateTime());
+        this.container = new TimerTaskContainer(task, this.circleType, this.rules, this.executeType);
         return this.container;
     }
 
@@ -113,7 +114,7 @@ public class TimerDriver extends ScheduledThreadPoolExecutor {
      * 获取定时器信息
      */
     public String getTimerInfo() {
-        String info = "\ncircleType:" + this.circleType.getName() + "\nrules:" + this.rules + "\nexcuteType:" + this.excuteType.getName();
+        String info = "\ncircleType:" + this.circleType.getName() + "\nrules:" + this.rules + "\nexecuteType:" + this.executeType.getName();
         if (this.container != null) {
             info += "\ntimertask[" + this.container.getTaskName() + "]\nisNeedExecuteImmediate=" + (this.container.isNeedExecuteImmediate() ? "true" : "false");
         }
@@ -147,11 +148,11 @@ public class TimerDriver extends ScheduledThreadPoolExecutor {
                 if (this.container.isNeedExecuteImmediate()) {
                     this.container.immediateRun();
                 }
-                long[] param = new Calculation().getTimerParam(this.circleType, this.rules);
+                long[] param = Calculation.getTimerParam(this.circleType, this.rules);
                 this.scheduleAtFixedRate(this.container, param[0], param[1], TimeUnit.MILLISECONDS);
-                log.info("start timertask successfull:" + getTimerInfo());
+                log.info("start timerTask successFull:" + getTimerInfo());
             } else {
-                throw new TimerException("timertask is null");
+                throw new TimerException("timerTask is null");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

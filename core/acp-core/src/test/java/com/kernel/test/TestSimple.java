@@ -1,8 +1,11 @@
 package com.kernel.test;
 
+import org.joda.time.DateTime;
+import pers.acp.core.CalendarTools;
 import pers.acp.core.CommonTools;
 import pers.acp.core.task.threadpool.ThreadPoolService;
 import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
+import pers.acp.core.task.timer.container.Calculation;
 
 import java.math.BigInteger;
 
@@ -19,8 +22,21 @@ public class TestSimple {
         System.out.println("bigInteger2=" + bigInteger2);
         System.out.println("bigInteger2=" + bigInteger2.longValue());
 
-        testPath();
-        testThreadPool();
+//        testPath();
+//        testThreadPool();
+        testDateTime();
+    }
+
+    private static void testDateTime() {
+        DateTime now = CommonTools.getNowDateTime();
+        System.out.println(now);
+        System.out.println(CommonTools.getDateTimeString(now, Calculation.DATETIME_FORMAT));
+        System.out.println(CommonTools.getDateTimeString(now, Calculation.DATE_FORMAT));
+        System.out.println(CommonTools.getDateTimeString(CalendarTools.getNextDay(now), Calculation.DATE_FORMAT));
+        System.out.println(CommonTools.getDateTimeString(CalendarTools.getPrevDay(now), Calculation.DATE_FORMAT));
+        System.out.println(CalendarTools.getWeekNo(now));
+        System.out.println(CalendarTools.getMonthNoInQuarter(now));
+        System.out.println(CalendarTools.getLastDayInMonthNo(now));
     }
 
     private static void testThreadPool() throws InterruptedException {
@@ -28,30 +44,30 @@ public class TestSimple {
 //        for (int i = 0; i < 10000; i++) {
 //            threadPoolService.addTask(new BaseThreadTask(i + "") {
 //                @Override
-//                public boolean beforeExcuteFun() {
+//                public boolean beforeExecuteFun() {
 //                    return true;
 //                }
 //
 //                @Override
-//                public Object excuteFun() {
+//                public Object executeFun() {
 //                    System.out.println("i=" + this.getTaskName());
 //                    return true;
 //                }
 //
 //                @Override
-//                public void afterExcuteFun(Object result) {
+//                public void afterExecuteFun(Object result) {
 //
 //                }
 //            });
 //        }
         BaseThreadTask task = new BaseThreadTask("") {
             @Override
-            public boolean beforeExcuteFun() {
+            public boolean beforeExecuteFun() {
                 return true;
             }
 
             @Override
-            public Object excuteFun() {
+            public Object executeFun() {
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -61,11 +77,11 @@ public class TestSimple {
             }
 
             @Override
-            public void afterExcuteFun(Object result) {
+            public void afterExecuteFun(Object result) {
 
             }
         };
-        System.out.println(CommonTools.excuteTaskInThreadPool(threadPoolService, task));
+        System.out.println(CommonTools.executeTaskInThreadPool(threadPoolService, task));
     }
 
     private static void testPath() {
