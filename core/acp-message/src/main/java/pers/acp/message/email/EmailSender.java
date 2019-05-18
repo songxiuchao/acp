@@ -55,14 +55,14 @@ public class EmailSender {
                 String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
                 props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
                 props.setProperty("mail.smtp.socketFactory.fallback", "false");
-                props.setProperty("mail.smtp.socketFactory.port", emailEntity.getMailPort() + "");
+                props.setProperty("mail.smtp.socketFactory.port", String.valueOf(emailEntity.getMailPort()));
                 props.setProperty("mail.smtp.starttls.enable", "true");
                 props.setProperty("mail.smtp.ssl.enable", "true");
             }
             props.setProperty("mail.smtp.host", emailEntity.getMailHost());
-            props.setProperty("mail.smtp.port", emailEntity.getMailPort() + "");
+            props.setProperty("mail.smtp.port", String.valueOf(emailEntity.getMailPort()));
             props.setProperty("mail.transport.protocol", emailEntity.getMailTransportProtocol());
-            props.setProperty("mail.smtp.auth", emailEntity.isMailSmtpAuth() + "");
+            props.setProperty("mail.smtp.auth", String.valueOf(emailEntity.isMailSmtpAuth()));
             Session session = Session.getDefaultInstance(props, new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(emailEntity.getUserName(), emailEntity.getPassword());
