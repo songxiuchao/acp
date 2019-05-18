@@ -15,6 +15,7 @@ import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -69,6 +70,8 @@ public class XmlPacket {
      * @return xml字符串
      */
     public static String jsonToXML(JsonNode json, String clientCharset, boolean isIndent) {
+        StringWriter writer = null;
+        XMLWriter output = null;
         try {
             if (json == null || json.isNull()) {
                 throw new Exception("json object is null or empty");
@@ -86,13 +89,27 @@ public class XmlPacket {
             format.setNewlines(isIndent);
             format.setIndent(isIndent);
             format.setIndent("    ");
-            StringWriter writer = new StringWriter();
-            XMLWriter output = new XMLWriter(writer, format);
+            writer = new StringWriter();
+            output = new XMLWriter(writer, format);
             output.write(document);
             writer.close();
             output.close();
             return writer.toString();
         } catch (Exception e) {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException ex) {
+                log.error(ex.getMessage(), ex);
+            }
+            try {
+                if (output != null) {
+                    output.close();
+                }
+            } catch (IOException ex) {
+                log.error(ex.getMessage(), ex);
+            }
             log.error(e.getMessage(), e);
             return "";
         }

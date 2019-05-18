@@ -108,7 +108,7 @@ public class LogFactory {
         if (stacks.length >= 4) {
             lineno = stacks[3].getLineNumber();
         }
-        MDC.put("lineno", lineno + "");
+        MDC.put("lineno", String.valueOf(lineno));
     }
 
 }

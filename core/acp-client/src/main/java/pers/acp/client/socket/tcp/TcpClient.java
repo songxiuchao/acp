@@ -87,7 +87,11 @@ public final class TcpClient extends SockertClient {
     @Override
     public void afterSendMessage(Channel channel) {
         if (!keepAlive && !needRead) {
-            channel.close();
+            try {
+                channel.close();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
             doClose();
         }
     }
@@ -100,7 +104,11 @@ public final class TcpClient extends SockertClient {
     @Override
     public void afterReadMessage(ChannelHandlerContext ctx) {
         if (!keepAlive) {
-            ctx.close();
+            try {
+                ctx.close();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
             doClose();
         }
     }
