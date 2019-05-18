@@ -34,7 +34,7 @@ public class PageNumberHandle extends PdfPageEventHelper {
     }
 
     public void onEndPage(PdfWriter writer, Document document) {
-        int currNumLen = (writer.getPageNumber() + "").length();
+        int currNumLen = String.valueOf(writer.getPageNumber()).length();
         PdfContentByte cb = writer.getDirectContent();
         cb.saveState();
         String text = currNumStr.replace("[pageNumber]",

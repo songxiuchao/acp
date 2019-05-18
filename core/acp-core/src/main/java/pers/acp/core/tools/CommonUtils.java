@@ -375,7 +375,7 @@ public class CommonUtils {
      * @return 填充后的字符串
      */
     public static String strFillIn(String str, int number, int flag, char c) {
-        return strFillIn(str, number, flag, c + "");
+        return strFillIn(str, number, flag, String.valueOf(c));
     }
 
     /**

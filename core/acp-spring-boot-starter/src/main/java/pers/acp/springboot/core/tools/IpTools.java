@@ -98,7 +98,7 @@ public final class IpTools {
                 IPs[0] = "";
             } else {
                 IPs = new String[tmp_ips.size()];
-                for (int i = 0; i < tmp_ips.size(); i++) {
+                for (int i = 0, length = tmp_ips.size(); i < length; i++) {
                     IPs[i] = tmp_ips.get(i);
                 }
             }
