@@ -110,25 +110,27 @@ public class RestControllerAspect {
             response = pjp.proceed();
             if (needLog(uri)) {
                 log.info(">>>>>>>>>> 请求处理结束! [method: {}, uri: {}, 处理耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - processBegin);
-                StringBuilder endLog = new StringBuilder("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-                endLog.append("-----> response: ").append(response.toString()).append("\n");
-                String responseInfo = null;
-                if (response instanceof ResponseEntity) {
-                    ResponseEntity responseEntity = ((ResponseEntity) response);
-                    Object responseBody = responseEntity.getBody();
-                    if (responseBody != null) {
-                        if (responseBody instanceof String) {
-                            responseInfo = (String) responseBody;
-                        } else {
-                            responseInfo = objectMapper.writeValueAsString(responseBody);
+                if (response != null) {
+                    StringBuilder endLog = new StringBuilder("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                    endLog.append("-----> response: ").append(response.toString()).append("\n");
+                    String responseInfo = null;
+                    if (response instanceof ResponseEntity) {
+                        ResponseEntity responseEntity = ((ResponseEntity) response);
+                        Object responseBody = responseEntity.getBody();
+                        if (responseBody != null) {
+                            if (responseBody instanceof String) {
+                                responseInfo = (String) responseBody;
+                            } else {
+                                responseInfo = objectMapper.writeValueAsString(responseBody);
+                            }
                         }
+                    } else {
+                        responseInfo = objectMapper.writeValueAsString(response);
                     }
-                } else {
-                    responseInfo = objectMapper.writeValueAsString(response);
+                    endLog.append("      ┖---- body: \n").append(responseInfo).append("\n");
+                    endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                    log.info(endLog.toString());
                 }
-                endLog.append("      ┖---- body: \n").append(responseInfo).append("\n");
-                endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                log.info(endLog.toString());
                 log.info("========== 请求结束! [method: {}, uri: {}, 总耗时: {} 毫秒]", method, uri, (System.currentTimeMillis() - beginTime));
             }
         }
