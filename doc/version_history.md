@@ -10,6 +10,7 @@
 > - [Upgrade] 优化 acp-core 中线程池相关参数及注释
 > - [Upgrade] 使用 joda-time 替换 jdk 日期时间及日历处理
 > - [Upgrade] 优化代码执行效率
+> - [Upgrade] 优化核心任务基类，实现Callable接口，替换Runnable接口
 ##### v5.1.4.2
 > - [Upgrade] 文件压缩解压公共方法从 acp-file 迁移到 acp-core，使用 CommonTools 类
 > - [Upgrade] 升级 gradle 至 5.4
