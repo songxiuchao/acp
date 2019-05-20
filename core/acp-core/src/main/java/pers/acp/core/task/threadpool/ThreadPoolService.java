@@ -183,28 +183,28 @@ public final class ThreadPoolService {
      *
      * @param newTask 任务
      */
-    public void addTask(BaseThreadTask newTask) {
+    public Future<Object> addTask(BaseThreadTask newTask) {
         newTask.setSubmitTime(CommonUtils.getNowDateTime());
-        this.executor.execute(newTask);
         log.debug("thread pool [" + poolName + "] submit task[" + newTask.getTaskId() + "]: " + newTask.getTaskName());
+        return this.executor.submit(newTask);
     }
 
     /**
      * 批量增加新任务
      *
-     * @param taskes 任务
+     * @param tasks 任务
      */
-    public void batchAddTask(BaseThreadTask[] taskes) {
-        if (taskes == null || taskes.length == 0) {
+    public void batchAddTask(BaseThreadTask[] tasks) {
+        if (tasks == null || tasks.length == 0) {
             return;
         }
-        for (BaseThreadTask taske : taskes) {
-            if (taske == null) {
+        for (BaseThreadTask task : tasks) {
+            if (task == null) {
                 continue;
             }
-            taske.setSubmitTime(CommonUtils.getNowDateTime());
-            this.executor.execute(taske);
-            log.debug("thread pool [" + poolName + "] submit task[" + taske.getTaskId() + "]: " + taske.getTaskName());
+            task.setSubmitTime(CommonUtils.getNowDateTime());
+            this.executor.submit(task);
+            log.debug("thread pool [" + poolName + "] submit task[" + task.getTaskId() + "]: " + task.getTaskName());
         }
     }
 

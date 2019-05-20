@@ -4,12 +4,14 @@ import org.joda.time.DateTime;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.tools.CommonUtils;
 
+import java.util.concurrent.Callable;
+
 /**
  * 任务基类
  *
  * @author zb
  */
-public abstract class BaseTask implements IBaseTask, Runnable {
+public abstract class BaseTask implements IBaseTask, Callable<Object> {
 
     /**
      * 日志对象
@@ -86,28 +88,26 @@ public abstract class BaseTask implements IBaseTask, Runnable {
     }
 
     @Override
-    public void run() {
+    public Object call() {
         this.isRunning = true;
         this.beginExecuteTime = new DateTime();
+        Object result = null;
         try {
             if (this.beforeExecuteFun()) {
-                Object result = this.executeFun();
+                result = this.executeFun();
                 this.setTaskResult(result);
                 if (result != null) {
                     this.afterExecuteFun(result);
-                } else {
-                    this.setTaskResult(null);
                 }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            this.setTaskResult(null);
+            result = null;
         }
         this.finishTime = CommonUtils.getNowDateTime();
         this.isRunning = false;
-        synchronized (this) {
-            this.notifyAll();
-        }
+        this.setTaskResult(result);
+        return result;
     }
 
     /**
@@ -116,8 +116,7 @@ public abstract class BaseTask implements IBaseTask, Runnable {
      * @return 执行结果对象
      */
     public Object doExecute() {
-        this.run();
-        return this.taskResult;
+        return call();
     }
 
     public String getTaskId() {
