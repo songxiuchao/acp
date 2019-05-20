@@ -101,8 +101,8 @@ public final class TimerTaskContainer implements Runnable {
     /**
      * 立即执行任务
      */
-    public void immediateRun() {
-        this.task.doExecute();
+    public Object immediateRun() {
+        return this.task.doExecute();
     }
 
     @Override
