@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -655,20 +656,17 @@ public class CommonUtils {
      * @param task       线程池任务
      * @return 执行结果
      */
-    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     public static Object executeTaskInThreadPool(ThreadPoolService threadPool, BaseThreadTask task) {
         if (task != null && threadPool != null) {
-            threadPool.addTask(task);
+            Future<Object> future = threadPool.addTask(task);
             try {
-                synchronized (task) {
-                    task.wait();
-                    if (task.getTaskResult() != null) {
-                        log.debug("execute task in threadPool success:" + task.getTaskResult());
-                        return task.getTaskResult();
-                    } else {
-                        log.debug("execute task in threadPool success");
-                        return null;
-                    }
+                Object result = future.get();
+                if (result != null) {
+                    log.debug("execute task in threadPool success:" + result);
+                    return result;
+                } else {
+                    log.debug("execute task in threadPool success");
+                    return null;
                 }
             } catch (Exception e) {
                 log.error("execute task in threadPool failed:" + e.getMessage(), e);
