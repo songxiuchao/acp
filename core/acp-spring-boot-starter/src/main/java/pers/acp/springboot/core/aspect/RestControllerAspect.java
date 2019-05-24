@@ -58,7 +58,7 @@ public class RestControllerAspect {
             "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PutMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.Mapping) ) ")
-    public void excudeService() {
+    public void executeService() {
     }
 
     /**
@@ -67,7 +67,7 @@ public class RestControllerAspect {
      * @param pjp 拦截对象
      * @return Object（被拦截方法的执行结果）
      */
-    @Around("excudeService()")
+    @Around("executeService()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         Object response = null;
         long beginTime = System.currentTimeMillis();
