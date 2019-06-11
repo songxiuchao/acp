@@ -1,4 +1,7 @@
 ## 版本更新记录
+##### v5.x
+> - [Upgrade] testspringboot 增加 Map 接收参数的 Demo
+> - [Upgrade] testspringboot 增加使用 RestTemplate 进行 post 方式的 form 提交单元测试
 ##### v5.1.5
 > - [Upgrade] 升级 Spring Boot 至 2.1.5.RELEASE
 > - [Upgrade] 升级 Spring Boot Admin 至 2.1.5
