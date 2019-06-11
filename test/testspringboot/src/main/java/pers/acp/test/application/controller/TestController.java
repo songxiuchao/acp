@@ -99,4 +99,12 @@ public class TestController {
         return ResponseEntity.ok(mapper.writeValueAsString(body));
     }
 
+    @ApiOperation(value = "测试 rest 接口", notes = "参数为Map<String, Object>")
+    @RequestMapping(value = "/mapform", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Object> postMapForm(@RequestParam Map<String, Object> body) throws IOException {
+        log.info("params:");
+        body.forEach((key, value) -> log.info("key=" + key + " value=" + value));
+        return ResponseEntity.ok(mapper.writeValueAsString(body));
+    }
+
 }
