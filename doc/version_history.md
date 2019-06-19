@@ -2,7 +2,6 @@
 ##### v5.1.6
 > - [Upgrade] testspringboot 增加 Map 接收参数的 Demo
 > - [Upgrade] testspringboot 增加使用 RestTemplate 进行 post 方式的 form 提交单元测试
-> - [Upgrade] 升级 Spring Boot 至 2.1.6.RELEASE
 > - [Upgrade] 升级 Spring Boot Admin 至 2.1.6
 > - [Upgrade] 升级依赖项
 >   - Apache HttpClient to 4.5.9
