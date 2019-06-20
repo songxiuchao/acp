@@ -5,8 +5,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
-import pers.acp.core.DBConTools;
 import pers.acp.core.log.LogFactory;
+import pers.acp.springboot.core.conf.AcpCoreConfiguration;
 import pers.acp.springboot.core.init.task.InitTcpServer;
 import pers.acp.springboot.core.init.task.InitUdpServer;
 
@@ -20,10 +20,13 @@ public class InitServer {
 
     private final InitUdpServer initUdpServer;
 
+    private final AcpCoreConfiguration acpCoreConfiguration;
+
     @Autowired
-    public InitServer(InitTcpServer initTcpServer, InitUdpServer initUdpServer) {
+    public InitServer(InitTcpServer initTcpServer, InitUdpServer initUdpServer, AcpCoreConfiguration acpCoreConfiguration) {
         this.initTcpServer = initTcpServer;
         this.initUdpServer = initUdpServer;
+        this.acpCoreConfiguration = acpCoreConfiguration;
     }
 
     /**
@@ -31,7 +34,7 @@ public class InitServer {
      */
     void startNow() {
         try {
-            InitSource.getInstance(initTcpServer, initUdpServer).run();
+            InitSource.getInstance(initTcpServer, initUdpServer, acpCoreConfiguration).run();
         } catch (Exception e) {
             log.error("system startup Exception:" + e.getMessage());
         }
@@ -42,7 +45,7 @@ public class InitServer {
      */
     void startDelay() {
         try {
-            InitSource.getInstance(initTcpServer, initUdpServer).start();
+            InitSource.getInstance(initTcpServer, initUdpServer, acpCoreConfiguration).start();
         } catch (Exception e) {
             log.error("system startup Exception:" + e.getMessage());
         }
@@ -59,17 +62,20 @@ class InitSource extends Thread {
 
     private final InitUdpServer initUdpServer;
 
-    private InitSource(InitTcpServer initTcpServer, InitUdpServer initUdpServer) {
+    private final AcpCoreConfiguration acpCoreConfiguration;
+
+    private InitSource(InitTcpServer initTcpServer, InitUdpServer initUdpServer, AcpCoreConfiguration acpCoreConfiguration) {
+        this.acpCoreConfiguration = acpCoreConfiguration;
         this.setDaemon(true);
         this.initTcpServer = initTcpServer;
         this.initUdpServer = initUdpServer;
     }
 
-    protected static InitSource getInstance(InitTcpServer initTcpServer, InitUdpServer initUdpServer) {
+    protected static InitSource getInstance(InitTcpServer initTcpServer, InitUdpServer initUdpServer, AcpCoreConfiguration acpCoreConfiguration) {
         if (handle == null) {
             synchronized (InitSource.class) {
                 if (handle == null) {
-                    handle = new InitSource(initTcpServer, initUdpServer);
+                    handle = new InitSource(initTcpServer, initUdpServer, acpCoreConfiguration);
                 }
             }
         }
@@ -89,8 +95,10 @@ class InitSource extends Thread {
 
     private void initTools() {
         log.info("tools init begin ...");
-        CommonTools.initTools();
-        DBConTools.initTools();
+        CommonTools.initTools(acpCoreConfiguration.getDeleteFileWaitTime(),
+                acpCoreConfiguration.getAbsPathPrefix(),
+                acpCoreConfiguration.getUserPathPrefix(),
+                acpCoreConfiguration.getFontPath());
         log.info("tools init finished!");
     }
 
