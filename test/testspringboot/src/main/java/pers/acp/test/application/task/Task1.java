@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import pers.acp.springboot.core.base.BaseSpringBootScheduledTask;
+import pers.acp.springboot.base.BaseSpringBootScheduledTask;
 import pers.acp.test.application.repo.pg.TableTwoRepo;
 import pers.acp.test.application.repo.primary.TableRepo;
 import pers.acp.core.CommonTools;

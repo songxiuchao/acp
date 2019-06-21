@@ -7,7 +7,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
-import pers.acp.springboot.core.tools.SpringBeanFactory;
+import pers.acp.springboot.tools.SpringBeanFactory;
 import pers.acp.springcloud.common.conf.LogServerCientConfiguration;
 import pers.acp.springcloud.common.enums.LogLevel;
 import pers.acp.springcloud.common.log.producer.LogProducer;

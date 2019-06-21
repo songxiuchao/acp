@@ -3,7 +3,7 @@ package pers.acp.test.application.test;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
-import pers.acp.springboot.core.socket.base.ISocketServerHandle;
+import pers.acp.springboot.socket.base.ISocketServerHandle;
 import pers.acp.test.application.repo.primary.TableRepo;
 
 /**

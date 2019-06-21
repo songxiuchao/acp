@@ -3,7 +3,7 @@ package pers.acp.test.application.conf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pers.acp.springboot.core.conf.SwaggerConfiguration;
+import pers.acp.springboot.conf.SwaggerConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;

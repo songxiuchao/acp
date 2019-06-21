@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-import pers.acp.springboot.core.vo.ErrorVO;
+import pers.acp.springboot.vo.ErrorVO;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
