@@ -14,7 +14,7 @@ import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.core.security.SignatureUtils;
-import pers.acp.ftp.config.FTPConfig;
+import pers.acp.ftp.conf.FTPConfig;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.security.MD5Utils;

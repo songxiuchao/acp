@@ -13,7 +13,7 @@ import org.apache.sshd.sftp.subsystem.SftpSubsystem;
 import pers.acp.core.CommonTools;
 import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.core.log.LogFactory;
-import pers.acp.ftp.config.SFTPConfig;
+import pers.acp.ftp.conf.SFTPConfig;
 import pers.acp.ftp.exceptions.SFTPServerException;
 
 import java.util.ArrayList;

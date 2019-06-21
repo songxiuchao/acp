@@ -1,4 +1,4 @@
-package pers.acp.ftp.config;
+package pers.acp.ftp.conf;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -30,6 +30,10 @@ public class SFTPConfig extends BaseXML {
         return listens;
     }
 
+    public void setListens(List<Listen> listens) {
+        this.listens = listens;
+    }
+
     @XStreamImplicit(itemFieldName = "listen")
     private List<Listen> listens;
 
@@ -39,40 +43,80 @@ public class SFTPConfig extends BaseXML {
             return name;
         }
 
+        public void setName(String name) {
+            this.name = name;
+        }
+
         public boolean isEnabled() {
             return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
         }
 
         public int getPort() {
             return port;
         }
 
+        public void setPort(int port) {
+            this.port = port;
+        }
+
         public String getHostKeyPath() {
             return hostKeyPath;
+        }
+
+        public void setHostKeyPath(String hostKeyPath) {
+            this.hostKeyPath = hostKeyPath;
         }
 
         public boolean isPasswordAuth() {
             return passwordAuth;
         }
 
+        public void setPasswordAuth(boolean passwordAuth) {
+            this.passwordAuth = passwordAuth;
+        }
+
         public boolean isPublicKeyAuth() {
             return publicKeyAuth;
         }
 
+        public void setPublicKeyAuth(boolean publicKeyAuth) {
+            this.publicKeyAuth = publicKeyAuth;
+        }
+
         public String getKeyAuthType() {
-            return keyAuthType.toLowerCase();
+            return keyAuthType;
+        }
+
+        public void setKeyAuthType(String keyAuthType) {
+            this.keyAuthType = keyAuthType;
         }
 
         public String getKeyAuthMode() {
-            return keyAuthMode.toUpperCase();
+            return keyAuthMode;
+        }
+
+        public void setKeyAuthMode(String keyAuthMode) {
+            this.keyAuthMode = keyAuthMode;
         }
 
         public String getDefaultHomeDirectory() {
             return defaultHomeDirectory;
         }
 
+        public void setDefaultHomeDirectory(String defaultHomeDirectory) {
+            this.defaultHomeDirectory = defaultHomeDirectory;
+        }
+
         public String getUserFactoryClass() {
             return userFactoryClass;
+        }
+
+        public void setUserFactoryClass(String userFactoryClass) {
+            this.userFactoryClass = userFactoryClass;
         }
 
         @XStreamAsAttribute

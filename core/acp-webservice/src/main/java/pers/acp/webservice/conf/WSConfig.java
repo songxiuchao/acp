@@ -1,4 +1,4 @@
-package pers.acp.webservice.config;
+package pers.acp.webservice.conf;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
