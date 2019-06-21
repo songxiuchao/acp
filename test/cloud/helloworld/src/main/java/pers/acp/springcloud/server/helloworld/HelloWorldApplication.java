@@ -8,7 +8,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
-import pers.acp.springcloud.common.annotation.AcpCloudAtomApplication;
+import pers.acp.springcloud.annotation.AcpCloudAtomApplication;
 
 /**
  * @author zhangbin by 2018-3-5 13:56

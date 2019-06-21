@@ -15,7 +15,7 @@ import pers.acp.springboot.tools.PackageTools;
  * @since JDK 11
  */
 @Configuration
-@ComponentScan("pers.acp.springboot.core")
+@ComponentScan("pers.acp.springboot")
 public class AcpAutoConfiguration {
 
     @Primary

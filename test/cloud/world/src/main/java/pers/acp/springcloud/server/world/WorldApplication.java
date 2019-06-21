@@ -1,7 +1,7 @@
 package pers.acp.springcloud.server.world;
 
 import org.springframework.boot.SpringApplication;
-import pers.acp.springcloud.common.annotation.AcpCloudAtomApplication;
+import pers.acp.springcloud.annotation.AcpCloudAtomApplication;
 
 /**
  * @author zhangbin by 2018-3-5 13:56

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pers.acp.springcloud.common.log.LogInstance;
+import pers.acp.springcloud.log.LogInstance;
 
 import javax.servlet.http.HttpServletRequest;
 

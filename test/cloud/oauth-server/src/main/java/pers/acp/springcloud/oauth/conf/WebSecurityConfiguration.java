@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import pers.acp.core.CommonTools;
-import pers.acp.springcloud.common.constant.ConfigurationOrder;
+import pers.acp.springcloud.constant.ConfigurationOrder;
 import pers.acp.springcloud.oauth.component.UserPasswordEncoder;
 import pers.acp.springcloud.oauth.domain.SecurityClientDetailsService;
 import pers.acp.springcloud.oauth.domain.SecurityUserDetailsService;

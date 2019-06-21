@@ -1,7 +1,7 @@
 package pers.acp.springcloud.log;
 
 import org.springframework.boot.SpringApplication;
-import pers.acp.springcloud.common.annotation.AcpCloudAtomApplication;
+import pers.acp.springcloud.annotation.AcpCloudAtomApplication;
 
 /**
  * @author zhangbin by 09/04/2018 16:11

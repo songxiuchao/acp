@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.springboot.tools.IpTools;
-import pers.acp.springcloud.common.log.LogInstance;
+import pers.acp.springcloud.log.LogInstance;
 import pers.acp.springcloud.server.helloworld.feign.HelloServer;
 import pers.acp.springcloud.server.helloworld.feign.WorldServer;
 

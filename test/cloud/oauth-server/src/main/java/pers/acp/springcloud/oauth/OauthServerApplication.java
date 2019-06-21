@@ -1,7 +1,7 @@
 package pers.acp.springcloud.oauth;
 
 import org.springframework.boot.SpringApplication;
-import pers.acp.springcloud.common.annotation.AcpCloudOauthServerApplication;
+import pers.acp.springcloud.annotation.AcpCloudOauthServerApplication;
 
 /**
  * @author zhangbin by 09/04/2018 16:11
