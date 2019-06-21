@@ -39,3 +39,6 @@ include 'test:cloud:log-server'
 findProject(':test:cloud:log-server')?.name = 'log-server'
 include 'test:cloud:config-server'
 findProject(':test:cloud:config-server')?.name = 'config-server'
+include 'boot:acp-spring-boot-starter-ftp'
+findProject(':boot:acp-spring-boot-starter-ftp')?.name = 'acp-spring-boot-starter-ftp'
+
