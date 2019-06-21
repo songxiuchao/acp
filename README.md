@@ -128,8 +128,8 @@ ext {
     （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.spring.boot.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
     （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
     （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
-    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 resources/config 中增加相应配置
-    （11）如有需要，可选择引入 acp-file、acp-message、acp-webservice、acp-spring-boot-starter-ftp 等包
+    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 application-dev.xml 中增加相应配置
+    （11）如有需要，可选择引入 acp-file、acp-message、acp-webservice、acp-spring-boot-starter-ftp、acp-spring-boot-starter-ws 等包
 ##### 2. 配置说明
 - 定制开发的 api 接口，开启 swagger 文档
 ```yaml
@@ -186,6 +186,49 @@ acp:
         handleBean: TestTcpHandle         #报文接收处理的 Bean 名称
         responsable: true                 #报文是否需要进行原路响应，默认true
         charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集
+```
+
+- ftp 服务端
+```yaml
+  ftp-server:
+    listeners:
+      - name: "测试ftp服务器"                                                 #服务名车鞥
+        enabled: true                                                        #可空，是否启用，默认false
+        port: 221                                                            #服务端口号
+        pwd-encrypt-mode: MD5                                                #可空，用户密码加密方式（支持MD5、SHA1、SHA256），默认MD5
+        login-failure-delay: 30                                              #可空，默认30
+        max-login-failures: 20                                               #可空，默认20
+        max-logins: 10                                                       #可空，默认10
+        max-anonymous-logins: 20                                             #可空，默认20
+        max-threads: 10                                                      #可空，默认10
+        default-home-directory: "abs:D:\\个人\\测试ftp"                       #默认根路径
+        anonymous-login-enabled: false                                       #可空，是否允许匿名用户登录，默认false
+        anonymous-write-permission: false                                    #可空，是否允许匿名用户写操作，默认false
+        user-factory-class: pers.acp.test.application.test.TestUserFactory   #用户工厂类
+```
+
+- sftp 服务端
+```yaml
+  sftp-server:
+    listeners:
+      - name: "测试sftp服务器"                                                #服务名称
+        enabled: true                                                        #可空，是否启用，默认false
+        port: 4221                                                           #服务端口号
+        host-key-path: "files/resource/key/hostkey"                          #服务器密钥文件路径
+        password-auth: true                                                  #可空，是否进行密码登录，默认true
+        public-key-auth: false                                               #可空，是否进行证书登录（开启后仅支持证书验证），用户证书只支持openssh生成的密钥，默认false
+        key-auth-type: pem                                                   #可空，证书类型（der/pem/ssh），默认pem
+        key-auth-mode: RSA                                                   #可空，证书验证模式（RSA/DSA），默认RSA
+        default-home-directory: "abs:D:\\个人\\测试ftp"                       #默认根路径
+        user-factory-class: pers.acp.test.application.test.TestUserFactory   #用户工厂类
+```
+
+- webservice 服务端
+```yaml
+  ws-server:
+    server:
+      - class-name: pers.acp.test.application.test.TestWebService            #webservice类
+        href: "http://127.0.0.1:8081/ws"                                     #访问地址 http://host:port
 ```
 
 ### （三）启停 springboot 应用

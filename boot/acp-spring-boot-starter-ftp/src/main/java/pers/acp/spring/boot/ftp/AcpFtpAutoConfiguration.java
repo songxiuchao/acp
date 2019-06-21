@@ -21,14 +21,14 @@ public class AcpFtpAutoConfiguration {
     @Bean
     @ConditionalOnClass(InitFtpServer.class)
     @ConfigurationProperties(prefix = "acp.ftp-server")
-    public FtpServerConfiguration ftpServerConfiguration() {
+    public FtpServerConfiguration acpFtpServerConfiguration() {
         return new FtpServerConfiguration();
     }
 
     @Bean
     @ConditionalOnClass(InitSFtpServer.class)
     @ConfigurationProperties(prefix = "acp.sftp-server")
-    public SftpServerConfiguration sftpServerConfiguration() {
+    public SftpServerConfiguration acpSftpServerConfiguration() {
         return new SftpServerConfiguration();
     }
 

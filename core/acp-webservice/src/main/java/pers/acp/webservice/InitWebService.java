@@ -3,10 +3,11 @@ package pers.acp.webservice;
 import pers.acp.core.log.LogFactory;
 import pers.acp.webservice.base.IWebService;
 import pers.acp.webservice.conf.WSConfig;
+import pers.acp.webservice.conf.WSServer;
 
 import javax.xml.ws.Endpoint;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class InitWebService {
 
@@ -19,8 +20,7 @@ public class InitWebService {
             doPublish(wsConfig);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-        } finally {
-            log.info("publish webservice finished!");
+            log.error("publish webservice exception: " + e.getMessage());
         }
     }
 
@@ -30,16 +30,15 @@ public class InitWebService {
             doPublish(wsConfig);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-        } finally {
-            log.info("publish webservice finished!");
+            log.error("publish webservice exception: " + e.getMessage());
         }
     }
 
     private static void doPublish(WSConfig wsConfig) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if (wsConfig != null) {
-            ArrayList<WSConfig.Server> servers = (ArrayList<WSConfig.Server>) wsConfig.getServer();
+            List<WSServer> servers = wsConfig.getServer();
             if (servers != null) {
-                for (WSConfig.Server server : servers) {
+                for (WSServer server : servers) {
                     String classname = server.getClassName();
                     String href = server.getHref();
                     Class<?> cls = Class.forName(classname);

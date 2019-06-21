@@ -29,7 +29,7 @@ public final class InitUdpServer {
         log.info("start udp listen service ...");
         try {
             List<SocketListenerConfiguration> listens = udpServerConfiguration.getListeners();
-            if (!listens.isEmpty()) {
+            if (listens != null && !listens.isEmpty()) {
                 for (SocketListenerConfiguration listen : listens) {
                     if (listen.isEnabled()) {
                         String beanName = listen.getHandleBean();
@@ -53,7 +53,7 @@ public final class InitUdpServer {
                     }
                 }
             } else {
-                log.info("No listen service was found");
+                log.info("No udp listen service was found");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

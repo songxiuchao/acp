@@ -32,6 +32,7 @@ public class InitFtpServer extends InitServer {
             ftpServers = doStart(ftpConfig);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            log.info("start ftp servers exception: " + e.getMessage());
         }
         return ftpServers;
     }
@@ -53,7 +54,7 @@ public class InitFtpServer extends InitServer {
         List<IDaemonService> ftpServers = new ArrayList<>();
         if (ftpConfig != null) {
             List<FTPListener> listens = ftpConfig.getListens();
-            if (listens != null) {
+            if (listens != null && !listens.isEmpty()) {
                 for (FTPListener listen : listens) {
                     if (listen.isEnabled()) {
                         String classname = listen.getUserFactoryClass();
@@ -71,6 +72,8 @@ public class InitFtpServer extends InitServer {
                         log.info("ftp server is disabled [" + listen.getName() + "]");
                     }
                 }
+            } else {
+                log.info("No ftp service was found");
             }
         }
         return ftpServers;

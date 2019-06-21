@@ -1,7 +1,6 @@
 package pers.acp.webservice.conf;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import pers.acp.core.config.base.BaseXML;
 import pers.acp.core.log.LogFactory;
@@ -22,30 +21,15 @@ public class WSConfig extends BaseXML {
         }
     }
 
-    @XStreamImplicit(itemFieldName = "server")
-    private List<Server> server;
-
-    public List<Server> getServer() {
+    public List<WSServer> getServer() {
         return server;
     }
 
-    public class Server {
-
-        @XStreamAsAttribute
-        @XStreamAlias("class")
-        private String className;
-
-        @XStreamAsAttribute
-        @XStreamAlias("href")
-        private String href;
-
-        public String getClassName() {
-            return className;
-        }
-
-        public String getHref() {
-            return href;
-        }
+    public void setServer(List<WSServer> server) {
+        this.server = server;
     }
+
+    @XStreamImplicit(itemFieldName = "server")
+    private List<WSServer> server;
 
 }

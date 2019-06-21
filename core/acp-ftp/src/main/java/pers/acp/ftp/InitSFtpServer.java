@@ -32,6 +32,7 @@ public class InitSFtpServer extends InitServer {
             sftpServers = doStart(sftpConfig);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            log.info("start sftp servers exception: " + e.getMessage());
         }
         return sftpServers;
     }
@@ -53,7 +54,7 @@ public class InitSFtpServer extends InitServer {
         List<IDaemonService> sftpServers = new ArrayList<>();
         if (sftpConfig != null) {
             List<SFTPListener> listens = sftpConfig.getListens();
-            if (listens != null) {
+            if (listens != null && !listens.isEmpty()) {
                 for (SFTPListener listen : listens) {
                     if (listen.isEnabled()) {
                         String classname = listen.getUserFactoryClass();
@@ -71,6 +72,8 @@ public class InitSFtpServer extends InitServer {
                         log.info("sftp server is disabled [" + listen.getName() + "]");
                     }
                 }
+            } else {
+                log.info("No sftp service was found");
             }
         }
         return sftpServers;

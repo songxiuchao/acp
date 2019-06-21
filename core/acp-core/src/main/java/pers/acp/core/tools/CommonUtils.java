@@ -64,7 +64,6 @@ public class CommonUtils {
     }
 
     public static void init(long deleteFileWaitTime, String absPathPrefix, String userPathPrefix, String fontPath) {
-        CommonUtils.init();
         CommonUtils.deleteFileWaitTime = deleteFileWaitTime;
         CommonUtils.absPathPrefix = absPathPrefix;
         if (isNullStr(CommonUtils.absPathPrefix)) {
