@@ -125,9 +125,9 @@ ext {
     （4）yml配置文件中增加数据源配置（单数据源或多数据源），数据库操作遵循 spring-data-jpa 标准，使用 hibernate 进行实例化
     （5）单数据源应用的话无需增加额外配置类，正常编写domain、repo、entity即可
     （6）多数据源应用需要增加对应每个数据源的 Jpa 配置类，并创建对应数据源的 repo、entity 包，之后再在对应包中编写 repo 和 entity
-    （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.springboot.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
-    （8）自定义系统初始化任务，新增任务类，继承 pers.acp.springboot.base.BaseInitialization 类
-    （9）自定义可控制监听器，新增监听器类，实现 pers.acp.springboot.interfaces.IListener 接口
+    （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.spring.boot.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
+    （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
+    （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
     （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 resources/config 中增加相应配置
     （11）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
 ##### 2. 配置说明
@@ -256,7 +256,7 @@ acp:
 
 [查看认证过程](doc/oauth2.0认证.md)
 
-> test:cloud:oauth-server 中增加 authorization_code 方式配置，详见 pers.acp.springcloud.oauth.conf.WebSecurityConfiguration 注释
+> test:cloud:oauth-server 中增加 authorization_code 方式配置，详见 pers.acp.spring.cloud.oauth.conf.WebSecurityConfiguration 注释
 
 > 注：使用 authorization_code 方式时，认证请求时需要直接访问 oauth-server 不能通过 gateway
 
@@ -309,7 +309,7 @@ http://127.0.0.1:5601
 ![Architecture diagram](doc/images/kibana.png)
 ### （三）组件开发
 ##### 全局说明
-> - 统一注入 pers.acp.springcloud.log.LogInstance 进行日志记录
+> - 统一注入 pers.acp.spring.cloud.log.LogInstance 进行日志记录
 ##### 1. 可视化监控
     test:cloud:admin-server
     （1）无需改动代码
@@ -388,7 +388,7 @@ http://127.0.0.1:5601
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication
-    （3）如需自定义日志消息处理，新增Bean实现 pers.acp.springcloud.log.consumer.LogProcess 接口，并且增加 @Primary 注解
+    （3）如需自定义日志消息处理，新增Bean实现 pers.acp.spring.cloud.log.consumer.LogProcess 接口，并且增加 @Primary 注解
     （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
         a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
         b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender
