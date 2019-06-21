@@ -3,7 +3,9 @@ package pers.acp.ftp;
 import pers.acp.core.CommonTools;
 import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.core.log.LogFactory;
+import pers.acp.ftp.base.InitServer;
 import pers.acp.ftp.conf.FTPConfig;
+import pers.acp.ftp.conf.FTPListener;
 import pers.acp.ftp.server.FTPServer;
 import pers.acp.ftp.user.UserFactory;
 
@@ -15,7 +17,7 @@ import java.util.List;
  * Created by zhangbin on 2016/12/20.
  * 初始化FTP服务器
  */
-public class InitFtpServer {
+public class InitFtpServer extends InitServer {
 
     /**
      * 日志对象
@@ -30,21 +32,19 @@ public class InitFtpServer {
             ftpServers = doStart(ftpConfig);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-        } finally {
-            log.info("start ftp servers finished!");
         }
         return ftpServers;
     }
 
-    public static List<IDaemonService> startFtpServer(FTPConfig ftpConfig) {
+    public static List<IDaemonService> startFtpServer(FTPConfig ftpConfig, List<UserFactory> userFactoryList) {
         log.info("start ftp servers ...");
+        userFactoryList.forEach(InitServer::addUserFactory);
         List<IDaemonService> ftpServers = new ArrayList<>();
         try {
             ftpServers = doStart(ftpConfig);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-        } finally {
-            log.info("start ftp servers finished!");
+            log.info("start ftp servers exception: " + e.getMessage());
         }
         return ftpServers;
     }
@@ -52,19 +52,18 @@ public class InitFtpServer {
     private static List<IDaemonService> doStart(FTPConfig ftpConfig) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         List<IDaemonService> ftpServers = new ArrayList<>();
         if (ftpConfig != null) {
-            List<FTPConfig.Listen> listens = ftpConfig.getListens();
+            List<FTPListener> listens = ftpConfig.getListens();
             if (listens != null) {
-                for (FTPConfig.Listen listen : listens) {
+                for (FTPListener listen : listens) {
                     if (listen.isEnabled()) {
                         String classname = listen.getUserFactoryClass();
                         if (!CommonTools.isNullStr(classname)) {
-                            UserFactory userFactory = (UserFactory) Class.forName(classname).getDeclaredConstructor().newInstance();
+                            UserFactory userFactory = getUserFactory(classname);
                             FTPServer ftpServer = new FTPServer(userFactory.generateFtpUserList(), listen);
                             Thread sub = new Thread(ftpServer);
                             sub.setDaemon(true);
                             sub.start();
                             ftpServers.add(ftpServer);
-                            log.info("start ftp server success [" + listen.getName() + "] port:" + listen.getPort());
                         } else {
                             log.info("start ftp server failed [" + listen.getName() + "] : user factory class is null");
                         }

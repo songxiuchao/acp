@@ -12,7 +12,7 @@ import java.util.List;
  * Created by zhangbin on 2016/12/21.
  * 用户认证类
  */
-class UserPublicKeyAuthcator implements PublickeyAuthenticator {
+class UserPublicKeyAuthenticator implements PublickeyAuthenticator {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
@@ -24,7 +24,7 @@ class UserPublicKeyAuthcator implements PublickeyAuthenticator {
 
     private String keyAuthType;
 
-    UserPublicKeyAuthcator(List<SFTPServerUser> userList, boolean needAuth, String keyAuthMode, String keyAuthType) {
+    UserPublicKeyAuthenticator(List<SFTPServerUser> userList, boolean needAuth, String keyAuthMode, String keyAuthType) {
         this.userList = userList;
         this.needAuth = needAuth;
         this.keyAuthMode = keyAuthMode;
@@ -37,14 +37,14 @@ class UserPublicKeyAuthcator implements PublickeyAuthenticator {
         if (needAuth) {
             boolean isexist = false;
             for (SFTPServerUser sftpServerUser : userList) {
-                if (sftpServerUser.isEnableflag()) {
+                if (sftpServerUser.isEnableFlag()) {
                     if (sftpServerUser.getUsername().equals(username)) {
                         isexist = true;
                         try {
                             PublicKey userPublicKey = getUserPublicKey(sftpServerUser.getPublicKey());
                             if (publicKey.equals(userPublicKey)) {
                                 result = true;
-                                log.info("sftp user [" + username + "] certificate authentication successfull");
+                                log.info("sftp user [" + username + "] certificate authentication successFull");
                             } else {
                                 result = false;
                                 log.error("sftp user [" + username + "] certificate authentication failed : certificate is invalid");

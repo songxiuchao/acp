@@ -114,7 +114,7 @@ public class FtpClient extends BaseClient {
                     ftpClient.enterRemotePassiveMode();
                     break;
             }
-            log.info("ftp server by hostname:{" + hostname + "} username:{" + username + "} is connect successfull");
+            log.info("ftp server by hostname:{" + hostname + "} username:{" + username + "} is connect successFull");
             return true;
         } catch (Exception e) {
             throw new Exception("ftp connect failed!");
@@ -243,7 +243,7 @@ public class FtpClient extends BaseClient {
             long lRemoteSize = files[0].getSize();
             File realFile = new File(localRealFile);
             if (realFile.exists()) {
-                log.info("ftp download successfull: " + localRealFile);
+                log.info("ftp download successFull: " + localRealFile);
                 return localRealFile;
             }
             File file = new File(localFile);
@@ -252,7 +252,7 @@ public class FtpClient extends BaseClient {
                 long localSize = file.length();
                 if (localSize == lRemoteSize) {
                     if (file.renameTo(realFile)) {
-                        log.info("ftp download successfull: " + localRealFile);
+                        log.info("ftp download successFull: " + localRealFile);
                         return localRealFile;
                     } else {
                         return "";
@@ -279,7 +279,7 @@ public class FtpClient extends BaseClient {
             ftpClient.disconnect();
             if (isDo) {
                 if (file.renameTo(realFile)) {
-                    log.info("ftp download successfull: " + localRealFile);
+                    log.info("ftp download successFull: " + localRealFile);
                     return localRealFile;
                 } else {
                     return "";
@@ -329,7 +329,7 @@ public class FtpClient extends BaseClient {
             ftpClient.logout();
             ftpClient.disconnect();
             if (uploadResult) {
-                log.info("ftp download successfull{" + localFile.getName() + "}: " + localFile.getAbsolutePath());
+                log.info("ftp download successFull{" + localFile.getName() + "}: " + localFile.getAbsolutePath());
             }
             return uploadResult;
         } catch (Exception e) {

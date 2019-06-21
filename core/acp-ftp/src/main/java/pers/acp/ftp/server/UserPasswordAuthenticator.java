@@ -10,15 +10,15 @@ import java.util.List;
  * Created by zhangbin on 2016/12/21.
  * 用户认证类
  */
-class UserPasswordAuthcator implements PasswordAuthenticator {
+class UserPasswordAuthenticator implements PasswordAuthenticator {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    private List<SFTPServerUser> userList = null;
+    private List<SFTPServerUser> userList;
 
     private boolean needAuth;
 
-    UserPasswordAuthcator(List<SFTPServerUser> userList, boolean needAuth) {
+    UserPasswordAuthenticator(List<SFTPServerUser> userList, boolean needAuth) {
         this.userList = userList;
         this.needAuth = needAuth;
     }
@@ -29,12 +29,12 @@ class UserPasswordAuthcator implements PasswordAuthenticator {
         if (needAuth) {
             boolean isexist = false;
             for (SFTPServerUser sftpServerUser : userList) {
-                if (sftpServerUser.isEnableflag()) {
+                if (sftpServerUser.isEnableFlag()) {
                     if (sftpServerUser.getUsername().equals(username)) {
                         isexist = true;
                         if (sftpServerUser.getPassword().equals(password)) {
                             result = true;
-                            log.info("sftp user [" + username + "] password authentication successfull");
+                            log.info("sftp user [" + username + "] password authentication successFull");
                             break;
                         } else {
                             log.error("sftp user [" + username + "] password authentication failed : password error");

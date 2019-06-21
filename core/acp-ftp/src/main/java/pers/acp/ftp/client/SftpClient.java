@@ -110,7 +110,7 @@ public class SftpClient extends BaseClient {
             sftp = (ChannelSftp) channel;
             rebuildSftp();
             sftp.setFilenameEncoding(serverCharset);
-            log.info(String.format("sftp server hostname:[%s] port:[%s] is connect successfull", hostname, port));
+            log.info(String.format("sftp server hostname:[%s] port:[%s] is connect successFull", hostname, port));
         } catch (Exception e) {
             log.error("Cannot connect to specified sftp server : {" + hostname + "}:{" + port + "} \n Exception message is: {" + e.getMessage() + "}");
             throw new SFTPException(e.getMessage());
@@ -186,13 +186,13 @@ public class SftpClient extends BaseClient {
             String localRealFile = localPath + File.separator + fileName;
             File realFile = new File(localRealFile);
             if (realFile.exists()) {
-                log.info("sftp download successfull: " + localRealFile);
+                log.info("sftp download successFull: " + localRealFile);
                 return localRealFile;
             }
             File file = new File(localFile);
             sftp.get(remoteFile, localFile, null, channelMode);
             if (file.renameTo(realFile)) {
-                log.info("sftp download successfull: " + localRealFile);
+                log.info("sftp download successFull: " + localRealFile);
                 return localRealFile;
             } else {
                 return "";

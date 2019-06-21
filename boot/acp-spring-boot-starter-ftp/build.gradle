@@ -1,0 +1,16 @@
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
+    }
+}
+apply plugin: "io.spring.dependency-management"
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$versions.spring_boot"
+    }
+}
+dependencies {
+    compile project(":core:acp-ftp")
+    compile project(":boot:acp-spring-boot-starter")
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}

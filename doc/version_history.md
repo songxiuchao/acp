@@ -6,6 +6,7 @@
 > - [Upgrade] acp-spring-boot-start 模块从 core 模块中移入 boot 模块，包名更新为 pers.acp.spring.boot
 > - [Upgrade] acp-spring-boot-start-common 模块更名为 acp-spring-boot-start，包名更新为 pers.acp.spring.cloud
 > - [Upgrade] 修改 ftp、sftp、webservice 服务启动方式及配置方式，同时在使用 spring boot 的情况下去除 acp.properties 配置文件
+> - [Upgrade] 增加 acp-spring-boot-starter-ftp 模块，自动配置ftp及sftp服务
 > - [Upgrade] 升级依赖项
 >   - Apache HttpClient to 4.5.9
 >   - jackson to 2.9.9

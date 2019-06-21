@@ -129,7 +129,7 @@ ext {
     （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
     （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
     （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 resources/config 中增加相应配置
-    （11）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
+    （11）如有需要，可选择引入 acp-file、acp-message、acp-webservice、acp-spring-boot-starter-ftp 等包
 ##### 2. 配置说明
 - 定制开发的 api 接口，开启 swagger 文档
 ```yaml
