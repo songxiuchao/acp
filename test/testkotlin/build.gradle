@@ -29,7 +29,7 @@ compileTestKotlin {
 }
 
 dependencies {
-    compile project(":core:acp-spring-boot-starter")
+    compile project(":boot:acp-spring-boot-starter")
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
     compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"

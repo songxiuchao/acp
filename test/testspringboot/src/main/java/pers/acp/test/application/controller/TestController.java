@@ -16,9 +16,11 @@ import pers.acp.core.log.LogFactory;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangbin on 2017/4/26.
@@ -87,6 +89,22 @@ public class TestController {
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("result2", str);
         return ResponseEntity.ok(objectNode.toString());
+    }
+
+    @ApiOperation(value = "测试 rest 接口", notes = "参数为Map<String, Object>")
+    @RequestMapping(value = "/map", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Object> postMap(@RequestBody Map<String, Object> body) throws IOException {
+        log.info("params:");
+        body.forEach((key, value) -> log.info("key=" + key + " value=" + value));
+        return ResponseEntity.ok(mapper.writeValueAsString(body));
+    }
+
+    @ApiOperation(value = "测试 rest 接口", notes = "参数为Map<String, Object>")
+    @RequestMapping(value = "/mapform", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Object> postMapForm(@RequestParam Map<String, Object> body) throws IOException {
+        log.info("params:");
+        body.forEach((key, value) -> log.info("key=" + key + " value=" + value));
+        return ResponseEntity.ok(mapper.writeValueAsString(body));
     }
 
 }

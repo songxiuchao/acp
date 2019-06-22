@@ -13,11 +13,12 @@ import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 import pers.acp.core.interfaces.IDaemonService;
-import pers.acp.core.security.SignatureUtils;
-import pers.acp.ftp.config.FTPConfig;
+import pers.acp.core.security.SHA1Utils;
+import pers.acp.core.security.SHA256Utils;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.security.MD5Utils;
+import pers.acp.ftp.conf.FTPListener;
 import pers.acp.ftp.exceptions.FTPServerException;
 
 import java.util.ArrayList;
@@ -33,11 +34,11 @@ public class FTPServer implements Runnable, IDaemonService {
 
     private List<FTPServerUser> userList;
 
-    private FTPConfig.Listen listen;
+    private FTPListener listen;
 
-    private FtpServer ftpServerInstence = null;
+    private FtpServer ftpServerInstance = null;
 
-    public FTPServer(List<FTPServerUser> userList, FTPConfig.Listen listen) {
+    public FTPServer(List<FTPServerUser> userList, FTPListener listen) {
         this.userList = userList;
         this.listen = listen;
     }
@@ -49,8 +50,8 @@ public class FTPServer implements Runnable, IDaemonService {
 
     @Override
     public void stopService() {
-        if (ftpServerInstence != null) {
-            ftpServerInstence.stop();
+        if (ftpServerInstance != null) {
+            ftpServerInstance.stop();
         }
     }
 
@@ -80,7 +81,10 @@ public class FTPServer implements Runnable, IDaemonService {
                             result = MD5Utils.encrypt(pwd);
                             break;
                         case "SHA1":
-                            result = SignatureUtils.encrypt(pwd, SignatureUtils.SHA1);
+                            result = SHA1Utils.encrypt(pwd);
+                            break;
+                        case "SHA256":
+                            result = SHA256Utils.encrypt(pwd);
                             break;
                         default:
                             result = null;
@@ -109,8 +113,8 @@ public class FTPServer implements Runnable, IDaemonService {
                     BaseUser user = new BaseUser();
                     user.setName(ftpServerUser.getUsername());
                     user.setPassword(ftpServerUser.getPassword());
-                    user.setEnabled(ftpServerUser.isEnableflag());
-                    String homeDirectory = ftpServerUser.getHomedirectory();
+                    user.setEnabled(ftpServerUser.isEnableFlag());
+                    String homeDirectory = ftpServerUser.getHomeDirectory();
                     if (CommonTools.isNullStr(homeDirectory)) {
                         user.setHomeDirectory(defaultHomeDirectory);
                     } else {
@@ -140,9 +144,9 @@ public class FTPServer implements Runnable, IDaemonService {
                     throw new FTPServerException("no user set");
                 }
             }
-            ftpServerInstence = serverFactory.createServer();
-            ftpServerInstence.start();
-            log.info("ftp server [" + listen.getName() + "] is started , path : " + defaultHomeDirectory);
+            ftpServerInstance = serverFactory.createServer();
+            ftpServerInstance.start();
+            log.info("ftp server [" + listen.getName() + "] is started, port : " + listen.getPort() + ", path : " + defaultHomeDirectory);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             log.error("start ftp server failed [" + listen.getName() + "] port:" + listen.getPort());
