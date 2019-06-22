@@ -24,7 +24,15 @@ public final class CommonTools {
     private static final LogFactory log = LogFactory.getInstance(CommonTools.class);
 
     public static void initTools() {
-        log.info("default charset is : " + getDefaultCharset());
+        CommonUtils.init();
+    }
+
+    public static void initTools(long deleteFileWaitTime, String absPathPrefix, String userPathPrefix, String fontPath) {
+        CommonUtils.init(deleteFileWaitTime, absPathPrefix, userPathPrefix, fontPath);
+    }
+
+    public static String getFontFold() {
+        return CommonUtils.fontPath;
     }
 
     /**

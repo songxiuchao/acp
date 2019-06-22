@@ -1,10 +1,9 @@
 # acp 
-###### v5.1.5 [版本更新日志](doc/version_history.md)
+###### v5.2.0 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
-从 5.1.2 开始，小版本号与 SpringBoot 小版本号一致
 
 ## 相关组件版本及官方文档
-- [Spring Boot 2.1.5.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Boot 2.1.6.RELEASE](https://projects.spring.io/spring-boot)
 - [Spring Cloud Greenwich.SR1](http://projects.spring.io/spring-cloud)
 
 ## 技术栈
@@ -126,11 +125,11 @@ ext {
     （4）yml配置文件中增加数据源配置（单数据源或多数据源），数据库操作遵循 spring-data-jpa 标准，使用 hibernate 进行实例化
     （5）单数据源应用的话无需增加额外配置类，正常编写domain、repo、entity即可
     （6）多数据源应用需要增加对应每个数据源的 Jpa 配置类，并创建对应数据源的 repo、entity 包，之后再在对应包中编写 repo 和 entity
-    （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.springboot.core.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
-    （8）自定义系统初始化任务，新增任务类，继承 pers.acp.springboot.core.base.BaseInitialization 类
-    （9）自定义可控制监听器，新增监听器类，实现 pers.acp.springboot.core.interfaces.IListener 接口
-    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 resources/config 中增加相应配置
-    （11）如有需要，可选择引入 acp-file、acp-ftp、acp-message、acp-webservice 等包
+    （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.spring.boot.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
+    （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
+    （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
+    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 application-dev.xml 中增加相应配置
+    （11）如有需要，可选择引入 acp-file、acp-message、acp-webservice、acp-spring-boot-starter-ftp、acp-spring-boot-starter-ws 等包
 ##### 2. 配置说明
 - 定制开发的 api 接口，开启 swagger 文档
 ```yaml
@@ -162,17 +161,17 @@ acp:
 acp:
   tcp-server:
     listeners:
-      - name: testSocket                  #监听服务名称
-        enabled: true                     #是否启用，默认false
-        keepAlive: false                  #是否为长连接，默认false；TCP服务有效
-        idletime: 10000                   #连接进入空闲状态的等待时间单位毫秒，默认10000；TCP服务有效
-        messageDecoder: ""                #粘包拆包解码器 Bean 名称，默认不设置；TCP服务有效
-        threadNumber: 100                 #接收报文处理的最大线程数，为0或不设置则使用系统默认线程数；TCP服务有效
-        hex: false                        #接收报文是否是十六进制机器码，默认false
-        port: 9999                        #监听端口号
-        handleBean: TestTcpHandle         #报文接收处理的 Bean 名称
-        responsable: true                 #报文是否需要进行原路响应，默认true
-        charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集
+      - name: testSocket                                                     #监听服务名称
+        enabled: true                                                        #是否启用，默认false
+        keepAlive: false                                                     #是否为长连接，默认false；TCP服务有效
+        idletime: 10000                                                      #连接进入空闲状态的等待时间单位毫秒，默认10000；TCP服务有效
+        messageDecoder: ""                                                   #粘包拆包解码器 Bean 的类名，默认不设置；TCP服务有效
+        threadNumber: 100                                                    #接收报文处理的最大线程数，为0或不设置则使用系统默认线程数；TCP服务有效
+        hex: false                                                           #接收报文是否是十六进制机器码，默认false
+        port: 9999                                                           #监听端口号
+        handleBean: pers.acp.test.application.test.TestTcpHandle             #报文接收处理 Bean 的类名
+        responsable: true                                                    #报文是否需要进行原路响应，默认true
+        charset: gbk                                                         #服务使用字符集，为空或不设置则系统默认字符集
 ```
 
 - udp 服务端
@@ -180,13 +179,59 @@ acp:
 acp:
   udp-server:
     listeners: 
-      - name: testSocket                  #监听服务名称
-        enabled: true                     #是否启用，默认false
-        hex: false                        #接收报文是否是十六进制机器码，默认false
-        port: 9999                        #监听端口号
-        handleBean: TestTcpHandle         #报文接收处理的 Bean 名称
-        responsable: true                 #报文是否需要进行原路响应，默认true
-        charset: gbk                      #服务使用字符集，为空或不设置则系统默认字符集
+      - name: testSocket                                                     #监听服务名称
+        enabled: true                                                        #是否启用，默认false
+        hex: false                                                           #接收报文是否是十六进制机器码，默认false
+        port: 9999                                                           #监听端口号
+        handleBean: pers.acp.test.application.test.TestTcpHandle             #报文接收处理 Bean 的类名
+        responsable: true                                                    #报文是否需要进行原路响应，默认true
+        charset: gbk
+```
+
+- ftp 服务端
+```yaml
+acp:
+  ftp-server:
+    listeners:
+      - name: "测试ftp服务器"                                                 #服务名车鞥
+        enabled: true                                                        #可空，是否启用，默认false
+        port: 221                                                            #服务端口号
+        pwd-encrypt-mode: MD5                                                #可空，用户密码加密方式（支持MD5、SHA1、SHA256），默认MD5
+        login-failure-delay: 30                                              #可空，默认30
+        max-login-failures: 20                                               #可空，默认20
+        max-logins: 10                                                       #可空，默认10
+        max-anonymous-logins: 20                                             #可空，默认20
+        max-threads: 10                                                      #可空，默认10
+        default-home-directory: "abs:D:\\个人\\测试ftp"                       #默认根路径
+        anonymous-login-enabled: false                                       #可空，是否允许匿名用户登录，默认false
+        anonymous-write-permission: false                                    #可空，是否允许匿名用户写操作，默认false
+        user-factory-class: pers.acp.test.application.test.TestUserFactory   #用户工厂类
+```
+
+- sftp 服务端
+```yaml
+acp:
+  sftp-server:
+    listeners:
+      - name: "测试sftp服务器"                                                #服务名称
+        enabled: true                                                        #可空，是否启用，默认false
+        port: 4221                                                           #服务端口号
+        host-key-path: "files/resource/key/hostkey"                          #服务器密钥文件路径
+        password-auth: true                                                  #可空，是否进行密码登录，默认true
+        public-key-auth: false                                               #可空，是否进行证书登录（开启后仅支持证书验证），用户证书只支持openssh生成的密钥，默认false
+        key-auth-type: pem                                                   #可空，证书类型（der/pem/ssh），默认pem
+        key-auth-mode: RSA                                                   #可空，证书验证模式（RSA/DSA），默认RSA
+        default-home-directory: "abs:D:\\个人\\测试ftp"                       #默认根路径
+        user-factory-class: pers.acp.test.application.test.TestUserFactory   #用户工厂类
+```
+
+- webservice 服务端
+```yaml
+acp:
+  ws-server:
+    server:
+      - class-name: pers.acp.test.application.test.TestWebService            #webservice类
+        href: "http://127.0.0.1:8081/ws"                                     #访问地址 http://host:port
 ```
 
 ### （三）启停 springboot 应用
@@ -257,7 +302,7 @@ acp:
 
 [查看认证过程](doc/oauth2.0认证.md)
 
-> test:cloud:oauth-server 中增加 authorization_code 方式配置，详见 pers.acp.springcloud.oauth.conf.WebSecurityConfiguration 注释
+> test:cloud:oauth-server 中增加 authorization_code 方式配置，详见 pers.acp.spring.cloud.oauth.conf.WebSecurityConfiguration 注释
 
 > 注：使用 authorization_code 方式时，认证请求时需要直接访问 oauth-server 不能通过 gateway
 
@@ -310,7 +355,7 @@ http://127.0.0.1:5601
 ![Architecture diagram](doc/images/kibana.png)
 ### （三）组件开发
 ##### 全局说明
-> - 统一注入 pers.acp.springcloud.common.log.LogInstance 进行日志记录
+> - 统一注入 pers.acp.spring.cloud.log.LogInstance 进行日志记录
 ##### 1. 可视化监控
     test:cloud:admin-server
     （1）无需改动代码
@@ -389,7 +434,7 @@ http://127.0.0.1:5601
 ##### 7. 日志服务（依赖 kafka）
     （1）引入 cloud:acp-spring-cloud-starter-common
     （2）入口类增加注解 @AcpCloudAtomApplication
-    （3）如需自定义日志消息处理，新增Bean实现 pers.acp.springcloud.common.log.consumer.LogProcess 接口，并且增加 @Primary 注解
+    （3）如需自定义日志消息处理，新增Bean实现 pers.acp.spring.cloud.log.consumer.LogProcess 接口，并且增加 @Primary 注解
     （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
         a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
         b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender

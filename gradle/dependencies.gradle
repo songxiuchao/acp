@@ -13,7 +13,7 @@ versions += [
         slf4j           : "1.7.26",
         logback         : "1.2.3",
         xstream         : "1.4.11.1",
-        jackson_databind: "2.9.8",
+        jackson_databind: "2.9.9",
 
         hikaricp        : "3.2.0",
         mysql           : "8.0.16",
@@ -22,7 +22,7 @@ versions += [
         postgresql      : "42.2.5",
 
         jaxb_runtime    : "2.3.2",
-        spring_boot     : "2.1.5.RELEASE",
+        spring_boot     : "2.1.6.RELEASE",
         spring_cloud    : "Greenwich.SR1",
         swagger         : "2.9.2"
 ]

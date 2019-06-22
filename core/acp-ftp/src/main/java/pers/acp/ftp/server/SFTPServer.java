@@ -13,7 +13,7 @@ import org.apache.sshd.sftp.subsystem.SftpSubsystem;
 import pers.acp.core.CommonTools;
 import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.core.log.LogFactory;
-import pers.acp.ftp.config.SFTPConfig;
+import pers.acp.ftp.conf.SFTPListener;
 import pers.acp.ftp.exceptions.SFTPServerException;
 
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class SFTPServer implements Runnable, IDaemonService {
 
     private List<SFTPServerUser> userList;
 
-    private SFTPConfig.Listen listen;
+    private SFTPListener listen;
 
     private SshServer sshServer = null;
 
-    public SFTPServer(List<SFTPServerUser> userList, SFTPConfig.Listen listen) {
+    public SFTPServer(List<SFTPServerUser> userList, SFTPListener listen) {
         this.userList = userList;
         this.listen = listen;
     }
@@ -93,9 +93,9 @@ public class SFTPServer implements Runnable, IDaemonService {
             String keyPath = CommonTools.getAbsPath(listen.getHostKeyPath());
             if (listen.isPublicKeyAuth()) {
                 sshServer.getProperties().put(SshServer.AUTH_METHODS, "publickey");
-                sshServer.setPublickeyAuthenticator(new UserPublicKeyAuthcator(userList, true, keyAuthMode, keyAuthType));
+                sshServer.setPublickeyAuthenticator(new UserPublicKeyAuthenticator(userList, true, keyAuthMode, keyAuthType));
             } else {
-                sshServer.setPublickeyAuthenticator(new UserPublicKeyAuthcator(userList, false, keyAuthMode, keyAuthType));
+                sshServer.setPublickeyAuthenticator(new UserPublicKeyAuthenticator(userList, false, keyAuthMode, keyAuthType));
             }
             sshServer.setCommandFactory(new ScpCommandFactory());
             sshServer.setShellFactory(new ProcessShellFactory());
@@ -103,9 +103,9 @@ public class SFTPServer implements Runnable, IDaemonService {
             namedFactoryList.add(new SftpSubsystem.Factory());
             sshServer.setSubsystemFactories(namedFactoryList);
             if (!listen.isPublicKeyAuth() && listen.isPasswordAuth()) {
-                sshServer.setPasswordAuthenticator(new UserPasswordAuthcator(userList, true));
+                sshServer.setPasswordAuthenticator(new UserPasswordAuthenticator(userList, true));
             } else {
-                sshServer.setPasswordAuthenticator(new UserPasswordAuthcator(userList, false));
+                sshServer.setPasswordAuthenticator(new UserPasswordAuthenticator(userList, false));
             }
             if (SecurityUtils.isBouncyCastleRegistered()) {
                 sshServer.setKeyPairProvider(new PEMGeneratorHostKeyProvider(keyPath + ".pem", keyAuthMode));
@@ -114,7 +114,7 @@ public class SFTPServer implements Runnable, IDaemonService {
             }
             VirtualFileSystemFactory virtualFileSystemFactory = new VirtualFileSystemFactory(defaultHomeDirectory);
             for (SFTPServerUser sftpServerUser : userList) {
-                String homeDirectory = sftpServerUser.getHomedirectory();
+                String homeDirectory = sftpServerUser.getHomeDirectory();
                 if (CommonTools.isNullStr(homeDirectory)) {
                     virtualFileSystemFactory.setUserHomeDir(sftpServerUser.getUsername(), defaultHomeDirectory);
                 } else {
@@ -131,7 +131,7 @@ public class SFTPServer implements Runnable, IDaemonService {
             }
             sshServer.setFileSystemFactory(virtualFileSystemFactory);
             sshServer.start();
-            log.info("sftp server [" + listen.getName() + "] is started , path : " + defaultHomeDirectory);
+            log.info("sftp server [" + listen.getName() + "] is started, port : " + listen.getPort() + ", path : " + defaultHomeDirectory);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             log.error("start sftp server failed [" + listen.getName() + "] port:" + listen.getPort());
