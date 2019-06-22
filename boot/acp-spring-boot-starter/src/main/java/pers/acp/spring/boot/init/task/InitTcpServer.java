@@ -25,7 +25,7 @@ public final class InitTcpServer extends BaseInitTask {
 
     private final List<ByteToMessageDecoder> byteToMessageDecoderList;
 
-    @Autowired
+    @Autowired(required = false)
     public InitTcpServer(TcpServerConfiguration tcpServerConfiguration, List<ISocketServerHandle> socketServerHandleList, List<ByteToMessageDecoder> byteToMessageDecoderList) {
         this.tcpServerConfiguration = tcpServerConfiguration;
         this.socketServerHandleList = socketServerHandleList;
