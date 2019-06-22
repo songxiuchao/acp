@@ -158,6 +158,7 @@ acp:
 
 - tcp 服务端
 ```yaml
+acp:
   tcp-server:
     listeners:
       - name: testSocket                                                     #监听服务名称
