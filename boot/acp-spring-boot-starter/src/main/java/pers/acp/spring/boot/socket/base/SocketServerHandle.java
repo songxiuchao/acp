@@ -15,7 +15,7 @@ import java.nio.charset.Charset;
  * @author zhang by 04/03/2019
  * @since JDK 11
  */
-public abstract class SockertServerHandle extends ChannelInboundHandlerAdapter {
+public abstract class SocketServerHandle extends ChannelInboundHandlerAdapter {
 
     protected final LogFactory log = LogFactory.getInstance(this.getClass());
 
@@ -23,7 +23,7 @@ public abstract class SockertServerHandle extends ChannelInboundHandlerAdapter {
 
     protected ISocketServerHandle socketServerHandle;
 
-    public SockertServerHandle(SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle) {
+    public SocketServerHandle(SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle) {
         this.socketListenerConfiguration = socketListenerConfiguration;
         this.socketServerHandle = socketServerHandle;
     }

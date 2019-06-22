@@ -39,7 +39,9 @@ public class InitSFtpServer extends InitServer {
 
     public static List<IDaemonService> startSFtpServer(SFTPConfig sftpConfig, List<UserFactory> userFactoryList) {
         log.info("start sftp servers ...");
-        userFactoryList.forEach(InitServer::addUserFactory);
+        if (userFactoryList != null && userFactoryList.size() > 0) {
+            userFactoryList.forEach(InitServer::addUserFactory);
+        }
         List<IDaemonService> sftpServers = new ArrayList<>();
         try {
             sftpServers = doStart(sftpConfig);

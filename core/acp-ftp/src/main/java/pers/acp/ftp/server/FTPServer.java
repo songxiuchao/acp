@@ -36,7 +36,7 @@ public class FTPServer implements Runnable, IDaemonService {
 
     private FTPListener listen;
 
-    private FtpServer ftpServerInstence = null;
+    private FtpServer ftpServerInstance = null;
 
     public FTPServer(List<FTPServerUser> userList, FTPListener listen) {
         this.userList = userList;
@@ -50,8 +50,8 @@ public class FTPServer implements Runnable, IDaemonService {
 
     @Override
     public void stopService() {
-        if (ftpServerInstence != null) {
-            ftpServerInstence.stop();
+        if (ftpServerInstance != null) {
+            ftpServerInstance.stop();
         }
     }
 
@@ -144,9 +144,9 @@ public class FTPServer implements Runnable, IDaemonService {
                     throw new FTPServerException("no user set");
                 }
             }
-            ftpServerInstence = serverFactory.createServer();
-            ftpServerInstence.start();
-            log.info("ftp server [" + listen.getName() + "] is started , path : " + defaultHomeDirectory);
+            ftpServerInstance = serverFactory.createServer();
+            ftpServerInstance.start();
+            log.info("ftp server [" + listen.getName() + "] is started, port : " + listen.getPort() + ", path : " + defaultHomeDirectory);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             log.error("start ftp server failed [" + listen.getName() + "] port:" + listen.getPort());

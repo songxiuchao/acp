@@ -131,7 +131,7 @@ public class SFTPServer implements Runnable, IDaemonService {
             }
             sshServer.setFileSystemFactory(virtualFileSystemFactory);
             sshServer.start();
-            log.info("sftp server [" + listen.getName() + "] is started , path : " + defaultHomeDirectory);
+            log.info("sftp server [" + listen.getName() + "] is started, port : " + listen.getPort() + ", path : " + defaultHomeDirectory);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             log.error("start sftp server failed [" + listen.getName() + "] port:" + listen.getPort());

@@ -6,12 +6,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
-import pers.acp.core.CommonTools;
 import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.spring.boot.socket.base.ISocketServerHandle;
 import pers.acp.spring.boot.conf.SocketListenerConfiguration;
 import pers.acp.core.log.LogFactory;
-import pers.acp.spring.boot.tools.SpringBeanFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,15 +17,17 @@ public final class TcpServer implements IDaemonService, Runnable {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    private int port;
+    private final int port;
 
-    private EventLoopGroup bossGroup;
+    private final EventLoopGroup bossGroup;
 
-    private EventLoopGroup workerGroup;
+    private final EventLoopGroup workerGroup;
 
-    private SocketListenerConfiguration socketListenerConfiguration;
+    private final SocketListenerConfiguration socketListenerConfiguration;
 
-    private ISocketServerHandle socketServerHandle;
+    private final ISocketServerHandle socketServerHandle;
+
+    private final ByteToMessageDecoder messageDecoder;
 
     /**
      * 构造函数
@@ -36,23 +36,19 @@ public final class TcpServer implements IDaemonService, Runnable {
      * @param socketListenerConfiguration 监听服务配置
      * @param socketServerHandle          接收报文处理对象
      */
-    public TcpServer(int port, SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle) {
+    public TcpServer(int port, SocketListenerConfiguration socketListenerConfiguration, ISocketServerHandle socketServerHandle, ByteToMessageDecoder messageDecoder) {
         this.port = port;
         this.bossGroup = new NioEventLoopGroup();
         this.workerGroup = new NioEventLoopGroup(socketListenerConfiguration.getThreadNumber());
         this.socketListenerConfiguration = socketListenerConfiguration;
         this.socketServerHandle = socketServerHandle;
+        this.messageDecoder = messageDecoder;
     }
 
     @Override
     public void run() {
         if (this.socketServerHandle != null) {
-            ByteToMessageDecoder messageDecoder = null;
-            if (!CommonTools.isNullStr(socketListenerConfiguration.getMessageDecoder())) {
-                messageDecoder = (ByteToMessageDecoder) SpringBeanFactory.getBean(socketListenerConfiguration.getMessageDecoder());
-            }
             ServerBootstrap bootstrap = new ServerBootstrap();
-            ByteToMessageDecoder finalMessageDecoder = messageDecoder;
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
@@ -61,8 +57,8 @@ public final class TcpServer implements IDaemonService, Runnable {
                     .childHandler(new ChannelInitializer<>() {
                         @Override
                         protected void initChannel(Channel ch) {
-                            if (finalMessageDecoder != null) {
-                                ch.pipeline().addLast(finalMessageDecoder);
+                            if (messageDecoder != null) {
+                                ch.pipeline().addLast(messageDecoder);
                             }
                             if (socketListenerConfiguration.isKeepAlive()) {
                                 ch.pipeline().addLast(new IdleStateHandler(socketListenerConfiguration.getIdletime(), socketListenerConfiguration.getIdletime(), socketListenerConfiguration.getIdletime(), TimeUnit.MILLISECONDS));

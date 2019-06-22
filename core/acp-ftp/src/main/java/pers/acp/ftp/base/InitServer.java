@@ -19,7 +19,7 @@ public abstract class InitServer {
     }
 
     protected static UserFactory getUserFactory(String className) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        UserFactory userFactory = userFactoryMap.get(className);
+        UserFactory userFactory = userFactoryMap.getOrDefault(className, null);
         if (userFactory == null) {
             userFactory = (UserFactory) Class.forName(className).getDeclaredConstructor().newInstance();
         }
