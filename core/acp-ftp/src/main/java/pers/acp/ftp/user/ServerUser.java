@@ -22,20 +22,20 @@ public abstract class ServerUser {
         this.password = password;
     }
 
-    public String getHomedirectory() {
-        return homedirectory;
+    public String getHomeDirectory() {
+        return homeDirectory;
     }
 
-    public void setHomedirectory(String homedirectory) {
-        this.homedirectory = homedirectory;
+    public void setHomeDirectory(String homeDirectory) {
+        this.homeDirectory = homeDirectory;
     }
 
-    public boolean isEnableflag() {
-        return enableflag;
+    public boolean isEnableFlag() {
+        return enableFlag;
     }
 
-    public void setEnableflag(boolean enableflag) {
-        this.enableflag = enableflag;
+    public void setEnableFlag(boolean enableFlag) {
+        this.enableFlag = enableFlag;
     }
 
     /**
@@ -51,11 +51,11 @@ public abstract class ServerUser {
     /**
      * 可访问路径
      */
-    private String homedirectory;
+    private String homeDirectory = "/";
 
     /**
      * 是否启用
      */
-    private boolean enableflag;
+    private boolean enableFlag = true;
 
 }

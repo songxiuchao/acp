@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import org.springframework.web.bind.annotation.*
 import pers.acp.core.log.LogFactory
-import pers.acp.springboot.core.enums.ResponseCode
-import pers.acp.springboot.core.exceptions.ServerException
+import pers.acp.spring.boot.enums.ResponseCode
+import pers.acp.spring.boot.exceptions.ServerException
 
 /**
  * @author zhangbin by 28/04/2018 13:06

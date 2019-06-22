@@ -21,7 +21,7 @@ public class TestUserFactory implements UserFactory {
         FTPServerUser ftpServerUser = new FTPServerUser();
         ftpServerUser.setUsername("zb");
         ftpServerUser.setPassword("1");
-        ftpServerUser.setEnableflag(true);
+        ftpServerUser.setEnableFlag(true);
         ftpServerUser.setWritepermission(true);
         userList.add(ftpServerUser);
         return userList;
@@ -39,7 +39,7 @@ public class TestUserFactory implements UserFactory {
         //yjy
 //        sftpServerUser.setPublicKey("AAAAB3NzaC1yc2EAAAADAQABAAABAQCrEkxHw/rCPEB/Xh8vfchtxXIyLnGDnAOXFnIwRLXt+WS9yyir8zi/XJJhXC7zFa5eUHQM+Ji+PFYDEL4tIlhnAWPzt+W6q5Ov69TeBg6pNkSWq//Shvc7NqYn7yjp3aJQHbtI+Zp7fu+kSvcDR+lszI0M/eHLZ0P6J9DHLk54oBGfWWY5KHMr/PHnG3hiP6NbObyBRXB28XEFsCY3bhiLTjHnnGfw4B4Z3DBALX6SDRxyJUFBRaZ9YXr0hlbPOPhkUqZ+IYmu7eHdgObMSIKgOXj0YRHrKtcZ+NXdqDaaBPKnydpJzycniYvmEcvx62mdsgKO9eGyesaG8Q+kxIcp");
         sftpServerUser.setPublicKey(CommonTools.getAbsPath("/files/resource/userpkey/rsa_public_key.pem"));
-        sftpServerUser.setEnableflag(true);
+        sftpServerUser.setEnableFlag(true);
         userList.add(sftpServerUser);
         return userList;
     }

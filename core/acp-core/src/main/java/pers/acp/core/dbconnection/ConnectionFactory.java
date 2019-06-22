@@ -143,9 +143,9 @@ public final class ConnectionFactory {
      * @return 数据库操作工厂
      */
     private BaseDBInstance produceDBInstance() throws Exception {
-        String fname = dbType.getInstanceName();
-        String classname = ConnectionFactory.class.getCanonicalName();
-        Class<?> cls = Class.forName(classname.substring(0, classname.lastIndexOf(".")) + ".factory." + fname);
+        String name = dbType.getInstanceName();
+        String className = ConnectionFactory.class.getCanonicalName();
+        Class<?> cls = Class.forName(className.substring(0, className.lastIndexOf(".")) + ".factory." + name);
         return (BaseDBInstance) cls.getDeclaredConstructor().newInstance();
     }
 

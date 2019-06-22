@@ -36,7 +36,7 @@ public class FontLoader {
      * @return 文件夹路径
      */
     private static String getFontFold() {
-        String path = CommonTools.getAbsPath(CommonTools.getProperties("fonts.fold", "/files/resource/font"));
+        String path = CommonTools.getAbsPath(CommonTools.getFontFold());
         File fold = new File(path);
         if (!fold.exists()) {
             if (!fold.mkdirs()) {

@@ -45,7 +45,39 @@ public class CommonUtils {
 
     private static String DEFAULT_CHARSET = "utf-8";
 
+    private static Long deleteFileWaitTime;
+
+    private static String absPathPrefix;
+
+    private static String userPathPrefix;
+
+    public static String fontPath;
+
     private static final LogFactory log = LogFactory.getInstance(CommonUtils.class);
+
+    public static void init() {
+        log.info("default charset is : " + getDefaultCharset());
+        deleteFileWaitTime = 1200000L;
+        absPathPrefix = getProperties("absPath.prefix", "abs:");
+        userPathPrefix = getProperties("userPath.prefix", "user:");
+        fontPath = getProperties("fonts.fold", "files/resource/font");
+    }
+
+    public static void init(long deleteFileWaitTime, String absPathPrefix, String userPathPrefix, String fontPath) {
+        CommonUtils.deleteFileWaitTime = deleteFileWaitTime;
+        CommonUtils.absPathPrefix = absPathPrefix;
+        if (isNullStr(CommonUtils.absPathPrefix)) {
+            CommonUtils.absPathPrefix = getProperties("absPath.prefix", "abs:");
+        }
+        CommonUtils.userPathPrefix = userPathPrefix;
+        if (isNullStr(CommonUtils.userPathPrefix)) {
+            CommonUtils.userPathPrefix = getProperties("userPath.prefix", "user:");
+        }
+        CommonUtils.fontPath = fontPath;
+        if (isNullStr(CommonUtils.fontPath)) {
+            CommonUtils.fontPath = getProperties("fonts.fold", "files/resource/font");
+        }
+    }
 
     /**
      * 获取系统默认字符集
@@ -123,9 +155,7 @@ public class CommonUtils {
      * @return 是否是绝对路径
      */
     public static boolean isAbsPath(String path) {
-        String prefix = getProperties("absPath.prefix", "abs:");
-        String prefixU = getProperties("userPath.prefix", "user:");
-        return path.startsWith(prefix) || !(path.startsWith(prefixU) || path.startsWith("/") || path.startsWith("\\") || path.startsWith(File.separator));
+        return path.startsWith(absPathPrefix);
     }
 
     /**
@@ -137,14 +167,14 @@ public class CommonUtils {
     public static String getAbsPath(String srcPath) {
         String path = srcPath.replace("\\", File.separator).replace("/", File.separator);
         if (isAbsPath(path)) {
-            String prefix = getProperties("absPath.prefix", "abs:");
+            String prefix = absPathPrefix;
             if (path.startsWith(prefix)) {
                 return path.substring(prefix.length());
             } else {
                 return path;
             }
         } else {
-            String prefix = getProperties("userPath.prefix", "user:");
+            String prefix = userPathPrefix;
             if (path.startsWith(prefix)) {
                 return System.getProperty("user.home") + path.substring(prefix.length());
             } else {
@@ -848,12 +878,18 @@ public class CommonUtils {
      * @param isSync 是否异步删除
      */
     public static void doDeleteFile(final File file, boolean isSync) {
-        String waitTimeStr = getProperties("deleteFile.waitTime");
-        if (isNullStr(waitTimeStr)) {
-            waitTimeStr = "1200000";
+        Long waitTime;
+        if (deleteFileWaitTime != null) {
+            waitTime = deleteFileWaitTime;
+        } else {
+            String waitTimeStr = getProperties("deleteFile.waitTime");
+            if (isNullStr(waitTimeStr)) {
+                waitTime = 1200000L;
+            } else {
+                waitTime = Long.valueOf(waitTimeStr);
+            }
         }
-        if (isSync && Long.valueOf(waitTimeStr) >= 0) {
-            long waitTime = Long.valueOf(waitTimeStr);
+        if (isSync && waitTime >= 0) {
             doDeleteFile(file, true, waitTime);
         } else {
             doDeleteFile(file, false, 0);

@@ -59,7 +59,7 @@ public class FTPServerUser extends ServerUser {
     /**
      * 是否有写权限
      */
-    private boolean writepermission;
+    private boolean writepermission = false;
 
     private int maxloginnumber = 0;
 
