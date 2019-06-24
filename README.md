@@ -4,7 +4,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
 
 ## 相关组件版本及官方文档
 - [Spring Boot 2.1.6.RELEASE](https://projects.spring.io/spring-boot)
-- [Spring Cloud Greenwich.SR1](http://projects.spring.io/spring-cloud)
+- [Spring Cloud Greenwich.SR2](http://projects.spring.io/spring-cloud)
 
 ## 技术栈
 - joda-time
