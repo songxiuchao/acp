@@ -3,6 +3,7 @@
 > - [Upgrade] testspringboot 增加 Map 接收参数的 Demo
 > - [Upgrade] testspringboot 增加使用 RestTemplate 进行 post 方式的 form 提交单元测试
 > - [Upgrade] 升级 Spring Boot 至 2.1.6.RELEASE
+> - [Upgrade] 升级 Spring Cloud 至 Greenwich.SR2
 > - [Upgrade] acp-spring-boot-start 模块从 core 模块中移入 boot 模块，包名更新为 pers.acp.spring.boot
 > - [Upgrade] acp-spring-boot-start-common 模块更名为 acp-spring-boot-start，包名更新为 pers.acp.spring.cloud
 > - [Upgrade] 修改 ftp、sftp、webservice 服务启动方式及配置方式，同时在使用 spring boot 的情况下去除 acp.properties 配置文件
