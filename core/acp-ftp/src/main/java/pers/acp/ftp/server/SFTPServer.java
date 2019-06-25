@@ -1,21 +1,21 @@
 package pers.acp.ftp.server;
 
-import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
-import org.apache.sshd.common.util.SecurityUtils;
-import org.apache.sshd.server.Command;
-import org.apache.sshd.server.command.ScpCommandFactory;
-import org.apache.sshd.server.keyprovider.PEMGeneratorHostKeyProvider;
+import org.apache.sshd.common.keyprovider.FileKeyPairProvider;
+import org.apache.sshd.server.SshServer;
+import org.apache.sshd.server.command.Command;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
+import org.apache.sshd.server.shell.ProcessShellCommandFactory;
 import org.apache.sshd.server.shell.ProcessShellFactory;
-import org.apache.sshd.sftp.subsystem.SftpSubsystem;
+import org.apache.sshd.server.subsystem.sftp.SftpSubsystemFactory;
 import pers.acp.core.CommonTools;
 import pers.acp.core.interfaces.IDaemonService;
 import pers.acp.core.log.LogFactory;
 import pers.acp.ftp.conf.SFTPListener;
 import pers.acp.ftp.exceptions.SFTPServerException;
 
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,35 +97,32 @@ public class SFTPServer implements Runnable, IDaemonService {
             } else {
                 sshServer.setPublickeyAuthenticator(new UserPublicKeyAuthenticator(userList, false, keyAuthMode, keyAuthType));
             }
-            sshServer.setCommandFactory(new ScpCommandFactory());
-            sshServer.setShellFactory(new ProcessShellFactory());
+            sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(FileSystems.getDefault().getPath(keyPath)));
+
+//            sshServer.setCommandFactory(new ProcessShellCommandFactory());
+//            sshServer.setShellFactory(new ProcessShellFactory());
             List<NamedFactory<Command>> namedFactoryList = new ArrayList<>();
-            namedFactoryList.add(new SftpSubsystem.Factory());
+            namedFactoryList.add(new SftpSubsystemFactory());
             sshServer.setSubsystemFactories(namedFactoryList);
             if (!listen.isPublicKeyAuth() && listen.isPasswordAuth()) {
                 sshServer.setPasswordAuthenticator(new UserPasswordAuthenticator(userList, true));
             } else {
                 sshServer.setPasswordAuthenticator(new UserPasswordAuthenticator(userList, false));
             }
-            if (SecurityUtils.isBouncyCastleRegistered()) {
-                sshServer.setKeyPairProvider(new PEMGeneratorHostKeyProvider(keyPath + ".pem", keyAuthMode));
-            } else {
-                sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(keyPath + ".ser", keyAuthMode));
-            }
-            VirtualFileSystemFactory virtualFileSystemFactory = new VirtualFileSystemFactory(defaultHomeDirectory);
+            VirtualFileSystemFactory virtualFileSystemFactory = new VirtualFileSystemFactory(FileSystems.getDefault().getPath(defaultHomeDirectory));
             for (SFTPServerUser sftpServerUser : userList) {
                 String homeDirectory = sftpServerUser.getHomeDirectory();
                 if (CommonTools.isNullStr(homeDirectory)) {
-                    virtualFileSystemFactory.setUserHomeDir(sftpServerUser.getUsername(), defaultHomeDirectory);
+                    virtualFileSystemFactory.setUserHomeDir(sftpServerUser.getUsername(), FileSystems.getDefault().getPath(defaultHomeDirectory));
                 } else {
                     homeDirectory = homeDirectory.replace("\\", "/");
                     if (!homeDirectory.startsWith("/")) {
                         homeDirectory = "/" + homeDirectory;
                     }
                     if (defaultHomeDirectory.equals("/")) {
-                        virtualFileSystemFactory.setUserHomeDir(sftpServerUser.getUsername(), homeDirectory);
+                        virtualFileSystemFactory.setUserHomeDir(sftpServerUser.getUsername(), FileSystems.getDefault().getPath(homeDirectory));
                     } else {
-                        virtualFileSystemFactory.setUserHomeDir(sftpServerUser.getUsername(), defaultHomeDirectory + homeDirectory);
+                        virtualFileSystemFactory.setUserHomeDir(sftpServerUser.getUsername(), FileSystems.getDefault().getPath(defaultHomeDirectory + homeDirectory));
                     }
                 }
             }
