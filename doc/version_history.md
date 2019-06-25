@@ -12,6 +12,7 @@
 > - [Upgrade] 升级依赖项
 >   - Apache HttpClient to 4.5.9
 >   - jackson to 2.9.9
+>   - sshd-sftp to 2.2.0
 ##### v5.1.5
 > - [Upgrade] 升级 Spring Boot 至 2.1.5.RELEASE
 > - [Upgrade] 升级 Spring Boot Admin 至 2.1.5

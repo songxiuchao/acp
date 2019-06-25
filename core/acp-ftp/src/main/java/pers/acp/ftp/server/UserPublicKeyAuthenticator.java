@@ -1,6 +1,6 @@
 package pers.acp.ftp.server;
 
-import org.apache.sshd.server.PublickeyAuthenticator;
+import org.apache.sshd.server.auth.pubkey.PublickeyAuthenticator;
 import org.apache.sshd.server.session.ServerSession;
 import pers.acp.core.log.LogFactory;
 import pers.acp.core.security.key.KeyManagement;
