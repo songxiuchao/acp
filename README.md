@@ -99,37 +99,61 @@ ext {
 引入 acp 下相应模块包
 ### （一）模块说明，具体API文档请查看各模块 javadoc
 ##### 1. acp:acp-core 
-    核心包，封装了常用工具类，包括jdbc、配置文件解析（xml、properties）、加解密算法、线程池、定时任务、四则运算、json处理、字符串处理
+> - 核心包
+> - 封装了常用工具类，包括jdbc、配置文件解析（xml、properties）、加解密算法、线程池、定时任务、四则运算、json处理、字符串处理
 ##### 2. acp:acp-core-orm
-    核心扩展包，自定义 ORM 组件；以 hibernate 的思想自己封装的组件，仅供娱乐，建议还是使用hibernate
+> - 核心扩展包
+> - 依赖 acp:acp-core
+> - 自定义 ORM 组件；以 hibernate 的思想自己封装的组件，仅供娱乐，建议还是使用hibernate
 ##### 3. acp:acp-packet
-    通讯打解包组件，依赖 acp-core；封装了http数据包、iso8583报文、xml报文的打解包操作
+> - 通讯打解包组件
+> - 依赖 acp-core
+> - 封装了http数据包、iso8583报文、xml报文的打解包操作
 ##### 4. acp:acp-client
-    客户端组件包，依赖 acp-packet；封装了http、https、tcp、udp、ftp、sftp协议的客户端
-##### 5. acp:acp-spring-boot-starter
-    springboot 应用扩展组件，依赖 acp-client；扩展支持 tcp、udp 等协议服务端开发；同时封装定时任务
-##### 6. acp:acp-ftp
-    应用扩展组件，依赖 acp-core；封装支持 ftp/sftp 服务端及客户端
-##### 7. acp:acp-webservice
-    应用扩展组件，依赖 acp-core；封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
-##### 8. acp:acp-file
-    文件处理组件包，依赖 acp-core；封装了excel、pdf、word、html、fremark模板文件的读写转换等操作
-##### 9. acp:acp-message
-    消息处理组件包，依赖 acp-core；封装了发送email
+> - 客户端组件包
+> - 依赖 acp-packet
+> - 封装了http、https、tcp、udp、ftp、sftp协议的客户端
+##### 5. acp:acp-ftp
+> - 应用扩展组件
+> - 依赖 acp-core
+> - 封装支持 ftp/sftp 服务端及客户端
+##### 6. acp:acp-webservice
+> - 应用扩展组件
+> - 依赖 acp-core
+> - 封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
+##### 7. acp:acp-file
+> - 文件处理组件包
+> - 依赖 acp-core
+> - 封装了excel、pdf、word、html、freemarker模板文件的读写转换等操作
+##### 8. acp:acp-message
+> - 消息处理组件包
+> - 依赖 acp-core
+> - 封装了发送email
+##### 9. boot:acp-spring-boot-starter
+> - springboot 应用扩展组件
+> - 依赖 acp-client
+> - 在 springboot 基础上整合大量底层功能，扩展支持 tcp、udp 等协议服务端配置；同时封装定时任务
+##### 10. boot:acp-spring-boot-starter-ftp
+> - springboot 应用扩展组件
+> - 依赖 acp-spring-boot-starter
+> - 扩展支持 ftp、sftp 等协议服务端配置
+##### 10. boot:acp-spring-boot-starter-ws
+> - springboot 应用扩展组件
+> - 依赖 acp-spring-boot-starter
+> - 扩展支持 webservice 服务端配置
 ### （二）快速开发 springboot 应用
 ##### 1. 开发说明
-    （1）参考 test:testspringboot
-    （2）依赖 acp:acp-spring-boot-starter
-    （3）src/main/java/resources 中增加配置文件（测试配置文件在 src/test/resources）
-        config 下的文件和 acp.properties 为选用
-    （4）yml配置文件中增加数据源配置（单数据源或多数据源），数据库操作遵循 spring-data-jpa 标准，使用 hibernate 进行实例化
-    （5）单数据源应用的话无需增加额外配置类，正常编写domain、repo、entity即可
-    （6）多数据源应用需要增加对应每个数据源的 Jpa 配置类，并创建对应数据源的 repo、entity 包，之后再在对应包中编写 repo 和 entity
-    （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.spring.boot.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
-    （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
-    （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
-    （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 application-dev.xml 中增加相应配置
-    （11）如有需要，可选择引入 acp-file、acp-message、acp-webservice、acp-spring-boot-starter-ftp、acp-spring-boot-starter-ws 等包
+- （1）参考 test:testspringboot
+- （2）依赖 boot:acp-spring-boot-starter
+- （3）src/main/java/resources 中增加配置文件（测试配置文件在 src/test/resources）config 下的文件和 acp.properties 为选用
+- （4）yml配置文件中增加数据源配置（单数据源或多数据源），数据库操作遵循 spring-data-jpa 标准，使用 hibernate 进行实例化
+- （5）单数据源应用的话无需增加额外配置类，正常编写domain、repo、entity即可
+- （6）多数据源应用需要增加对应每个数据源的 Jpa 配置类，并创建对应数据源的 repo、entity 包，之后再在对应包中编写 repo 和 entity
+- （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.spring.boot.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
+- （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
+- （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
+- （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 application-dev.xml 中增加相应配置
+- （11）如有需要，可选择引入 acp-file、acp-message、acp-spring-boot-starter-ftp、acp-spring-boot-starter-ws 等包
 ##### 2. 配置说明
 - 定制开发的 api 接口，开启 swagger 文档
 ```yaml
@@ -250,15 +274,15 @@ acp:
 ## 五、开发 SpringCloud 应用
 引入 cloud 下相应模块包，demo 位于 cloud 下
 ### （一）模块说明
-##### 1. cloud:acp-spring-cloud-starter-common
-    原子服务公共模块：
-    （1）自定义程序入口注解
-    （2）oauth2.0 资源服务配置、客户端服务配置及远程单点认证机制
-    （3）自定义 feign 并发策略、自定义 feign 请求拦截
-    （4）hystrix 断路器
-    （5）封装日志服务客户端，发送日志消息至 kafka
-    （6）zipkin 链路追踪客户端
-    （7）自定义 PropertySourceLocator
+##### 1. cloud:acp-spring-cloud-starter
+原子服务公共模块：
+- （1）自定义程序入口注解
+- （2）oauth2.0 资源服务配置、客户端服务配置及远程单点认证机制
+- （3）自定义 feign 并发策略、自定义 feign 请求拦截
+- （4）hystrix 断路器
+- （5）封装日志服务客户端，发送日志消息至 kafka
+- （6）zipkin 链路追踪客户端
+- （7）自定义 PropertySourceLocator
 ##### 2. test:cloud:admin-server 
 ###### 2.1 可视化监控，监控服务状态、信息聚合
 |          url          |  描述                   |
@@ -268,8 +292,8 @@ acp:
 ###### 2.2 zipkin 链路追踪
 - 服务端
 > 从SpringCloud2.0 以后，官方已经不支持自定义服务，官方只提供编译好的jar包供用户使用。可以自行使用多种方式部署zipkin服务，并采用elasticsearch作为zipkin的数据存储器。
-- 客户端
-> - 依赖 cloud:acp-spring-cloud-starter-common
+- 客户端（cloud中其他需要监控链路的服务，admin-server、eureka-server、gateway-server 除外）
+> - 依赖 cloud:acp-spring-cloud-starter
 > - 增加 zipkin 相关配置
 > ```yaml
 > spring:
@@ -357,92 +381,109 @@ http://127.0.0.1:5601
 ##### 全局说明
 > - 统一注入 pers.acp.spring.cloud.log.LogInstance 进行日志记录
 ##### 1. 可视化监控
-    test:cloud:admin-server
-    （1）无需改动代码
-    （2）修改 yml 配置即可
+> - test:cloud:admin-server
+> - （1）无需改动代码
+> - （2）修改 yml 配置即可
 ![Architecture diagram](doc/images/admin-server.png)
 ##### 2. 服务注册发现（支持高可用eureka集群）
-    test:cloud:eureka-server
-    （1）无需改动代码
-    （2）修改 yml 配置即可
+> - test:cloud:eureka-server
+> - （1）无需改动代码
+> - （2）修改 yml 配置即可
 ##### 3. 统一配置管理
-    test:cloud:config-server
-    （1）额外功能根据实际需求自定义
-    （2）修改 yml 配置即可
+> - test:cloud:config-server
+> - （1）依赖 cloud:acp-spring-cloud-starter
+> - （2）额外功能根据实际需求自定义
+> - （3）修改 yml 配置即可
 ##### 4. 网关服务
-    test:cloud:gateway-server
-    （1）需自定义限流策略（需依赖 Redis）
-    （2）修改 yml 进行路由配置；若没有 Redis 请不要配置限流策略
+> - test:cloud:gateway-server
+> - （1）需自定义限流策略（需依赖 Redis）
+> - （2）修改 yml 进行路由配置；若没有 Redis 请不要配置限流策略
 ##### 5. 认证服务
-    test:cloud:oauth-server
-    （1）引入 cloud:acp-spring-cloud-starter-common，按需引入 org.springframework.boot:spring-boot-starter-data-redis
-    （2）入口类增加注解 @AcpCloudOauthServerApplication
-    （3）配置中增加
-    acp:
-      cloud:
-        oauth:
-          oauth-server: true
-    （3）需定制 UserPasswordEncoder 用户密码编码器，配置进 WebSecurityConfiguration
-    （4）需定制用户（信息、角色、权限）初始化和查询方式 SecurityUserDetailsService，配置进 AuthorizationServerConfiguration
-    （5）需定制客户端（信息）初始化和查询方式 SecurityClientDetailsService，配置进 AuthorizationServerConfiguration
-    （6）token 持久化方式为 Redis，配置在 AuthorizationServerConfiguration；若没有 Redis 可根据注释持久化到内存，也可自行开发其他持久化方式
-##### 6. 原子服务
-    （1）引入 cloud:acp-spring-cloud-starter-common
-    （2）参考 四、开发 SpringBoot 应用
-    （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置
-    （4）参考 test:cloud:hello、test:cloud:world、test:cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
-    （5）如果存在日志服务，则需进行配置
-    acp:
-      cloud:
-        log-server:
-          client:
-            enabled: true #是否启用日志服务
-            log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
-    （6）如果不存在日志服务，需要排除依赖
-    exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
-    （7）可自定义token验证异常（新建 Bean 实现 org.springframework.security.web.AuthenticationEntryPoint 接口）和权限异常（新建 Bean 实现 org.springframework.security.web.access.AccessDeniedHandler）返回信息，若有多个实现接口的 Bean，则需要通过如下配置显示指定
-    acp:
-      cloud:
-        oauth:
-          auth-exception-entry-point: AuthExceptionEntryPoint         #自定义 token 异常 bean 名称
-          access-denied-handler: CustomAccessDeniedHandler            #自定义权限异常 bean 名称
-    （8）如有特殊需要不进行认证的url（例如"/customer"），则增加resource-server-permit-all-path配置；如有需要进行认证的url（例如"/customer2"），则增加resource-server-security-path配置
-    acp:
-      cloud:
-        oauth:
-          resource-server-permit-all-path: 
-            - /customer
-          resource-server-security-path:
-            - /customer2
-    （9）如果原子服务不需要加入统一认证体系中，即不需要进行访问权限验证，则增加配置
-    acp:
-      cloud:
-        oauth:
-          resource-server: false #是否是资源服务器
-    （10）特别需要注意：
-        即使不需要加入统一认证体系中，如果请求的 header 中包含 Authorization， oauth2 还是会进行身份认证！
-        所以仍然需要正确进行如下配置，否则 oauth2 进行身份认证时将会抛出异常
-        com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
-        或调用端身份认证失败：status 401
-    security:
-      oauth2:
-        client:
-          client-id: ***
-          client-secret: ***
-        resource:
-          token-info-uri: http://oauth2-server/oauth/check_token
-##### 7. 日志服务（依赖 kafka）
-    （1）引入 cloud:acp-spring-cloud-starter-common
-    （2）入口类增加注解 @AcpCloudAtomApplication
-    （3）如需自定义日志消息处理，新增Bean实现 pers.acp.spring.cloud.log.consumer.LogProcess 接口，并且增加 @Primary 注解
-    （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
-        a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
-        b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender
-        c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.path 一致，方便统一管理
-    （5）增加配置
-    acp:
-      cloud:
-        log-server:
-          enabled: true #是否开启日志服务
+> - test:cloud:oauth-server
+> - （1）依赖 cloud:acp-spring-cloud-starter，按需依赖 org.springframework.boot:spring-boot-starter-data-redis
+> - （2）入口类增加注解 @AcpCloudOauthServerApplication
+> - （3）配置中增加
+>   ```yaml
+>   acp:
+>     cloud:
+>       oauth:
+>         oauth-server: true
+>   ```
+> - （3）需定制 UserPasswordEncoder 用户密码编码器，配置进 WebSecurityConfiguration
+> - （4）需定制用户（信息、角色、权限）初始化和查询方式 SecurityUserDetailsService，配置进 AuthorizationServerConfiguration
+> - （5）需定制客户端（信息）初始化和查询方式 SecurityClientDetailsService，配置进 AuthorizationServerConfiguration
+> - （6）token 持久化方式为 Redis，配置在 AuthorizationServerConfiguration；若没有 Redis 可根据注释持久化到内存，也可自行开发其他持久化方式
+##### 6. 日志服务（依赖 kafka）
+> - （1）依赖 cloud:acp-spring-cloud-starter
+> - （2）入口类增加注解 @AcpCloudAtomApplication
+> - （3）如需自定义日志消息处理，新增Bean实现 pers.acp.spring.cloud.log.consumer.LogProcess 接口，并且增加 @Primary 注解
+> - （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
+> -     a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
+> -     b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender
+> -     c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.path 一致，方便统一管理
+> - （5）增加配置
+>   ```yaml
+>   acp:
+>     cloud:
+>       log-server:
+>         enabled: true #是否开启日志服务
+>   ```
+##### 7. 原子服务
+> - （1）依赖 cloud:acp-spring-cloud-starter
+> - （2）参考 四、开发 SpringBoot 应用
+> - （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置
+> - （4）参考 test:cloud:hello、test:cloud:world、test:cloud:helloworld，入口类增加注解 @AcpCloudAtomApplication
+> - （5）如果存在日志服务，则需进行配置
+>    ```yaml
+>    acp:
+>      cloud:
+>        log-server:
+>          client:
+>            enabled: true #是否启用日志服务
+>            log-type: ALL #当前服务的日志类型，默认ALL，也自定义；自定义的类型需要在日志服务中参照ALL配置appender和logger
+>    ```
+> - （6）如果不存在日志服务，需要排除依赖
+>    ```groovy
+>    exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-stream-kafka'
+>    ```
+> - （7）可自定义token验证异常（新建 Bean 实现 org.springframework.security.web.AuthenticationEntryPoint 接口）和权限异常（新建 Bean 实现 org.springframework.security.web.access.AccessDeniedHandler）返回信息，若有多个实现接口的 Bean，则需要通过如下配置显示指定
+>    ```yaml    
+>   acp:
+>     cloud:
+>       oauth:
+>         auth-exception-entry-point: AuthExceptionEntryPoint         #自定义 token 异常 bean 名称
+>         access-denied-handler: CustomAccessDeniedHandler            #自定义权限异常 bean 名称
+>    ```
+> - （8）如有特殊需要不进行认证的url（例如"/customer"），则增加resource-server-permit-all-path配置；如有需要进行认证的url（例如"/customer2"），则增加resource-server-security-path配置
+>    ```yaml    
+>   acp:
+>     cloud:
+>       oauth:
+>         resource-server-permit-all-path: 
+>           - /customer
+>         resource-server-security-path:
+>           - /customer2
+>    ```
+> - （9）如果原子服务不需要加入统一认证体系中，即不需要进行访问权限验证，则增加配置
+>    ```yaml    
+>   acp:
+>     cloud:
+>       oauth:
+>         resource-server: false #是否是资源服务器
+>    ```
+> - （10）特别需要注意：
+     即使不需要加入统一认证体系中，如果请求的 header 中包含 Authorization， oauth2 还是会进行身份认证！
+     所以仍然需要正确进行如下配置，否则 oauth2 进行身份认证时将会抛出异常
+     com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+     或调用端身份认证失败：status 401
+>    ```yaml    
+>   security:
+>     oauth2:
+>       client:
+>         client-id: ***
+>         client-secret: ***
+>       resource:
+>         token-info-uri: http://oauth2-server/oauth/check_token
+>    ```
 ## 六、打包为 docker 镜像
 自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
