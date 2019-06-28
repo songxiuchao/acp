@@ -2,6 +2,9 @@ package pers.acp.spring.boot.socket.base;
 
 import io.netty.handler.timeout.IdleStateEvent;
 
+/**
+ * Socket 报文处理接口
+ */
 public interface ISocketServerHandle {
 
     /**

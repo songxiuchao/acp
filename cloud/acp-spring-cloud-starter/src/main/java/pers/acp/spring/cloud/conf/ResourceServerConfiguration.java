@@ -77,6 +77,12 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         this.contextPath = CommonTools.isNullStr(serverProperties.getServlet().getContextPath()) ? "" : serverProperties.getServlet().getContextPath();
     }
 
+    /**
+     * 自定义负载均衡客户端
+     *
+     * @return RestTemplate
+     * @throws HttpException 异常
+     */
     @LoadBalanced
     @Bean("acpSpringCloudOauth2ClientRestTemplate")
     public RestTemplate acpSpringCloudOauth2ClientRestTemplate() throws HttpException {
@@ -88,12 +94,22 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         return restTemplate;
     }
 
+    /**
+     * 获取服务配置信息
+     *
+     * @return ServerProperties
+     */
     @Bean
     @ConditionalOnMissingBean
     public ServerProperties serverProperties() {
         return new ServerProperties();
     }
 
+    /**
+     * 获取资源服务配置信息
+     *
+     * @return ResourceServerProperties
+     */
     @Bean
     @ConditionalOnMissingBean
     public ResourceServerProperties resourceServerProperties() {
@@ -136,6 +152,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     /**
      * 设置 token 验证服务
+     * 设置自定义异常处理
      *
      * @param resources 资源服务安全验证配置对象
      */

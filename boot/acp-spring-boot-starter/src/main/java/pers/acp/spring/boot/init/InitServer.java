@@ -10,6 +10,9 @@ import pers.acp.spring.boot.conf.AcpCoreConfiguration;
 import pers.acp.spring.boot.init.task.InitTcpServer;
 import pers.acp.spring.boot.init.task.InitUdpServer;
 
+/**
+ * 初始化系统及TCP、UDP服务
+ */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class InitServer {

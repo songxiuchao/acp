@@ -13,6 +13,8 @@ import pers.acp.core.log.LogFactory;
 import java.util.Map;
 
 /**
+ * 系统控制器
+ *
  * @author zhangbin by 2018-1-20 21:24
  * @since JDK 11
  */
@@ -26,12 +28,15 @@ public class SystemControl implements IDaemonService {
 
     private final TimerTaskScheduler timerTaskScheduler;
 
-    @Autowired
+    @Autowired(required = false)
     public SystemControl(Map<String, IListener> listenerMap, TimerTaskScheduler timerTaskScheduler) {
         this.listenerMap = listenerMap;
         this.timerTaskScheduler = timerTaskScheduler;
     }
 
+    /**
+     * 系统初始化
+     */
     public void initialization() {
         try {
             start();
@@ -41,28 +46,39 @@ public class SystemControl implements IDaemonService {
         DaemonServiceManager.addService(this);
     }
 
+    /**
+     * 系统启动
+     *
+     * @throws Exception 异常
+     */
     public void start() throws Exception {
-        log.info("start listener begin ...");
-        listenerMap.forEach((key, listener) -> {
-            log.info("开始启动监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
-            listener.startListener();
-        });
-        log.info("start listener finished!");
+        if (listenerMap != null && listenerMap.size() > 0) {
+            log.info("start listener begin ...");
+            listenerMap.forEach((key, listener) -> {
+                log.info("开始启动监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
+                listener.startListener();
+            });
+            log.info("start listener finished!");
+        }
         timerTaskScheduler.controlSchedule(ITimerTaskScheduler.START);
     }
 
+    /**
+     * 系统停止
+     */
     public void stop() {
-        log.info("stop listener begin ...");
         try {
-            listenerMap.forEach((key, listener) -> {
-                log.info("开始停止监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
-                listener.stopListener();
-            });
+            if (listenerMap != null && listenerMap.size() > 0) {
+                log.info("stop listener begin ...");
+                listenerMap.forEach((key, listener) -> {
+                    log.info("开始停止监听：" + key + " 【" + listener.getClass().getCanonicalName() + "】");
+                    listener.stopListener();
+                });
+                log.info("stop listener finished!");
+            }
             timerTaskScheduler.controlSchedule(ITimerTaskScheduler.STOP);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-        } finally {
-            log.info("stop listener finished!");
         }
     }
 

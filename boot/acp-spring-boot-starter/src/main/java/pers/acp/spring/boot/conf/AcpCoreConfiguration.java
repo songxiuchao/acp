@@ -4,6 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * 核心配置信息
+ *
  * @author zhang by 20/06/2019
  * @since JDK 11
  */
@@ -43,12 +45,24 @@ public class AcpCoreConfiguration {
         this.fontPath = fontPath;
     }
 
+    /**
+     * 延迟删除文件等待时间（单位毫秒）
+     */
     private long deleteFileWaitTime = 1200000;
 
+    /**
+     * 绝对路径前缀
+     */
     private String absPathPrefix = "abs:";
 
+    /**
+     * 用户路径前缀
+     */
     private String userPathPrefix = "user:";
 
+    /**
+     * 字体文件夹路径
+     */
     private String fontPath = "files/resource/font";
 
 }

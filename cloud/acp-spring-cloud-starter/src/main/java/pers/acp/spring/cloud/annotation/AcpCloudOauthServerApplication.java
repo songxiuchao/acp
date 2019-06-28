@@ -9,6 +9,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.lang.annotation.*;
 
 /**
+ * Cloud 鉴权服务注解
+ *
  * @author zhang by 14/01/2019 16:13
  * @since JDK 11
  */

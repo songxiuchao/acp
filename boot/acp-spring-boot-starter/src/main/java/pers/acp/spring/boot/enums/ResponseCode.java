@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 响应编码
  * Create by zhangbin on 2017-8-8 17:40
  */
 public enum ResponseCode implements IEnumValue {

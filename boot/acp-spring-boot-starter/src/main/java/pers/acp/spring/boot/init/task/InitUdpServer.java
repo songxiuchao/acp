@@ -14,6 +14,9 @@ import pers.acp.spring.boot.socket.base.ISocketServerHandle;
 
 import java.util.List;
 
+/**
+ * 初始化UDP服务
+ */
 @Component
 public final class InitUdpServer extends BaseInitTask {
 

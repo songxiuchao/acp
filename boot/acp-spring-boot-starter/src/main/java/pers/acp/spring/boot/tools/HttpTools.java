@@ -7,6 +7,9 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Http请求相关工具类
+ */
 public final class HttpTools {
 
     private static final LogFactory log = LogFactory.getInstance(HttpTools.class);// 日志对象

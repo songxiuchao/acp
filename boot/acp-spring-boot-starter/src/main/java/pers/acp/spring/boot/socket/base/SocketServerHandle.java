@@ -12,6 +12,8 @@ import pers.acp.spring.boot.conf.SocketListenerConfiguration;
 import java.nio.charset.Charset;
 
 /**
+ * Socket 报文处理基类
+ *
  * @author zhang by 04/03/2019
  * @since JDK 11
  */
