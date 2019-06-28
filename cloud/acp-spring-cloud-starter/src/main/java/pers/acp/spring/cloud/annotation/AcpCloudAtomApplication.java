@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import java.lang.annotation.*;
 
 /**
+ * Cloud 原子服务注解
+ *
  * @author zhangbin by 12/04/2018 12:47
  * @since JDK 11
  */

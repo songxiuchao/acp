@@ -282,7 +282,7 @@ acp:
 - （4）hystrix 断路器
 - （5）封装日志服务客户端，发送日志消息至 kafka
 - （6）zipkin 链路追踪客户端
-- （7）自定义 PropertySourceLocator
+- （7）自定义 PropertySourceLocator，实现自定义配置中心客户端
 ##### 2. test:cloud:admin-server 
 ###### 2.1 可视化监控，监控服务状态、信息聚合
 |          url          |  描述                   |

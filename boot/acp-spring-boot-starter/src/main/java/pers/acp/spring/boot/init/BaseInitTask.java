@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 初始化任务基类
+ *
  * @author zhang by 22/06/2019
  * @since JDK 11
  */

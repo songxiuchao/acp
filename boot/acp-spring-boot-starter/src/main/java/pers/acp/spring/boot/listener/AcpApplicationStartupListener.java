@@ -9,6 +9,8 @@ import pers.acp.core.log.LogFactory;
 import java.util.*;
 
 /**
+ * SpringBoot 应用初始化
+ *
  * @author zhangbin by 2018-1-31 12:50
  * @since JDK 11
  */
@@ -17,6 +19,11 @@ public class AcpApplicationStartupListener implements ApplicationListener<Contex
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
 
+    /**
+     * 监听 ContextRefreshedEvent 事件
+     *
+     * @param event 事件对象
+     */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         Map<String, BaseInitialization> initializationMap = event.getApplicationContext().getBeansOfType(BaseInitialization.class);

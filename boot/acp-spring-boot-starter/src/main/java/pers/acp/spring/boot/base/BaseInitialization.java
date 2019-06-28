@@ -3,6 +3,8 @@ package pers.acp.spring.boot.base;
 import pers.acp.core.log.LogFactory;
 
 /**
+ * 系统初始化服务基类
+ *
  * @author zhangbin by 2018-1-31 13:04
  * @since JDK 11
  */

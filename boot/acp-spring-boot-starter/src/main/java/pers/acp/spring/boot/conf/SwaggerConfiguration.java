@@ -4,6 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * Swagger 配置
+ *
  * @author zhang by 14/01/2019 15:07
  * @since JDK 11
  */
@@ -19,6 +21,9 @@ public class SwaggerConfiguration {
         this.enabled = enabled;
     }
 
+    /**
+     * 是否启用
+     */
     private boolean enabled = false;
 
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 鉴权相关配置
+ *
  * @author zhang by 14/01/2019 17:30
  * @since JDK 11
  */
@@ -80,7 +82,7 @@ public class AcpOauthConfiguration {
     private String authExceptionEntryPoint;
 
     /**
-     * customeer access denied handler
+     * customer access denied handler
      */
     private String accessDeniedHandler;
 

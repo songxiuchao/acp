@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * 错误信息实体
+ *
  * @author zhang by 27/12/2018 13:07
  * @since JDK 11
  */

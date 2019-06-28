@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 日志消息实体
+ *
  * @author zhangbin by 11/07/2018 13:34
  * @since JDK 11
  */

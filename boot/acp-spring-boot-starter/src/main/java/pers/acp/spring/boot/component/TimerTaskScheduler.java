@@ -19,7 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 /**
- * Create by zhangbin on 2017-10-27 22:42
+ * 定时任务处理器
+ *
+ * @author zhangbin by 2018-1-20 21:24
+ * @since JDK 11
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -48,16 +51,16 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
     }
 
     /**
-     * 启动定时任务，此时服务变为“主”服务
+     * 启动定时任务
      */
     private void startSchedule() throws InterruptedException {
         if (!scheduledTaskMap.isEmpty() || !futureMap.isEmpty()) {
             stopSchedule();
         }
         baseSpringBootScheduledTaskMap.forEach((key, scheduledTask) -> {
-            Map<String, String> crons = scheduleConfiguration.getCrons();
-            if (crons != null && !crons.isEmpty() && crons.containsKey(key) && !CommonTools.isNullStr(crons.get(key)) && !"none".equalsIgnoreCase(crons.get(key))) {
-                String cron = crons.get(key);
+            Map<String, String> cronMap = scheduleConfiguration.getCrons();
+            if (cronMap != null && !cronMap.isEmpty() && cronMap.containsKey(key) && !CommonTools.isNullStr(cronMap.get(key)) && !"none".equalsIgnoreCase(cronMap.get(key))) {
+                String cron = cronMap.get(key);
                 scheduledTaskMap.put(key, scheduledTask);
                 ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(scheduledTask::executeScheduledTask, new CronTrigger(cron));
                 if (future != null) {
@@ -69,7 +72,7 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
     }
 
     /**
-     * 停止定时任务，此时服务变为“从”服务
+     * 停止定时任务
      */
     private void stopSchedule() throws InterruptedException {
         Iterator<Map.Entry<String, BaseSpringBootScheduledTask>> it = scheduledTaskMap.entrySet().iterator();
@@ -89,6 +92,12 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
         }
     }
 
+    /**
+     * 定时任务控制
+     *
+     * @param command ITimerTaskScheduler.START | ITimerTaskScheduler.STOP
+     * @throws InterruptedException 异常
+     */
     @Override
     public void controlSchedule(int command) throws InterruptedException {
         synchronized (this) {
