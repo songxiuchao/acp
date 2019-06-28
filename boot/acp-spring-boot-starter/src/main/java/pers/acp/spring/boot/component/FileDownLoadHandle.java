@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 文件下载处理组件
+ *
  * @author zhangbin by 2018-1-21 1:30
  * @since JDK 11
  */

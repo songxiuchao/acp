@@ -9,6 +9,9 @@ import pers.acp.spring.cloud.enums.LogLevel;
 import pers.acp.spring.cloud.log.LogInfo;
 
 /**
+ * 默认日志消息处理类
+ * 如需自定义，请实现 LogProcess 接口
+ *
  * @author zhang by 25/03/2019
  * @since JDK 11
  */

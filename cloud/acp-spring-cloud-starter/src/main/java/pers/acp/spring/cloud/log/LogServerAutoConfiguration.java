@@ -21,6 +21,8 @@ import pers.acp.spring.cloud.conf.LogServerConfiguration;
 import javax.annotation.PostConstruct;
 
 /**
+ * 日志服务自动配置
+ *
  * @author zhang by 14/01/2019 14:42
  * @since JDK 11
  */
@@ -40,6 +42,9 @@ public class LogServerAutoConfiguration {
         this.bindings = bindings;
     }
 
+    /**
+     * 初始化日志消息消费者
+     */
     @PostConstruct
     public void init() {
         if (logServerConfiguration.isEnabled()) {

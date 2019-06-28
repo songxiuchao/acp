@@ -3,8 +3,10 @@ package pers.acp.spring.boot.base;
 import pers.acp.core.task.timer.basetask.BaseTimerTask;
 
 /**
- * spring boot ScheduledTask
- * author zb
+ * 定时任务基类
+ *
+ * @author zhangbin by 2018-1-31 13:04
+ * @since JDK 11
  */
 public abstract class BaseSpringBootScheduledTask extends BaseTimerTask {
 

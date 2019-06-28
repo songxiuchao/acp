@@ -8,8 +8,8 @@ import pers.acp.spring.boot.component.SystemControl;
 import pers.acp.spring.boot.daemon.DaemonServiceManager;
 
 /**
+ * 系统初始化
  * Created by zhangbin on 2017-6-16.
- * listener 系统初始化监听
  */
 @Component
 public class SystemInitialization extends BaseInitialization {

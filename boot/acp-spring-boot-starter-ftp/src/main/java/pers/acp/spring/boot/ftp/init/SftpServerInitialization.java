@@ -33,6 +33,9 @@ public class SftpServerInitialization extends BaseInitialization {
         return "sftp server setup server";
     }
 
+    /**
+     * 启动sftp服务
+     */
     @Override
     public void start() {
         SFTPConfig sftpConfig = new SFTPConfig();

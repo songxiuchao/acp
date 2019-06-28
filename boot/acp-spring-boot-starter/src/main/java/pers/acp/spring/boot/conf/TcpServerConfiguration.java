@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Tcp 服务端配置
+ */
 @Component
 @ConfigurationProperties(prefix = "acp.tcp-server")
 public class TcpServerConfiguration {
@@ -18,6 +21,9 @@ public class TcpServerConfiguration {
         this.listeners = listeners;
     }
 
+    /**
+     * Socket 监听列表
+     */
     private List<SocketListenerConfiguration> listeners = new ArrayList<>();
 
 }

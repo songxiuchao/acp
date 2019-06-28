@@ -12,7 +12,7 @@ import pers.acp.spring.boot.enums.ResponseCode;
 
 /**
  * Created by Shepherd on 2016-08-05.
- * 报文工具类
+ * 报文消息工具类
  */
 public class PackageTools {
 

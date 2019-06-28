@@ -9,6 +9,9 @@ import pers.acp.core.log.LogFactory;
 import pers.acp.spring.boot.conf.SocketListenerConfiguration;
 import pers.acp.spring.boot.socket.base.ISocketServerHandle;
 
+/**
+ * Udp 服务端
+ */
 public final class UdpServer implements IDaemonService, Runnable {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());
