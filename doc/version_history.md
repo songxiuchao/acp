@@ -13,6 +13,7 @@
 >   - Apache HttpClient to 4.5.9
 >   - jackson to 2.9.9
 >   - sshd-sftp to 2.2.0
+> - [Upgrade] 优化源代码，增加大量注释，并更新文档
 ##### v5.1.5
 > - [Upgrade] 升级 Spring Boot 至 2.1.5.RELEASE
 > - [Upgrade] 升级 Spring Boot Admin 至 2.1.5

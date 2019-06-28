@@ -10,11 +10,13 @@ import pers.acp.core.log.LogFactory;
 import pers.acp.spring.boot.tools.SpringBeanFactory;
 import pers.acp.spring.cloud.enums.LogLevel;
 import pers.acp.spring.cloud.log.producer.LogProducer;
-import pers.acp.spring.cloud.conf.LogServerCientConfiguration;
+import pers.acp.spring.cloud.conf.LogServerClientConfiguration;
 
 import java.util.Arrays;
 
 /**
+ * 日志实例
+ *
  * @author zhangbin by 11/07/2018 13:36
  * @since JDK 11
  */
@@ -25,18 +27,18 @@ public class LogInstance {
 
     private final ObjectMapper objectMapper;
 
-    private final LogServerCientConfiguration logServerCientConfiguration;
+    private final LogServerClientConfiguration logServerClientConfiguration;
 
     @Autowired
-    public LogInstance(ObjectMapper objectMapper, LogServerCientConfiguration logServerCientConfiguration) {
+    public LogInstance(ObjectMapper objectMapper, LogServerClientConfiguration logServerClientConfiguration) {
         this.objectMapper = objectMapper;
-        this.logServerCientConfiguration = logServerCientConfiguration;
+        this.logServerClientConfiguration = logServerClientConfiguration;
     }
 
     private LogInfo generateLogInfo() {
         LogInfo logInfo = SpringBeanFactory.getBean(LogInfo.class);
         if (logInfo != null) {
-            String logType = logServerCientConfiguration.getLogType();
+            String logType = logServerClientConfiguration.getLogType();
             if (CommonTools.isNullStr(logType)) {
                 logType = LogConstant.DEFAULT_TYPE;
             }
@@ -57,7 +59,7 @@ public class LogInstance {
         logInfo.setLineno(lineno);
         logInfo.setClassName(className);
         try {
-            if (logServerCientConfiguration.isEnabled()) {
+            if (logServerClientConfiguration.isEnabled()) {
                 LogProducer logProducer = SpringBeanFactory.getBean(LogProducer.class);
                 if (logProducer != null) {
                     logProducer.getLogOutput().sendMessage().send(MessageBuilder.withPayload(objectMapper.writeValueAsString(logInfo)).build());

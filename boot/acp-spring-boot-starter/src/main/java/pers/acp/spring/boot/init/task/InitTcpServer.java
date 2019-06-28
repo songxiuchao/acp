@@ -14,6 +14,9 @@ import pers.acp.spring.boot.socket.base.ISocketServerHandle;
 
 import java.util.List;
 
+/**
+ * 初始化TCP服务
+ */
 @Component
 public final class InitTcpServer extends BaseInitTask {
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * controller 切面日志配置
+ * Controller 切面日志配置
  *
  * @author zhangbin by 14/04/2018 00:36
  * @since JDK 11
@@ -32,9 +32,13 @@ public class ControllerAspectConfiguration {
         this.noLogUriRegexes = noLogUriRegexes;
     }
 
+    /**
+     * 是否启用
+     */
     private boolean enabled = true;
 
     /**
+     * 不进行日志记录的 url 正则表达式
      * no log uri regexes
      */
     private List<String> noLogUriRegexes = new ArrayList<>();

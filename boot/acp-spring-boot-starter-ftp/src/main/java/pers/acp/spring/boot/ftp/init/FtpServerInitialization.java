@@ -33,6 +33,9 @@ public class FtpServerInitialization extends BaseInitialization {
         return "ftp server setup server";
     }
 
+    /**
+     * 启动ftp服务
+     */
     @Override
     public void start() {
         FTPConfig ftpConfig = new FTPConfig();

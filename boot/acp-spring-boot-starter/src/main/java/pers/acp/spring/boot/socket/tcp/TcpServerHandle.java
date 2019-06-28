@@ -13,6 +13,8 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
 /**
+ * Tcp 报文处理
+ *
  * @author zhang by 04/03/2019
  * @since JDK 11
  */

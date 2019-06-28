@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 日志记录级别
+ *
  * @author zhangbin by 11/07/2018 14:54
  * @since JDK 11
  */

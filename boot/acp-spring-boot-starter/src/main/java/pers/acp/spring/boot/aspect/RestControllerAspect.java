@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * controller拦截器
+ * Controller 拦截器，记录请求日志
  *
  * @author zhangbin by 21/11/2017 10:06
  * @since JDK 11

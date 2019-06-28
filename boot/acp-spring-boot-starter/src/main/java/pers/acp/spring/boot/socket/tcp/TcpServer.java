@@ -13,6 +13,9 @@ import pers.acp.core.log.LogFactory;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Tcp服务端
+ */
 public final class TcpServer implements IDaemonService, Runnable {
 
     private final LogFactory log = LogFactory.getInstance(this.getClass());

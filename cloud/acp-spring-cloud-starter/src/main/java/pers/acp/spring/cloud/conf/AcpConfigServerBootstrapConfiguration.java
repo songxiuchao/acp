@@ -24,6 +24,10 @@ import java.util.Map;
 import static org.springframework.cloud.config.client.ConfigClientProperties.AUTHORIZATION;
 
 /**
+ * 配置中心客户端自动配置
+ * 装载优先级最高
+ * 根据参数创建自定义客户端实例
+ *
  * @author zhang by 21/03/2019
  * @since JDK 11
  */
@@ -40,6 +44,12 @@ public class AcpConfigServerBootstrapConfiguration {
         this.environment = environment;
     }
 
+    /**
+     * 加载配置中心自定义客户端
+     *
+     * @param clientProperties 配置中心客户端配置内容
+     * @return ConfigServicePropertySourceLocator
+     */
     @Primary
     @Bean
     @ConditionalOnProperty(value = "spring.cloud.config.enabled", matchIfMissing = true)
@@ -50,6 +60,12 @@ public class AcpConfigServerBootstrapConfiguration {
         return locator;
     }
 
+    /**
+     * 创建自定义 RestTemplate 客户端
+     *
+     * @param clientProperties 配置中心客户端配置内容
+     * @return RestTemplate
+     */
     private RestTemplate customerConfigClientRestTemplate(ConfigClientProperties clientProperties) {
         try {
             HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(

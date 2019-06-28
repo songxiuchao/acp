@@ -9,6 +9,9 @@ import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+/**
+ * IP 相关工具类
+ */
 public final class IpTools {
 
     private static final LogFactory log = LogFactory.getInstance(IpTools.class);// 日志对象

@@ -12,12 +12,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.MimeTypeUtils;
 import pers.acp.spring.cloud.log.producer.LogOutput;
 import pers.acp.spring.cloud.log.producer.LogProducer;
-import pers.acp.spring.cloud.conf.LogServerCientConfiguration;
+import pers.acp.spring.cloud.conf.LogServerClientConfiguration;
 import pers.acp.spring.cloud.conf.LogServerConfiguration;
 
 import javax.annotation.PostConstruct;
 
 /**
+ * 日志服务客户端自动配置
+ *
  * @author zhang by 14/01/2019 14:42
  * @since JDK 11
  */
@@ -29,20 +31,23 @@ public class LogServerClientAutoConfiguration {
 
     private final LogServerConfiguration logServerConfiguration;
 
-    private final LogServerCientConfiguration logServerCientConfiguration;
+    private final LogServerClientConfiguration logServerClientConfiguration;
 
     private final BindingServiceProperties bindings;
 
     @Autowired
-    public LogServerClientAutoConfiguration(LogServerConfiguration logServerConfiguration, LogServerCientConfiguration logServerCientConfiguration, BindingServiceProperties bindings) {
+    public LogServerClientAutoConfiguration(LogServerConfiguration logServerConfiguration, LogServerClientConfiguration logServerClientConfiguration, BindingServiceProperties bindings) {
         this.logServerConfiguration = logServerConfiguration;
-        this.logServerCientConfiguration = logServerCientConfiguration;
+        this.logServerClientConfiguration = logServerClientConfiguration;
         this.bindings = bindings;
     }
 
+    /**
+     * 初始化日志消息生产者
+     */
     @PostConstruct
     public void init() {
-        if (logServerCientConfiguration.isEnabled()) {
+        if (logServerClientConfiguration.isEnabled()) {
             BindingProperties outputBinding = this.bindings.getBindings().get(LogConstant.OUTPUT);
             if (outputBinding == null) {
                 this.bindings.getBindings().put(LogConstant.OUTPUT, new BindingProperties());
