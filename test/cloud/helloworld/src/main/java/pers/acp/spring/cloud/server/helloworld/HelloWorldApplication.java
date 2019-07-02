@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
@@ -24,10 +24,14 @@ public class HelloWorldApplication {
     @Bean("customerRestTemplateTest")
     @LoadBalanced
     public RestTemplate restTemplate(FeignHttpClientProperties feignHttpClientProperties) throws HttpException {
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(
+        return new RestTemplate(new OkHttp3ClientHttpRequestFactory(
                 new HttpClientBuilder().maxTotalConn(feignHttpClientProperties.getMaxConnections())
-                        .maxPerRoute(feignHttpClientProperties.getMaxConnectionsPerRoute())
-                        .timeOut(feignHttpClientProperties.getConnectionTimeout()).build().getHttpClient()));
+                        .timeOut(feignHttpClientProperties.getConnectionTimeout())
+                        .timeToLive(feignHttpClientProperties.getTimeToLive())
+                        .timeToLiveTimeUnit(feignHttpClientProperties.getTimeToLiveUnit())
+                        .followRedirects(feignHttpClientProperties.isFollowRedirects())
+                        .disableSslValidation(feignHttpClientProperties.isDisableSslValidation())
+                        .build().getBuilder().build()));
     }
 
 }

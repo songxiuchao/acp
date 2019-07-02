@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -86,10 +86,14 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @LoadBalanced
     @Bean("acpSpringCloudOauth2ClientRestTemplate")
     public RestTemplate acpSpringCloudOauth2ClientRestTemplate() throws HttpException {
-        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(
+        RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(
                 new HttpClientBuilder().maxTotalConn(feignHttpClientProperties.getMaxConnections())
-                        .maxPerRoute(feignHttpClientProperties.getMaxConnectionsPerRoute())
-                        .timeOut(feignHttpClientProperties.getConnectionTimeout()).build().getHttpClient()));
+                        .timeOut(feignHttpClientProperties.getConnectionTimeout())
+                        .timeToLive(feignHttpClientProperties.getTimeToLive())
+                        .timeToLiveTimeUnit(feignHttpClientProperties.getTimeToLiveUnit())
+                        .followRedirects(feignHttpClientProperties.isFollowRedirects())
+                        .disableSslValidation(feignHttpClientProperties.isDisableSslValidation())
+                        .build().getBuilder().build()));
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter(objectMapper));
         return restTemplate;
     }

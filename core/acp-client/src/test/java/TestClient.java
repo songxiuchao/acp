@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.netty.handler.timeout.IdleStateEvent;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpClientBuilder;
+import pers.acp.client.http.RequestParamBuilder;
 import pers.acp.client.http.ResponseResult;
 import pers.acp.client.socket.base.ISocketClientHandle;
 import pers.acp.client.socket.tcp.TcpClient;
@@ -22,7 +23,7 @@ public class TestClient {
             final int x = i + 1;
             new Thread(() -> {
                 for (int j = 0; j < 1; j++) {
-                    int flag = 3;
+                    int flag = 1;
                     if (flag == 1) {
                         ObjectMapper mapper = new ObjectMapper();
                         ObjectNode body = mapper.createObjectNode();
@@ -37,13 +38,15 @@ public class TestClient {
                         ResponseResult recevStr = null;
                         try {
                             recevStr = new HttpClientBuilder().build()
-                                    .url("http://127.0.0.1:8770/oauth/2.0/oauth/token")
-                                    .doPost(map);
-//                                    .doPostJSONStr(body.toString());
+                                    .doPost(RequestParamBuilder.build()
+                                            .url("http://127.0.0.1:8770/oauth/2.0/oauth/token")
+                                            .params(map));
                         } catch (HttpException e) {
                             e.printStackTrace();
                         }
                         System.out.println(recevStr);
+                        System.out.println(recevStr.getStatus());
+                        System.out.println(recevStr.getBody());
                         System.out.println(x + "" + j + "----->" + (System.currentTimeMillis() - begin));
                     } else if (flag == 2) {
                         UdpClient client = new UdpClient("127.0.0.1", 9999, 60000);
