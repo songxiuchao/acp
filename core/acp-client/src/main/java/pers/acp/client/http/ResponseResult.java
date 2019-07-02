@@ -1,7 +1,11 @@
 package pers.acp.client.http;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
+import okhttp3.Headers;
+import okhttp3.Response;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangbin by 2018-2-22 23:10
@@ -9,19 +13,22 @@ import org.apache.http.HttpResponse;
  */
 public class ResponseResult {
 
+    ResponseResult() {
+    }
+
     public int getStatus() {
         return status;
     }
 
-    public Header[] getHeaders() {
-        return headers;
+    public Map<String, List<String>> getHeaders() {
+        return responseHeaders;
     }
 
     public String getBody() {
         return body;
     }
 
-    public HttpResponse getResponse() {
+    public Response getResponse() {
         return response;
     }
 
@@ -30,8 +37,8 @@ public class ResponseResult {
         return this;
     }
 
-    public ResponseResult headers(Header[] headers) {
-        this.headers = headers;
+    public ResponseResult headers(Headers headers) {
+        this.responseHeaders = headers.toMultimap();
         return this;
     }
 
@@ -40,7 +47,7 @@ public class ResponseResult {
         return this;
     }
 
-    public ResponseResult response(HttpResponse response) {
+    public ResponseResult response(Response response) {
         this.response = response;
         return this;
     }
@@ -52,10 +59,10 @@ public class ResponseResult {
 
     private int status;
 
-    private Header[] headers;
+    private Map<String, List<String>> responseHeaders = new HashMap<>();
 
     private String body;
 
-    private HttpResponse response;
+    private Response response;
 
 }
