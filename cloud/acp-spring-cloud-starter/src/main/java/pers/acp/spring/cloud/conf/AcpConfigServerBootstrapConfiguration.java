@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +20,7 @@ import pers.acp.spring.boot.tools.PackageTools;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.springframework.cloud.config.client.ConfigClientProperties.AUTHORIZATION;
 
@@ -68,11 +69,14 @@ public class AcpConfigServerBootstrapConfiguration {
      */
     private RestTemplate customerConfigClientRestTemplate(ConfigClientProperties clientProperties) {
         try {
-            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(
+            OkHttp3ClientHttpRequestFactory requestFactory = new OkHttp3ClientHttpRequestFactory(
                     new HttpClientBuilder().maxTotalConn(Integer.valueOf(environment.getProperty("feign.httpclient.max-connections", "1000")))
-                            .maxPerRoute(Integer.valueOf(environment.getProperty("feign.httpclient.max-connections-per-route", "50")))
                             .timeOut(Integer.valueOf(environment.getProperty("feign.httpclient.connection-timeout", "10000")))
-                            .build().getHttpClient());
+                            .timeToLive(Integer.valueOf(environment.getProperty("feign.httpclient.time-to-live", "900")))
+                            .timeToLiveTimeUnit(Enum.valueOf(TimeUnit.class, environment.getProperty("feign.httpclient.time-to-live-unit", "seconds").toUpperCase()))
+                            .followRedirects(Boolean.valueOf(environment.getProperty("feign.httpclient.follow-redirects", "true")))
+                            .disableSslValidation(Boolean.valueOf(environment.getProperty("feign.httpclient.disable-ssl-validation", "false")))
+                            .build().getBuilder().build());
             if (clientProperties.getRequestReadTimeout() < 0) {
                 throw new IllegalStateException("Invalid Value for Read Timeout set.");
             }

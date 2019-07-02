@@ -75,7 +75,7 @@ public class HttpPacket {
                     }
                     String key = stringStringEntry.getKey();
                     String val = stringStringEntry.getValue();
-                    urlBuilder.append(sepStr).append(key).append("=").append(URLEncoder.encode(val, clientCharset));
+                    urlBuilder.append(sepStr).append(key).append("=").append(urlEncoding(val, clientCharset));
                 }
                 url = urlBuilder.toString();
             }

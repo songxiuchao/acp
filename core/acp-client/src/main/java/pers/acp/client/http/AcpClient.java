@@ -1,371 +1,365 @@
 package pers.acp.client.http;
 
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.HttpClient;
+import okhttp3.*;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.core.CommonTools;
+import pers.acp.core.log.LogFactory;
+import pers.acp.packet.http.HttpPacket;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.net.ssl.*;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 
 /**
- * Create by zhangbin on 2017-8-16 15:53
+ * @author zhang by 01/07/2019
+ * @since JDK 11
  */
 public class AcpClient {
 
-    private String url = null;
+    private final LogFactory log = LogFactory.getInstance(this.getClass());
 
-    private Map<String, String> params;
+    private OkHttpClient.Builder builder;
 
-    private String clientCharset;
+    private OkHttpClient client = null;
 
-    private boolean sendXML = false;
-
-    private String rootNameXML = null;
-
-    private boolean sendJSONStr = false;
-
-    private String jsonString;
-
-    private boolean sendBytes = false;
-
-    private byte[] bytes;
-
-    private boolean sendSOAP = false;
-
-    private String username = null;
-
-    private String password = null;
-
-    private ClientSender client;
-
-    private Map<String, String> headers = new HashMap<>();
-
-    public HttpClient getHttpClient() {
-        return client.getHttpClient();
+    public OkHttpClient.Builder getBuilder() {
+        return builder;
     }
 
-    public boolean isHttps() {
-        return client.isHttps();
-    }
-
-    private void post(boolean post) {
-        client = client.post(post);
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public Map<String, String> getParams() {
-        return params;
-    }
-
-    public String getClientCharset() {
-        return clientCharset;
-    }
-
-    public int getTimeOut() {
-        return client.getTimeOut();
-    }
-
-    public int getMaxTotalConn() {
-        return client.getMaxTotalConn();
-    }
-
-    public int getMaxperRoute() {
-        return client.getMaxPerRoute();
-    }
-
-    public String getUserAgent() {
-        return headers.get(HttpHeaders.USER_AGENT);
-    }
-
-    public String getCookie() {
-        return headers.get("Cookie");
-    }
-
-    public void addHeader(String name, String value) {
-        this.headers.put(name, value);
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public String getHeader(String name) {
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(name)) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * 伪装跳转地址
-     *
-     * @return 跳转地址
-     */
-    public String getRefer() {
-        return headers.get(HttpHeaders.REFERER);
-    }
-
-    public AcpClient url(String url) {
-        this.url = url;
+    public AcpClient cookieJar(CookieJar cookieJar) {
+        this.builder.cookieJar(cookieJar);
         return this;
     }
 
-    public AcpClient clientCharset(String clientCharset) {
-        this.clientCharset = clientCharset;
+    public AcpClient interceptor(Interceptor interceptor) {
+        this.builder.addInterceptor(interceptor);
         return this;
-    }
-
-    /**
-     * 伪装跳转地址
-     *
-     * @param referer 跳转地址
-     */
-    public AcpClient referer(String referer) {
-        headers.put(HttpHeaders.REFERER, referer);
-        return this;
-    }
-
-    public AcpClient userAgent(String userAgent) {
-        headers.put(HttpHeaders.USER_AGENT, userAgent);
-        return this;
-    }
-
-    public AcpClient cookie(String cookie) {
-        headers.put("Cookie", cookie);
-        return this;
-    }
-
-    public AcpClient username(String username) {
-        this.username = username;
-        return this;
-    }
-
-    public AcpClient password(String password) {
-        this.password = password;
-        return this;
-    }
-
-    public void close() {
-        if (client != null) {
-            client.close();
-        }
-    }
-
-    private void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-
-    private void setSendXML(boolean sendXML) {
-        this.sendXML = sendXML;
-    }
-
-    private void setRootNameXML(String rootNameXML) {
-        this.rootNameXML = rootNameXML;
-    }
-
-    private void setSendJSONStr(boolean sendJSONStr) {
-        this.sendJSONStr = sendJSONStr;
-    }
-
-    private void setJsonString(String jsonString) {
-        this.jsonString = jsonString;
-    }
-
-    private void setSendBytes(boolean sendBytes) {
-        this.sendBytes = sendBytes;
-    }
-
-    private void setBytes(byte[] bytes) {
-        this.bytes = bytes;
-    }
-
-    private void setSendSOAP(boolean sendSOAP) {
-        this.sendSOAP = sendSOAP;
     }
 
     /**
      * http 构造函数
      *
-     * @param isHttps      是否https请求，默认false
-     * @param maxTotalConn 最大链接数，默认1000
-     * @param maxPerRoute  路由并发数，默认50
-     * @param timeOut      超时时间
+     * @param builder              构造器
+     * @param disableSslValidation 无效ssl验证
      */
-    AcpClient(boolean isHttps, int maxTotalConn, int maxPerRoute, int timeOut) throws HttpException {
-        super();
-        client = new ClientSender(isHttps, maxTotalConn, maxPerRoute, timeOut);
+    AcpClient(OkHttpClient.Builder builder, boolean disableSslValidation, String sslType) throws HttpException {
+        this.builder = builder;
+        if (disableSslValidation) {
+            try {
+                X509TrustManager disabledTrustManager = new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] chain, String authType) {
+
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] chain, String authType) {
+
+                    }
+
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[0];
+                    }
+                };
+                TrustManager[] trustManagers = new TrustManager[1];
+                trustManagers[0] = disabledTrustManager;
+                SSLContext sslContext = SSLContext.getInstance(sslType);
+                sslContext.init(null, trustManagers, new java.security.SecureRandom());
+                SSLSocketFactory disabledSSLSocketFactory = sslContext.getSocketFactory();
+                this.builder.sslSocketFactory(disabledSSLSocketFactory, disabledTrustManager);
+                this.builder.hostnameVerifier((hostname, session) -> true);
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+                log.error(e.getMessage(), e);
+                throw new HttpException("Error setting SSLSocketFactory in OKHttpClient: " + e.getMessage());
+            }
+        }
+    }
+
+    private void basicAuth(RequestParam requestParam) {
+        if (!CommonTools.isNullStr(requestParam.getBasicUsername()) && !CommonTools.isNullStr(requestParam.getBasicPassword())) {
+            this.builder.authenticator((route, response) -> {
+                String credential = Credentials.basic(requestParam.getBasicUsername(), requestParam.getBasicPassword());
+                return response.request().newBuilder().header("Authorization", credential).build();
+            });
+        }
     }
 
     /**
      * GET请求
      *
+     * @param requestParam 请求参数
      * @return 响应信息
      */
-    public ResponseResult doGet() throws HttpException {
-        return doGet(null);
+    public ResponseResult doGet(RequestParam requestParam) throws HttpException {
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(HttpPacket.buildGetParam(requestParam.getUrl(), requestParam.getParams(), requestParam.getClientCharset()));
+        return doRequest(requestParam, requestBuilder);
     }
 
     /**
      * GET请求
      *
-     * @param params 请求参数
-     * @return 响应信息
+     * @param requestParam 请求参数
+     * @param httpCallBack 回调对象
      */
-    public ResponseResult doGet(Map<String, String> params) throws HttpException {
-        post(false);
-        setParams(params);
-        return doRequest();
+    public void doGetAsync(RequestParam requestParam, HttpCallBack httpCallBack) throws HttpException {
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(HttpPacket.buildGetParam(requestParam.getUrl(), requestParam.getParams(), requestParam.getClientCharset()));
+        doRequestAsync(requestParam, requestBuilder, httpCallBack);
     }
 
     /**
      * POST请求
+     * 键值对
      *
-     * @param params 参数
+     * @param requestParam 请求参数
      * @return 响应信息
      */
-    public ResponseResult doPost(Map<String, String> params) throws HttpException {
-        post(true);
-        setSendXML(false);
-        setSendJSONStr(false);
-        setSendBytes(false);
-        setSendSOAP(false);
-        setParams(params);
-        return doRequest();
+    public ResponseResult doPost(RequestParam requestParam) throws HttpException {
+        FormBody.Builder body = new FormBody.Builder();
+        requestParam.getParams().forEach(body::add);
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body.build());
+        return doRequest(requestParam, requestBuilder);
+    }
+
+    /**
+     * POST请求
+     * 键值对
+     *
+     * @param requestParam 请求参数
+     * @param httpCallBack 回调对象
+     */
+    public void doPostAsync(RequestParam requestParam, HttpCallBack httpCallBack) throws HttpException {
+        FormBody.Builder body = new FormBody.Builder();
+        requestParam.getParams().forEach(body::add);
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body.build());
+        doRequestAsync(requestParam, requestBuilder, httpCallBack);
     }
 
     /**
      * POST请求发送XML
      *
-     * @param params 参数
+     * @param requestParam 请求参数
      * @return 响应信息
      */
-    public ResponseResult doPostXML(Map<String, String> params) throws HttpException {
-        return doPostXML(null, params);
+    public ResponseResult doPostXml(RequestParam requestParam) throws HttpException {
+        RequestBody body = RequestBody.create(MediaType.parse("application/xml;charset=" + requestParam.getClientCharset()),
+                requestParam.getBodyString());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        return doRequest(requestParam, requestBuilder);
     }
 
     /**
      * POST请求发送XML
      *
-     * @param rootNameXML xml跟标签名
-     * @param params      参数
-     * @return 响应信息
+     * @param requestParam 请求参数
+     * @param httpCallBack 回调对象
      */
-    public ResponseResult doPostXML(String rootNameXML, Map<String, String> params) throws HttpException {
-        post(true);
-        setSendXML(true);
-        setSendJSONStr(false);
-        setSendBytes(false);
-        setSendSOAP(false);
-        setRootNameXML(rootNameXML);
-        setParams(params);
-        setBytes(null);
-        return doRequest();
-    }
-
-    /**
-     * POST请求发送XML
-     *
-     * @param bytes xml内容
-     * @return 响应信息
-     */
-    public ResponseResult doPostXML(byte[] bytes) throws HttpException {
-        post(true);
-        setSendXML(true);
-        setSendJSONStr(false);
-        setSendBytes(false);
-        setSendSOAP(false);
-        setRootNameXML(null);
-        setParams(null);
-        setBytes(bytes);
-        return doRequest();
+    public void doPostXmlAsync(RequestParam requestParam, HttpCallBack httpCallBack) throws HttpException {
+        RequestBody body = RequestBody.create(MediaType.parse("application/xml;charset=" + requestParam.getClientCharset()),
+                requestParam.getBodyString());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        doRequestAsync(requestParam, requestBuilder, httpCallBack);
     }
 
     /**
      * POST请求发送JSON字符串
      *
-     * @param jSONString json字符串
+     * @param requestParam 请求参数
      * @return 响应信息
      */
-    public ResponseResult doPostJSONStr(String jSONString) throws HttpException {
-        post(true);
-        setSendXML(false);
-        setSendJSONStr(true);
-        setSendBytes(false);
-        setSendSOAP(false);
-        setJsonString(jSONString);
-        return doRequest();
+    public ResponseResult doPostJson(RequestParam requestParam) throws HttpException {
+        RequestBody body = RequestBody.create(MediaType.parse("application/json;charset=" + requestParam.getClientCharset()),
+                requestParam.getBodyString());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        return doRequest(requestParam, requestBuilder);
     }
 
     /**
-     * POST请求发送字节数组数据
+     * POST请求发送JSON字符串
      *
-     * @param bytes 报文字节数组
-     * @return 响应信息
+     * @param requestParam 请求参数
+     * @param httpCallBack 回调对象
      */
-    public ResponseResult doPostBytes(byte[] bytes) throws HttpException {
-        post(true);
-        setSendXML(false);
-        setSendJSONStr(false);
-        setSendBytes(true);
-        setSendSOAP(false);
-        setBytes(bytes);
-        return doRequest();
+    public void doPostJsonAsync(RequestParam requestParam, HttpCallBack httpCallBack) throws HttpException {
+        RequestBody body = RequestBody.create(MediaType.parse("application/json;charset=" + requestParam.getClientCharset()),
+                requestParam.getBodyString());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        doRequestAsync(requestParam, requestBuilder, httpCallBack);
     }
 
     /**
      * POST请求发送SOAP报文数据
      *
-     * @param bytes 报文字节数组
+     * @param requestParam 请求参数
      * @return 响应信息
      */
-    public ResponseResult doPostSOAP(byte[] bytes) throws HttpException {
-        post(true);
-        setSendXML(false);
-        setSendJSONStr(false);
-        setSendBytes(false);
-        setSendSOAP(true);
-        setBytes(bytes);
-        return doRequest();
+    public ResponseResult doPostSoap(RequestParam requestParam) throws HttpException {
+        RequestBody body = RequestBody.create(MediaType.parse("application/soap+xml;charset=" + requestParam.getClientCharset()),
+                requestParam.getBodyString());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        return doRequest(requestParam, requestBuilder);
     }
 
     /**
-     * 执行请求
+     * POST请求发送SOAP报文数据
      *
+     * @param requestParam 请求参数
+     * @param httpCallBack 回调对象
+     */
+    public void doPostSoapAsync(RequestParam requestParam, HttpCallBack httpCallBack) throws HttpException {
+        RequestBody body = RequestBody.create(MediaType.parse("application/soap+xml;charset=" + requestParam.getClientCharset()),
+                requestParam.getBodyString());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        doRequestAsync(requestParam, requestBuilder, httpCallBack);
+    }
+
+    /**
+     * POST请求发送字节数组数据
+     *
+     * @param requestParam 请求参数
+     * @return 响应信息
+     */
+    public ResponseResult doPostBytes(RequestParam requestParam) throws HttpException {
+        if (requestParam.getBodyBytes() == null) {
+            throw new HttpException("the bodyBytes is null");
+        }
+        RequestBody body = RequestBody.create(MediaType.parse("application/octet-stream"),
+                requestParam.getBodyBytes());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        return doRequest(requestParam, requestBuilder);
+    }
+
+    /**
+     * POST请求发送字节数组数据
+     *
+     * @param requestParam 请求参数
+     * @param httpCallBack 回调对象
+     */
+    public void doPostBytesAsync(RequestParam requestParam, HttpCallBack httpCallBack) throws HttpException {
+        if (requestParam.getBodyBytes() == null) {
+            throw new HttpException("the bodyBytes is null");
+        }
+        RequestBody body = RequestBody.create(MediaType.parse("application/octet-stream"),
+                requestParam.getBodyBytes());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl())
+                .post(body);
+        doRequestAsync(requestParam, requestBuilder, httpCallBack);
+    }
+
+    /**
+     * 自定义请求
+     *
+     * @param method       请求类型
+     * @param requestParam 请求参数（body不能为空）
+     * @return 响应信息
+     */
+    public ResponseResult doRequest(String method, RequestParam requestParam) throws HttpException {
+        if (requestParam.getBody() == null) {
+            throw new HttpException("the body is null");
+        }
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl()).method(method, requestParam.getBody());
+        return doRequest(requestParam, requestBuilder);
+    }
+
+    /**
+     * 自定义请求
+     *
+     * @param method       请求类型
+     * @param requestParam 请求参数（body不能为空）
+     * @param httpCallBack 回调对象
+     */
+    public void doRequestAsync(String method, RequestParam requestParam, HttpCallBack httpCallBack) throws HttpException {
+        if (requestParam.getBody() == null) {
+            throw new HttpException("the body is null");
+        }
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(requestParam.getUrl()).method(method, requestParam.getBody());
+        doRequestAsync(requestParam, requestBuilder, httpCallBack);
+    }
+
+    /**
+     * 执行同步请求
+     *
+     * @param requestParam   请求参数
+     * @param requestBuilder 请求对象构造器
      * @return 响应
      */
-    private ResponseResult doRequest() throws HttpException {
-        Map<String, String> contextParam = null;
-        if (!CommonTools.isNullStr(username)) {
-            contextParam = new HashMap<>();
-            contextParam.put("username", username);
-            contextParam.put("password", password);
+    private ResponseResult doRequest(RequestParam requestParam, Request.Builder requestBuilder) throws HttpException {
+        try {
+            if (client == null) {
+                basicAuth(requestParam);
+                client = builder.build();
+            }
+            requestParam.getRequestHeaders().forEach(requestBuilder::addHeader);
+            Response response = client.newCall(requestBuilder.build()).execute();
+            return parseResponseResult(response);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new HttpException(e.getMessage());
         }
-        return client.params(params)
-                .clientCharset(clientCharset)
-                .headers(headers)
-                .sendXML(sendXML)
-                .rootName(rootNameXML)
-                .sendJSONStr(sendJSONStr)
-                .jsonString(jsonString)
-                .sendBytes(sendBytes)
-                .bytes(bytes)
-                .sendSOAP(sendSOAP)
-                .contextParams(contextParam)
-                .doRequest(url);
+    }
+
+    /**
+     * 执行异步请求
+     *
+     * @param requestParam   请求参数
+     * @param requestBuilder 请求对象构造器
+     * @param httpCallBack   回调对象
+     */
+    private void doRequestAsync(RequestParam requestParam, Request.Builder requestBuilder, HttpCallBack httpCallBack) throws HttpException {
+        try {
+            if (client == null) {
+                basicAuth(requestParam);
+                client = builder.build();
+            }
+            requestParam.getRequestHeaders().forEach(requestBuilder::addHeader);
+            client.newCall(requestBuilder.build()).enqueue(httpCallBack);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new HttpException(e.getMessage());
+        }
+    }
+
+    /**
+     * 处理响应
+     *
+     * @param response 响应对象
+     * @return 转换后的响应对象
+     * @throws IOException 异常
+     */
+    static ResponseResult parseResponseResult(Response response) throws IOException {
+        ResponseResult responseResult = ResponseResultBuilder.build()
+                .response(response)
+                .headers(response.headers())
+                .status(response.code());
+        if (response.body() != null) {
+            responseResult.body(response.body().string());
+        }
+        return responseResult;
     }
 
 }

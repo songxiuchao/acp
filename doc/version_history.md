@@ -1,4 +1,12 @@
 ## 版本更新记录
+##### v5.2.1
+> - [Upgrade] 重写 AcpClient ，底层将 Apache HttpClient 替换为 OKHttp
+> - [Upgrade] acp-spring-cloud-starter 中资源服务器客户端修改 AcpClient 参数
+> - [Upgrade] acp-spring-cloud-starter 中配置服务器客户端修改 AcpClient 参数
+> - [Upgrade] 更新 gradle 至 5.5
+> - [Upgrade] 修改 test/cloud 下各模块配置文件，HttpClient 替换为 OKHttp
+> - [Upgrade] 升级版本号为 5.2.1
+> - [Upgrade] 更新文档
 ##### v5.2.0
 > - [Upgrade] testspringboot 增加 Map 接收参数的 Demo
 > - [Upgrade] testspringboot 增加使用 RestTemplate 进行 post 方式的 form 提交单元测试

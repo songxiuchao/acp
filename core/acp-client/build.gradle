@@ -1,6 +1,6 @@
 versions += [
-        netty     : "4.1.36.Final",
-        httpclient: "4.5.9"
+        netty : "4.1.36.Final",
+        okhttp: "3.8.1"
 ]
 dependencies {
     compile project(":core:acp-packet")
@@ -9,5 +9,5 @@ dependencies {
     compile "io.netty:netty-all:$versions.netty"
 
     // http client
-    compile "org.apache.httpcomponents:httpclient:$versions.httpclient"
+    compile "com.squareup.okhttp3:okhttp:$versions.okhttp"
 }
