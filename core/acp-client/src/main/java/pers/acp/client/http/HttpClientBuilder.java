@@ -44,7 +44,7 @@ public class HttpClientBuilder {
     /**
      * SSL链接类型
      */
-    private String sslType = "TLSv1";
+    private String sslProtocolVersion = "SSL";
 
     /**
      * 请求失败时是否重试
@@ -81,8 +81,8 @@ public class HttpClientBuilder {
         return this;
     }
 
-    public HttpClientBuilder sslType(String sslType) {
-        this.sslType = sslType;
+    public HttpClientBuilder sslProtocolVersion(String sslType) {
+        this.sslProtocolVersion = sslType;
         return this;
     }
 
@@ -101,7 +101,7 @@ public class HttpClientBuilder {
                 .followSslRedirects(followRedirects)
                 .connectionPool(new ConnectionPool(maxTotalConn, timeToLive, timeToLiveTimeUnit))
                 .retryOnConnectionFailure(retryOnConnectionFailure)
-                .cookieJar(new DefaultCookieJar()), disableSslValidation, sslType);
+                .cookieJar(new DefaultCookieJar()), disableSslValidation, sslProtocolVersion);
     }
 
 }
