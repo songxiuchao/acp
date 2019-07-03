@@ -1,11 +1,14 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import okhttp3.Call;
 import org.junit.jupiter.api.Test;
 import pers.acp.client.exceptions.HttpException;
+import pers.acp.client.http.HttpCallBack;
 import pers.acp.client.http.HttpClientBuilder;
 import pers.acp.client.http.RequestParamBuilder;
 import pers.acp.client.http.ResponseResult;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,11 +22,12 @@ class TestHttp {
     void doTest() {
         try {
             doPost();
+            doPostAsync();
             doPostString();
             doPostBytes();
             doGet();
             doGetHttps();
-        } catch (HttpException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -43,6 +47,37 @@ class TestHttp {
         System.out.println("doPost -----> " + responseResult.getStatus());
         System.out.println("doPost -----> " + responseResult.getBody());
         System.out.println("doPost -----> " + (System.currentTimeMillis() - begin));
+    }
+
+    @Test
+    void doPostAsync() throws HttpException, InterruptedException {
+        Map<String, String> map = new HashMap<>();
+        map.put("grant_type", "client_credentials");
+        map.put("client_id", "test");
+        map.put("client_secret", "test");
+        long begin = System.currentTimeMillis();
+        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> begin");
+        new HttpClientBuilder().build()
+                .doPostAsync(RequestParamBuilder.build()
+                        .url("http://127.0.0.1:9090/boot/mapform")
+                        .params(map), new HttpCallBack() {
+                    @Override
+                    public void onRequestFailure(Call call, IOException e) {
+                        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> failure");
+                        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + call.request().url());
+                        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + (System.currentTimeMillis() - begin));
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onRequestResponse(Call call, ResponseResult responseResult) {
+                        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + responseResult);
+                        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + responseResult.getStatus());
+                        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + responseResult.getBody());
+                        System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + (System.currentTimeMillis() - begin));
+                    }
+                });
+        Thread.sleep(5000);
     }
 
     @Test
