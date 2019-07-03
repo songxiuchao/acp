@@ -53,7 +53,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "测试 hello", notes = "返回项目绝对路径")
-    @RequestMapping(value = "hello", method = RequestMethod.GET)
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public ResponseEntity<Object> home() throws UnknownHostException {
         return ResponseEntity.ok("home，" + CommonTools.getWebRootAbsPath() + "，" + InetAddress.getLocalHost().getHostAddress());
     }
