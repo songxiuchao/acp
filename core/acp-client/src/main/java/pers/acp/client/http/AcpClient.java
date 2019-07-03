@@ -297,7 +297,7 @@ public class AcpClient {
             throw new HttpException("the body is null");
         }
         Request.Builder requestBuilder = new Request.Builder()
-                .url(requestParam.getUrl()).method(method, requestParam.getBody());
+                .url(requestParam.getUrl()).method(method.toUpperCase(), requestParam.getBody());
         doRequestAsync(requestParam, requestBuilder, httpCallBack);
     }
 
