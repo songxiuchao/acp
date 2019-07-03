@@ -12,16 +12,18 @@ import java.io.IOException;
  */
 public abstract class HttpCallBack implements Callback {
 
+    @Override
     public void onFailure(Call call, IOException e) {
         onRequestFailure(call, e);
     }
 
+    @Override
     public void onResponse(Call call, Response response) throws IOException {
         onRequestResponse(call, AcpClient.parseResponseResult(response));
     }
 
-    abstract void onRequestFailure(Call call, IOException e);
+    public abstract void onRequestFailure(Call call, IOException e);
 
-    abstract void onRequestResponse(Call call, ResponseResult responseResult);
+    public abstract void onRequestResponse(Call call, ResponseResult responseResult);
 
 }
