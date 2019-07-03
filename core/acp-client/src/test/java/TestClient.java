@@ -1,16 +1,7 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.netty.handler.timeout.IdleStateEvent;
-import pers.acp.client.exceptions.HttpException;
-import pers.acp.client.http.HttpClientBuilder;
-import pers.acp.client.http.RequestParamBuilder;
-import pers.acp.client.http.ResponseResult;
 import pers.acp.client.socket.base.ISocketClientHandle;
 import pers.acp.client.socket.tcp.TcpClient;
 import pers.acp.client.socket.udp.UdpClient;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by zhang on 2016/6/1.
@@ -25,29 +16,7 @@ public class TestClient {
                 for (int j = 0; j < 1; j++) {
                     int flag = 1;
                     if (flag == 1) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        ObjectNode body = mapper.createObjectNode();
-                        body.put("param1", "尼玛");
-                        body.put("param2", Integer.valueOf(x + "" + j));
-
-                        Map<String, String> map = new HashMap<>();
-                        map.put("grant_type", "client_credentials");
-                        map.put("client_id", "test");
-                        map.put("client_secret", "test");
-                        long begin = System.currentTimeMillis();
-                        ResponseResult recevStr = null;
-                        try {
-                            recevStr = new HttpClientBuilder().build()
-                                    .doPost(RequestParamBuilder.build()
-                                            .url("http://127.0.0.1:8770/oauth/2.0/oauth/token")
-                                            .params(map));
-                        } catch (HttpException e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println(recevStr);
-                        System.out.println(recevStr.getStatus());
-                        System.out.println(recevStr.getBody());
-                        System.out.println(x + "" + j + "----->" + (System.currentTimeMillis() - begin));
+                        new TestHttp().doTest();
                     } else if (flag == 2) {
                         UdpClient client = new UdpClient("127.0.0.1", 9999, 60000);
                         client.setServerCharset("gbk");
