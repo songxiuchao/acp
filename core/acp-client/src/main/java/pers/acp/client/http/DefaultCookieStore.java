@@ -1,8 +1,8 @@
 package pers.acp.client.http;
 
 import okhttp3.Cookie;
-import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
+import pers.acp.client.http.base.CookieStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhang by 01/07/2019
  * @since JDK 11
  */
-public class DefaultCookieJar implements CookieJar {
+public class DefaultCookieStore implements CookieStore {
 
     private final ConcurrentHashMap<String, List<Cookie>> concurrentHashMap = new ConcurrentHashMap<>();
 

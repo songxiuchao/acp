@@ -2,6 +2,8 @@ package pers.acp.client.http;
 
 import okhttp3.*;
 import pers.acp.client.exceptions.HttpException;
+import pers.acp.client.http.base.CookieStore;
+import pers.acp.client.http.base.HttpInterceptor;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.packet.http.HttpPacket;
@@ -28,13 +30,13 @@ public class AcpClient {
         return builder;
     }
 
-    public AcpClient cookieJar(CookieJar cookieJar) {
-        this.builder.cookieJar(cookieJar);
+    public AcpClient cookieStore(CookieStore cookieStore) {
+        this.builder.cookieJar(cookieStore);
         return this;
     }
 
-    public AcpClient interceptor(Interceptor interceptor) {
-        this.builder.addInterceptor(interceptor);
+    public AcpClient httpInterceptor(HttpInterceptor httpInterceptor) {
+        this.builder.addInterceptor(httpInterceptor);
         return this;
     }
 

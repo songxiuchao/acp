@@ -101,7 +101,7 @@ public class HttpClientBuilder {
                 .followSslRedirects(followRedirects)
                 .connectionPool(new ConnectionPool(maxTotalConn, timeToLive, timeToLiveTimeUnit))
                 .retryOnConnectionFailure(retryOnConnectionFailure)
-                .cookieJar(new DefaultCookieJar()), disableSslValidation, sslProtocolVersion);
+                .cookieJar(new DefaultCookieStore()), disableSslValidation, sslProtocolVersion);
     }
 
 }
