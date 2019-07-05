@@ -1,0 +1,44 @@
+buildscript {
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot" as Object
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}" as Object
+        classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}" as Object
+        classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}" as Object
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'kotlin-jpa'
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+bootJar {
+    manifest {
+        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Project': 'Acp')
+    }
+}
+sourceCompatibility = "${javaVersion}"
+targetCompatibility = "${javaVersion}"
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "${javaVersion}"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "${javaVersion}"
+}
+
+dependencies {
+    compile project(":boot:acp-spring-boot-starter")
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
+    compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$versions.jackson_databind"
+    compile "commons-codec:commons-codec"
+
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "junit", module: "junit"
+    }
+}

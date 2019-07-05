@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v6.x
+> - [Upgrade] 增加 testkotlin 模块
 ##### v5.2.1
 > - [Upgrade] 重写 AcpClient ，底层将 Apache HttpClient 替换为 OKHttp
 > - [Upgrade] acp-spring-cloud-starter 中资源服务器客户端修改 AcpClient 参数
