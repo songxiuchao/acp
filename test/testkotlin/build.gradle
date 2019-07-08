@@ -31,9 +31,9 @@ compileTestKotlin {
 dependencies {
     compile project(":boot:acp-spring-boot-starter")
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
-    compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$versions.jackson_databind"
+    compile "org.jetbrains.kotlin:kotlin-stdlib"
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin"
     compile "commons-codec:commons-codec"
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
