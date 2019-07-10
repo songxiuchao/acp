@@ -1,7 +1,6 @@
 package pers.acp.spring.boot.enums;
 
 import pers.acp.core.exceptions.EnumValueUndefinedException;
-import pers.acp.core.interfaces.IEnumValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.Map;
  * 响应编码
  * Create by zhangbin on 2017-8-8 17:40
  */
-public enum ResponseCode implements IEnumValue {
+public enum ResponseCode {
 
     success(200, "请求成功"),
 
@@ -46,17 +45,14 @@ public enum ResponseCode implements IEnumValue {
         }
     }
 
-    @Override
     public Integer getValue() {
         return this.value;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Boolean equals(Integer value) {
         return this.value.equals(value);
     }
@@ -65,7 +61,7 @@ public enum ResponseCode implements IEnumValue {
         if (map.containsKey(value)) {
             return map.get(value);
         } else {
-            throw new EnumValueUndefinedException(ResponseCode.class, value);
+            throw new EnumValueUndefinedException(ResponseCode.class, value + "");
         }
     }
 

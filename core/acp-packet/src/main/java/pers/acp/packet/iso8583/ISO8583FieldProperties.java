@@ -1,8 +1,8 @@
 package pers.acp.packet.iso8583;
 
-import pers.acp.core.config.base.BaseProperties;
+import pers.acp.core.CommonTools;
+import pers.acp.core.base.BaseProperties;
 import pers.acp.core.log.LogFactory;
-import pers.acp.core.tools.CommonUtils;
 
 /**
  * @author zhangbin by 2018-2-3 21:14
@@ -20,7 +20,7 @@ public class ISO8583FieldProperties extends BaseProperties {
     public static ISO8583FieldProperties getInstance() {
         try {
             String propertiesFileName = "/iso8583.properties";
-            return (ISO8583FieldProperties) getInstance(ISO8583FieldProperties.class, propertiesFileName, CommonUtils.getWebRootAbsPath() + propertiesFileName);
+            return (ISO8583FieldProperties) getInstance(ISO8583FieldProperties.class, propertiesFileName, CommonTools.getWebRootAbsPath() + propertiesFileName);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return null;

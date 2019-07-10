@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-import pers.acp.spring.boot.base.BaseSpringBootScheduledTask;
+import pers.acp.spring.boot.base.BaseSpringBootScheduledAsyncTask;
 import pers.acp.spring.boot.conf.ScheduleConfiguration;
 import pers.acp.spring.boot.interfaces.ITimerTaskScheduler;
 import pers.acp.core.CommonTools;
@@ -34,14 +34,14 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
 
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-    private final Map<String, BaseSpringBootScheduledTask> baseSpringBootScheduledTaskMap;
+    private final Map<String, BaseSpringBootScheduledAsyncTask> baseSpringBootScheduledTaskMap;
 
-    private final ConcurrentHashMap<String, BaseSpringBootScheduledTask> scheduledTaskMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, BaseSpringBootScheduledAsyncTask> scheduledTaskMap = new ConcurrentHashMap<>();
 
     private final ConcurrentHashMap<String, ScheduledFuture<?>> futureMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public TimerTaskScheduler(TaskSchedulingProperties properties, ScheduleConfiguration scheduleConfiguration, Map<String, BaseSpringBootScheduledTask> baseSpringBootScheduledTaskMap) {
+    public TimerTaskScheduler(TaskSchedulingProperties properties, ScheduleConfiguration scheduleConfiguration, Map<String, BaseSpringBootScheduledAsyncTask> baseSpringBootScheduledTaskMap) {
         this.scheduleConfiguration = scheduleConfiguration;
         this.baseSpringBootScheduledTaskMap = baseSpringBootScheduledTaskMap;
         this.threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
@@ -75,11 +75,11 @@ public class TimerTaskScheduler implements ITimerTaskScheduler {
      * 停止定时任务
      */
     private void stopSchedule() throws InterruptedException {
-        Iterator<Map.Entry<String, BaseSpringBootScheduledTask>> it = scheduledTaskMap.entrySet().iterator();
+        Iterator<Map.Entry<String, BaseSpringBootScheduledAsyncTask>> it = scheduledTaskMap.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, BaseSpringBootScheduledTask> entry = it.next();
+            Map.Entry<String, BaseSpringBootScheduledAsyncTask> entry = it.next();
             String key = entry.getKey();
-            BaseSpringBootScheduledTask scheduledTask = entry.getValue();
+            BaseSpringBootScheduledAsyncTask scheduledTask = entry.getValue();
             ScheduledFuture<?> future = futureMap.remove(key);
             while (!scheduledTask.isWaiting()) {
                 Thread.sleep(3000);

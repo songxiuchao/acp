@@ -1,13 +1,13 @@
 package pers.acp.message.exceptions;
 
-import pers.acp.core.exceptions.base.BaseException;
+import pers.acp.core.base.BaseException;
 
 public class WeChatException extends BaseException {
 
-	private static final long serialVersionUID = 1824694106452546829L;
+    private static final long serialVersionUID = 1824694106452546829L;
 
-	public WeChatException(String message) {
-		super(message);
-	}
+    public WeChatException(String message) {
+        super(message);
+    }
 
 }

@@ -55,7 +55,7 @@ public enum LogLevel {
         if (map.containsKey(value)) {
             return map.get(value);
         } else {
-            throw new EnumValueUndefinedException(LogLevel.class, value);
+            throw new EnumValueUndefinedException(LogLevel.class, value + "");
         }
     }
 

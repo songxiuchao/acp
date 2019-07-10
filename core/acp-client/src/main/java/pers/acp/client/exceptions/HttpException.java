@@ -1,6 +1,6 @@
 package pers.acp.client.exceptions;
 
-import pers.acp.core.exceptions.base.BaseException;
+import pers.acp.core.base.BaseException;
 
 public class HttpException extends BaseException {
 

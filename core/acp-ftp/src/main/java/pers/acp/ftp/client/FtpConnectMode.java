@@ -2,7 +2,6 @@ package pers.acp.ftp.client;
 
 import org.apache.commons.net.ftp.FTPClient;
 import pers.acp.core.exceptions.EnumValueUndefinedException;
-import pers.acp.core.interfaces.IEnumValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.Map;
 /**
  * Create by zhangbin on 2017-11-3 15:16
  */
-public enum FtpConnectMode implements IEnumValue {
+public enum FtpConnectMode {
 
     ACTIVE_LOCAL("ACTIVE_LOCAL", FTPClient.ACTIVE_LOCAL_DATA_CONNECTION_MODE),
 
@@ -38,17 +37,14 @@ public enum FtpConnectMode implements IEnumValue {
         this.value = value;
     }
 
-    @Override
     public Integer getValue() {
         return this.value;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Boolean equals(Integer value) {
         return this.value.equals(value);
     }
@@ -57,7 +53,7 @@ public enum FtpConnectMode implements IEnumValue {
         if (map.containsKey(value)) {
             return map.get(value);
         }
-        throw new EnumValueUndefinedException(FtpConnectMode.class, value);
+        throw new EnumValueUndefinedException(FtpConnectMode.class, value + "");
     }
 
 }

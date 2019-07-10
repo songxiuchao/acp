@@ -1,6 +1,6 @@
 package pers.acp.ftp.exceptions;
 
-import pers.acp.core.exceptions.base.BaseException;
+import pers.acp.core.base.BaseException;
 
 /**
  * Created by zhangbin on 2016/12/22.

@@ -2,7 +2,7 @@ package pers.acp.core;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import pers.acp.core.dbconnection.ConnectionFactory;
+import pers.acp.core.dbcon.ConnectionFactory;
 import pers.acp.file.FileOperation;
 import pers.acp.file.excel.scheme.ExcelType;
 import pers.acp.file.excel.ExcelService;
@@ -389,8 +389,8 @@ public final class FileTools {
         PDFService pdfService = new PDFService();
         String result = pdfService.htmlFileToPDF(htmlFilePath, resultfile, basePath);
         if (isDelete) {
-            CommonTools.doDeleteDir(new File(foldpath));
-            CommonTools.doDeleteDir(htmlFile.getParentFile());
+            CommonTools.doDeleteFile(new File(foldpath), false);
+            CommonTools.doDeleteFile(htmlFile.getParentFile(), false);
         }
         return result.replace(webRootAdsPath, "").replaceAll("\\\\", "/");
     }

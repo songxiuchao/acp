@@ -1,0 +1,21 @@
+package pers.acp.core.base
+
+/**
+ * @author zhang by 10/07/2019
+ * @since JDK 11
+ */
+abstract class BaseException(override val message: String?) : Exception(message) {
+
+    var code: Int? = 1
+
+    constructor(e: Exception) : this(e.message)
+
+    constructor(code: Int?, message: String) : this(message) {
+        this.code = code
+    }
+
+    companion object {
+        private const val serialVersionUID = -7545052394584258864L
+    }
+
+}

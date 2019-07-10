@@ -1,7 +1,6 @@
 package pers.acp.ftp.client;
 
 import pers.acp.core.exceptions.EnumValueUndefinedException;
-import pers.acp.core.interfaces.IEnumValue;
 import com.jcraft.jsch.ChannelSftp;
 
 import java.util.HashMap;
@@ -11,7 +10,7 @@ import java.util.Map;
  * Created by zhangbin on 2016/12/20.
  * sftp 传输模式
  */
-public enum SftpChannelMode implements IEnumValue {
+public enum SftpChannelMode {
 
     OVERWRITE("OVERWRITE", ChannelSftp.OVERWRITE),
 
@@ -37,17 +36,14 @@ public enum SftpChannelMode implements IEnumValue {
         this.value = value;
     }
 
-    @Override
     public Integer getValue() {
         return this.value;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Boolean equals(Integer value) {
         return this.value.equals(value);
     }
@@ -56,7 +52,7 @@ public enum SftpChannelMode implements IEnumValue {
         if (map.containsKey(value)) {
             return map.get(value);
         }
-        throw new EnumValueUndefinedException(SftpChannelMode.class, value);
+        throw new EnumValueUndefinedException(SftpChannelMode.class, value + "");
     }
 
 }

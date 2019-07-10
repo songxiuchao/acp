@@ -22,7 +22,7 @@ public final class ExcelService {
     private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
 
     private void fillFilePath(File file) {
-        CommonTools.doDeleteFile(file, false, 0);
+        CommonTools.doDeleteFile(file, false);
         if (!file.getParentFile().exists()) {
             if (!file.getParentFile().mkdirs()) {
                 log.error("mkdirs failed : " + file.getParent());
@@ -60,7 +60,7 @@ public final class ExcelService {
                 }
                 /* 目标文件 */
                 File targetFile = new File(filename);
-                CommonTools.doDeleteFile(targetFile, false, 0);
+                CommonTools.doDeleteFile(targetFile, false);
                 /* 源文件内容导入目标文件 */
                 for (int s = 0; s < wb.getNumberOfSheets(); s++) {
                     Sheet sheet = wb.getSheetAt(s);
@@ -140,7 +140,7 @@ public final class ExcelService {
             }
         } catch (Exception e) {
             log.error("generate Excel Exception:" + e.getMessage(), e);
-            CommonTools.doDeleteFile(file, false, 0);
+            CommonTools.doDeleteFile(file, false);
             return "";
         }
     }
@@ -219,7 +219,7 @@ public final class ExcelService {
             }
         } catch (Exception e) {
             log.error("generate Excel Exception:" + e.getMessage());
-            CommonTools.doDeleteFile(file, false, 0);
+            CommonTools.doDeleteFile(file, false);
             return "";
         }
     }
@@ -325,12 +325,12 @@ public final class ExcelService {
                     result.add(rowData);
                 }
                 if (isDelete) {
-                    CommonTools.doDeleteFile(excelFile, false, 0);
+                    CommonTools.doDeleteFile(excelFile, false);
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 if (isDelete) {
-                    CommonTools.doDeleteFile(excelFile, false, 0);
+                    CommonTools.doDeleteFile(excelFile, false);
                 }
                 result = mapper.createArrayNode();
             }

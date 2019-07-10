@@ -8,7 +8,7 @@ import pers.acp.core.exceptions.OperateException
 import pers.acp.core.match.MoneyToCN
 import pers.acp.core.match.Operate
 import pers.acp.core.security.key.KeyManagement
-import pers.acp.core.task.threadpool.basetask.BaseAsyncTask
+import pers.acp.core.task.BaseAsyncTask
 import pers.acp.core.tools.CommonUtils
 
 import java.io.File
@@ -255,7 +255,7 @@ object CommonTools {
     @Throws(OperateException::class)
     fun doCalculate(calculateStr: String): Double {
         val operate = Operate()
-        return operate.caculate(calculateStr)
+        return operate.calculate(calculateStr)
     }
 
     /**
@@ -265,7 +265,7 @@ object CommonTools {
      * @return 大写字符串
      */
     @JvmStatic
-    fun moneyToCNMontrayUnit(money: Double): String = MoneyToCN.moneyToCNMontrayUnit(money)
+    fun moneyToRenminbi(money: Double): String = MoneyToCN.moneyToRenminbi(money)
 
     /**
      * 在线程池中执行任务

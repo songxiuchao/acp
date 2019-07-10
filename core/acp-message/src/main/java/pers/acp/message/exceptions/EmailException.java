@@ -1,6 +1,6 @@
 package pers.acp.message.exceptions;
 
-import pers.acp.core.exceptions.base.BaseException;
+import pers.acp.core.base.BaseException;
 
 public class EmailException extends BaseException {
 

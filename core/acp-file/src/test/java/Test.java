@@ -33,7 +33,7 @@ public class Test {
     }
 
     private static void testDecompress() {
-        CommonTools.ZIPToFiles("D:\\test\\test.zip", "D:\\test\\test", false);
+        CommonTools.zipToFiles("D:\\test\\test.zip", "D:\\test\\test", false);
     }
 
 }

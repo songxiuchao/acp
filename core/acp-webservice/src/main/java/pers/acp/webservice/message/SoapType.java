@@ -6,9 +6,8 @@ import java.util.Map;
 import javax.xml.soap.SOAPConstants;
 
 import pers.acp.core.exceptions.EnumValueUndefinedException;
-import pers.acp.core.interfaces.IEnumValue;
 
-public enum SoapType implements IEnumValue {
+public enum SoapType {
 
     /**
      * soap1.1协议
@@ -38,17 +37,14 @@ public enum SoapType implements IEnumValue {
         this.value = value;
     }
 
-    @Override
     public Integer getValue() {
         return this.value;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Boolean equals(Integer value) {
         return this.value.equals(value);
     }
@@ -57,6 +53,6 @@ public enum SoapType implements IEnumValue {
         if (map.containsKey(value)) {
             return map.get(value);
         }
-        throw new EnumValueUndefinedException(SoapType.class, value);
+        throw new EnumValueUndefinedException(SoapType.class, value + "");
     }
 }

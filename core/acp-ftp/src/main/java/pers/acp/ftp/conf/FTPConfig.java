@@ -3,7 +3,7 @@ package pers.acp.ftp.conf;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import pers.acp.core.config.base.BaseXML;
+import pers.acp.core.base.BaseXML;
 import pers.acp.core.log.LogFactory;
 
 import java.util.List;
