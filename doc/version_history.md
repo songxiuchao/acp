@@ -1,5 +1,5 @@
 ## 版本更新记录
-##### v6.x
+##### v6.0.0
 > - [Upgrade] 增加 testkotlin 模块
 > - [Upgrade] core/acp-core 模块大部分用 kotlin 重写，提升执行效率，去除冗余
 ##### v5.2.1
