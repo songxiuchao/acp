@@ -2,7 +2,7 @@ package pers.acp.ftp.conf;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import pers.acp.core.base.BaseXML;
+import pers.acp.core.base.BaseXml;
 import pers.acp.core.log.LogFactory;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * SFTP服务配置
  */
 @XStreamAlias("sftp-config")
-public class SFTPConfig extends BaseXML {
+public class SFTPConfig extends BaseXml {
 
     private static final LogFactory log = LogFactory.getInstance(SFTPConfig.class);
 

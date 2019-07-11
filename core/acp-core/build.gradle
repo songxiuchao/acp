@@ -1,7 +1,4 @@
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlin_coroutines"
     compile "joda-time:joda-time:$versions.joda_time"
     compile "commons-codec:commons-codec:$versions.commons_codec"
     compile "org.apache.commons:commons-text:$versions.commons_text"

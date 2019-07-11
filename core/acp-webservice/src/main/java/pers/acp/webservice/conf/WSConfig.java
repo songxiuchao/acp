@@ -2,13 +2,13 @@ package pers.acp.webservice.conf;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import pers.acp.core.base.BaseXML;
+import pers.acp.core.base.BaseXml;
 import pers.acp.core.log.LogFactory;
 
 import java.util.List;
 
 @XStreamAlias("webservice-config")
-public class WSConfig extends BaseXML {
+public class WSConfig extends BaseXml {
 
     private static final LogFactory log = LogFactory.getInstance(WSConfig.class);
 

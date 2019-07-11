@@ -3,7 +3,7 @@ package pers.acp.ftp.conf;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import pers.acp.core.base.BaseXML;
+import pers.acp.core.base.BaseXml;
 import pers.acp.core.log.LogFactory;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * FTP服务配置
  */
 @XStreamAlias("ftp-config")
-public class FTPConfig extends BaseXML {
+public class FTPConfig extends BaseXml {
 
     private static final LogFactory log = LogFactory.getInstance(FTPConfig.class);
 

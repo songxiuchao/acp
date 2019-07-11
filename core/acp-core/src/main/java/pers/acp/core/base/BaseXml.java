@@ -10,11 +10,11 @@ import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class BaseXML {
+public abstract class BaseXml {
 
-    private static final LogFactory log = LogFactory.getInstance(BaseXML.class);// 日志对象
+    private static final LogFactory log = LogFactory.getInstance(BaseXml.class);// 日志对象
 
-    private static final Map<String, BaseXML> instanceMap = new ConcurrentHashMap<>();
+    private static final Map<String, BaseXml> instanceMap = new ConcurrentHashMap<>();
 
     private String fileAdbPathName = null;
 
@@ -26,7 +26,7 @@ public abstract class BaseXML {
      * @param cls 序列化后转换的java类
      * @return 实例对象
      */
-    protected static BaseXML Load(Class<? extends BaseXML> cls) throws ConfigException {
+    protected static BaseXml Load(Class<? extends BaseXml> cls) throws ConfigException {
         String fileName = null;
         try {
             fileName = CommonUtils.INSTANCE.getProperties(cls.getCanonicalName(), "");
@@ -44,7 +44,7 @@ public abstract class BaseXML {
                     inputStreamReader = new InputStreamReader(new FileInputStream(file), CommonUtils.defaultCharset);
                 }
 
-                BaseXML instance = instanceMap.get(fileName);
+                BaseXml instance = instanceMap.get(fileName);
                 if (!instanceMap.containsKey(fileName) || (file.exists() && file.lastModified() > instance.lastModified)) {
                     if (inputStreamReader != null) {
                         synchronized (instanceMap) {
@@ -52,7 +52,7 @@ public abstract class BaseXML {
                             XStream.setupDefaultSecurity(xstream);
                             xstream.addPermission(type -> type.getName().equals(cls.getName()));
                             xstream.processAnnotations(cls);
-                            BaseXML obj = (BaseXML) xstream.fromXML(inputStreamReader);
+                            BaseXml obj = (BaseXml) xstream.fromXML(inputStreamReader);
                             if (obj == null) {
                                 log.error("load config failed:[" + fileName + "]");
                                 instanceMap.remove(fileName);

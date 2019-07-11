@@ -40,12 +40,12 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
     - spring-cloud-config-server
     - spring-cloud-bus-kafka
     
-## 一、环境要求
-- jdk 11
+## 一、环境要求及开发语言
+- java 11
 - gradle 5.5
 - kotlin 1.3.41
 
-## 二、gralde 配置及使用
+## 二、gradle 脚本配置及使用
 ### （一）配置文件
 ##### 1.gradle/dependencies.gradle
 定义外部依赖版本号
@@ -113,7 +113,7 @@ ext {
 ##### 4. acp:acp-client
 > - 客户端组件包
 > - 依赖 acp-packet
-> - 封装了http、https、tcp、udp、ftp、sftp协议的客户端
+> - 封装了http、https、tcp、udp的客户端
 ##### 5. acp:acp-ftp
 > - 应用扩展组件
 > - 依赖 acp-core
@@ -137,11 +137,11 @@ ext {
 ##### 10. boot:acp-spring-boot-starter-ftp
 > - springboot 应用扩展组件
 > - 依赖 acp-spring-boot-starter
-> - 扩展支持 ftp、sftp 等协议服务端配置
+> - 扩展支持 ftp、sftp 等协议服务端自动配置
 ##### 10. boot:acp-spring-boot-starter-ws
 > - springboot 应用扩展组件
 > - 依赖 acp-spring-boot-starter
-> - 扩展支持 webservice 服务端配置
+> - 扩展支持 webservice 服务端自动配置
 ### （二）快速开发 springboot 应用
 ##### 1. 开发说明
 - （1）参考 test:testspringboot
@@ -170,7 +170,7 @@ acp:
     crons:
       task1: 0 0/1 * * * ?
 ```
-key-value 形式，其中 key:task1 为任务 beanName，value:0 0/1 * * * ? 为定时执行规则。可配置多个
+key-value 形式（可配置多个），其中 task1 为任务的 beanName；0 0/1 * * * ? 为定时执行规则cron表达式。
 
 - 输出 controller 日志
 ```yaml

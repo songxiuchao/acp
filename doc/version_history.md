@@ -1,7 +1,8 @@
 ## 版本更新记录
 ##### v6.0.0
-> - [Upgrade] 增加 testkotlin 模块
-> - [Upgrade] core/acp-core 模块大部分用 kotlin 重写，提升执行效率，去除冗余
+> - [Upgrade] 升级 kotlin 版本至 1.3.41，至此已兼容 java 11
+> - [Upgrade] java 11 环境下增加 testkotlin 模块
+> - [Upgrade] 大部分模块用 kotlin 重写，与 java 并存，提升执行效率，去除冗余
 ##### v5.2.1
 > - [Upgrade] 重写 AcpClient ，底层将 Apache HttpClient 替换为 OKHttp
 > - [Upgrade] acp-spring-cloud-starter 中资源服务器客户端修改 AcpClient 参数
