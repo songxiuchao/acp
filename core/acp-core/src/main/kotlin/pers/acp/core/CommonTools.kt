@@ -161,7 +161,7 @@ object CommonTools {
      * @return 是否为空
      */
     @JvmStatic
-    fun isNullStr(src: String): Boolean = CommonUtils.isNullStr(src)
+    fun isNullStr(src: String?): Boolean = CommonUtils.isNullStr(src)
 
     /**
      * 源字符串中每到指定长度时就插入子字符串

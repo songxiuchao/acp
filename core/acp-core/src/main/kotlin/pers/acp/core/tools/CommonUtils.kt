@@ -356,7 +356,7 @@ object CommonUtils {
      * @return 是否为空
      */
     fun isNullStr(src: String?): Boolean {
-        return src.isNullOrBlank()
+        return src == null || src.isNullOrBlank()
     }
 
     /**
