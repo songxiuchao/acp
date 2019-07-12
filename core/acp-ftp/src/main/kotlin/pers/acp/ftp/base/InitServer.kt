@@ -14,13 +14,13 @@ abstract class InitServer {
         private val userFactoryMap = ConcurrentHashMap<String, UserFactory>()
 
         @JvmStatic
-        protected fun addUserFactory(userFactory: UserFactory) {
+        internal fun addUserFactory(userFactory: UserFactory) {
             userFactoryMap[userFactory.javaClass.canonicalName] = userFactory
         }
 
         @JvmStatic
         @Throws(ClassNotFoundException::class, NoSuchMethodException::class, IllegalAccessException::class, InvocationTargetException::class, InstantiationException::class)
-        protected fun getUserFactory(className: String): UserFactory {
+        internal fun getUserFactory(className: String): UserFactory {
             var userFactory = userFactoryMap[className]
             if (userFactory == null) {
                 userFactory = Class.forName(className).getDeclaredConstructor().newInstance() as UserFactory

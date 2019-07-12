@@ -250,7 +250,7 @@ acp:
         user-factory-class: pers.acp.test.application.test.TestUserFactory   #用户工厂类
 ```
 
-- webservice 服务端
+- webservice 服务端（仅限jdk8版本）
 ```yaml
 acp:
   ws-server:

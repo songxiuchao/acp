@@ -105,7 +105,3 @@ acp:
         key-auth-mode: RSA                                                   #可空，证书验证模式（RSA/DSA），默认RSA
         default-home-directory: "abs:D:\\个人\\测试ftp"                       #默认根路径
         user-factory-class: pers.acp.test.application.test.TestUserFactory   #用户工厂类
-  ws-server:
-    server:
-      - class-name: pers.acp.test.application.test.TestWebService            #webservice类
-        href: "http://127.0.0.1:8081/ws"                                     #访问地址 http://host:port

@@ -1,5 +1,6 @@
 ## 版本更新记录
 ##### v6.0.0
+> - [Upgrade] java 11 环境中删除 acp-spring-boot-starter-ws 和 acp-webservice 模块
 > - [Upgrade] 升级 kotlin 版本至 1.3.41，至此已兼容 java 11
 > - [Upgrade] java 11 环境下增加 testkotlin 模块
 > - [Upgrade] 大部分模块用 kotlin 重写，与 java 并存，提升执行效率，去除冗余
