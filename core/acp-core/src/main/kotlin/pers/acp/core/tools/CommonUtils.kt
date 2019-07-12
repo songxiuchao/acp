@@ -81,9 +81,10 @@ object CommonUtils {
      */
     private fun initSystemProperties() {
         try {
-            pps = AcpProperties.getInstance()
+            pps = pps ?: AcpProperties.getInstance()
         } catch (e: Exception) {
             log.error("load acp.properties failed!")
+            pps = null
         }
     }
 
@@ -255,9 +256,7 @@ object CommonUtils {
      * @return 值
      */
     fun getProperties(key: String, defaultValue: String = ""): String {
-        if (pps == null) {
-            initSystemProperties()
-        }
+        initSystemProperties()
         return if (pps != null) {
             pps!!.getProperty(key, defaultValue)
         } else {
@@ -659,7 +658,7 @@ object CommonUtils {
         var bin: BufferedInputStream? = null
         var bout: BufferedOutputStream? = null
         try {
-            zin = ZipInputStream(FileInputStream(zipFileName), Charset.forName(charSet))
+            zin = ZipInputStream(FileInputStream(zipFileName), charset(charSet))
             bin = BufferedInputStream(zin)
             var fOut: File
             var entry: ZipEntry? = zin.nextEntry

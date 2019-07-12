@@ -147,7 +147,7 @@ object Iso8583Packet {
                     return null
                 }
                 //将域值编码转换，保证报文编码统一
-                fieldValue = String(fieldValue.toByteArray(charset(packetEncoding)), Charset.forName(packetEncoding))
+                fieldValue = String(fieldValue.toByteArray(charset(packetEncoding)), charset(packetEncoding))
                 // 数据域名称FIELD开头的为128域
                 if (fieldName.startsWith("FIELD")) {
                     val fieldNo = fieldName.substring(5, 8)//例如005
@@ -242,16 +242,16 @@ object Iso8583Packet {
                     // 截取该域信息
                     if (!isFixLen) {//变长域
                         val defLen1 = Integer.valueOf(defLen)//VAR2后面的2
-                        val realLen1 = String(content8583, pos, defLen1, Charset.forName(packetEncoding))//报文中实际记录域长,例如16,023
+                        val realLen1 = String(content8583, pos, defLen1, charset(packetEncoding))//报文中实际记录域长,例如16,023
                         val realAllLen = defLen1 + Integer.valueOf(realLen1)//该字段总长度（包括长度值占的长度）
                         //						filedValue = new String(content8583, pos+defLen1, Integer.valueOf(realLen1), packetEncoding);
                         val filedValueByte = ByteArray(Integer.valueOf(realLen1))
                         System.arraycopy(content8583, pos + defLen1, filedValueByte, 0, filedValueByte.size)
-                        filedValue = String(filedValueByte, Charset.forName(packetEncoding))
+                        filedValue = String(filedValueByte, charset(packetEncoding))
                         pos += realAllLen//记录当前位置
                     } else {//定长域
                         val defLen2 = Integer.valueOf(defLen)//长度值占的位数
-                        filedValue = String(content8583, pos, defLen2, Charset.forName(packetEncoding))
+                        filedValue = String(content8583, pos, defLen2, charset(packetEncoding))
                         pos += defLen2//记录当前位置
                     }
                     filedMap[filedName] = filedValue

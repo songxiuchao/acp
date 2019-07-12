@@ -22,6 +22,7 @@ enum class ExecuteType {
             }
         }
 
+        @JvmStatic
         @Throws(EnumValueUndefinedException::class)
         fun getEnum(name: String): ExecuteType {
             if (nameMap.containsKey(name.toLowerCase())) {

@@ -25,6 +25,7 @@ enum class CircleType {
             }
         }
 
+        @JvmStatic
         @Throws(EnumValueUndefinedException::class)
         fun getEnum(name: String): CircleType {
             if (nameMap.containsKey(name.toLowerCase())) {

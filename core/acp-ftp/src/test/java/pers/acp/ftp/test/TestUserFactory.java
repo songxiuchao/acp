@@ -1,36 +1,38 @@
 package pers.acp.ftp.test;
 
+import org.jetbrains.annotations.NotNull;
 import pers.acp.core.CommonTools;
-import pers.acp.ftp.server.FTPServerUser;
-import pers.acp.ftp.server.SFTPServerUser;
+import pers.acp.ftp.server.FtpServerUser;
+import pers.acp.ftp.server.SftpServerUser;
 import pers.acp.ftp.user.UserFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author zhangbin
- * @date 2018-1-15 10:40
+ * @author zhangbin by 28/09/2018 16:36
  * @since JDK 11
  */
 public class TestUserFactory implements UserFactory {
 
+    @NotNull
     @Override
-    public List<FTPServerUser> generateFtpUserList() {
-        List<FTPServerUser> userList = new ArrayList<>();
-        FTPServerUser ftpServerUser = new FTPServerUser();
+    public List<FtpServerUser> generateFtpUserList() {
+        List<FtpServerUser> userList = new ArrayList<>();
+        FtpServerUser ftpServerUser = new FtpServerUser();
         ftpServerUser.setUsername("zb");
         ftpServerUser.setPassword("1");
         ftpServerUser.setEnableFlag(true);
-        ftpServerUser.setWritepermission(true);
+        ftpServerUser.setWritePermission(true);
         userList.add(ftpServerUser);
         return userList;
     }
 
+    @NotNull
     @Override
-    public List<SFTPServerUser> generateSFtpUserList() {
-        List<SFTPServerUser> userList = new ArrayList<>();
-        SFTPServerUser sftpServerUser = new SFTPServerUser();
+    public List<SftpServerUser> generateSFtpUserList() {
+        List<SftpServerUser> userList = new ArrayList<>();
+        SftpServerUser sftpServerUser = new SftpServerUser();
         sftpServerUser.setUsername("zhang");
         sftpServerUser.setPassword("1");
         //zb

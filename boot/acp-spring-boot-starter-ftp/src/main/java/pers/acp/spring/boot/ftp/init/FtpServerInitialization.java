@@ -3,7 +3,7 @@ package pers.acp.spring.boot.ftp.init;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 import pers.acp.ftp.InitFtpServer;
-import pers.acp.ftp.conf.FTPConfig;
+import pers.acp.ftp.conf.FtpConfig;
 import pers.acp.ftp.user.UserFactory;
 import pers.acp.spring.boot.base.BaseInitialization;
 import pers.acp.spring.boot.daemon.DaemonServiceManager;
@@ -38,7 +38,7 @@ public class FtpServerInitialization extends BaseInitialization {
      */
     @Override
     public void start() {
-        FTPConfig ftpConfig = new FTPConfig();
+        FtpConfig ftpConfig = new FtpConfig();
         ftpConfig.setListens(ftpServerConfiguration.getListeners());
         DaemonServiceManager.addAllService(InitFtpServer.startFtpServer(ftpConfig, userFactoryList));
     }

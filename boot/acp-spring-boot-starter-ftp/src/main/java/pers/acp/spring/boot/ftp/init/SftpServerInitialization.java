@@ -2,8 +2,8 @@ package pers.acp.spring.boot.ftp.init;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
-import pers.acp.ftp.InitSFtpServer;
-import pers.acp.ftp.conf.SFTPConfig;
+import pers.acp.ftp.InitSftpServer;
+import pers.acp.ftp.conf.SftpConfig;
 import pers.acp.ftp.user.UserFactory;
 import pers.acp.spring.boot.base.BaseInitialization;
 import pers.acp.spring.boot.daemon.DaemonServiceManager;
@@ -16,7 +16,7 @@ import java.util.List;
  * @since JDK 11
  */
 @Component
-@ConditionalOnClass(InitSFtpServer.class)
+@ConditionalOnClass(InitSftpServer.class)
 public class SftpServerInitialization extends BaseInitialization {
 
     private final SftpServerConfiguration sftpServerConfiguration;
@@ -38,9 +38,9 @@ public class SftpServerInitialization extends BaseInitialization {
      */
     @Override
     public void start() {
-        SFTPConfig sftpConfig = new SFTPConfig();
+        SftpConfig sftpConfig = new SftpConfig();
         sftpConfig.setListens(sftpServerConfiguration.getListeners());
-        DaemonServiceManager.addAllService(InitSFtpServer.startSFtpServer(sftpConfig, userFactoryList));
+        DaemonServiceManager.addAllService(InitSftpServer.startSftpServer(sftpConfig, userFactoryList));
     }
 
     @Override

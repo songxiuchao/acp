@@ -74,7 +74,7 @@ class TcpClient(serverIp: String, port: Int, timeOut: Int, idleTime: Int) : Sock
     }
 
     override fun beforeSendMessage(sendStr: String): Any =
-            ByteBufUtil.encodeString(channel!!.alloc(), CharBuffer.wrap(sendStr), Charset.forName(serverCharset))
+            ByteBufUtil.encodeString(channel!!.alloc(), CharBuffer.wrap(sendStr), charset(serverCharset))
 
     override fun afterSendMessage(channel: Channel) {
         if (!keepAlive && !needRead) {

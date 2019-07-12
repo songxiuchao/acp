@@ -60,7 +60,7 @@ abstract class SocketClient(internal var serverIp: String, internal var port: In
                 var sendStr = requestStr
                 if (hex) {
                     val bts = ByteBufUtil.decodeHexDump(sendStr)
-                    sendStr = String(bts, Charset.forName(serverCharset))
+                    sendStr = String(bts, charset(serverCharset))
                 }
                 val msgPack = beforeSendMessage(sendStr)
                 channel!!.writeAndFlush(msgPack)
@@ -75,7 +75,7 @@ abstract class SocketClient(internal var serverIp: String, internal var port: In
             val recvStr = if (hex) {
                 ByteBufUtil.hexDump(byteBuf)
             } else {
-                byteBuf.toString(Charset.forName(serverCharset))
+                byteBuf.toString(charset(serverCharset))
             }
             log.debug("socket receive:$recvStr")
             socketHandle?.receiveMsg(recvStr)

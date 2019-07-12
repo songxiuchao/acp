@@ -107,13 +107,6 @@ class TimerTaskContainer(
     }
 
     /**
-     * 执行前函数
-     */
-    private fun beforeExecute() {
-        lastExecuteDateTime = CommonUtils.getNowDateTime()
-    }
-
-    /**
      * 执行任务
      */
     @Throws(TimerException::class)
@@ -126,9 +119,8 @@ class TimerTaskContainer(
                 + task.generateTime?.toString(Calculation.DATETIME_FORMAT)
                 + " submitTime:"
                 + task.submitTime?.toString(Calculation.DATETIME_FORMAT))
-        beforeExecute()
-        val result = task.doExecute()
-        if (result == null) {
+        lastExecuteDateTime = CommonUtils.getNowDateTime()
+        if (task.doExecute() == null) {
             log.error("timerTask [" + task.taskName + "] execute failed...")
         }
     }

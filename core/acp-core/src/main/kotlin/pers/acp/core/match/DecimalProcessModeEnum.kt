@@ -33,6 +33,7 @@ enum class DecimalProcessModeEnum(val mode: RoundingMode, val description: Strin
             }
         }
 
+        @JvmStatic
         @Throws(EnumValueUndefinedException::class)
         fun getEnum(name: String): DecimalProcessModeEnum {
             if (nameMap.containsKey(name.toLowerCase())) {
