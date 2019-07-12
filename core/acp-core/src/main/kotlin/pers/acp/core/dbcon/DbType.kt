@@ -1,7 +1,6 @@
 package pers.acp.core.dbcon
 
 import pers.acp.core.exceptions.EnumValueUndefinedException
-import java.util.HashMap
 
 /**
  * @author zhang by 10/07/2019
@@ -24,7 +23,7 @@ enum class DbType(private val namePrefix: String, private val nameSuffix: String
 
     companion object {
 
-        private var nameMap: MutableMap<String, DbType> = HashMap()
+        private var nameMap: MutableMap<String, DbType> = mutableMapOf()
 
         init {
             for (type in values()) {

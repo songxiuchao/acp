@@ -10,12 +10,8 @@ abstract class BaseException(override val message: String?) : Exception(message)
 
     constructor(e: Exception) : this(e.message)
 
-    constructor(code: Int?, message: String) : this(message) {
+    constructor(code: Int?, message: String?) : this(message) {
         this.code = code
-    }
-
-    companion object {
-        private const val serialVersionUID = -7545052394584258864L
     }
 
 }

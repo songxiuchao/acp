@@ -1,7 +1,5 @@
 package pers.acp.core.task.timer.rule
 
-import java.util.HashMap
-
 import pers.acp.core.exceptions.EnumValueUndefinedException
 
 /**
@@ -19,7 +17,7 @@ enum class CircleType {
 
     companion object {
 
-        private var nameMap: MutableMap<String, CircleType> = HashMap()
+        private var nameMap: MutableMap<String, CircleType> = mutableMapOf()
 
         init {
             for (type in values()) {

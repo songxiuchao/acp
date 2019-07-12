@@ -15,7 +15,6 @@ import pers.acp.core.log.LogFactory
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.StringWriter
-import java.util.HashMap
 
 /**
  * @author zhang by 11/07/2019
@@ -32,9 +31,9 @@ object XmlPacket {
      * @return 参数Map
      */
     @JvmStatic
-    fun parseXml(xml: String): Map<String, String> =
+    fun parseXml(xml: String): MutableMap<String, String> =
             try {
-                val result = HashMap<String, String>()
+                val result: MutableMap<String, String> = mutableMapOf()
                 val json = xmlToJson(xml)
                 val iKey = json.fields()
                 while (iKey.hasNext()) {
@@ -53,7 +52,7 @@ object XmlPacket {
                 result
             } catch (e: Exception) {
                 log.error(e.message, e)
-                HashMap()
+                mutableMapOf()
             }
 
     /**

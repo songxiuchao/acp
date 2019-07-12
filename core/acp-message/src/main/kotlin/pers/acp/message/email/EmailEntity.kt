@@ -115,4 +115,46 @@ data class EmailEntity(
             return field
         }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as EmailEntity
+
+        if (senderAddress != other.senderAddress) return false
+        if (password != other.password) return false
+        if (mailPort != other.mailPort) return false
+        if (mailTransportProtocol != other.mailTransportProtocol) return false
+        if (mailSmtpAuth != other.mailSmtpAuth) return false
+        if (deBug != other.deBug) return false
+        if (ssl != other.ssl) return false
+        if (recipientAddresses != other.recipientAddresses) return false
+        if (recipientCCAddresses != other.recipientCCAddresses) return false
+        if (recipientBCCAddresses != other.recipientBCCAddresses) return false
+        if (mailSubject != other.mailSubject) return false
+        if (content != other.content) return false
+        if (images != other.images) return false
+        if (attaches != other.attaches) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = senderAddress?.hashCode() ?: 0
+        result = 31 * result + (password?.hashCode() ?: 0)
+        result = 31 * result + mailPort
+        result = 31 * result + mailTransportProtocol.hashCode()
+        result = 31 * result + mailSmtpAuth.hashCode()
+        result = 31 * result + deBug.hashCode()
+        result = 31 * result + ssl.hashCode()
+        result = 31 * result + (recipientAddresses?.hashCode() ?: 0)
+        result = 31 * result + (recipientCCAddresses?.hashCode() ?: 0)
+        result = 31 * result + (recipientBCCAddresses?.hashCode() ?: 0)
+        result = 31 * result + (mailSubject?.hashCode() ?: 0)
+        result = 31 * result + content.hashCode()
+        result = 31 * result + (images?.hashCode() ?: 0)
+        result = 31 * result + (attaches?.hashCode() ?: 0)
+        return result
+    }
+
 }

@@ -90,4 +90,23 @@ data class KeyEntity(
             return entity
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as KeyEntity
+
+        if (keyType != other.keyType) return false
+        if (traitId != other.traitId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = keyType.hashCode()
+        result = 31 * result + traitId.hashCode()
+        return result
+    }
+
 }

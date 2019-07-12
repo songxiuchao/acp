@@ -5,7 +5,6 @@ import pers.acp.core.log.LogFactory
 
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
-import java.util.HashMap
 import java.util.TreeMap
 import kotlin.math.abs
 
@@ -73,8 +72,8 @@ object Iso8583Packet {
         try {
             val iso8583FieldProperties = Iso8583FieldProperties.getInstance()
             iso8583FieldProperties?.let {
-                map8583Definition = HashMap()
-                iso8583FieldProperties.forEach { key, value -> (map8583Definition as HashMap<String, String>)[key.toString()] = value.toString() }
+                map8583Definition = mutableMapOf()
+                iso8583FieldProperties.forEach { key, value -> (map8583Definition as MutableMap<String, String>)[key.toString()] = value.toString() }
             }
         } catch (e: Exception) {
             log.error(e.message, e)

@@ -1,7 +1,6 @@
 package pers.acp.core.task.timer.rule
 
 import pers.acp.core.exceptions.EnumValueUndefinedException
-import java.util.HashMap
 
 /**
  * @author zhang by 10/07/2019
@@ -15,7 +14,7 @@ enum class ExecuteType {
 
     companion object {
 
-        private var nameMap: MutableMap<String, ExecuteType> = HashMap()
+        private var nameMap: MutableMap<String, ExecuteType> = mutableMapOf()
 
         init {
             for (type in values()) {

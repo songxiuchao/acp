@@ -1,7 +1,6 @@
 package pers.acp.core.security.key
 
 import pers.acp.core.exceptions.EnumValueUndefinedException
-import java.util.HashMap
 
 /**
  * @author zhang by 10/07/2019
@@ -21,7 +20,7 @@ enum class KeyType {
 
     companion object {
 
-        private var nameMap: MutableMap<String, KeyType> = HashMap()
+        private var nameMap: MutableMap<String, KeyType> = mutableMapOf()
 
         init {
             for (type in values()) {

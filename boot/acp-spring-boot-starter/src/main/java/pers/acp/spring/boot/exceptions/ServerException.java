@@ -5,8 +5,6 @@ import pers.acp.spring.boot.enums.ResponseCode;
 
 public class ServerException extends BaseException {
 
-    private static final long serialVersionUID = -826325914171274124L;
-
     public ServerException(ResponseCode responseCode) {
         super(responseCode.getValue(), responseCode.getName());
     }

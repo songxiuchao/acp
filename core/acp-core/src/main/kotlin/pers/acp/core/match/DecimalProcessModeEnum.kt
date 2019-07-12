@@ -2,7 +2,6 @@ package pers.acp.core.match
 
 import pers.acp.core.exceptions.EnumValueUndefinedException
 import java.math.RoundingMode
-import java.util.HashMap
 
 /**
  * @author zhang by 10/07/2019
@@ -26,7 +25,7 @@ enum class DecimalProcessModeEnum(val mode: RoundingMode, val description: Strin
 
     companion object {
 
-        private var nameMap: MutableMap<String, DecimalProcessModeEnum> = HashMap()
+        private var nameMap: MutableMap<String, DecimalProcessModeEnum> = mutableMapOf()
 
         init {
             for (type in values()) {
