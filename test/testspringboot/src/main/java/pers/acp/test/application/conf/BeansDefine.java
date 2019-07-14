@@ -13,7 +13,7 @@ import org.springframework.orm.hibernate5.HibernateExceptionTranslator;
 public class BeansDefine {
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(HibernateExceptionTranslator.class)
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }

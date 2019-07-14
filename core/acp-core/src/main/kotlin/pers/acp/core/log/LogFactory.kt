@@ -25,9 +25,9 @@ class LogFactory {
         logger.info(message)
     }
 
-    fun info(message: String?, vararg `var`: Any) {
+    fun info(message: String?, vararg variable: Any?) {
         setCustomerParams()
-        logger.info(message, *`var`)
+        logger.info(message, *variable)
     }
 
     fun info(message: String?, t: Throwable) {
@@ -40,9 +40,9 @@ class LogFactory {
         logger.debug(message)
     }
 
-    fun debug(message: String?, vararg `var`: Any) {
+    fun debug(message: String?, vararg variable: Any?) {
         setCustomerParams()
-        logger.debug(message, *`var`)
+        logger.debug(message, *variable)
     }
 
     fun debug(message: String?, t: Throwable) {
@@ -55,9 +55,9 @@ class LogFactory {
         logger.warn(message)
     }
 
-    fun warn(message: String?, vararg `var`: Any) {
+    fun warn(message: String?, vararg variable: Any?) {
         setCustomerParams()
-        logger.warn(message, *`var`)
+        logger.warn(message, *variable)
     }
 
     fun warn(message: String?, t: Throwable) {
@@ -70,9 +70,9 @@ class LogFactory {
         logger.error(message)
     }
 
-    fun error(message: String?, vararg `var`: Any) {
+    fun error(message: String?, vararg variable: Any?) {
         setCustomerParams()
-        logger.debug(message, *`var`)
+        logger.debug(message, *variable)
     }
 
     fun error(message: String?, t: Throwable) {
@@ -85,9 +85,9 @@ class LogFactory {
         logger.trace(message)
     }
 
-    fun trace(message: String?, vararg `var`: Any) {
+    fun trace(message: String?, vararg variable: Any?) {
         setCustomerParams()
-        logger.trace(message, *`var`)
+        logger.trace(message, *variable)
     }
 
     fun trace(message: String?, t: Throwable) {
