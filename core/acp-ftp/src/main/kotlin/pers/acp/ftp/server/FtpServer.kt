@@ -49,7 +49,7 @@ class FtpServer(private val userList: List<FtpServerUser>, private val listen: F
             val factory = ListenerFactory()
             factory.port = listen.port
             serverFactory.addListener("default", factory.createListener())
-            val connectionConfig = DefaultConnectionConfig(listen.isAnonymousLoginEnabled, listen.loginFailureDelay, listen.maxLogins, listen.maxAnonymousLogins, listen.maxLoginFailures, listen.maxThreads)
+            val connectionConfig = DefaultConnectionConfig(listen.anonymousLoginEnabled, listen.loginFailureDelay, listen.maxLogins, listen.maxAnonymousLogins, listen.maxLoginFailures, listen.maxThreads)
             serverFactory.connectionConfig = connectionConfig
             val pwdMode = listen.pwdEncryptMode
 
@@ -74,9 +74,9 @@ class FtpServer(private val userList: List<FtpServerUser>, private val listen: F
             }
             val anonymous = BaseUser()
             anonymous.name = "anonymous"
-            anonymous.enabled = listen.isAnonymousLoginEnabled
+            anonymous.enabled = listen.anonymousLoginEnabled
             anonymous.homeDirectory = defaultHomeDirectory
-            if (listen.isAnonymousWritePermission) {
+            if (listen.anonymousWritePermission) {
                 val authorities = ArrayList<Authority>()
                 authorities.add(WritePermission())
                 anonymous.authorities = authorities
@@ -113,7 +113,7 @@ class FtpServer(private val userList: List<FtpServerUser>, private val listen: F
                     serverFactory.userManager.save(user)
                 }
             } else {
-                if (!listen.isAnonymousLoginEnabled) {
+                if (!listen.anonymousLoginEnabled) {
                     log.error("start ftp server failed [" + listen.name + "] : no user set!")
                     throw FtpServerException("no user set")
                 }

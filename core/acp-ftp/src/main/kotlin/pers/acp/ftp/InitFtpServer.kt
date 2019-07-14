@@ -43,7 +43,7 @@ object InitFtpServer : InitServer() {
             val listens = it.listens
             if (listens != null && listens.isNotEmpty()) {
                 for (listen in listens) {
-                    if (listen.isEnabled) {
+                    if (listen.enabled) {
                         val classname = listen.userFactoryClass
                         if (!CommonTools.isNullStr(classname)) {
                             val userFactory = getUserFactory(classname!!)

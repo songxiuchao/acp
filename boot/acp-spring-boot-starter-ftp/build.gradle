@@ -3,6 +3,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
     }
 }
+apply plugin: 'kotlin-spring'
 apply plugin: "io.spring.dependency-management"
 dependencyManagement {
     imports {

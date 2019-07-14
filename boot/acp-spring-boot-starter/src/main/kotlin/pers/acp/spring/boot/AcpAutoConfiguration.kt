@@ -16,16 +16,16 @@ import pers.acp.spring.boot.tools.PackageTools
  */
 @Configuration
 @ComponentScan("pers.acp.spring.boot")
-open class AcpAutoConfiguration {
+class AcpAutoConfiguration {
 
     @Primary
     @Bean
     @ConditionalOnMissingBean(ObjectMapper::class)
     @ConditionalOnBean(JacksonProperties::class)
-    open fun jacksonObjectMapper(jacksonProperties: JacksonProperties): ObjectMapper = PackageTools.buildJacksonObjectMapper(jacksonProperties)
+    fun jacksonObjectMapper(jacksonProperties: JacksonProperties): ObjectMapper = PackageTools.buildJacksonObjectMapper(jacksonProperties)
 
     @Bean
     @ConditionalOnMissingBean(JacksonProperties::class)
-    open fun jacksonProperties() = JacksonProperties()
+    fun jacksonProperties() = JacksonProperties()
 
 }

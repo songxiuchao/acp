@@ -48,7 +48,7 @@ class SftpServer(private val userList: List<SftpServerUser>, private val listen:
             }
 
             val keyAuthType = listen.keyAuthType
-            if (listen.isPublicKeyAuth && CommonTools.isNullStr(keyAuthType)) {
+            if (listen.publicKeyAuth && CommonTools.isNullStr(keyAuthType)) {
                 log.error("start sftp server failed [" + listen.name + "] : keyAuthType is not support [" + keyAuthType + "] !")
                 throw SftpServerException("keyAuthType is not support : $keyAuthType")
             } else {
@@ -72,7 +72,7 @@ class SftpServer(private val userList: List<SftpServerUser>, private val listen:
             sshServer = SshServer.setUpDefaultServer()
             sshServer!!.port = listen.port
             val keyPath = CommonTools.getAbsPath(listen.hostKeyPath!!)
-            if (listen.isPublicKeyAuth) {
+            if (listen.publicKeyAuth) {
                 sshServer!!.properties[SshServer.AUTH_METHODS] = "publickey"
                 sshServer!!.publickeyAuthenticator = UserPublicKeyAuthenticator(userList, true, keyAuthMode, keyAuthType)
             } else {
@@ -85,7 +85,7 @@ class SftpServer(private val userList: List<SftpServerUser>, private val listen:
             val namedFactoryList = ArrayList<NamedFactory<Command>>()
             namedFactoryList.add(SftpSubsystemFactory())
             sshServer!!.subsystemFactories = namedFactoryList
-            if (!listen.isPublicKeyAuth && listen.isPasswordAuth) {
+            if (!listen.publicKeyAuth && listen.passwordAuth) {
                 sshServer!!.passwordAuthenticator = UserPasswordAuthenticator(userList, true)
             } else {
                 sshServer!!.passwordAuthenticator = UserPasswordAuthenticator(userList, false)
