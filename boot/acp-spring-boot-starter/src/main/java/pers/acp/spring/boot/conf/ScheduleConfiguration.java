@@ -16,12 +16,12 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "acp.schedule")
 public class ScheduleConfiguration {
 
-    public Map<String, String> getCrons() {
-        return crons;
+    public Map<String, String> getCron() {
+        return cron;
     }
 
-    public void setCrons(Map<String, String> crons) {
-        this.crons = crons;
+    public void setCron(Map<String, String> cron) {
+        this.cron = cron;
     }
 
     /**
@@ -29,6 +29,6 @@ public class ScheduleConfiguration {
      * key => bean name
      * value => coron
      */
-    private Map<String, String> crons = new HashMap<>();
+    private Map<String, String> cron = new HashMap<>();
 
 }

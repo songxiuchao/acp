@@ -1,5 +1,6 @@
 package pers.acp.spring.boot.ftp.init;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 import pers.acp.ftp.InitFtpServer;
@@ -28,6 +29,7 @@ public class FtpServerInitialization extends BaseInitialization {
         this.userFactoryList = userFactoryList;
     }
 
+    @NotNull
     @Override
     public String getName() {
         return "ftp server setup server";

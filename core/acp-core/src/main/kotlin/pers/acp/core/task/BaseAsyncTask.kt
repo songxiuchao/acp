@@ -60,7 +60,7 @@ abstract class BaseAsyncTask(var taskName: String, var needExecuteImmediate: Boo
      * 任务是否处于正在执行状态
      */
     @Volatile
-    var isRunning = false
+    var running = false
         private set
 
     init {
@@ -69,7 +69,7 @@ abstract class BaseAsyncTask(var taskName: String, var needExecuteImmediate: Boo
     }
 
     override fun call(): Any? {
-        this.isRunning = true
+        this.running = true
         this.beginExecuteTime = DateTime()
         var result: Any? = null
         try {
@@ -86,7 +86,7 @@ abstract class BaseAsyncTask(var taskName: String, var needExecuteImmediate: Boo
         }
 
         this.finishTime = CommonUtils.getNowDateTime()
-        this.isRunning = false
+        this.running = false
         this.taskResult = result
         return result
     }

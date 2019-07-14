@@ -19,7 +19,6 @@ import pers.acp.core.task.timer.Calculation
 
 import java.io.*
 import java.net.URLDecoder
-import java.nio.charset.Charset
 import java.util.Properties
 import java.util.UUID
 import java.util.regex.Pattern
@@ -546,13 +545,24 @@ object CommonUtils {
     }
 
     /**
-     * 在线程池中执行任务
+     * 异步执行任务，立即执行
      *
-     * @param task       线程池任务
-     * @return 协程任务
+     * @param task     异步任务
+     * @return 协程任务 Deferred
      */
-    fun executeAsyncTask(task: BaseAsyncTask): Job =
-            GlobalScope.launch {
+    fun executeTaskAsync(task: BaseAsyncTask) =
+            GlobalScope.async {
+                task.doExecute()
+            }
+
+    /**
+     * 异步执行任务，不立即执行
+     *
+     * @param task     异步任务
+     * @return 协程任务 Deferred
+     */
+    fun executeTaskAsyncLazy(task: BaseAsyncTask) =
+            GlobalScope.async(start = CoroutineStart.LAZY) {
                 task.doExecute()
             }
 
@@ -564,7 +574,7 @@ object CommonUtils {
      * @param deleteFile     压缩完后是否删除原文件
      * @return 目标文件绝对路径
      */
-    fun filesToZIP(fileNames: Array<String>, resultFileName: String, deleteFile: Boolean): String {
+    fun filesToZip(fileNames: Array<String>, resultFileName: String, deleteFile: Boolean): String {
         val startTime = System.currentTimeMillis()
         var endTime: Long = 0
         var out: ZipOutputStream? = null

@@ -274,7 +274,7 @@ object CommonTools {
      * @return 协程任务
      */
     @JvmStatic
-    fun executeTaskInThreadPool(task: BaseAsyncTask) = CommonUtils.executeAsyncTask(task)
+    fun executeTaskAsync(task: BaseAsyncTask) = CommonUtils.executeTaskAsync(task)
 
     /**
      * 字符串转JSON对象
@@ -338,8 +338,8 @@ object CommonTools {
      * @return 目标文件绝对路径
      */
     @JvmStatic
-    fun filesToZIP(fileNames: Array<String>, resultFileName: String, deleteFile: Boolean): String =
-            CommonUtils.filesToZIP(fileNames, resultFileName, deleteFile)
+    fun filesToZip(fileNames: Array<String>, resultFileName: String, deleteFile: Boolean): String =
+            CommonUtils.filesToZip(fileNames, resultFileName, deleteFile)
 
     /**
      * 解压缩文件

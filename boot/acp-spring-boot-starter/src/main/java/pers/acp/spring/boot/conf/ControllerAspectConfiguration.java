@@ -16,7 +16,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "acp.controller-aspect")
 public class ControllerAspectConfiguration {
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
@@ -24,12 +24,12 @@ public class ControllerAspectConfiguration {
         this.enabled = enabled;
     }
 
-    public List<String> getNoLogUriRegexes() {
-        return noLogUriRegexes;
+    public List<String> getNoLogUriRegular() {
+        return noLogUriRegular;
     }
 
-    public void setNoLogUriRegexes(List<String> noLogUriRegexes) {
-        this.noLogUriRegexes = noLogUriRegexes;
+    public void setNoLogUriRegular(List<String> noLogUriRegular) {
+        this.noLogUriRegular = noLogUriRegular;
     }
 
     /**
@@ -39,8 +39,8 @@ public class ControllerAspectConfiguration {
 
     /**
      * 不进行日志记录的 url 正则表达式
-     * no log uri regexes
+     * no log uri regular
      */
-    private List<String> noLogUriRegexes = new ArrayList<>();
+    private List<String> noLogUriRegular = new ArrayList<>();
 
 }

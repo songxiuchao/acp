@@ -21,7 +21,7 @@ public class SocketListenerConfiguration {
         this.threadNumber = threadNumber;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
@@ -29,7 +29,7 @@ public class SocketListenerConfiguration {
         this.enabled = enabled;
     }
 
-    public boolean isKeepAlive() {
+    public boolean getKeepAlive() {
         return keepAlive;
     }
 
@@ -37,7 +37,7 @@ public class SocketListenerConfiguration {
         this.keepAlive = keepAlive;
     }
 
-    public boolean isHex() {
+    public boolean getHex() {
         return hex;
     }
 
@@ -77,7 +77,7 @@ public class SocketListenerConfiguration {
         this.handleBean = handleBean;
     }
 
-    public boolean isResponsable() {
+    public boolean getResponsable() {
         return responsable;
     }
 

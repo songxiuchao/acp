@@ -1,9 +1,14 @@
 ## 版本更新记录
 ##### v6.0.0
-> - [Upgrade] java 11 环境中删除 acp-spring-boot-starter-ws 和 acp-webservice 模块
+> - [Upgrade] java 11 环境中删除 acp-spring-boot-starter-ws 和 acp-webservice 模块，彻底废弃 webservice 相关功能的支持
+> - [Upgrade] java 1.8 环境中删除 testscala 模块
 > - [Upgrade] 升级 kotlin 版本至 1.3.41，至此已兼容 java 11
 > - [Upgrade] java 11 环境下增加 testkotlin 模块
 > - [Upgrade] 大部分模块用 kotlin 重写，与 java 并存，提升执行效率，去除冗余
+> - [Upgrade] gradle 脚本中 bootJar 内增加 Kotlin Version
+> - [Upgrade] 修改部分配置参数
+    - acp.controller-aspect.no-log-uri-regexes 修改为 acp.controller-aspect.no-log-uri-regular
+    - acp.schedule.crons 修改为 acp.schedule.cron
 ##### v5.2.1
 > - [Upgrade] 重写 AcpClient ，底层将 Apache HttpClient 替换为 OKHttp
 > - [Upgrade] acp-spring-cloud-starter 中资源服务器客户端修改 AcpClient 参数

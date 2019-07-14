@@ -167,7 +167,7 @@ acp:
 ```yaml
 acp:
   schedule:
-    crons:
+    cron:
       task1: 0 0/1 * * * ?
 ```
 key-value 形式（可配置多个），其中 task1 为任务的 beanName；0 0/1 * * * ? 为定时执行规则cron表达式。
@@ -177,7 +177,7 @@ key-value 形式（可配置多个），其中 task1 为任务的 beanName；0 0
 acp:
   controller-aspect:
     enabled: true        #是否开启controller日志输出，默认true
-    no-log-uri-regexes:
+    no-log-uri-regular:
       - /oauth/.*        #不进行日志输出的 url 正则表达式，可配置多个
 ```
 

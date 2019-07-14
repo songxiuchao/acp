@@ -17,7 +17,7 @@ dependencyManagement {
 }
 bootJar {
     manifest {
-        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Project': 'Acp')
+        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Kotlin': "${kotlinVersion}", 'Project': 'Acp')
     }
 }
 dependencies {

@@ -26,7 +26,7 @@ public class Test {
     }
 
     private static void testCompress() {
-        System.out.println(CommonTools.filesToZIP(new String[]{
+        System.out.println(CommonTools.filesToZip(new String[]{
                         "C:\\WorkFile\\IdeaProjects\\pers-acp\\acp\\logs\\log-server\\2019-01-29",
                         "C:\\WorkFile\\IdeaProjects\\pers-acp\\acp\\logs\\log-server\\spring.log.2019-01-29.0.gz"},
                 "D:\\test\\test.zip", false));
