@@ -26,7 +26,7 @@ class HtmlParse {
         int begin = buff.indexOf("font-family:", 0);// 获取开始位置
         while (begin > -1) {
             int end = buff.indexOf(";", begin);
-            String family = buff.substring(begin + 12, end).strip();
+            String family = buff.substring(begin + 12, end).trim();
             if (!fontName.containsKey(family)
                     && !fontName.containsValue(family)) {
                 String defaultFontFamily = "SimSun";

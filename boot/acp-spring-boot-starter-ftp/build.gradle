@@ -4,6 +4,7 @@ buildscript {
     }
 }
 apply plugin: 'kotlin-spring'
+apply plugin: 'kotlin-noarg'
 apply plugin: "io.spring.dependency-management"
 dependencyManagement {
     imports {
