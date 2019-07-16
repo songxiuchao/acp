@@ -18,22 +18,16 @@ import pers.acp.spring.cloud.log.LogInfo
 class DefaultLogProcess : LogProcess {
 
     override fun process(logInfo: LogInfo) {
-        // TODO: 改为协程
         // 每个日志类型启动一个线程池，池中仅有一个线程，保证每个类型的消息顺序处理
         val threadPoolService = ThreadPoolService.getInstance(1, 1, Integer.MAX_VALUE, logInfo.logType + "_log")
         threadPoolService.addTask(object : BaseAsyncTask(logInfo.logType + "_log", false) {
-            override fun beforeExecuteFun(): Boolean {
-                return true
-            }
-
+            override fun beforeExecuteFun(): Boolean = true
             override fun executeFun(): Any? {
                 doLog(logInfo)
                 return true
             }
 
-            override fun afterExecuteFun(result: Any) {
-
-            }
+            override fun afterExecuteFun(result: Any) {}
         })
     }
 
