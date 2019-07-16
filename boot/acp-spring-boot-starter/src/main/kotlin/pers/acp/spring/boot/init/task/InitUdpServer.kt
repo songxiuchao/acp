@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
-import pers.acp.spring.boot.conf.SocketListenerConfiguration
 import pers.acp.spring.boot.conf.UdpServerConfiguration
 import pers.acp.spring.boot.daemon.DaemonServiceManager
 import pers.acp.spring.boot.init.BaseInitTask
@@ -15,7 +14,7 @@ import pers.acp.spring.boot.socket.base.ISocketServerHandle
  * 初始化UDP服务
  */
 @Component
-class InitUdpServer @Autowired
+class InitUdpServer @Autowired(required = false)
 constructor(private val udpServerConfiguration: UdpServerConfiguration, private val socketServerHandleList: List<ISocketServerHandle>) : BaseInitTask() {
 
     private val log = LogFactory.getInstance(this.javaClass)// 日志对象

@@ -1,17 +1,13 @@
 package pers.acp.spring.cloud.conf
 
 import feign.RequestInterceptor
-import feign.RequestTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.http.HttpHeaders
-import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import pers.acp.core.CommonTools
-
-import javax.servlet.http.HttpServletRequest
 
 /**
  * Feign 请求拦截器配置

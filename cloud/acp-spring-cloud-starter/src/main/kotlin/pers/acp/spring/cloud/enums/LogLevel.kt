@@ -2,8 +2,6 @@ package pers.acp.spring.cloud.enums
 
 import pers.acp.core.exceptions.EnumValueUndefinedException
 
-import java.util.HashMap
-
 /**
  * 日志记录级别
  *

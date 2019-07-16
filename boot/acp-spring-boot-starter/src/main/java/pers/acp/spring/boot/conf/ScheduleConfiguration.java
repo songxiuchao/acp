@@ -27,7 +27,7 @@ public class ScheduleConfiguration {
     /**
      * crons expression list
      * key => bean name
-     * value => coron
+     * value => cron
      */
     private Map<String, String> cron = new HashMap<>();
 

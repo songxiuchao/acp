@@ -1,5 +1,6 @@
 package pers.acp.spring.boot.ftp.init
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.stereotype.Component
 import pers.acp.ftp.InitSftpServer
@@ -15,7 +16,8 @@ import pers.acp.spring.boot.ftp.conf.SftpServerConfiguration
  */
 @Component
 @ConditionalOnClass(InitSftpServer::class)
-class SftpServerInitialization(private val sftpServerConfiguration: SftpServerConfiguration, private val userFactoryList: List<UserFactory>?) : BaseInitialization() {
+class SftpServerInitialization @Autowired(required = false)
+constructor(private val sftpServerConfiguration: SftpServerConfiguration, private val userFactoryList: List<UserFactory>?) : BaseInitialization() {
 
     override val name: String
         get() = "sftp server setup server"
