@@ -1,23 +1,25 @@
 package pers.acp.spring.cloud.conf
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.config.client.ConfigClientProperties
 import org.springframework.cloud.config.client.ConfigServicePropertySourceLocator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
-import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.client.RestTemplate
 import pers.acp.client.http.HttpClientBuilder
 import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.tools.PackageTools
 
 import org.springframework.cloud.config.client.ConfigClientProperties.AUTHORIZATION
+import org.springframework.cloud.config.client.ConfigServiceBootstrapConfiguration
+import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Primary
+import org.springframework.core.env.ConfigurableEnvironment
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 
 /**
  * 配置中心客户端自动配置
@@ -28,15 +30,13 @@ import org.springframework.cloud.config.client.ConfigClientProperties.AUTHORIZAT
  * @since JDK 11
  */
 @Configuration
+@Import(ConfigServiceBootstrapConfiguration::class)
 @EnableConfigurationProperties
+@ConditionalOnNotWebApplication
 class AcpConfigServerBootstrapConfiguration @Autowired
 constructor(private val environment: ConfigurableEnvironment) {
 
     private val log = LogFactory.getInstance(this.javaClass)
-
-    @Bean
-    @ConditionalOnMissingBean(ConfigClientProperties::class)
-    fun acpConfigClientProperties() = ConfigClientProperties(environment)
 
     /**
      * 加载配置中心自定义客户端
@@ -46,7 +46,7 @@ constructor(private val environment: ConfigurableEnvironment) {
     @Primary
     @Bean
     @ConditionalOnProperty(value = ["spring.cloud.config.enabled"], matchIfMissing = true)
-    fun acpConfigServicePropertySource(clientProperties: ConfigClientProperties): ConfigServicePropertySourceLocator {
+    fun acpConfigServicePropertySourceLocator(clientProperties: ConfigClientProperties): ConfigServicePropertySourceLocator {
         val locator = ConfigServicePropertySourceLocator(clientProperties)
         locator.setRestTemplate(customerConfigClientRestTemplate(clientProperties))
         log.info("Start Up Cloud, Configuration ConfigServicePropertySourceLocator For ACP")
@@ -94,5 +94,4 @@ constructor(private val environment: ConfigurableEnvironment) {
         }
 
     }
-
 }
