@@ -1,12 +1,11 @@
 package pers.acp.file.excel.scheme;
 
 import pers.acp.core.exceptions.EnumValueUndefinedException;
-import pers.acp.core.interfaces.IEnumValue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ExcelType implements IEnumValue {
+public enum ExcelType {
 
     EXCEL_TYPE_XLS(".xls", 0),
 
@@ -30,17 +29,14 @@ public enum ExcelType implements IEnumValue {
         this.value = value;
     }
 
-    @Override
     public Integer getValue() {
         return this.value;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Boolean equals(Integer value) {
         return this.value.equals(value);
     }
@@ -49,7 +45,7 @@ public enum ExcelType implements IEnumValue {
         if (map.containsKey(value)) {
             return map.get(value);
         }
-        throw new EnumValueUndefinedException(ExcelType.class, value);
+        throw new EnumValueUndefinedException(ExcelType.class, value + "");
     }
 
 }

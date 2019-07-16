@@ -1,4 +1,5 @@
 import io.netty.handler.timeout.IdleStateEvent;
+import org.jetbrains.annotations.NotNull;
 import pers.acp.client.socket.base.ISocketClientHandle;
 import pers.acp.client.socket.tcp.TcpClient;
 import pers.acp.client.socket.udp.UdpClient;
@@ -22,12 +23,13 @@ public class TestClient {
                         client.setServerCharset("gbk");
                         client.setSocketHandle(new ISocketClientHandle() {
                             @Override
-                            public void receiveMsg(String recvStr) {
+                            public void receiveMsg(@NotNull String recvStr) {
                                 System.out.println("啊udp：" + recvStr);
                             }
 
+                            @NotNull
                             @Override
-                            public String userEventTriggered(IdleStateEvent evt) throws Exception {
+                            public String userEventTriggered(@NotNull IdleStateEvent evt) throws Exception {
                                 return null;
                             }
                         });

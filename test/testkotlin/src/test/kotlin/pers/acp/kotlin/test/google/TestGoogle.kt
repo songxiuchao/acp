@@ -7,14 +7,14 @@ import java.net.URLEncoder
  * @date 16/03/2018
  * @since JDK 11
  */
-fun main(args: Array<String>) {
-//    generateQRcode()
-    val code = "549475"
-    println("code=$code")
-    println(GoogleAuthenticatorUtils.verify(
-            secretKey = "P5JVA7W6QVLA5SEM",
-            code = code,
-            timeExcursionConfig = "1"))
+fun main() {
+    generateQRcode()
+//    val code = "061001"
+//    println("code=$code")
+//    println(GoogleAuthenticatorUtils.verify(
+//            secretKey = "P5JVA7W6QVLA5SEM",
+//            code = code,
+//            timeExcursionConfig = "1"))
 }
 
 fun generateQRcode() {

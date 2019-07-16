@@ -12,13 +12,12 @@ dependencyManagement {
 }
 bootJar {
     manifest {
-        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Project': 'Acp')
+        attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Kotlin': "${kotlinVersion}", 'Project': 'Acp')
     }
 }
 dependencies {
     compile project(":boot:acp-spring-boot-starter")
     compile project(":boot:acp-spring-boot-starter-ftp")
-    compile project(":boot:acp-spring-boot-starter-ws")
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa"

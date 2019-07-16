@@ -132,7 +132,7 @@ public class FileOperation {
                 log.error(e1.getMessage(), e1);
             } finally {
                 if (tmpFile != null) {
-                    CommonTools.doDeleteFile(tmpFile, false, 0);
+                    CommonTools.doDeleteFile(tmpFile, false);
                 }
             }
             fileAbsPath = "";

@@ -1,6 +1,6 @@
 package pers.acp.spring.boot.ftp.conf;
 
-import pers.acp.ftp.conf.SFTPListener;
+import pers.acp.ftp.conf.SftpListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +13,17 @@ import java.util.List;
  */
 public class SftpServerConfiguration {
 
-    public List<SFTPListener> getListeners() {
+    public List<SftpListener> getListeners() {
         return listeners;
     }
 
-    public void setListeners(List<SFTPListener> listeners) {
+    public void setListeners(List<SftpListener> listeners) {
         this.listeners = listeners;
     }
 
     /**
      * Sftp 服务监听列表
      */
-    private List<SFTPListener> listeners = new ArrayList<>();
+    private List<SftpListener> listeners = new ArrayList<>();
 
 }

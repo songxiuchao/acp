@@ -93,12 +93,10 @@ class DocToHtml {
         }
 
         List<Picture> pics = wordDocument.getPicturesTable().getAllPictures();
-        if (pics != null) {
-            for (Picture pic : pics) {
-                OutputStream out = new FileOutputStream(baseFold.getAbsolutePath() + File.separator + prefix + "_" + suffixMap.get(new String(pic.getContent()).replace(" ", "").length()));
-                pic.writeImageContent(out);
-                out.close();
-            }
+        for (Picture pic : pics) {
+            OutputStream out = new FileOutputStream(baseFold.getAbsolutePath() + File.separator + prefix + "_" + suffixMap.get(new String(pic.getContent()).replace(" ", "").length()));
+            pic.writeImageContent(out);
+            out.close();
         }
 
         StringWriter writer = new StringWriter();

@@ -20,7 +20,7 @@ public class TestSQL {
 
         BigDecimal gasPrice = BigDecimal.valueOf(160000);
         System.out.println(gasPrice.toPlainString());
-        System.out.println(gasPrice.setScale(0, DecimalProcessModeEnum.Half_UP.getMode()).toPlainString());
+        System.out.println(gasPrice.setScale(0, DecimalProcessModeEnum.HalfUp.getMode()).toPlainString());
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import pers.acp.ftp.InitFtpServer;
-import pers.acp.ftp.InitSFtpServer;
+import pers.acp.ftp.InitSftpServer;
 import pers.acp.spring.boot.ftp.conf.SftpServerConfiguration;
 import pers.acp.spring.boot.ftp.conf.FtpServerConfiguration;
 
@@ -26,7 +26,7 @@ public class AcpFtpAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnClass(InitSFtpServer.class)
+    @ConditionalOnClass(InitSftpServer.class)
     @ConfigurationProperties(prefix = "acp.sftp-server")
     public SftpServerConfiguration acpSftpServerConfiguration() {
         return new SftpServerConfiguration();

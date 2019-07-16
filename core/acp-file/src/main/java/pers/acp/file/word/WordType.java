@@ -1,12 +1,11 @@
 package pers.acp.file.word;
 
 import pers.acp.core.exceptions.EnumValueUndefinedException;
-import pers.acp.core.interfaces.IEnumValue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum WordType implements IEnumValue {
+public enum WordType {
 
     WORD_TYPE_DOC(".doc", 0),
 
@@ -30,17 +29,14 @@ public enum WordType implements IEnumValue {
         this.value = value;
     }
 
-    @Override
     public Integer getValue() {
         return this.value;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Boolean equals(Integer value) {
         return this.value.equals(value);
     }
@@ -49,7 +45,7 @@ public enum WordType implements IEnumValue {
         if (map.containsKey(value)) {
             return map.get(value);
         }
-        throw new EnumValueUndefinedException(WordType.class, value);
+        throw new EnumValueUndefinedException(WordType.class, value + "");
     }
 
 }
