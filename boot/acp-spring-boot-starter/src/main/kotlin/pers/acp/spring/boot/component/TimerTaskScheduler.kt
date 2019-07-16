@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledFuture
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-class TimerTaskScheduler @Autowired
+class TimerTaskScheduler @Autowired(required = false)
 constructor(properties: TaskSchedulingProperties, private val scheduleConfiguration: ScheduleConfiguration, private val baseSpringBootScheduledTaskMap: Map<String, BaseSpringBootScheduledAsyncTask>) : ITimerTaskScheduler {
 
     private val log = LogFactory.getInstance(this.javaClass)

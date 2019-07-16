@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot" as Object
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot"
     }
 }
 apply plugin: 'kotlin-spring'

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jackson.JacksonProperties
+import org.springframework.boot.autoconfigure.task.TaskSchedulingProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -27,5 +28,9 @@ class AcpAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(JacksonProperties::class)
     fun jacksonProperties() = JacksonProperties()
+
+    @Bean
+    @ConditionalOnMissingBean(TaskSchedulingProperties::class)
+    fun taskSchedulingProperties() = TaskSchedulingProperties()
 
 }
