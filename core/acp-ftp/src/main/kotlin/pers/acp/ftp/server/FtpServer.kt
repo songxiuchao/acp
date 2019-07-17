@@ -32,7 +32,7 @@ class FtpServer(private val userList: List<FtpServerUser>, private val listen: F
     private var ftpServerInstance: FtpServer? = null
 
     override fun getServiceName(): String {
-        return "ftp service " + listen.name!!
+        return "ftp service " + listen.name
     }
 
     override fun stopService() {

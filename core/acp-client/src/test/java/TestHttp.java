@@ -41,8 +41,7 @@ class TestHttp {
         map.put("client_secret", "test");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doPost(new RequestParamBuilder()
-                        .url("http://127.0.0.1:9090/boot/mapform")
+                .doPost(new RequestParamBuilder("http://127.0.0.1:9090/boot/mapform")
                         .params(map).build());
         System.out.println("doPost -----> " + responseResult);
         System.out.println("doPost -----> " + responseResult.getStatus());
@@ -59,8 +58,7 @@ class TestHttp {
         long begin = System.currentTimeMillis();
         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> begin");
         new HttpClientBuilder().build()
-                .doPostAsync(new RequestParamBuilder()
-                        .url("http://127.0.0.1:9090/boot/mapform")
+                .doPostAsync(new RequestParamBuilder("http://127.0.0.1:9090/boot/mapform")
                         .params(map).build(), new HttpCallBack() {
                     @Override
                     public void onRequestFailure(@NotNull Call call, @NotNull IOException e) {
@@ -89,8 +87,7 @@ class TestHttp {
         body.put("param2", "3");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doPostJson(new RequestParamBuilder()
-                        .url("http://127.0.0.1:9090/boot/map")
+                .doPostJson(new RequestParamBuilder("http://127.0.0.1:9090/boot/map")
                         .body(body.toString()).build());
         System.out.println("doPostString -----> " + responseResult);
         System.out.println("doPostString -----> " + responseResult.getStatus());
@@ -106,8 +103,7 @@ class TestHttp {
         body.put("param2", "3");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doPostBytes(new RequestParamBuilder()
-                        .url("http://127.0.0.1:9090/boot/map")
+                .doPostBytes(new RequestParamBuilder("http://127.0.0.1:9090/boot/map")
                         .body(body.toString().getBytes()).build());
         System.out.println("doPostBytes -----> " + responseResult);
         System.out.println("doPostBytes -----> " + responseResult.getStatus());
@@ -121,8 +117,7 @@ class TestHttp {
         map.put("pwd", "password");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doGet(new RequestParamBuilder()
-                        .url("http://127.0.0.1:9090/boot/rest1/testget")
+                .doGet(new RequestParamBuilder("http://127.0.0.1:9090/boot/rest1/testget")
                         .params(map).build());
         System.out.println("doGet -----> " + responseResult);
         System.out.println("doGet -----> " + responseResult.getStatus());
@@ -137,8 +132,7 @@ class TestHttp {
                 .disableSslValidation(true)
 //                .sslProtocolVersion("TLSv1.2")
                 .build()
-                .doGet(new RequestParamBuilder()
-                        .url("https://github.com/zhangbin1010/acp-admin").build());
+                .doGet(new RequestParamBuilder("https://github.com/zhangbin1010/acp-admin").build());
         System.out.println("doGetHttps -----> " + responseResult);
         System.out.println("doGetHttps -----> " + responseResult.getStatus());
         System.out.println("doGetHttps -----> " + responseResult.getBody());
