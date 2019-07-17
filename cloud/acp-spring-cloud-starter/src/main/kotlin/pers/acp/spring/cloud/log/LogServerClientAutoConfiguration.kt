@@ -35,7 +35,7 @@ constructor(private val logServerConfiguration: LogServerConfiguration, private 
      */
     @PostConstruct
     fun init() {
-        if (logServerClientConfiguration.isEnabled) {
+        if (logServerClientConfiguration.enabled) {
             if (this.bindings.bindings[LogConstant.OUTPUT] == null) {
                 this.bindings.bindings[LogConstant.OUTPUT] = BindingProperties()
             }

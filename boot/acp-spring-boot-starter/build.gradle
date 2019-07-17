@@ -19,7 +19,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-aop"
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    kapt "org.springframework.boot:spring-boot-configuration-processor"
 
     // Swagger2
     compile "io.springfox:springfox-swagger2:$versions.swagger"
