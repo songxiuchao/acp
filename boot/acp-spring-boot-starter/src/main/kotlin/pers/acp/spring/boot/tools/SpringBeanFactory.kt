@@ -66,12 +66,13 @@ class SpringBeanFactory : ApplicationContextAware {
          */
         @JvmStatic
         fun getBean(name: String): Any? {
-            if (applicationContext != null) {
-                return applicationContext!!.getBean(name)
+            applicationContext?.let {
+                return it.getBean(name)
             }
-            return if (webApplicationContext != null) {
-                webApplicationContext!!.getBean(name)
-            } else null
+            webApplicationContext?.let {
+                return it.getBean(name)
+            }
+            return null
         }
 
         /**
@@ -82,12 +83,13 @@ class SpringBeanFactory : ApplicationContextAware {
          */
         @JvmStatic
         fun <T> getBean(clazz: Class<T>): T? {
-            if (applicationContext != null) {
-                return applicationContext!!.getBean(clazz)
+            applicationContext?.let {
+                return it.getBean(clazz)
             }
-            return if (webApplicationContext != null) {
-                webApplicationContext!!.getBean(clazz)
-            } else null
+            webApplicationContext?.let {
+                return it.getBean(clazz)
+            }
+            return null
         }
 
         /**
@@ -99,12 +101,13 @@ class SpringBeanFactory : ApplicationContextAware {
          */
         @JvmStatic
         fun <T> getBean(name: String, clazz: Class<T>): T? {
-            if (applicationContext != null) {
-                return applicationContext!!.getBean(name, clazz)
+            applicationContext?.let {
+                return it.getBean(name, clazz)
             }
-            return if (webApplicationContext != null) {
-                webApplicationContext!!.getBean(name, clazz)
-            } else null
+            webApplicationContext?.let {
+                return it.getBean(name, clazz)
+            }
+            return null
         }
 
         /**
@@ -116,12 +119,13 @@ class SpringBeanFactory : ApplicationContextAware {
          */
         @JvmStatic
         fun getBean(name: String, vararg args: Any): Any? {
-            if (applicationContext != null) {
-                return applicationContext!!.getBean(name, *args)
+            applicationContext?.let {
+                return it.getBean(name, *args)
             }
-            return if (webApplicationContext != null) {
-                webApplicationContext!!.getBean(name, *args)
-            } else null
+            webApplicationContext?.let {
+                return it.getBean(name, *args)
+            }
+            return null
         }
 
         /**
@@ -133,12 +137,13 @@ class SpringBeanFactory : ApplicationContextAware {
          */
         @JvmStatic
         fun <T> getBean(clazz: Class<T>, vararg args: Any): T? {
-            if (applicationContext != null) {
-                return applicationContext!!.getBean(clazz, *args)
+            applicationContext?.let {
+                return it.getBean(clazz, *args)
             }
-            return if (webApplicationContext != null) {
-                webApplicationContext!!.getBean(clazz, *args)
-            } else null
+            webApplicationContext?.let {
+                return it.getBean(clazz, *args)
+            }
+            return null
         }
     }
 

@@ -47,34 +47,33 @@ class DefaultLogProcess : LogProcess {
                 .append("[").append(logInfo.className).append("] ")
                 .append("[ ").append(logInfo.lineno).append(" ] - ")
                 .append(logInfo.message)
-        val throwable = logInfo.throwable
         when (logLevel) {
             LogLevel.Debug -> {
-                logFactory.debug(message.toString(), throwable!!)
+                logFactory.debug(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.debug(message.toString(), *logInfo.params.toTypedArray())
                 }
             }
             LogLevel.Warn -> {
-                logFactory.warn(message.toString(), throwable!!)
+                logFactory.warn(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.warn(message.toString(), *logInfo.params.toTypedArray())
                 }
             }
             LogLevel.Error -> {
-                logFactory.error(message.toString(), throwable!!)
+                logFactory.error(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.error(message.toString(), *logInfo.params.toTypedArray())
                 }
             }
             LogLevel.Trace -> {
-                logFactory.trace(message.toString(), throwable!!)
+                logFactory.trace(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.trace(message.toString(), *logInfo.params.toTypedArray())
                 }
             }
             else -> {
-                logFactory.info(message.toString(), throwable!!)
+                logFactory.info(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.info(message.toString(), *logInfo.params.toTypedArray())
                 }

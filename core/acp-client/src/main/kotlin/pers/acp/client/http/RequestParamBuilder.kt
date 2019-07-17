@@ -7,10 +7,7 @@ import pers.acp.core.CommonTools
  * @author zhang by 11/07/2019
  * @since JDK 11
  */
-class RequestParamBuilder {
-
-    var url: String? = null
-        private set
+class RequestParamBuilder(var url: String) {
 
     var clientCharset = CommonTools.getDefaultCharset()
         private set
@@ -81,7 +78,7 @@ class RequestParamBuilder {
     }
 
     fun build(): RequestParam = RequestParam(
-            url = this.url!!,
+            url = this.url,
             requestHeaders = this.requestHeaders,
             clientCharset = this.clientCharset,
             basicUsername = this.basicUsername,
