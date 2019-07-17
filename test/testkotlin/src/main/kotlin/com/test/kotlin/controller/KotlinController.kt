@@ -27,12 +27,12 @@ class KotlinController(private val tableOneDomain: TableOneDomain) {
                             if (it.isPresent) {
                                 ResponseEntity.ok(it.get())
                             } else {
-                                throw ServerException(ResponseCode.DBError.value, "没有记录")
+                                throw ServerException(ResponseCode.DbError.value, "没有记录")
                             }
                         }
             } catch (e: Exception) {
                 log.error(e.message ?: "", e)
-                if (e !is ServerException) throw ServerException(ResponseCode.serviceError)
+                if (e !is ServerException) throw ServerException(ResponseCode.ServiceError)
                 throw e
             }
 
@@ -44,7 +44,7 @@ class KotlinController(private val tableOneDomain: TableOneDomain) {
                         .let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
             } catch (e: Exception) {
                 log.error(e.message ?: "", e)
-                if (e !is ServerException) throw ServerException(ResponseCode.serviceError)
+                if (e !is ServerException) throw ServerException(ResponseCode.ServiceError)
                 throw e
             }
 

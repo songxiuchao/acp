@@ -36,7 +36,7 @@ public class CustomerSwaggerConfiguration {
 //        tokenPar.name("Authorization").description("认证信息").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
 //        pars.add(tokenPar.build());
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(swaggerConfiguration.isEnabled())
+                .enable(swaggerConfiguration.getEnabled())
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包路径

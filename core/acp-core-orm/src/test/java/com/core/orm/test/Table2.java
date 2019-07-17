@@ -1,8 +1,8 @@
 package com.core.orm.test;
 
-import pers.acp.core.dbconnection.annotation.ADBTable;
-import pers.acp.core.dbconnection.annotation.ADBTableField;
-import pers.acp.core.dbconnection.entity.DBTableFieldType;
+import pers.acp.core.dbcon.annotation.ADBTable;
+import pers.acp.core.dbcon.annotation.ADBTableField;
+import pers.acp.core.dbcon.entity.DBTableFieldType;
 
 /**
  * Create by zhangbin on 2017-8-7 1:31

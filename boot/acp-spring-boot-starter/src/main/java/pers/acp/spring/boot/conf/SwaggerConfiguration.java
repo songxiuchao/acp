@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "acp.swagger")
 public class SwaggerConfiguration {
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 

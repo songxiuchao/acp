@@ -6,7 +6,9 @@ buildscript {
 apply plugin: "io.spring.dependency-management"
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:$versions.spring_boot"
+        mavenBom("org.springframework.boot:spring-boot-dependencies:$versions.spring_boot") {
+            bomProperty("kotlin.version", "${kotlinVersion}")
+        }
     }
 }
 dependencies {

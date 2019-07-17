@@ -54,7 +54,7 @@ public final class PDFService {
                     os.close();
                 }
                 File file = new File(fileName);
-                CommonTools.doDeleteFile(file, false, 0);
+                CommonTools.doDeleteFile(file, false);
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }
@@ -188,7 +188,7 @@ public final class PDFService {
             }
             document.close();
             if (isDeleteFile) {
-                CommonTools.doDeleteFile(new File(pdfFilePath), false, 0);
+                CommonTools.doDeleteFile(new File(pdfFilePath), false);
             }
             log.info("add page number success");
             return resultFileName;
@@ -270,7 +270,7 @@ public final class PDFService {
             }
             stamp.close();// 关闭
             if (isDeleteFile) {
-                CommonTools.doDeleteFile(new File(pdfFilePath), false, 0);
+                CommonTools.doDeleteFile(new File(pdfFilePath), false);
             }
             log.info("PDF encrypt success");
             return resultFileName;
@@ -314,7 +314,7 @@ public final class PDFService {
                         copy.addPage(page);
                     }
                     if (isDeleteFile) {
-                        CommonTools.doDeleteFile(new File(file), false, 0);
+                        CommonTools.doDeleteFile(new File(file), false);
                     }
                 }
                 document.close();
