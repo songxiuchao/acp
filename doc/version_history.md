@@ -8,6 +8,7 @@
 > - [Upgrade] 更新 gradle 至 5.5.1
 > - [Upgrade] 优化 gradle 脚本
 > - [Upgrade] gradle 脚本中 bootJar 内增加 Kotlin Version
+> - [Upgrade] 更新 Spring Boot Admin 至 2.1.6
 > - [Upgrade] 修改部分配置参数
 >   - acp.controller-aspect.no-log-uri-regexes 修改为 acp.controller-aspect.no-log-uri-regular
 >   - acp.schedule.crons 修改为 acp.schedule.cron
