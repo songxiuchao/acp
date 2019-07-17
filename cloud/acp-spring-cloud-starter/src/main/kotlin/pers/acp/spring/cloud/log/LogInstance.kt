@@ -48,7 +48,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         logInfo.lineno = lineno
         logInfo.className = className
         try {
-            if (logServerClientConfiguration.isEnabled) {
+            if (logServerClientConfiguration.enabled) {
                 val logProducer = SpringBeanFactory.getBean(LogProducer::class.java)
                 logProducer?.logOutput?.sendMessage()?.send(MessageBuilder.withPayload(objectMapper.writeValueAsString(logInfo)).build())
             }

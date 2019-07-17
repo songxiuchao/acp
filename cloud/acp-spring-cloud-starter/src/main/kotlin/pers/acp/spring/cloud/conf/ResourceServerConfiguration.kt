@@ -153,7 +153,7 @@ constructor(private val acpOauthConfiguration: AcpOauthConfiguration,
      * @param resources 资源服务安全验证配置对象
      */
     override fun configure(resources: ResourceServerSecurityConfigurer) {
-        if (!acpOauthConfiguration.isOauthServer) {
+        if (!acpOauthConfiguration.oauthServer) {
             resources.tokenServices(remoteTokenServices())
         }
         // 自定义 token 异常处理
@@ -192,7 +192,7 @@ constructor(private val acpOauthConfiguration: AcpOauthConfiguration,
     override fun configure(http: HttpSecurity) {
         val permitAll = ArrayList<String>()
         val security = ArrayList<String>()
-        if (acpOauthConfiguration.isResourceServer) {
+        if (acpOauthConfiguration.resourceServer) {
             log.info("resource server = true")
             permitAll.add("$contextPath/error")
             permitAll.add("$contextPath/actuator")
