@@ -6,8 +6,9 @@
 > - [Upgrade] java 11 环境下增加 testkotlin 模块
 > - [Upgrade] 大部分底层代码使用 kotlin 重写，与 java 并存，提升执行效率，去除冗余
 > - [Upgrade] 更新 gradle 至 5.5.1
-> - [Upgrade] 优化 gradle 脚本
 > - [Upgrade] gradle 脚本中 bootJar 内增加 Kotlin Version
+> - [Upgrade] Spring Boot Starter 中 annotationProcessor 替换为 kapt
+> - [Upgrade] 优化 gradle 脚本
 > - [Upgrade] 更新 Spring Boot Admin 至 2.1.6
 > - [Upgrade] 修改部分配置参数
 >   - acp.controller-aspect.no-log-uri-regexes 修改为 acp.controller-aspect.no-log-uri-regular
