@@ -1,8 +1,9 @@
 package pers.acp.test.application.test;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
-import pers.acp.ftp.server.FTPServerUser;
-import pers.acp.ftp.server.SFTPServerUser;
+import pers.acp.ftp.server.FtpServerUser;
+import pers.acp.ftp.server.SftpServerUser;
 import pers.acp.ftp.user.UserFactory;
 
 import java.util.ArrayList;
@@ -15,25 +16,27 @@ import java.util.List;
 @Component
 public class TestUserFactory implements UserFactory {
 
+    @NotNull
     @Override
-    public List<FTPServerUser> generateFtpUserList() {
-        List<FTPServerUser> result = new ArrayList<>();
-        FTPServerUser ftpServerUser = new FTPServerUser();
+    public List<FtpServerUser> generateFtpUserList() {
+        List<FtpServerUser> result = new ArrayList<>();
+        FtpServerUser ftpServerUser = new FtpServerUser();
         ftpServerUser.setUsername("ftp");
         ftpServerUser.setPassword("1");
-        ftpServerUser.setWritepermission(true);
-        ftpServerUser.setMaxloginnumber(10);
-        ftpServerUser.setMaxloginperip(10);
+        ftpServerUser.setWritePermission(true);
+        ftpServerUser.setMaxLoginNumber(10);
+        ftpServerUser.setMaxLoginPerIp(10);
         ftpServerUser.setHomeDirectory("/");
         ftpServerUser.setEnableFlag(true);
         result.add(ftpServerUser);
         return result;
     }
 
+    @NotNull
     @Override
-    public List<SFTPServerUser> generateSFtpUserList() {
-        List<SFTPServerUser> result = new ArrayList<>();
-        SFTPServerUser sftpServerUser = new SFTPServerUser();
+    public List<SftpServerUser> generateSFtpUserList() {
+        List<SftpServerUser> result = new ArrayList<>();
+        SftpServerUser sftpServerUser = new SftpServerUser();
         sftpServerUser.setUsername("ftp");
         sftpServerUser.setPassword("1");
         sftpServerUser.setHomeDirectory("/");

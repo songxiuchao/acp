@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import okhttp3.Call;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpCallBack;
@@ -40,9 +41,9 @@ class TestHttp {
         map.put("client_secret", "test");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doPost(RequestParamBuilder.build()
+                .doPost(new RequestParamBuilder()
                         .url("http://127.0.0.1:9090/boot/mapform")
-                        .params(map));
+                        .params(map).build());
         System.out.println("doPost -----> " + responseResult);
         System.out.println("doPost -----> " + responseResult.getStatus());
         System.out.println("doPost -----> " + responseResult.getBody());
@@ -58,11 +59,11 @@ class TestHttp {
         long begin = System.currentTimeMillis();
         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> begin");
         new HttpClientBuilder().build()
-                .doPostAsync(RequestParamBuilder.build()
+                .doPostAsync(new RequestParamBuilder()
                         .url("http://127.0.0.1:9090/boot/mapform")
-                        .params(map), new HttpCallBack() {
+                        .params(map).build(), new HttpCallBack() {
                     @Override
-                    public void onRequestFailure(Call call, IOException e) {
+                    public void onRequestFailure(@NotNull Call call, @NotNull IOException e) {
                         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> failure");
                         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + call.request().url());
                         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + (System.currentTimeMillis() - begin));
@@ -70,7 +71,7 @@ class TestHttp {
                     }
 
                     @Override
-                    public void onRequestResponse(Call call, ResponseResult responseResult) {
+                    public void onRequestResponse(@NotNull Call call, @NotNull ResponseResult responseResult) {
                         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + responseResult);
                         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + responseResult.getStatus());
                         System.out.println("doPostAsync [" + Thread.currentThread().getId() + "] -----> " + responseResult.getBody());
@@ -88,9 +89,9 @@ class TestHttp {
         body.put("param2", "3");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doPostJson(RequestParamBuilder.build()
+                .doPostJson(new RequestParamBuilder()
                         .url("http://127.0.0.1:9090/boot/map")
-                        .body(body.toString()));
+                        .body(body.toString()).build());
         System.out.println("doPostString -----> " + responseResult);
         System.out.println("doPostString -----> " + responseResult.getStatus());
         System.out.println("doPostString -----> " + responseResult.getBody());
@@ -105,9 +106,9 @@ class TestHttp {
         body.put("param2", "3");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doPostBytes(RequestParamBuilder.build()
+                .doPostBytes(new RequestParamBuilder()
                         .url("http://127.0.0.1:9090/boot/map")
-                        .body(body.toString().getBytes()));
+                        .body(body.toString().getBytes()).build());
         System.out.println("doPostBytes -----> " + responseResult);
         System.out.println("doPostBytes -----> " + responseResult.getStatus());
         System.out.println("doPostBytes -----> " + responseResult.getBody());
@@ -120,9 +121,9 @@ class TestHttp {
         map.put("pwd", "password");
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder().build()
-                .doGet(RequestParamBuilder.build()
+                .doGet(new RequestParamBuilder()
                         .url("http://127.0.0.1:9090/boot/rest1/testget")
-                        .params(map));
+                        .params(map).build());
         System.out.println("doGet -----> " + responseResult);
         System.out.println("doGet -----> " + responseResult.getStatus());
         System.out.println("doGet -----> " + responseResult.getBody());
@@ -136,8 +137,8 @@ class TestHttp {
                 .disableSslValidation(true)
 //                .sslProtocolVersion("TLSv1.2")
                 .build()
-                .doGet(RequestParamBuilder.build()
-                        .url("https://github.com/zhangbin1010/acp-admin"));
+                .doGet(new RequestParamBuilder()
+                        .url("https://github.com/zhangbin1010/acp-admin").build());
         System.out.println("doGetHttps -----> " + responseResult);
         System.out.println("doGetHttps -----> " + responseResult.getStatus());
         System.out.println("doGetHttps -----> " + responseResult.getBody());

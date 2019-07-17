@@ -50,6 +50,6 @@ public class LogServerConfiguration {
     /**
      * 日志消息的topic名称（队列名称）
      */
-    private String destination = "acp_cloud_log_server_logmessage_topic";
+    private String destination = "acp_cloud_log_server_message_topic";
 
 }

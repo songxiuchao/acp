@@ -1,5 +1,5 @@
 # acp 
-###### v5.2.1 [版本更新日志](doc/version_history.md)
+###### v6.0.0 [版本更新日志](doc/version_history.md)
 Application Construction Platform 应用构建平台。该项目是本人在日常工作中不断总结经验并结合最新的技术而封装的脚手架。本人会密切关注业界最新动态，并持续更新优化。使用该脚手架可快速搭建普通java应用、SpringBoot应用和SpringCloud应用。
 
 ## 相关组件版本及官方文档
@@ -40,11 +40,12 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
     - spring-cloud-config-server
     - spring-cloud-bus-kafka
     
-## 一、环境要求
-- jdk 11
-- gradle 5.5
+## 一、环境要求及开发语言
+- java 11
+- gradle 5.5.1
+- kotlin 1.3.41
 
-## 二、gralde 配置及使用
+## 二、gradle 脚本配置及使用
 ### （一）配置文件
 ##### 1.gradle/dependencies.gradle
 定义外部依赖版本号
@@ -83,7 +84,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.5 --distribution-type=all
+    gradlew wrapper --gradle-version=5.5.1 --distribution-type=all
 ``
 
 ## 三、工程说明
@@ -112,7 +113,7 @@ ext {
 ##### 4. acp:acp-client
 > - 客户端组件包
 > - 依赖 acp-packet
-> - 封装了http、https、tcp、udp、ftp、sftp协议的客户端
+> - 封装了http、https、tcp、udp的客户端
 ##### 5. acp:acp-ftp
 > - 应用扩展组件
 > - 依赖 acp-core
@@ -136,11 +137,11 @@ ext {
 ##### 10. boot:acp-spring-boot-starter-ftp
 > - springboot 应用扩展组件
 > - 依赖 acp-spring-boot-starter
-> - 扩展支持 ftp、sftp 等协议服务端配置
+> - 扩展支持 ftp、sftp 等协议服务端自动配置
 ##### 10. boot:acp-spring-boot-starter-ws
 > - springboot 应用扩展组件
 > - 依赖 acp-spring-boot-starter
-> - 扩展支持 webservice 服务端配置
+> - 扩展支持 webservice 服务端自动配置
 ### （二）快速开发 springboot 应用
 ##### 1. 开发说明
 - （1）参考 test:testspringboot
@@ -153,7 +154,7 @@ ext {
 - （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
 - （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
 - （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 soap/webservice、tcp、udp 服务端开发demo，并在 application-dev.xml 中增加相应配置
-- （11）如有需要，可选择引入 acp-file、acp-message、acp-spring-boot-starter-ftp、acp-spring-boot-starter-ws 等包
+- （11）如有需要，可选择引入 acp-file、acp-message、acp-spring-boot-starter-ftp 等包
 ##### 2. 配置说明
 - 定制开发的 api 接口，开启 swagger 文档
 ```yaml
@@ -166,17 +167,17 @@ acp:
 ```yaml
 acp:
   schedule:
-    crons:
+    cron:
       task1: 0 0/1 * * * ?
 ```
-key-value 形式，其中 key:task1 为任务 beanName，value:0 0/1 * * * ? 为定时执行规则。可配置多个
+key-value 形式（可配置多个），其中 task1 为任务的 beanName；0 0/1 * * * ? 为定时执行规则cron表达式。
 
 - 输出 controller 日志
 ```yaml
 acp:
   controller-aspect:
     enabled: true        #是否开启controller日志输出，默认true
-    no-log-uri-regexes:
+    no-log-uri-regular:
       - /oauth/.*        #不进行日志输出的 url 正则表达式，可配置多个
 ```
 
@@ -247,15 +248,6 @@ acp:
         key-auth-mode: RSA                                                   #可空，证书验证模式（RSA/DSA），默认RSA
         default-home-directory: "abs:D:\\个人\\测试ftp"                       #默认根路径
         user-factory-class: pers.acp.test.application.test.TestUserFactory   #用户工厂类
-```
-
-- webservice 服务端
-```yaml
-acp:
-  ws-server:
-    server:
-      - class-name: pers.acp.test.application.test.TestWebService            #webservice类
-        href: "http://127.0.0.1:8081/ws"                                     #访问地址 http://host:port
 ```
 
 ### （三）启停 springboot 应用

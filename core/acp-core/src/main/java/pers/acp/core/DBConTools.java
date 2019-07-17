@@ -2,9 +2,9 @@ package pers.acp.core;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariDataSource;
-import pers.acp.core.config.instance.DBProperties;
-import pers.acp.core.dbconnection.ConnectionFactory;
-import pers.acp.core.dbconnection.DBType;
+import pers.acp.core.conf.DbProperties;
+import pers.acp.core.dbcon.ConnectionFactory;
+import pers.acp.core.dbcon.DbType;
 import pers.acp.core.log.LogFactory;
 
 import java.io.InputStream;
@@ -16,13 +16,13 @@ public final class DBConTools {
 
     private static final LogFactory log = LogFactory.getInstance(DBConTools.class);
 
-    private ConnectionFactory dbcon;
+    private ConnectionFactory dbCon;
 
     /**
      * 默认构造函数
      */
     public DBConTools() {
-        dbcon = new ConnectionFactory();
+        dbCon = new ConnectionFactory();
     }
 
     /**
@@ -31,7 +31,7 @@ public final class DBConTools {
      * @param connectionNo 系统配置的数据源编号
      */
     public DBConTools(int connectionNo) {
-        dbcon = new ConnectionFactory(connectionNo);
+        dbCon = new ConnectionFactory(connectionNo);
     }
 
     /**
@@ -39,7 +39,7 @@ public final class DBConTools {
      */
     public static void initTools() {
         int defaultNo = 0;
-        DBProperties dbProperties = DBProperties.getInstance();
+        DbProperties dbProperties = DbProperties.getInstance();
         if (dbProperties != null) {
             try {
                 defaultNo = dbProperties.getDefaultSQLDbNo();
@@ -65,7 +65,7 @@ public final class DBConTools {
      * @return 数据库连接资源
      */
     public HikariDataSource getDataSource() {
-        return dbcon.getDataSource();
+        return dbCon.getDataSource();
     }
 
     /**
@@ -75,7 +75,7 @@ public final class DBConTools {
      * @return 结果集
      */
     public ResultSet getDataSetBySql(String sql) {
-        return dbcon.doQueryForSet(sql);
+        return dbCon.doQueryForSet(sql);
     }
 
     /**
@@ -86,7 +86,7 @@ public final class DBConTools {
      * @return 结果集
      */
     public ResultSet getDataSetBySql(String sql, Object[] param) {
-        return dbcon.doQueryForSet(sql, param);
+        return dbCon.doQueryForSet(sql, param);
     }
 
     /**
@@ -99,7 +99,7 @@ public final class DBConTools {
      * @return Object[]:[0]-long总页数,[1]-long总记录数,[2]-ResultSet结果集
      */
     public Object[] getDataSetBySql(long currPage, long maxCount, String pKey, String[] sqlArray) {
-        return dbcon.doQueryForSet(currPage, maxCount, pKey, sqlArray);
+        return dbCon.doQueryForSet(currPage, maxCount, pKey, sqlArray);
     }
 
     /**
@@ -113,7 +113,7 @@ public final class DBConTools {
      * @return Object[]:[0]-long总页数,[1]-long总记录数,[2]-ResultSet结果集
      */
     public Object[] getDataSetBySql(Object[] param, long currPage, long maxCount, String pKey, String[] sqlArray) {
-        return dbcon.doQueryForSet(param, currPage, maxCount, pKey, sqlArray);
+        return dbCon.doQueryForSet(param, currPage, maxCount, pKey, sqlArray);
     }
 
     /**
@@ -123,7 +123,7 @@ public final class DBConTools {
      * @return 结果List
      */
     public List<Map<String, Object>> getDataListBySql(String sql) {
-        return dbcon.doQueryForList(sql);
+        return dbCon.doQueryForList(sql);
     }
 
     /**
@@ -134,7 +134,7 @@ public final class DBConTools {
      * @return 结果List
      */
     public List<Map<String, Object>> getDataListBySql(String sql, Object[] param) {
-        return dbcon.doQueryForList(sql, param);
+        return dbCon.doQueryForList(sql, param);
     }
 
     /**
@@ -147,7 +147,7 @@ public final class DBConTools {
      * @return Object[]:[0]-long总页数,[1]-long总记录数,[2]-ArrayList结果集
      */
     public Object[] getDataListBySql(long currPage, long maxCount, String pKey, String[] sqlArray) {
-        return dbcon.doQueryForList(currPage, maxCount, pKey, sqlArray);
+        return dbCon.doQueryForList(currPage, maxCount, pKey, sqlArray);
     }
 
     /**
@@ -161,7 +161,7 @@ public final class DBConTools {
      * @return Object[]:[0]-long总页数,[1]-long总记录数,[2]-ArrayList结果集
      */
     public Object[] getDataListBySql(Object[] param, long currPage, long maxCount, String pKey, String[] sqlArray) {
-        return dbcon.doQueryForList(param, currPage, maxCount, pKey, sqlArray);
+        return dbCon.doQueryForList(param, currPage, maxCount, pKey, sqlArray);
     }
 
     /**
@@ -171,7 +171,7 @@ public final class DBConTools {
      * @return json对象
      */
     public JsonNode getDataJSONArrayBySql(String sql) {
-        return dbcon.doQueryForJSON(sql);
+        return dbCon.doQueryForJSON(sql);
     }
 
     /**
@@ -182,7 +182,7 @@ public final class DBConTools {
      * @return json对象
      */
     public JsonNode getDataJSONArrayBySql(String sql, Object[] param) {
-        return dbcon.doQueryForJSON(sql, param);
+        return dbCon.doQueryForJSON(sql, param);
     }
 
     /**
@@ -195,7 +195,7 @@ public final class DBConTools {
      * @return JSONObject:{pages:long-总页数,records:long-总记录数,datas:array-结果集}
      */
     public JsonNode getDataJSONArrayBySql(long currPage, long maxCount, String pKey, String[] sqlArray) {
-        return dbcon.doQueryForJSON(currPage, maxCount, pKey, sqlArray);
+        return dbCon.doQueryForJSON(currPage, maxCount, pKey, sqlArray);
     }
 
     /**
@@ -209,7 +209,7 @@ public final class DBConTools {
      * @return JSONObject:{pages:int-总页数,records:int-总记录数,datas:array-结果集}
      */
     public JsonNode getDataJSONArrayBySql(Object[] param, long currPage, long maxCount, String pKey, String[] sqlArray) {
-        return dbcon.doQueryForJSON(param, currPage, maxCount, pKey, sqlArray);
+        return dbCon.doQueryForJSON(param, currPage, maxCount, pKey, sqlArray);
     }
 
     /**
@@ -220,7 +220,7 @@ public final class DBConTools {
      * @return 结果List
      */
     public <T> List<T> getDataCusObjListBySql(String sql, Class<T> cls) {
-        return dbcon.doQueryForCusObjList(sql, cls);
+        return dbCon.doQueryForCusObjList(sql, cls);
     }
 
     /**
@@ -232,7 +232,7 @@ public final class DBConTools {
      * @return 结果List
      */
     public <T> List<T> getDataCusObjListBySql(String sql, Object[] param, Class<T> cls) {
-        return dbcon.doQueryForCusObjList(sql, param, cls);
+        return dbCon.doQueryForCusObjList(sql, param, cls);
     }
 
     /**
@@ -246,7 +246,7 @@ public final class DBConTools {
      * @return Object[]:[0]-long总页数,[1]-long总记录数,[2]-ArrayList结果集
      */
     public Object[] getDataCusObjListBySql(long currPage, long maxCount, String pKey, String[] sqlArray, Class<?> cls) {
-        return dbcon.doQueryForCusObjList(currPage, maxCount, pKey, sqlArray, cls);
+        return dbCon.doQueryForCusObjList(currPage, maxCount, pKey, sqlArray, cls);
     }
 
     /**
@@ -261,7 +261,7 @@ public final class DBConTools {
      * @return Object[]:[0]-long总页数,[1]-long总记录数,[2]-ArrayList结果集
      */
     public Object[] getDataCusObjListBySql(Object[] param, long currPage, long maxCount, String pKey, String[] sqlArray, Class<?> cls) {
-        return dbcon.doQueryForCusObjList(param, currPage, maxCount, pKey, sqlArray, cls);
+        return dbCon.doQueryForCusObjList(param, currPage, maxCount, pKey, sqlArray, cls);
     }
 
     /**
@@ -273,7 +273,7 @@ public final class DBConTools {
      * @return 输入流
      */
     public InputStream getLOB(String tableName, Map<String, Object> whereValues, String lobColName) {
-        return dbcon.doQueryLOB(tableName, whereValues, lobColName);
+        return dbCon.doQueryLOB(tableName, whereValues, lobColName);
     }
 
     /**
@@ -285,7 +285,7 @@ public final class DBConTools {
      * @return 结果字符串
      */
     public String getCLOB(String tableName, Map<String, Object> whereValues, String lobColName) {
-        return dbcon.doQueryCLOB(tableName, whereValues, lobColName);
+        return dbCon.doQueryCLOB(tableName, whereValues, lobColName);
     }
 
     /**
@@ -295,7 +295,7 @@ public final class DBConTools {
      * @return 成功或失败
      */
     public boolean doUpdate(String sql) {
-        return dbcon.doUpdate(sql);
+        return dbCon.doUpdate(sql);
     }
 
     /**
@@ -306,7 +306,7 @@ public final class DBConTools {
      * @return 成功或失败
      */
     public boolean doUpdate(String sql, Object[] param) {
-        return dbcon.doUpdate(sql, param);
+        return dbCon.doUpdate(sql, param);
     }
 
     /**
@@ -317,7 +317,7 @@ public final class DBConTools {
      * @return 自动生成字段列表：KEY=字段名，VALUE=字段值 | 异常：null
      */
     public List<Map<String, Object>> doUpdateWithFill(String sql, Object[] param) {
-        return dbcon.doUpdateWithFill(sql, param);
+        return dbCon.doUpdateWithFill(sql, param);
     }
 
     /**
@@ -330,7 +330,7 @@ public final class DBConTools {
      * @return 成功或失败
      */
     public boolean doInsertLOB(String tableName, Map<String, Object> whereValues, String lobColName, InputStream input) {
-        return dbcon.doInsertLOB(tableName, whereValues, lobColName, input);
+        return dbCon.doInsertLOB(tableName, whereValues, lobColName, input);
     }
 
     /**
@@ -343,28 +343,28 @@ public final class DBConTools {
      * @return 成功或失败
      */
     public boolean doUpdateLOB(String tableName, Map<String, Object> whereValues, String lobColName, InputStream input) {
-        return dbcon.doUpdateLOB(tableName, whereValues, lobColName, input);
+        return dbCon.doUpdateLOB(tableName, whereValues, lobColName, input);
     }
 
     /**
      * 开始事务
      */
     public void beginTranslist() {
-        dbcon.beginTranslist();
+        dbCon.beginTranslist();
     }
 
     /**
      * 提交事务
      */
     public void commitTranslist() {
-        dbcon.commitTranslist();
+        dbCon.commitTranslist();
     }
 
     /**
      * 回滚事务
      */
     public void rollBackTranslist() {
-        dbcon.rollBackTranslist();
+        dbCon.rollBackTranslist();
     }
 
     /**
@@ -373,7 +373,7 @@ public final class DBConTools {
      * @param sql sql语句
      */
     public void addBatch(String sql) {
-        dbcon.addBatch(sql);
+        dbCon.addBatch(sql);
     }
 
     /**
@@ -382,16 +382,7 @@ public final class DBConTools {
      * @return 成功或失败
      */
     public boolean excuteBatch() {
-        return dbcon.excuteBatch();
-    }
-
-    /**
-     * 获取当前数据库名称
-     *
-     * @return 数据库名称
-     */
-    public String getDbName() {
-        return dbcon.getDbName();
+        return dbCon.excuteBatch();
     }
 
     /**
@@ -399,8 +390,8 @@ public final class DBConTools {
      *
      * @return 链接类型
      */
-    public DBType getDbType() {
-        return dbcon.getDbType();
+    public DbType getDbType() {
+        return dbCon.getDbType();
     }
 
     /**
@@ -409,7 +400,7 @@ public final class DBConTools {
      * @return 数据源编号
      */
     public int getDbNo() {
-        return dbcon.getDbNo();
+        return dbCon.getDbNo();
     }
 
     /**
@@ -418,7 +409,7 @@ public final class DBConTools {
      * @return 驱动类型
      */
     public String getDbDriverType() {
-        return dbcon.getDbDriverType();
+        return dbCon.getDbDriverType();
     }
 
     /**
@@ -426,8 +417,8 @@ public final class DBConTools {
      *
      * @return 数据库连接对象
      */
-    public ConnectionFactory getDbcon() {
-        return dbcon;
+    public ConnectionFactory getDbCon() {
+        return dbCon;
     }
 
     /**
@@ -436,7 +427,7 @@ public final class DBConTools {
      * @return 是否自动提交
      */
     public boolean isAutoCommit() {
-        return dbcon.isAutoCommit();
+        return dbCon.isAutoCommit();
     }
 
     /**

@@ -2,12 +2,11 @@ package pers.acp.file.pdf;
 
 import com.itextpdf.text.pdf.PdfWriter;
 import pers.acp.core.exceptions.EnumValueUndefinedException;
-import pers.acp.core.interfaces.IEnumValue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum PermissionType implements IEnumValue {
+public enum PermissionType {
 
     ALLOW_ASSEMBLY("ALLOW_ASSEMBLY", PdfWriter.ALLOW_ASSEMBLY),
 
@@ -43,17 +42,14 @@ public enum PermissionType implements IEnumValue {
         this.value = value;
     }
 
-    @Override
     public Integer getValue() {
         return this.value;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public Boolean equals(Integer value) {
         return this.value.equals(value);
     }
@@ -62,6 +58,6 @@ public enum PermissionType implements IEnumValue {
         if (map.containsKey(value)) {
             return map.get(value);
         }
-        throw new EnumValueUndefinedException(PermissionType.class, value);
+        throw new EnumValueUndefinedException(PermissionType.class, value + "");
     }
 }

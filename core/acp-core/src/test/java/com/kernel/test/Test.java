@@ -12,7 +12,6 @@ import pers.acp.core.security.DESUtils;
 import pers.acp.core.security.HMACUtils;
 import pers.acp.core.security.MD5Utils;
 import pers.acp.core.security.key.KeyManagement;
-import pers.acp.core.tools.CommonUtils;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -50,7 +49,7 @@ public class Test {
         bean1.setParam5(2.43242);
         bean1.setParam6(899999999);
         bean1.setParam7(false);
-        String result = CommonTools.objectToJson(bean1, new String[]{"param7"}).toString();
+        String result = CommonTools.objectToJson(bean1).toString();
         System.out.println(result);
 
         Bean1 bean11 = CommonTools.jsonToObject(CommonTools.getJsonFromStr(result), Bean1.class);
@@ -64,7 +63,7 @@ public class Test {
         List<String> list = new ArrayList<>();
         list.add("111a");
         list.add("2222");
-        System.out.println(CommonUtils.strInList("111A", list, true));
+        System.out.println(CommonTools.strInList("111A", list, true));
 
 //        long start = System.currentTimeMillis();
 //        String str = FileCommon.getFileContent("C:\\WorkFile\\个人\\Oms.log.2017-02-17");
@@ -121,7 +120,7 @@ public class Test {
 
         Object[] params = {new BigDecimal("300"), "1231", 0.01, 300};
         List<Object> paramsList = Arrays.asList(params);
-        JsonNode parameters = CommonTools.objectToJson(paramsList, null);
+        JsonNode parameters = CommonTools.objectToJson(paramsList);
         System.out.println(parameters.toString());
 
         System.out.println(new StringBuilder("0xfadkfn1").insert(2, "0").toString());

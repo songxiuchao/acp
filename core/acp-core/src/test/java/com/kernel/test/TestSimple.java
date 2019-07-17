@@ -3,9 +3,9 @@ package com.kernel.test;
 import org.joda.time.DateTime;
 import pers.acp.core.CalendarTools;
 import pers.acp.core.CommonTools;
+import pers.acp.core.task.BaseAsyncTask;
 import pers.acp.core.task.threadpool.ThreadPoolService;
-import pers.acp.core.task.threadpool.basetask.BaseThreadTask;
-import pers.acp.core.task.timer.container.Calculation;
+import pers.acp.core.task.timer.Calculation;
 
 import java.math.BigInteger;
 
@@ -42,7 +42,7 @@ public class TestSimple {
     private static void testThreadPool() throws InterruptedException {
         ThreadPoolService threadPoolService = ThreadPoolService.getInstance(10, Integer.MAX_VALUE, 10);
 //        for (int i = 0; i < 10000; i++) {
-//            threadPoolService.addTask(new BaseThreadTask(i + "") {
+//            threadPoolService.addTask(new BaseAsyncTask(i + "") {
 //                @Override
 //                public boolean beforeExecuteFun() {
 //                    return true;
@@ -60,7 +60,7 @@ public class TestSimple {
 //                }
 //            });
 //        }
-        BaseThreadTask task = new BaseThreadTask("") {
+        BaseAsyncTask task = new BaseAsyncTask("", false) {
             @Override
             public boolean beforeExecuteFun() {
                 return true;
@@ -81,7 +81,6 @@ public class TestSimple {
 
             }
         };
-        System.out.println(CommonTools.executeTaskInThreadPool(threadPoolService, task));
     }
 
     private static void testPath() {

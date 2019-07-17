@@ -1,0 +1,102 @@
+package pers.acp.spring.boot.component
+
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.boot.autoconfigure.task.TaskSchedulingProperties
+import org.springframework.context.annotation.Scope
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+import org.springframework.scheduling.support.CronTrigger
+import org.springframework.stereotype.Component
+import pers.acp.spring.boot.base.BaseSpringBootScheduledAsyncTask
+import pers.acp.spring.boot.conf.ScheduleConfiguration
+import pers.acp.spring.boot.interfaces.ITimerTaskScheduler
+import pers.acp.core.CommonTools
+import pers.acp.core.log.LogFactory
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ScheduledFuture
+
+/**
+ * 定时任务处理器
+ *
+ * @author zhangbin by 2018-1-20 21:24
+ * @since JDK 11
+ */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+class TimerTaskScheduler @Autowired(required = false)
+constructor(properties: TaskSchedulingProperties, private val scheduleConfiguration: ScheduleConfiguration, private val baseSpringBootScheduledTaskMap: Map<String, BaseSpringBootScheduledAsyncTask>) : ITimerTaskScheduler {
+
+    private val log = LogFactory.getInstance(this.javaClass)
+
+    private val threadPoolTaskScheduler: ThreadPoolTaskScheduler = ThreadPoolTaskScheduler()
+
+    private val scheduledTaskMap = ConcurrentHashMap<String, BaseSpringBootScheduledAsyncTask>()
+
+    private val futureMap = ConcurrentHashMap<String, ScheduledFuture<*>>()
+
+    init {
+        this.threadPoolTaskScheduler.poolSize = properties.pool.size
+        this.threadPoolTaskScheduler.threadNamePrefix = properties.threadNamePrefix
+        this.threadPoolTaskScheduler.initialize()
+    }
+
+    /**
+     * 启动定时任务
+     */
+    @Throws(InterruptedException::class)
+    private fun startSchedule() {
+        if (!scheduledTaskMap.isEmpty() || !futureMap.isEmpty()) {
+            stopSchedule()
+        }
+        baseSpringBootScheduledTaskMap.forEach { (key, scheduledTask) ->
+            val cronMap = scheduleConfiguration.cron
+            if (cronMap.isNotEmpty() && cronMap.containsKey(key) && !CommonTools.isNullStr(cronMap[key]) && !"none".equals(cronMap[key], ignoreCase = true)) {
+                cronMap[key]?.apply {
+                    scheduledTaskMap[key] = scheduledTask
+                    threadPoolTaskScheduler.schedule(Runnable { scheduledTask.executeScheduledTask() }, CronTrigger(this))?.let {
+                        futureMap[key] = it
+                        log.info("启动定时任务：" + scheduledTask.taskName + " 【" + this + "】 【" + scheduledTask.javaClass.canonicalName + "】")
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 停止定时任务
+     */
+    @Throws(InterruptedException::class)
+    private fun stopSchedule() {
+        val iterator = scheduledTaskMap.entries.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            val key = entry.key
+            val scheduledTask = entry.value
+            val future = futureMap.remove(key)
+            while (!scheduledTask.waiting) {
+                Thread.sleep(3000)
+            }
+            future?.cancel(true)
+            log.info("停止定时任务：" + scheduledTask.taskName + " 【" + scheduledTask.javaClass.canonicalName + "】")
+            iterator.remove()
+        }
+    }
+
+    /**
+     * 定时任务控制
+     *
+     * @param command ITimerTaskScheduler.START | ITimerTaskScheduler.STOP
+     * @throws InterruptedException 异常
+     */
+    @Throws(InterruptedException::class)
+    override fun controlSchedule(command: Int) {
+        synchronized(this) {
+            if (command == ITimerTaskScheduler.START) {
+                startSchedule()
+            } else if (command == ITimerTaskScheduler.STOP) {
+                stopSchedule()
+            }
+        }
+    }
+
+}
