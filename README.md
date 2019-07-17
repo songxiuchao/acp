@@ -42,7 +42,7 @@ Application Construction Platform 应用构建平台。该项目是本人在日�
     
 ## 一、环境要求及开发语言
 - java 11
-- gradle 5.5
+- gradle 5.5.1
 - kotlin 1.3.41
 
 ## 二、gradle 脚本配置及使用
@@ -84,7 +84,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.5 --distribution-type=all
+    gradlew wrapper --gradle-version=5.5.1 --distribution-type=all
 ``
 
 ## 三、工程说明

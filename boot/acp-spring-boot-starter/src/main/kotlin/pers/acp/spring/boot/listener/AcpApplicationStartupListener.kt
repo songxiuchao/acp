@@ -25,9 +25,7 @@ class AcpApplicationStartupListener : ApplicationListener<ContextRefreshedEvent>
      * @param event 事件对象
      */
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        event.applicationContext.getBeansOfType(BaseInitialization::class.java)?.let {
-            sortMap(it)
-        }?.forEach { entry ->
+        sortMap(event.applicationContext.getBeansOfType(BaseInitialization::class.java)).forEach { entry ->
             log.info("start system initialization[" + entry.value.order + "] : " + entry.value.name)
             entry.value.start()
         }
