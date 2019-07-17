@@ -62,6 +62,7 @@ gradle全局参数：
 - mavenCentralUrl：maven中央仓库地址
 - org.gradle.jvmargs：gradle执行时的jvm参数
 - javaVersion：jdk版本号
+- kotlinVersion：kotlin版本号
     
 ##### 4.build.gradle
 公共构建脚本
@@ -138,10 +139,6 @@ ext {
 > - springboot 应用扩展组件
 > - 依赖 acp-spring-boot-starter
 > - 扩展支持 ftp、sftp 等协议服务端自动配置
-##### 10. boot:acp-spring-boot-starter-ws
-> - springboot 应用扩展组件
-> - 依赖 acp-spring-boot-starter
-> - 扩展支持 webservice 服务端自动配置
 ### （二）快速开发 springboot 应用
 ##### 1. 开发说明
 - （1）参考 test:testspringboot
