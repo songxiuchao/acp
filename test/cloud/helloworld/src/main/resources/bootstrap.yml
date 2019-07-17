@@ -106,6 +106,7 @@ acp:
     log-server:
       client:
         enabled: true
+        log-type: HELLOWORLD
     oauth:
       resource-server-permit-all-path:
         - /customer
