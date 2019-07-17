@@ -69,7 +69,7 @@ public class Properties {
     }
 
     @Id
-    @GenericGenerator(name = "idGenerator", strategy = "guid")
+    @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
     @Column(length = 36, nullable = false)
     private String id;
