@@ -87,7 +87,7 @@ data class EmailEntity(
     var userName: String = ""
         get() {
             if (CommonTools.isNullStr(field)) {
-                if (!CommonTools.isNullStr(senderAddress!!)) {
+                if (!CommonTools.isNullStr(senderAddress)) {
                     val senderInfo = StringUtils.splitPreserveAllTokens(senderAddress, "@")
                     if (senderInfo.size == 2) {
                         field = senderInfo[0]
@@ -105,7 +105,7 @@ data class EmailEntity(
     var mailHost: String = ""
         get() {
             if (CommonTools.isNullStr(field)) {
-                if (!CommonTools.isNullStr(senderAddress!!)) {
+                if (!CommonTools.isNullStr(senderAddress)) {
                     val senderInfo = StringUtils.splitPreserveAllTokens(senderAddress, "@")
                     if (senderInfo.size == 2) {
                         field = "smtp." + senderInfo[1]

@@ -56,7 +56,7 @@ object Iso8583Packet {
 
     private var packetEncoding = CommonTools.getDefaultCharset()//报文编码 UTF-8 GBK
 
-    private var map8583Definition: MutableMap<String, String>? = null// 8583报文128域定义器
+    private var map8583Definition: MutableMap<String, String> = mutableMapOf()// 8583报文128域定义器
 
     /**
      * 8583报文初始位图:128位01字符串
@@ -72,8 +72,7 @@ object Iso8583Packet {
         try {
             val iso8583FieldProperties = Iso8583FieldProperties.getInstance()
             iso8583FieldProperties?.let {
-                map8583Definition = mutableMapOf()
-                iso8583FieldProperties.forEach { key, value -> (map8583Definition as MutableMap<String, String>)[key.toString()] = value.toString() }
+                iso8583FieldProperties.forEach { key, value -> map8583Definition[key.toString()] = value.toString() }
             }
         } catch (e: Exception) {
             log.error(e.message, e)
@@ -154,7 +153,7 @@ object Iso8583Packet {
                     // 组二进制位图串
                     bitMap128Local = change16bitMapFlag(fieldNo, bitMap128Local)
                     // 获取域定义信息
-                    val fieldDef = map8583Definition!!["FIELD$fieldNo"]!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    val fieldDef = map8583Definition["FIELD$fieldNo"]!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     var defLen = fieldDef[1]//长度定义,例20
                     var isFixLen = true//是否定长判断
                     if (defLen.startsWith("VAR")) {//变长域
@@ -231,7 +230,7 @@ object Iso8583Packet {
                 val filedName = "FIELD" + getNumThree(i + 1)//FIELD005
                 if (bitMap128Str[i] == '1') {
                     // 获取域定义信息
-                    val fieldDef = map8583Definition!![filedName]!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    val fieldDef = map8583Definition[filedName]!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     var defLen = fieldDef[1]//长度定义,例20
                     var isFixLen = true//是否定长判断
 

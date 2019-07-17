@@ -37,7 +37,7 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
         log.error(ex.message, ex)
         val responseCode = try {
             if (ex is ServerException) {
-                ResponseCode.getEnum(ex.code!!)
+                ResponseCode.getEnum(ex.code ?: 99999)
             } else if (ex is ConstraintViolationException || ex is MethodArgumentNotValidException) {
                 ResponseCode.InvalidParameter
             } else {

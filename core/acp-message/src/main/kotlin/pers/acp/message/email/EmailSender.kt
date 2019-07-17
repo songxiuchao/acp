@@ -68,6 +68,9 @@ class EmailSender(private val emailEntity: EmailEntity) {
     @Throws(Exception::class)
     private fun createMail(session: Session, charset: String): MimeMessage {
         val message = MimeMessage(session)
+        if (CommonTools.isNullStr(emailEntity.senderAddress)) {
+            throw EmailException("senderAddress is null or empty")
+        }
         message.setFrom(InternetAddress(emailEntity.senderAddress!!))
         if (emailEntity.recipientAddresses == null || emailEntity.recipientAddresses!!.isEmpty()) {
             throw EmailException("recipientAddresses is null or empty")

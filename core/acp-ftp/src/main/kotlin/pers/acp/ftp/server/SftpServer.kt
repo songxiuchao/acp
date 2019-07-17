@@ -25,7 +25,7 @@ class SftpServer(private val userList: List<SftpServerUser>, private val listen:
     private var sshServer: SshServer? = null
 
     override fun getServiceName(): String {
-        return "sftp service " + listen.name!!
+        return "sftp service " + listen.name
     }
 
     override fun stopService() {
