@@ -30,7 +30,7 @@ class LogFactory {
         logger.info(message, *variable)
     }
 
-    fun info(message: String?, t: Throwable) {
+    fun info(message: String?, t: Throwable?) {
         setCustomerParams()
         logger.info(message, t)
     }
@@ -45,7 +45,7 @@ class LogFactory {
         logger.debug(message, *variable)
     }
 
-    fun debug(message: String?, t: Throwable) {
+    fun debug(message: String?, t: Throwable?) {
         setCustomerParams()
         logger.debug(message, t)
     }
@@ -60,7 +60,7 @@ class LogFactory {
         logger.warn(message, *variable)
     }
 
-    fun warn(message: String?, t: Throwable) {
+    fun warn(message: String?, t: Throwable?) {
         setCustomerParams()
         logger.warn(message, t)
     }
@@ -75,7 +75,7 @@ class LogFactory {
         logger.debug(message, *variable)
     }
 
-    fun error(message: String?, t: Throwable) {
+    fun error(message: String?, t: Throwable?) {
         setCustomerParams()
         logger.error(message, t)
     }
@@ -90,7 +90,7 @@ class LogFactory {
         logger.trace(message, *variable)
     }
 
-    fun trace(message: String?, t: Throwable) {
+    fun trace(message: String?, t: Throwable?) {
         setCustomerParams()
         logger.trace(message, t)
     }
