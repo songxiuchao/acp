@@ -19,7 +19,7 @@ class DefaultLogProcess : LogProcess {
 
     override fun process(logInfo: LogInfo) {
         // 每个日志类型启动一个线程池，池中仅有一个线程，保证每个类型的消息顺序处理
-        val threadPoolService = ThreadPoolService.getInstance(1, 1, Integer.MAX_VALUE, logInfo.logType + "_log")
+        val threadPoolService = ThreadPoolService.getInstance(1, 1, Int.MAX_VALUE, logInfo.logType + "_log")
         threadPoolService.addTask(object : BaseAsyncTask(logInfo.logType + "_log", false) {
             override fun beforeExecuteFun(): Boolean = true
             override fun executeFun(): Any? {

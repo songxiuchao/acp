@@ -57,7 +57,7 @@ class FileDownLoadHandle {
                 response.reset()
                 response.contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
                 response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, request.characterEncoding))
-                response.setContentLength(Integer.valueOf(file.length().toString()))
+                response.setContentLength(file.length().toInt())
                 toClient = BufferedOutputStream(response.outputStream)
                 toClient.write(buffer)
                 toClient.flush()

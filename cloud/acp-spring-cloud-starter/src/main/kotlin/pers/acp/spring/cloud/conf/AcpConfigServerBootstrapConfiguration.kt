@@ -62,9 +62,9 @@ constructor(private val environment: ConfigurableEnvironment) {
     private fun customerConfigClientRestTemplate(clientProperties: ConfigClientProperties): RestTemplate? {
         try {
             val requestFactory = OkHttp3ClientHttpRequestFactory(
-                    HttpClientBuilder().maxTotalConn(Integer.valueOf(environment.getProperty("feign.httpclient.max-connections", "1000")))
-                            .timeOut(Integer.valueOf(environment.getProperty("feign.httpclient.connection-timeout", "10000")))
-                            .timeToLive(Integer.valueOf(environment.getProperty("feign.httpclient.time-to-live", "900")).toLong())
+                    HttpClientBuilder().maxTotalConn(environment.getProperty("feign.httpclient.max-connections", "1000").toInt())
+                            .timeOut(environment.getProperty("feign.httpclient.connection-timeout", "10000").toInt())
+                            .timeToLive(environment.getProperty("feign.httpclient.time-to-live", "900").toLong())
                             .timeToLiveTimeUnit(enumValueOf(environment.getProperty("feign.httpclient.time-to-live-unit", "seconds").toUpperCase()))
                             .followRedirects(java.lang.Boolean.valueOf(environment.getProperty("feign.httpclient.follow-redirects", "true")))
                             .disableSslValidation(java.lang.Boolean.valueOf(environment.getProperty("feign.httpclient.disable-ssl-validation", "false")))
