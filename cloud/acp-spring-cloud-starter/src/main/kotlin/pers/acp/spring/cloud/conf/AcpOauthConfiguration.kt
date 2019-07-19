@@ -14,34 +14,32 @@ import org.springframework.stereotype.Component
 class AcpOauthConfiguration {
 
     /**
-     * is oauth server
-     * default false
+     * 是否oauth服务，默认：false
      */
     var oauthServer = false
 
     /**
-     * is resource server
-     * default true
+     * 是否资源服务，默认：true
      */
     var resourceServer = true
 
     /**
-     * customer auth exception entry point bean name
+     * 自定义异常处理的 Bean Name
      */
     var authExceptionEntryPoint: String? = null
 
     /**
-     * customer access denied handler
+     * 自定义权限处理 Bean Name
      */
     var accessDeniedHandler: String? = null
 
     /**
-     * permitAll path, effective when resourceServer=true
+     * 不进行权限校验的 url path，当 resourceServer=true 时有效
      */
     var resourceServerPermitAllPath: MutableList<String> = mutableListOf()
 
     /**
-     * security path, effective when resourceServer=true
+     * 进行权限保护的 url path，当 resourceServer=true 时有效
      */
     var resourceServerSecurityPath: MutableList<String> = mutableListOf()
 
