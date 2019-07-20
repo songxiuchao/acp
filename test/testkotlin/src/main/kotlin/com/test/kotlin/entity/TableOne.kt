@@ -10,19 +10,21 @@ import javax.persistence.*
  */
 @Entity
 @Table(name = "table1")
-data class TableOne(
-        @GenericGenerator(name = "tableSequenceGenerator",
-                strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-                parameters = [
-                    (Parameter(name = "sequence_name", value = "table_seq")),
-                    (Parameter(name = "initial_value", value = "1")),
-                    (Parameter(name = "increment_size", value = "1"))])
-        @Id
-        @GeneratedValue(generator = "tableSequenceGenerator")
-        @Column(updatable = false)
-        val id: Long = 0,
+class TableOne {
 
-        val name: String = "",
+    @GenericGenerator(name = "tableSequenceGenerator",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = [
+                (Parameter(name = "sequence_name", value = "table_seq")),
+                (Parameter(name = "initial_value", value = "1")),
+                (Parameter(name = "increment_size", value = "1"))])
+    @Id
+    @GeneratedValue(generator = "tableSequenceGenerator")
+    @Column(updatable = false)
+    var id: Long = 0
 
-        val value: Double = 0.00
-)
+    var name: String = ""
+
+    var value: Double = 0.00
+
+}

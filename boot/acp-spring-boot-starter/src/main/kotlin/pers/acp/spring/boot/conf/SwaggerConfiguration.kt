@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 class SwaggerConfiguration {
 
     /**
-     * 是否启用
+     * 是否启用，默认：false
      */
     var enabled = false
 
