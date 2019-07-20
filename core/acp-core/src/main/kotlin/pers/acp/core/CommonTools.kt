@@ -358,11 +358,11 @@ object CommonTools {
      * 删除文件
      *
      * @param file     待删除文件
-     * @param isSync   是否异步删除
+     * @param isAsync   是否异步删除
      * @param waitTime 异步删除等待时间
      */
     @JvmStatic
     @JvmOverloads
-    fun doDeleteFile(file: File, isSync: Boolean, waitTime: Long? = null) =
-            CommonUtils.doDeleteFile(file, isSync, waitTime)
+    fun doDeleteFile(file: File, isAsync: Boolean, waitTime: Long? = null) =
+            CommonUtils.doDeleteFile(file, isAsync, waitTime)
 }

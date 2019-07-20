@@ -22,7 +22,10 @@ class RestTest : BaseTest() {
     @Test
     fun testAdd201() {
         val name = "fsdafa"
-        val tableOne = TableOne(name = name, value = 101.0)
+        val tableOne = TableOne().apply {
+            this.name = name
+            this.value = 101.0
+        }
         val result = testRestTemplate.postForEntity("/add", tableOne, TableOne::class.java)
         Assertions.assertEquals(HttpStatus.CREATED, result.statusCode)
         Assertions.assertEquals(result.body!!.name, name)

@@ -14,13 +14,12 @@ import org.springframework.stereotype.Component
 class ControllerAspectConfiguration {
 
     /**
-     * 是否启用
+     * 是否启用，默认：true
      */
     var enabled = true
 
     /**
      * 不进行日志记录的 url 正则表达式
-     * no log uri regular
      */
     var noLogUriRegular: MutableList<String> = mutableListOf()
 

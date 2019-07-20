@@ -58,7 +58,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
 
     }
 
-    fun info(message: String) {
+    fun info(message: String?) {
         log.info(message)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -68,7 +68,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun info(message: String, vararg variable: Any?) {
+    fun info(message: String?, vararg variable: Any?) {
         log.info(message, *variable)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -79,7 +79,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun info(message: String, t: Throwable) {
+    fun info(message: String?, t: Throwable) {
         log.info(message, t)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -90,7 +90,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun debug(message: String) {
+    fun debug(message: String?) {
         log.debug(message)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -100,7 +100,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun debug(message: String, vararg variable: Any?) {
+    fun debug(message: String?, vararg variable: Any?) {
         log.debug(message, *variable)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -111,7 +111,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun debug(message: String, t: Throwable) {
+    fun debug(message: String?, t: Throwable) {
         log.debug(message, t)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -122,7 +122,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun warn(message: String) {
+    fun warn(message: String?) {
         log.warn(message)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -132,7 +132,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun warn(message: String, vararg variable: Any?) {
+    fun warn(message: String?, vararg variable: Any?) {
         log.warn(message, *variable)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -143,7 +143,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun warn(message: String, t: Throwable) {
+    fun warn(message: String?, t: Throwable) {
         log.warn(message, t)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -154,7 +154,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun error(message: String) {
+    fun error(message: String?) {
         log.error(message)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -164,7 +164,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun error(message: String, vararg variable: Any?) {
+    fun error(message: String?, vararg variable: Any?) {
         log.error(message, *variable)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -175,7 +175,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun error(message: String, t: Throwable) {
+    fun error(message: String?, t: Throwable) {
         log.error(message, t)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -186,7 +186,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun trace(message: String) {
+    fun trace(message: String?) {
         log.trace(message)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -196,7 +196,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun trace(message: String, vararg variable: Any?) {
+    fun trace(message: String?, vararg variable: Any?) {
         log.trace(message, *variable)
         val logInfo = generateLogInfo()
         logInfo?.let {
@@ -207,7 +207,7 @@ constructor(private val objectMapper: ObjectMapper, private val logServerClientC
         }
     }
 
-    fun trace(message: String, t: Throwable) {
+    fun trace(message: String?, t: Throwable) {
         log.trace(message, t)
         val logInfo = generateLogInfo()
         logInfo?.let {

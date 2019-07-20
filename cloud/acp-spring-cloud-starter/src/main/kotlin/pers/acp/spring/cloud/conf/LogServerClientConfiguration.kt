@@ -14,11 +14,13 @@ import pers.acp.spring.cloud.log.LogConstant
 @ConfigurationProperties(prefix = "acp.cloud.log-server.client")
 class LogServerClientConfiguration {
 
+    /**
+     * 是否启用日志服务客户端，默认：false
+     */
     var enabled = false
 
     /**
-     * log type
-     * default "ALL"
+     * 日志类型，默认："ALL"
      */
     var logType = LogConstant.DEFAULT_TYPE
 

@@ -19,9 +19,9 @@ class ThreadPoolService
  * @param maxFreeTime     线程最大空闲时间
  * @param minThreadNumber 最小线程数
  * @param maxThreadNumber 最大线程数
- * Integer.MAX_VALUE--无界线程数，直接提交
+ * Int.MAX_VALUE--无界线程数，直接提交
  * @param querySize       队列容量；
- * Integer.MAX_VALUE--无界队列，LinkedBlockingQueue
+ * Int.MAX_VALUE--无界队列，LinkedBlockingQueue
  * else---------------有界队列，ArrayBlockingQueue
  */
 private constructor(private val poolName: String, maxFreeTime: Long, minThreadNumber: Int, maxThreadNumber: Int, querySize: Int) {
@@ -30,7 +30,7 @@ private constructor(private val poolName: String, maxFreeTime: Long, minThreadNu
 
     init {
         when {
-            maxThreadNumber == Integer.MAX_VALUE ->
+            maxThreadNumber == Int.MAX_VALUE ->
                 /*
                  * 直接提交队列: SynchronousQueue
                  * 1、要求无界 maximumPoolSizes 以避免拒绝新提交的任务。其中每个插入操作必须等待另一个线程的对应移除操作，也就是说A任务进入队列，B任务必须等A任务被移除之后才能进入队列，否则执行异常策略
@@ -42,7 +42,7 @@ private constructor(private val poolName: String, maxFreeTime: Long, minThreadNu
                  * 5、当一个线程空闲时间超过 maxFreeTime 且运行线程数 > corePoolSize 时，销毁空闲线程，直至运行线程数 = corePoolSize
                  */
                 executor = ThreadPoolExecutor(0, maxThreadNumber, maxFreeTime, TimeUnit.MILLISECONDS, SynchronousQueue())
-            querySize == Integer.MAX_VALUE ->
+            querySize == Int.MAX_VALUE ->
                 /*
                  * 无界队列: LinkedBlockingQueue
                  * 1、将导致在所有核心线程都在忙时新任务在队列中等待。这样，创建的线程就不会超过 corePoolSize。(因此，maximumPoolSize 的值也就没意义了。)

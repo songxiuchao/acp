@@ -15,7 +15,7 @@ class DbProperties : BaseProperties() {
      *
      * @return 数据库编号
      */
-    fun getDefaultSQLDbNo(): Int = Integer.valueOf(getProperty("defaultsqldbno"))
+    fun getDefaultSQLDbNo(): Int = getProperty("defaultsqldbno").toInt()
 
     /**
      * 获取数据源名称
