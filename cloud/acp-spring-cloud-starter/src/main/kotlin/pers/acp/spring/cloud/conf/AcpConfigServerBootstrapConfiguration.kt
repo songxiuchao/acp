@@ -1,6 +1,7 @@
 package pers.acp.spring.cloud.conf
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -33,6 +34,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 @Import(ConfigServiceBootstrapConfiguration::class)
 @EnableConfigurationProperties
 @ConditionalOnNotWebApplication
+@ConditionalOnClass(ConfigClientProperties::class)
 class AcpConfigServerBootstrapConfiguration @Autowired
 constructor(private val environment: ConfigurableEnvironment) {
 
