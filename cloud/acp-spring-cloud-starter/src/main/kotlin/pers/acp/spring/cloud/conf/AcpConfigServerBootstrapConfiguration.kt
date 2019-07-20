@@ -1,6 +1,7 @@
 package pers.acp.spring.cloud.conf
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -33,6 +34,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 @Import(ConfigServiceBootstrapConfiguration::class)
 @EnableConfigurationProperties
 @ConditionalOnNotWebApplication
+@ConditionalOnClass(ConfigClientProperties::class)
 class AcpConfigServerBootstrapConfiguration @Autowired
 constructor(private val environment: ConfigurableEnvironment) {
 
@@ -62,9 +64,9 @@ constructor(private val environment: ConfigurableEnvironment) {
     private fun customerConfigClientRestTemplate(clientProperties: ConfigClientProperties): RestTemplate? {
         try {
             val requestFactory = OkHttp3ClientHttpRequestFactory(
-                    HttpClientBuilder().maxTotalConn(Integer.valueOf(environment.getProperty("feign.httpclient.max-connections", "1000")))
-                            .timeOut(Integer.valueOf(environment.getProperty("feign.httpclient.connection-timeout", "10000")))
-                            .timeToLive(Integer.valueOf(environment.getProperty("feign.httpclient.time-to-live", "900")).toLong())
+                    HttpClientBuilder().maxTotalConn(environment.getProperty("feign.httpclient.max-connections", "1000").toInt())
+                            .timeOut(environment.getProperty("feign.httpclient.connection-timeout", "10000").toInt())
+                            .timeToLive(environment.getProperty("feign.httpclient.time-to-live", "900").toLong())
                             .timeToLiveTimeUnit(enumValueOf(environment.getProperty("feign.httpclient.time-to-live-unit", "seconds").toUpperCase()))
                             .followRedirects(java.lang.Boolean.valueOf(environment.getProperty("feign.httpclient.follow-redirects", "true")))
                             .disableSslValidation(java.lang.Boolean.valueOf(environment.getProperty("feign.httpclient.disable-ssl-validation", "false")))

@@ -4,7 +4,6 @@ import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
 
 import java.io.UnsupportedEncodingException
-import java.nio.charset.Charset
 import java.util.TreeMap
 import kotlin.math.abs
 
@@ -163,7 +162,7 @@ object Iso8583Packet {
                     val fieldLen = fieldValue.toByteArray(charset(packetEncoding)).size//字段值得实际长度
                     // 判断是否为变长域
                     if (!isFixLen) {// 变长域(变长域最后组装成的效果：例如变长3位，定义var3，这里的3是指长度值占3位，字段值是123456，最后结果就是006123456)
-                        val defLen1 = Integer.valueOf(defLen)
+                        val defLen1 = defLen.toInt()
                         if (fieldLen.toString().length > 10 * defLen1) {
                             log.error("字段" + fieldName + "的数据定义长度的长度为" + defLen + "位,长度不能超过" + 10 * defLen1)
                             return null
@@ -172,7 +171,7 @@ object Iso8583Packet {
                             fieldValue = getVaryLengthValue(fieldValue, defLen1)!! + fieldValue
                         }
                     } else {//定长域(定长比较好理解，一个字段规定是N位，那么字段值绝对不能超过N位，不足N位就在后面补空格)
-                        val defLen2 = Integer.valueOf(defLen)
+                        val defLen2 = defLen.toInt()
                         if (fieldLen > defLen2) {
                             log.error("字段" + fieldName + "的数据定义长度为" + defLen + "位,长度不能超过" + defLen)
                             return null
@@ -240,16 +239,15 @@ object Iso8583Packet {
                     }
                     // 截取该域信息
                     if (!isFixLen) {//变长域
-                        val defLen1 = Integer.valueOf(defLen)//VAR2后面的2
+                        val defLen1 = defLen.toInt()//VAR2后面的2
                         val realLen1 = String(content8583, pos, defLen1, charset(packetEncoding))//报文中实际记录域长,例如16,023
-                        val realAllLen = defLen1 + Integer.valueOf(realLen1)//该字段总长度（包括长度值占的长度）
-                        //						filedValue = new String(content8583, pos+defLen1, Integer.valueOf(realLen1), packetEncoding);
-                        val filedValueByte = ByteArray(Integer.valueOf(realLen1))
+                        val realAllLen = defLen1 + realLen1.toInt()//该字段总长度（包括长度值占的长度）
+                        val filedValueByte = ByteArray(realLen1.toInt())
                         System.arraycopy(content8583, pos + defLen1, filedValueByte, 0, filedValueByte.size)
                         filedValue = String(filedValueByte, charset(packetEncoding))
                         pos += realAllLen//记录当前位置
                     } else {//定长域
-                        val defLen2 = Integer.valueOf(defLen)//长度值占的位数
+                        val defLen2 = defLen.toInt()//长度值占的位数
                         filedValue = String(content8583, pos, defLen2, charset(packetEncoding))
                         pos += defLen2//记录当前位置
                     }
@@ -319,7 +317,7 @@ object Iso8583Packet {
     fun getPacketLen(lenStr: String?): String {
         var res = ""
         if (lenStr != null) {
-            res = getPacketLen(Integer.valueOf(lenStr))
+            res = getPacketLen(lenStr.toInt())
         }
         return res
     }
@@ -359,7 +357,7 @@ object Iso8583Packet {
      */
     private fun change16bitMapFlag(fieldNo: String, res: String): String {
         var result = res
-        val indexNo = Integer.parseInt(fieldNo)
+        val indexNo = fieldNo.toInt()
         result = result.substring(0, indexNo - 1) + "1" + result.substring(indexNo)
         return result
     }
@@ -380,11 +378,11 @@ object Iso8583Packet {
         for (aBitMap16 in bitMap16) {
             var bc = aBitMap16.toInt()
             bc = if (bc < 0) bc + 256 else bc
-            val bitnaryStr = Integer.toBinaryString(bc)//二进制字符串
+            val bitNaryStr = Integer.toBinaryString(bc)//二进制字符串
             // 左补零，保证是8位
-            val rightBitnaryStr = strCopy("0", abs(8 - bitnaryStr.length)) + bitnaryStr//位图二进制字符串
+            val rightBitNaryStr = strCopy("0", abs(8 - bitNaryStr.length)) + bitNaryStr//位图二进制字符串
             // 先去除多余的零，然后组装128域二进制字符串
-            bitMap128.append(rightBitnaryStr)
+            bitMap128.append(rightBitNaryStr)
         }
         return bitMap128.toString()
     }

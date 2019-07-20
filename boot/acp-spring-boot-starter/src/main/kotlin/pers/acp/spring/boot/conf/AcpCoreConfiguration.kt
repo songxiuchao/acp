@@ -14,22 +14,22 @@ import org.springframework.stereotype.Component
 class AcpCoreConfiguration {
 
     /**
-     * 延迟删除文件等待时间（单位毫秒）
+     * 延迟删除文件等待时间（单位毫秒），默认：1200000
      */
     var deleteFileWaitTime: Long = 1200000
 
     /**
-     * 绝对路径前缀
+     * 绝对路径前缀，默认："abs:"
      */
     var absPathPrefix = "abs:"
 
     /**
-     * 用户路径前缀
+     * 用户路径前缀，默认："user:"
      */
     var userPathPrefix = "user:"
 
     /**
-     * 字体文件夹路径
+     * 字体文件夹路径，默认："files/resource/font"
      */
     var fontPath = "files/resource/font"
 

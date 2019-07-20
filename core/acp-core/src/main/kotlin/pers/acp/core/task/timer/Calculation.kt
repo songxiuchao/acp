@@ -240,7 +240,7 @@ object Calculation {
             // 当前时间
             val nowTime = now.toString(TIME_FORMAT)
 
-            val dayIndex = Integer.valueOf(rules[0])// 一周中第几天
+            val dayIndex = rules[0].toInt()// 一周中第几天
             val nowIndex = getWeekNo(now)// 当前日期是一周中第几天
             // 比上次发送时间至少晚一天，符合一周中第几天，等于或超过配置的发送时间
             if (nowDay >= afterDay && dayIndex == nowIndex && nowTime >= rules[1]) {
@@ -269,7 +269,7 @@ object Calculation {
             // 当前时间
             val nowTime = now.toString(TIME_FORMAT)
 
-            var dayIndex = Integer.valueOf(rules[0])// 日号
+            var dayIndex = rules[0].toInt()// 日号
             val nowIndex = getDayNo(now)// 当前日期是几号
             val maxDay = getLastDayInMonthNo(now)// 当前日期所在月最后一天
             if (maxDay < dayIndex) {
@@ -298,14 +298,14 @@ object Calculation {
             // 参照日期后一天0点
             val afterDay = getNextDay(contrast).toString(DATE_FORMAT) + " 00:00:00"
 
-            var dayIndex = Integer.valueOf(rules[1])// 日号
+            var dayIndex = rules[1].toInt()// 日号
             val nowIndex = getDayNo(now)// 当前日期是几号
             val maxDay = getLastDayInMonthNo(now)// 当前日期所在月最后一天
             if (maxDay < dayIndex) {
                 dayIndex = maxDay
             }
             // 比上次发送时间至少晚一天，符合季度内月号，符合月内日号，等于或超过配置的发送时间
-            if (now.toString(DATETIME_FORMAT) >= afterDay && getMonthNoInQuarter(now) == Integer.valueOf(rules[0]) && dayIndex == nowIndex && now.toString(TIME_FORMAT) >= rules[2]) {
+            if (now.toString(DATETIME_FORMAT) >= afterDay && getMonthNoInQuarter(now) == rules[0].toInt() && dayIndex == nowIndex && now.toString(TIME_FORMAT) >= rules[2]) {
                 isExecute = true
             }
         }
@@ -327,14 +327,14 @@ object Calculation {
             // 参照日期后一天0点
             val afterDay = getNextDay(contrast).toString(DATE_FORMAT) + " 00:00:00"
 
-            var dayIndex = Integer.valueOf(rules[1])// 日号
+            var dayIndex = rules[1].toInt()// 日号
             val nowIndex = getDayNo(now)// 当前日期是几号
             val maxDay = getLastDayInMonthNo(now)// 当前日期所在月最后一天
             if (maxDay < dayIndex) {
                 dayIndex = maxDay
             }
             // 比上次发送时间至少晚一天，符合月号，符合月内日号，等于或超过配置的发送时间
-            if (now.toString(DATETIME_FORMAT) >= afterDay && getMonthNo(now) == Integer.valueOf(rules[0]) && dayIndex == nowIndex && now.toString(TIME_FORMAT) >= rules[2]) {
+            if (now.toString(DATETIME_FORMAT) >= afterDay && getMonthNo(now) == rules[0].toInt() && dayIndex == nowIndex && now.toString(TIME_FORMAT) >= rules[2]) {
                 isExecute = true
             }
         }

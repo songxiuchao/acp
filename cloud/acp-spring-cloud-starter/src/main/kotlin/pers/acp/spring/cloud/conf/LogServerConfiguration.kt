@@ -14,17 +14,17 @@ import org.springframework.stereotype.Component
 class LogServerConfiguration {
 
     /**
-     * 消费日志消息的组id，多个日志服务使用相同的组id，能够保证日志消息不被重复消费
+     * 消费日志消息的组id，多个日志服务使用相同的组id，能够保证日志消息不被重复消费，默认："acp_cloud_log_server_group_id"
      */
     var groupId = "acp_cloud_log_server_group_id"
 
     /**
-     * 当前服务是否是日志服务
+     * 当前服务是否是日志服务，默认：false
      */
     var enabled = false
 
     /**
-     * 日志消息的topic名称（队列名称）
+     * 日志消息的topic名称（队列名称），默认："acp_cloud_log_server_message_topic"
      */
     var destination = "acp_cloud_log_server_message_topic"
 
