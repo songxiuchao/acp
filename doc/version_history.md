@@ -2,6 +2,7 @@
 ##### v6.x
 > - [Upgrade] 优化 RestControllerAspect 切面日志处理
 > - [Upgrade] testspringboot 增加异步请求接口demo
+> - [Upgrade] 升级 docker 中间件 elasticsearch 相关组件为 7.2.0
 ##### v6.0.0
 > - [Upgrade] 删除 acp-spring-boot-starter-ws 和 acp-webservice 模块，彻底废弃 webservice 相关功能的支持
 > - [Upgrade] java 1.8 环境中删除 testscala 模块
