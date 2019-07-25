@@ -3,6 +3,7 @@ package pers.acp.core
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import net.lingala.zip4j.model.ZipParameters
 import org.joda.time.DateTime
 import pers.acp.core.exceptions.OperateException
 import pers.acp.core.match.MoneyToCN
@@ -335,24 +336,27 @@ object CommonTools {
      * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于WebRoot的路径
      * @param resultFileName 生成的目标文件全路径
      * @param deleteFile     压缩完后是否删除原文件
+     * @param password       压缩密码
+     * @param zipParameters  压缩参数
      * @return 目标文件绝对路径
      */
     @JvmStatic
-    fun filesToZip(fileNames: Array<String>, resultFileName: String, deleteFile: Boolean): String =
-            CommonUtils.filesToZip(fileNames, resultFileName, deleteFile)
+    @JvmOverloads
+    fun filesToZip(fileNames: List<String>, resultFileName: String, deleteFile: Boolean = false, password: String? = null, zipParameters: ZipParameters? = null): String =
+            CommonUtils.filesToZip(fileNames, resultFileName, deleteFile, password, zipParameters)
 
     /**
      * 解压缩文件
      *
      * @param zipFileName  zip压缩文件名
      * @param parentFold   解压目标文件夹
-     * @param charSet      字符编码
      * @param deleteFile   解压完成是否删除压缩文件
+     * @param password     压缩密码
      */
     @JvmStatic
     @JvmOverloads
-    fun zipToFiles(zipFileName: String, parentFold: String, deleteFile: Boolean = false, charSet: String = CommonUtils.defaultCharset) =
-            CommonUtils.zipToFiles(zipFileName, parentFold, deleteFile, charSet)
+    fun zipToFiles(zipFileName: String, parentFold: String, deleteFile: Boolean = false, password: String? = null) =
+            CommonUtils.zipToFiles(zipFileName, parentFold, deleteFile, password)
 
     /**
      * 删除文件
@@ -363,6 +367,6 @@ object CommonTools {
      */
     @JvmStatic
     @JvmOverloads
-    fun doDeleteFile(file: File, isAsync: Boolean, waitTime: Long? = null) =
+    fun doDeleteFile(file: File, isAsync: Boolean = false, waitTime: Long? = null) =
             CommonUtils.doDeleteFile(file, isAsync, waitTime)
 }
