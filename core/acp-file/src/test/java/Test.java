@@ -1,5 +1,3 @@
-import pers.acp.core.CommonTools;
-
 import java.io.*;
 
 /**
@@ -21,19 +19,6 @@ public class Test {
 //        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\WorkFile\\22.txt"), "gbk"));
 //        writer.write(content);
 //        writer.flush();
-//        testCompress();
-//        testDecompress();
-    }
-
-    private static void testCompress() {
-        System.out.println(CommonTools.filesToZip(new String[]{
-                        "C:\\WorkFile\\IdeaProjects\\pers-acp\\acp\\logs\\log-server\\2019-01-29",
-                        "C:\\WorkFile\\IdeaProjects\\pers-acp\\acp\\logs\\log-server\\spring.log.2019-01-29.0.gz"},
-                "D:\\test\\test.zip", false));
-    }
-
-    private static void testDecompress() {
-        CommonTools.zipToFiles("D:\\test\\test.zip", "D:\\test\\test", false);
     }
 
 }

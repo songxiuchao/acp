@@ -13,10 +13,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
+import org.springframework.web.context.request.async.DeferredResult
+import org.springframework.web.context.request.async.WebAsyncTask
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.conf.ControllerAspectConfiguration
 import pers.acp.spring.boot.tools.HttpTools
+import java.util.concurrent.Callable
 
 /**
  * Controller 拦截器，记录请求日志
@@ -64,7 +67,7 @@ constructor(private val controllerAspectConfiguration: ControllerAspectConfigura
                 val request = this.request
                 val method = request.method
                 val uri = request.requestURI
-                if (needLog(uri)) {
+                if (needLog(controllerAspectConfiguration, uri)) {
                     val startLog = StringBuilder("========== 请求开始, method: {}, Content-Type: {}, uri: {}\n")
                     startLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
                     startLog.append("target : ").append(pjp.signature.declaringTypeName).append("\n")
@@ -95,62 +98,67 @@ constructor(private val controllerAspectConfiguration: ControllerAspectConfigura
                 }
                 val processBegin = System.currentTimeMillis()
                 response = pjp.proceed()
-                if (needLog(uri)) {
-                    log.info(">>>>>>>>>> 请求处理结束! [method: {}, uri: {}, 处理耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - processBegin)
-                    response?.apply {
-                        val endLog = StringBuilder("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
-                        endLog.append("-----> response: ").append(this.toString()).append("\n")
-                        var responseInfo: String? = null
-                        if (this is ResponseEntity<*>) {
-                            val responseBody = this.body
-                            responseBody?.let { body ->
-                                responseInfo = if (body is String) {
-                                    body
-                                } else {
-                                    objectMapper.writeValueAsString(body)
+                if (!(response is WebAsyncTask<*> || response is Callable<*> || response is DeferredResult<*>)) {
+                    if (needLog(controllerAspectConfiguration, uri)) {
+                        log.info(">>>>>>>>>> 请求处理结束! [method: {}, uri: {}, 处理耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - processBegin)
+                        response?.apply {
+                            val endLog = StringBuilder("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
+                            endLog.append("-----> response: ").append(this.toString()).append("\n")
+                            var responseInfo: String? = null
+                            if (this is ResponseEntity<*>) {
+                                val responseBody = this.body
+                                responseBody?.let { body ->
+                                    responseInfo = if (body is String) {
+                                        body
+                                    } else {
+                                        objectMapper.writeValueAsString(body)
+                                    }
                                 }
+                            } else {
+                                responseInfo = objectMapper.writeValueAsString(this)
                             }
-                        } else {
-                            responseInfo = objectMapper.writeValueAsString(this)
+                            endLog.append("      ┖---- body: \n").append(responseInfo).append("\n")
+                            endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+                            log.info(endLog.toString())
                         }
-                        endLog.append("      ┖---- body: \n").append(responseInfo).append("\n")
-                        endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                        log.info(endLog.toString())
+                        log.info("========== 请求结束! [method: {}, uri: {}, 总耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - beginTime)
                     }
-                    log.info("========== 请求结束! [method: {}, uri: {}, 总耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - beginTime)
+                } else {
+                    log.info(">>>>>>>>>> 进行异步处理...  [method: {}, uri: {}]", method, uri)
                 }
             }
         }
         return response
     }
 
-    /**
-     * 匹配uri
-     *
-     * @param uri uri
-     * @return true|false
-     */
-    private fun needLog(uri: String): Boolean {
-        if (controllerAspectConfiguration.enabled) {
-            for (regex in noLogUriRegular) {
-                if (HttpTools.isBeIdentifiedUri(uri, regex)) {
-                    return false
-                }
-            }
-            val noLogUriRegularConfig = controllerAspectConfiguration.noLogUriRegular
-            for (regex in noLogUriRegularConfig) {
-                if (HttpTools.isBeIdentifiedUri(uri, regex)) {
-                    return false
-                }
-            }
-            return true
-        } else {
-            return false
-        }
-    }
-
     companion object {
         private val noLogUriRegular = ImmutableList.of("/error")
+
+        /**
+         * 匹配uri
+         *
+         * @param controllerAspectConfiguration 配置对象
+         * @param uri uri
+         * @return true|false
+         */
+        internal fun needLog(controllerAspectConfiguration: ControllerAspectConfiguration, uri: String): Boolean {
+            if (controllerAspectConfiguration.enabled) {
+                for (regex in noLogUriRegular) {
+                    if (HttpTools.isBeIdentifiedUri(uri, regex)) {
+                        return false
+                    }
+                }
+                val noLogUriRegularConfig = controllerAspectConfiguration.noLogUriRegular
+                for (regex in noLogUriRegularConfig) {
+                    if (HttpTools.isBeIdentifiedUri(uri, regex)) {
+                        return false
+                    }
+                }
+                return true
+            } else {
+                return false
+            }
+        }
     }
 
 }

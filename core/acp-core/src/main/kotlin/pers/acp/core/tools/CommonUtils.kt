@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.commons.text.CharacterPredicates
 import org.apache.commons.text.RandomStringGenerator
 import org.joda.time.DateTime
+import net.lingala.zip4j.ZipFile
 import pers.acp.core.conf.AcpProperties
 import pers.acp.core.log.LogFactory
 import pers.acp.core.task.BaseAsyncTask
@@ -24,7 +25,12 @@ import java.util.UUID
 import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
-import java.util.zip.ZipOutputStream
+import net.lingala.zip4j.model.ZipParameters
+import net.lingala.zip4j.model.enums.AesKeyStrength
+import net.lingala.zip4j.model.enums.CompressionLevel
+import net.lingala.zip4j.model.enums.CompressionMethod
+import net.lingala.zip4j.model.enums.EncryptionMethod
+
 
 /**
  * @author zhang by 08/07/2019
@@ -572,12 +578,13 @@ object CommonUtils {
      * @param fileNames      需要压缩的文件路径数组，可以是全路径也可以是相对于WebRoot的路径
      * @param resultFileName 生成的目标文件全路径
      * @param deleteFile     压缩完后是否删除原文件
+     * @param password       压缩密码
+     * @param zipParameters  压缩参数
      * @return 目标文件绝对路径
      */
-    fun filesToZip(fileNames: Array<String>, resultFileName: String, deleteFile: Boolean): String {
+    fun filesToZip(fileNames: List<String>, resultFileName: String, deleteFile: Boolean = false, password: String? = null, zipParameters: ZipParameters? = null): String {
         val startTime = System.currentTimeMillis()
         var endTime: Long = 0
-        var out: ZipOutputStream? = null
         try {
             val resultFileParent = File(resultFileName).parentFile
             if (!resultFileParent.exists()) {
@@ -585,26 +592,40 @@ object CommonUtils {
                     log.error("mkdir failed : " + resultFileParent.absolutePath)
                 }
             }
-            out = ZipOutputStream(FileOutputStream(resultFileName))
-            fileNames.forEach {
-                val filename = it.replace("\\", File.separator).replace("/", File.separator)
-                val srcFile = File(filename)
-                compress(srcFile, out, srcFile.name)
-                if (deleteFile) {
-                    doDeleteFile(srcFile, false)
+            val files: MutableList<File> = mutableListOf()
+            val folds: MutableList<File> = mutableListOf()
+            fileNames.forEach { name ->
+                val file = File(name)
+                if (file.isDirectory) {
+                    folds.add(file)
+                } else {
+                    files.add(file)
                 }
             }
-            out.close()
+            val zipFile = if (password == null) {
+                ZipFile(resultFileName)
+            } else {
+                ZipFile(resultFileName, password.toCharArray())
+            }
+            //设置压缩文件参数
+            val parameters = zipParameters ?: ZipParameters().apply {
+                this.compressionMethod = CompressionMethod.DEFLATE
+                this.compressionLevel = CompressionLevel.NORMAL
+                password?.let {
+                    this.isEncryptFiles = true
+                    this.encryptionMethod = EncryptionMethod.ZIP_STANDARD
+                    this.aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+                }
+            }
+            zipFile.addFiles(files, parameters)
+            folds.forEach { fold -> zipFile.addFolder(fold, parameters) }
+            if (deleteFile) {
+                files.forEach { file -> doDeleteFile(file) }
+            }
             log.info("compress success")
             endTime = System.currentTimeMillis()
             return resultFileName
         } catch (e: Exception) {
-            try {
-                out?.closeEntry()
-                doDeleteFile(File(resultFileName), false)
-            } catch (ex: Exception) {
-                log.error("file compress Exception:" + ex.message, ex)
-            }
             log.error("file compress Exception:" + e.message, e)
             endTime = System.currentTimeMillis()
             return ""
@@ -614,95 +635,35 @@ object CommonUtils {
     }
 
     /**
-     * 递归压缩
-     *
-     * @param sourceFile 源文件
-     * @param zos        zip输出流
-     * @param name       压缩后的名称
-     * @throws Exception 异常
-     */
-    @Throws(Exception::class)
-    private fun compress(sourceFile: File, zos: ZipOutputStream, name: String) {
-        var input: FileInputStream? = null
-        try {
-            if (sourceFile.isFile) {
-                val buf = ByteArray(1024)
-                zos.putNextEntry(ZipEntry(name))
-                input = FileInputStream(sourceFile)
-                var len = input.read(buf)
-                while (len != -1) {
-                    zos.write(buf, 0, len)
-                    len = input.read(buf)
-                }
-                zos.closeEntry()
-                input.close()
-                input = null
-            } else {
-                val listFiles = sourceFile.listFiles()
-                if (listFiles == null || listFiles.isEmpty()) {
-                    zos.putNextEntry(ZipEntry("$name/"))
-                    zos.closeEntry()
-                } else {
-                    for (file in listFiles) {
-                        compress(file, zos, name + "/" + file.name)
-                    }
-                }
-            }
-        } finally {
-            input?.close()
-        }
-    }
-
-    /**
      * 解压缩文件
      *
      * @param zipFileName  zip压缩文件名
      * @param parentFold   解压目标文件夹
      * @param deleteFile   解压完成是否删除压缩文件
-     * @param charSet      字符编码
+     * @param password     压缩密码
      */
-    fun zipToFiles(zipFileName: String, parentFold: String, deleteFile: Boolean = false, charSet: String = defaultCharset) {
+    fun zipToFiles(zipFileName: String, parentFold: String, deleteFile: Boolean = false, password: String? = null) {
         val startTime = System.currentTimeMillis()
         var endTime: Long = 0
-        var zin: ZipInputStream? = null
-        var bin: BufferedInputStream? = null
-        var bout: BufferedOutputStream? = null
         try {
-            zin = ZipInputStream(FileInputStream(zipFileName), charset(charSet))
-            bin = BufferedInputStream(zin)
-            var fOut: File
-            var entry: ZipEntry? = zin.nextEntry
-            while (entry != null && !entry.isDirectory) {
-                fOut = File(parentFold, entry.name)
-                if (!fOut.exists()) {
-                    if (!fOut.parentFile.mkdirs()) {
-                        log.error("mkDirs failed : " + fOut.parent)
-                    }
+            val resultFileParent = File(parentFold)
+            if (!resultFileParent.exists()) {
+                if (!resultFileParent.mkdirs()) {
+                    log.error("mkdir failed : " + resultFileParent.absolutePath)
                 }
-                bout = BufferedOutputStream(FileOutputStream(fOut))
-                var b: Int = bin.read()
-                while (b != -1) {
-                    bout.write(b)
-                    b = bin.read()
-                }
-                bout.close()
-                entry = zin.nextEntry
             }
-            bin.close()
-            zin.close()
+            val zipFile = if (password == null) {
+                ZipFile(zipFileName)
+            } else {
+                ZipFile(zipFileName, password.toCharArray())
+            }
+            zipFile.extractAll(parentFold)
             if (deleteFile) {
-                doDeleteFile(File(zipFileName), false, 0)
+                doDeleteFile(File(zipFileName))
             }
             log.info("decompress success")
             endTime = System.currentTimeMillis()
         } catch (e: Exception) {
-            try {
-                bout?.close()
-                bin?.close()
-                zin?.close()
-            } catch (ex: Exception) {
-                log.error("file decompress Exception:" + ex.message, ex)
-            }
             log.error("file decompress Exception:" + e.message, e)
             endTime = System.currentTimeMillis()
         } finally {
@@ -717,7 +678,7 @@ object CommonUtils {
      * @param isAsync   是否异步删除
      * @param waitTime 异步删除等待时间（单位毫秒）
      */
-    fun doDeleteFile(file: File, isAsync: Boolean, waitTime: Long? = null) {
+    fun doDeleteFile(file: File, isAsync: Boolean = false, waitTime: Long? = null) {
         if (isAsync) {
             var time = deleteFileWaitTime
             if (waitTime != null) {
