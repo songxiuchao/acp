@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pers.acp.spring.boot.exceptions.ServerException;
 import pers.acp.test.application.entity.primary.TableOne;
 import pers.acp.test.application.repo.primary.TableRepo;
 import pers.acp.core.CommonTools;
@@ -21,6 +22,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Created by zhangbin on 2017/4/26.
@@ -105,6 +107,22 @@ public class TestController {
         log.info("params:");
         body.forEach((key, value) -> log.info("key=" + key + " value=" + value));
         return ResponseEntity.ok(mapper.writeValueAsString(body));
+    }
+
+
+    @ApiOperation(value = "测试异步 rest 接口", notes = "返回字符串")
+    @RequestMapping(value = "/restasync", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Callable<Object> postAsync(@ApiParam(value = "str", required = true) @NotEmpty(message = "str不能为空") @RequestBody String str) {
+        System.out.println("外部线程：" + Thread.currentThread().getName());
+        return () -> {
+            System.out.println("内部线程：" + Thread.currentThread().getName());
+            log.info("str:" + str);
+            Thread.sleep(3000);
+            log.info(CommonTools.getWebRootAbsPath());
+            ObjectNode objectNode = mapper.createObjectNode();
+            objectNode.put("result2", str);
+            return ResponseEntity.ok(objectNode.toString());
+        };
     }
 
 }
