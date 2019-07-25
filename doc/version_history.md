@@ -1,5 +1,5 @@
 ## 版本更新记录
-##### v6.x
+##### v6.0.1
 > - [Upgrade] 优化 RestControllerAspect 切面日志处理
 > - [Upgrade] testspringboot 增加异步请求接口demo
 > - [Upgrade] 升级 docker 中间件 elasticsearch 相关组件为 7.2.0
