@@ -14,7 +14,6 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        maven { url "https://repo.spring.io/plugins-release/" }
         maven { url "${mavenCentralUrl}" }
         mavenCentral()
         jcenter()
@@ -39,7 +38,6 @@ configure(allprojects) {
     buildscript {
         repositories {
             mavenLocal()
-            maven { url "https://repo.spring.io/plugins-release/" }
             maven { url "${mavenCentralUrl}" }
             mavenCentral()
             jcenter()
@@ -48,7 +46,6 @@ configure(allprojects) {
 
     repositories {
         mavenLocal()
-        maven { url "https://repo.spring.io/plugins-release/" }
         maven { url "${mavenCentralUrl}" }
         mavenCentral()
         jcenter()
