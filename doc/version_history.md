@@ -1,6 +1,7 @@
 ## 版本更新记录
-##### v6.x
+##### v6.0.2
 > - [Upgrade] 调整 gradle 脚本
+> - [Upgrade] 优化部分代码
 ##### v6.0.1
 > - [Upgrade] 优化 RestControllerAspect 切面日志处理
 > - [Upgrade] testspringboot 增加异步请求接口demo

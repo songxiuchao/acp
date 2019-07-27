@@ -87,12 +87,12 @@ configure(allprojects) {
         delete 'build', 'target', 'out'
     }
 
-    def copyJar = task("copyJar", type: Copy) {
+    task copyJar(type: Copy) {
         from(configurations.runtime)
         into('build/libs/dependencies')
     }
 
-    task("mapperFileCopy", type: Copy) {
+    task mapperFileCopy(type: Copy) {
         copy {
             from("src/main/java") {
                 include("**/*.xml")
@@ -103,22 +103,6 @@ configure(allprojects) {
         }
         copy {
             from("src/test/java") {
-                include("**/*.xml")
-                include("**/*.json")
-                include("**/*.properties")
-            }
-            into("${buildDir}/classes/test")
-        }
-        copy {
-            from("src/main/scala") {
-                include("**/*.xml")
-                include("**/*.json")
-                include("**/*.properties")
-            }
-            into("${buildDir}/classes/main")
-        }
-        copy {
-            from("src/test/scala") {
                 include("**/*.xml")
                 include("**/*.json")
                 include("**/*.properties")
@@ -154,8 +138,6 @@ configure(allprojects) {
     }
 
     task release(type: Copy, dependsOn: [build, copyJar]) {
-        from 'conf'
-        into('build/libs/eachend/conf') // 目标位置
     }
 
     jar {
