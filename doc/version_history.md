@@ -2,6 +2,7 @@
 ##### v6.0.2
 > - [Upgrade] 调整 gradle 脚本
 > - [Upgrade] 优化部分代码
+> - [Upgrade] 优化统一异常处理，支持自定义及覆盖
 ##### v6.0.1
 > - [Upgrade] 优化 RestControllerAspect 切面日志处理
 > - [Upgrade] testspringboot 增加异步请求接口demo

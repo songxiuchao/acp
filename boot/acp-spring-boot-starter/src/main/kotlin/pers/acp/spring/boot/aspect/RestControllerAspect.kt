@@ -35,6 +35,10 @@ constructor(private val controllerAspectConfiguration: ControllerAspectConfigura
 
     private val log = LogFactory.getInstance(this.javaClass)
 
+    protected fun doLog(info: String?, vararg variable: Any?) {
+        log.info(info)
+    }
+
     /**
      * 定义拦截规则
      */
@@ -93,14 +97,14 @@ constructor(private val controllerAspectConfiguration: ControllerAspectConfigura
                         startLog.append("           - ").append(name).append("=").append(request.getParameter(name)).append("\n")
                     }
                     startLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                    log.info(startLog.toString(), method, request.contentType, uri)
-                    log.info(">>>>>>>>>> 请求处理开始...  [method: {}, uri: {}]", method, uri)
+                    doLog(startLog.toString(), method, request.contentType, uri)
+                    doLog(">>>>>>>>>> 请求处理开始...  [method: {}, uri: {}]", method, uri)
                 }
                 val processBegin = System.currentTimeMillis()
                 response = pjp.proceed()
                 if (!(response is WebAsyncTask<*> || response is Callable<*> || response is DeferredResult<*>)) {
                     if (needLog(controllerAspectConfiguration, uri)) {
-                        log.info(">>>>>>>>>> 请求处理结束! [method: {}, uri: {}, 处理耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - processBegin)
+                        doLog(">>>>>>>>>> 请求处理结束! [method: {}, uri: {}, 处理耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - processBegin)
                         response?.apply {
                             val endLog = StringBuilder("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
                             endLog.append("-----> response: ").append(this.toString()).append("\n")
@@ -119,12 +123,12 @@ constructor(private val controllerAspectConfiguration: ControllerAspectConfigura
                             }
                             endLog.append("      ┖---- body: \n").append(responseInfo).append("\n")
                             endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                            log.info(endLog.toString())
+                            doLog(endLog.toString())
                         }
-                        log.info("========== 请求结束! [method: {}, uri: {}, 总耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - beginTime)
+                        doLog("========== 请求结束! [method: {}, uri: {}, 总耗时: {} 毫秒]", method, uri, System.currentTimeMillis() - beginTime)
                     }
                 } else {
-                    log.info(">>>>>>>>>> 进行异步处理...  [method: {}, uri: {}]", method, uri)
+                    doLog(">>>>>>>>>> 进行异步处理...  [method: {}, uri: {}]", method, uri)
                 }
             }
         }

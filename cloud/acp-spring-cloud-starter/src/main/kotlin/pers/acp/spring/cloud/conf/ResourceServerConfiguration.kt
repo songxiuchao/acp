@@ -29,7 +29,7 @@ import pers.acp.client.exceptions.HttpException
 import pers.acp.client.http.HttpClientBuilder
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
-import pers.acp.spring.cloud.constant.ConfigurationOrder
+import pers.acp.spring.cloud.constant.CloudConfigurationOrder
 import pers.acp.spring.cloud.constant.RestPrefix
 
 import java.util.ArrayList
@@ -42,7 +42,7 @@ import java.util.ArrayList
  */
 @Configuration
 @EnableResourceServer
-@Order(ConfigurationOrder.resourceServerConfiguration)
+@Order(CloudConfigurationOrder.resourceServerConfiguration)
 class ResourceServerConfiguration @Autowired
 constructor(private val acpOauthConfiguration: AcpOauthConfiguration,
             private val entryPointMap: Map<String, AuthenticationEntryPoint>,

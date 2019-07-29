@@ -16,7 +16,7 @@ import pers.acp.core.CommonTools;
 import pers.acp.spring.cloud.oauth.component.UserPasswordEncoder;
 import pers.acp.spring.cloud.oauth.domain.SecurityClientDetailsService;
 import pers.acp.spring.cloud.oauth.domain.SecurityUserDetailsService;
-import pers.acp.spring.cloud.constant.ConfigurationOrder;
+import pers.acp.spring.cloud.constant.CloudConfigurationOrder;
 
 /**
  * @author zhangbin by 11/04/2018 15:16
@@ -24,7 +24,7 @@ import pers.acp.spring.cloud.constant.ConfigurationOrder;
  */
 @Configuration
 @EnableWebSecurity
-@Order(ConfigurationOrder.resourceServerConfiguration + 1)
+@Order(CloudConfigurationOrder.resourceServerConfiguration + 1)
 // 如果使用 authorization_code 方式，需要 ConfigurationOrder.resourceServerConfiguration - 1 ， 反之则需要 ConfigurationOrder.resourceServerConfiguration + 1
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
