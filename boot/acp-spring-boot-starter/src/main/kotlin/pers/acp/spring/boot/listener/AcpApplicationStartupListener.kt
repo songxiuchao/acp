@@ -1,12 +1,11 @@
 package pers.acp.spring.boot.listener
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
 import pers.acp.spring.boot.base.BaseInitialization
-import pers.acp.core.log.LogFactory
-
-import java.util.*
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 /**
  * SpringBoot 应用初始化
@@ -15,9 +14,8 @@ import java.util.*
  * @since JDK 11
  */
 @Component
-class AcpApplicationStartupListener : ApplicationListener<ContextRefreshedEvent> {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+class AcpApplicationStartupListener @Autowired
+constructor(private val log: LogAdapter) : ApplicationListener<ContextRefreshedEvent> {
 
     /**
      * 监听 ContextRefreshedEvent 事件

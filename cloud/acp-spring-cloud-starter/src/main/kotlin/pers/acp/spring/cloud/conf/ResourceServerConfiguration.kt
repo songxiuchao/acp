@@ -29,6 +29,7 @@ import pers.acp.client.exceptions.HttpException
 import pers.acp.client.http.HttpClientBuilder
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
+import pers.acp.spring.boot.interfaces.LogAdapter
 import pers.acp.spring.cloud.constant.CloudConfigurationOrder
 import pers.acp.spring.cloud.constant.RestPrefix
 
@@ -44,7 +45,8 @@ import java.util.ArrayList
 @EnableResourceServer
 @Order(CloudConfigurationOrder.resourceServerConfiguration)
 class ResourceServerConfiguration @Autowired
-constructor(private val acpOauthConfiguration: AcpOauthConfiguration,
+constructor(private val log: LogAdapter,
+            private val acpOauthConfiguration: AcpOauthConfiguration,
             private val entryPointMap: Map<String, AuthenticationEntryPoint>,
             private val accessDeniedHandlerMap: Map<String, AccessDeniedHandler>,
             private val clientProperties: OAuth2ClientProperties,
@@ -52,8 +54,6 @@ constructor(private val acpOauthConfiguration: AcpOauthConfiguration,
             private val feignHttpClientProperties: FeignHttpClientProperties,
             private val objectMapper: ObjectMapper,
             serverProperties: ServerProperties) : ResourceServerConfigurerAdapter() {
-
-    private val log = LogFactory.getInstance(this.javaClass)
 
     private val contextPath: String = if (CommonTools.isNullStr(serverProperties.servlet.contextPath)) "" else serverProperties.servlet.contextPath
 

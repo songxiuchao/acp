@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration
  * @since JDK 11
  */
 @Configuration
-@ComponentScan("pers.acp.spring.cloud")
+@ComponentScan(basePackages = ["pers.acp.spring.cloud.*"])
 class AcpCloudAutoConfiguration

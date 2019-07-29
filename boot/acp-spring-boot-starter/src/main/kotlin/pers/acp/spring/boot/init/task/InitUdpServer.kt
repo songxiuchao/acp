@@ -7,6 +7,7 @@ import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.conf.UdpServerConfiguration
 import pers.acp.spring.boot.daemon.DaemonServiceManager
 import pers.acp.spring.boot.init.BaseInitTask
+import pers.acp.spring.boot.interfaces.LogAdapter
 import pers.acp.spring.boot.socket.udp.UdpServer
 import pers.acp.spring.boot.socket.base.ISocketServerHandle
 
@@ -15,9 +16,9 @@ import pers.acp.spring.boot.socket.base.ISocketServerHandle
  */
 @Component
 class InitUdpServer @Autowired(required = false)
-constructor(private val udpServerConfiguration: UdpServerConfiguration, private val socketServerHandleList: List<ISocketServerHandle>) : BaseInitTask() {
-
-    private val log = LogFactory.getInstance(this.javaClass)// 日志对象
+constructor(private val log: LogAdapter,
+            private val udpServerConfiguration: UdpServerConfiguration,
+            private val socketServerHandleList: List<ISocketServerHandle>) : BaseInitTask() {
 
     fun startUdpServer() {
         log.info("start udp listen service ...")
@@ -35,7 +36,7 @@ constructor(private val udpServerConfiguration: UdpServerConfiguration, private 
                                 val handle = getSocketServerHandle(beanName)
                                 if (handle != null) {
                                     val port = listen.port
-                                    val server = UdpServer(port, listen, handle)
+                                    val server = UdpServer(log, port, listen, handle)
                                     val sub = Thread(server)
                                     sub.isDaemon = true
                                     sub.start()

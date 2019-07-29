@@ -1,8 +1,7 @@
 package pers.acp.spring.boot.exceptions
 
 import org.springframework.beans.TypeMismatchException
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
-import org.springframework.core.annotation.Order
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -16,23 +15,19 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import pers.acp.spring.boot.enums.ResponseCode
 import pers.acp.spring.boot.tools.PackageTools
 import pers.acp.core.exceptions.EnumValueUndefinedException
-import pers.acp.core.log.LogFactory
-import pers.acp.spring.boot.constant.BootConfigurationOrder
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 import javax.validation.ConstraintViolationException
 
 /**
  * Create by zhangbin on 2017-8-10 16:26
  */
-@ConditionalOnMissingBean(ResponseEntityExceptionHandler::class)
-@Order(BootConfigurationOrder.restExceptionHandlerOrder)
 @ControllerAdvice
-class RestExceptionHandler : ResponseEntityExceptionHandler() {
+class RestExceptionHandler @Autowired
+constructor(private val logAdapter: LogAdapter) : ResponseEntityExceptionHandler() {
 
-    private val log = LogFactory.getInstance(this.javaClass)
-
-    protected fun doLog(ex: Throwable) {
-        log.error(ex.message, ex)
+    private fun doLog(ex: Throwable) {
+        logAdapter.error(ex.message, ex)
     }
 
     /**

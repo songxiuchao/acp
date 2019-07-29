@@ -8,6 +8,7 @@ import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.conf.TcpServerConfiguration
 import pers.acp.spring.boot.daemon.DaemonServiceManager
 import pers.acp.spring.boot.init.BaseInitTask
+import pers.acp.spring.boot.interfaces.LogAdapter
 import pers.acp.spring.boot.socket.tcp.TcpServer
 import pers.acp.spring.boot.socket.base.ISocketServerHandle
 
@@ -16,9 +17,10 @@ import pers.acp.spring.boot.socket.base.ISocketServerHandle
  */
 @Component
 class InitTcpServer @Autowired(required = false)
-constructor(private val tcpServerConfiguration: TcpServerConfiguration, private val socketServerHandleList: List<ISocketServerHandle>, private val byteToMessageDecoderList: List<ByteToMessageDecoder>) : BaseInitTask() {
-
-    private val log = LogFactory.getInstance(this.javaClass)// 日志对象
+constructor(private val log: LogAdapter,
+            private val tcpServerConfiguration: TcpServerConfiguration,
+            private val socketServerHandleList: List<ISocketServerHandle>,
+            private val byteToMessageDecoderList: List<ByteToMessageDecoder>) : BaseInitTask() {
 
     fun startTcpServer() {
         log.info("start tcp listen service ...")
@@ -39,7 +41,7 @@ constructor(private val tcpServerConfiguration: TcpServerConfiguration, private 
                                 val handle = getSocketServerHandle(beanName)
                                 if (handle != null) {
                                     val port = listen.port
-                                    val tcpServer = TcpServer(port, listen, handle, getMessageDecoder(listen.messageDecoder))
+                                    val tcpServer = TcpServer(log, port, listen, handle, getMessageDecoder(listen.messageDecoder))
                                     val thread = Thread(tcpServer)
                                     thread.isDaemon = true
                                     thread.start()

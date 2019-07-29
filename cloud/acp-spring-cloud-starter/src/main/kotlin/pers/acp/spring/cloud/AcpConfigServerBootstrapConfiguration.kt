@@ -1,4 +1,4 @@
-package pers.acp.spring.cloud.conf
+package pers.acp.spring.cloud
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass

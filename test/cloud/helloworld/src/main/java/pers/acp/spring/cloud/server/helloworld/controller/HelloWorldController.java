@@ -8,8 +8,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 import pers.acp.spring.boot.tools.IpTools;
-import pers.acp.spring.cloud.log.LogInstance;
 import pers.acp.spring.cloud.server.helloworld.feign.HelloServer;
 import pers.acp.spring.cloud.server.helloworld.feign.WorldServer;
 
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 @RefreshScope
 public class HelloWorldController {
 
-    private final LogInstance logInstance;
+    private final LogAdapter logAdapter;
 
     private final HelloServer helloServer;
 
@@ -35,17 +35,17 @@ public class HelloWorldController {
     private String properties;
 
     @Autowired
-    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogInstance logInstance, @Qualifier(value = "customerRestTemplateTest") RestTemplate restTemplate) {
+    public HelloWorldController(HelloServer helloServer, WorldServer worldServer, LogAdapter logAdapter, @Qualifier(value = "customerRestTemplateTest") RestTemplate restTemplate) {
         this.helloServer = helloServer;
         this.worldServer = worldServer;
-        this.logInstance = logInstance;
+        this.logAdapter = logAdapter;
         this.restTemplate = restTemplate;
     }
 
     @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> helloWorld(@RequestBody String content) {
         String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content) + "; properties=" + properties;
-        logInstance.info(respon);
+        logAdapter.info(respon);
         return ResponseEntity.ok(respon);
     }
 

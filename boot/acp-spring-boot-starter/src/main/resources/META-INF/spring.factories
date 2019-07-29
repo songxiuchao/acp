@@ -1,1 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=pers.acp.spring.boot.AcpAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  pers.acp.spring.boot.AcpAutoConfiguration,\
+  pers.acp.spring.boot.BootLogAutoConfiguration

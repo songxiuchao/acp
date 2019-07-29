@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import pers.acp.core.log.LogFactory
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Callable
@@ -30,9 +31,7 @@ import java.util.concurrent.TimeUnit
  */
 @Component
 class FeignHystrixConcurrencyStrategy @Autowired
-constructor() : HystrixConcurrencyStrategy() {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+constructor(private val log: LogAdapter) : HystrixConcurrencyStrategy() {
 
     private var delegate: HystrixConcurrencyStrategy? = null
 

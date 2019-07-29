@@ -9,6 +9,7 @@ import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.conf.AcpCoreConfiguration
 import pers.acp.spring.boot.init.task.InitTcpServer
 import pers.acp.spring.boot.init.task.InitUdpServer
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 /**
  * 初始化系统及TCP、UDP服务
@@ -16,9 +17,10 @@ import pers.acp.spring.boot.init.task.InitUdpServer
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 class InitServer @Autowired
-constructor(private val initTcpServer: InitTcpServer, private val initUdpServer: InitUdpServer, private val acpCoreConfiguration: AcpCoreConfiguration) {
-
-    private val log = LogFactory.getInstance(this.javaClass)// 日志对象
+constructor(private val log: LogAdapter,
+            private val initTcpServer: InitTcpServer,
+            private val initUdpServer: InitUdpServer,
+            private val acpCoreConfiguration: AcpCoreConfiguration) {
 
     /**
      * 主线程中进行系统初始化

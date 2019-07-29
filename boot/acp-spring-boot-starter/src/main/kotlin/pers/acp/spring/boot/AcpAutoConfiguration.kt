@@ -16,7 +16,7 @@ import pers.acp.spring.boot.tools.PackageTools
  * @since JDK 11
  */
 @Configuration
-@ComponentScan("pers.acp.spring.boot")
+@ComponentScan(basePackages = ["pers.acp.spring.boot.*"])
 class AcpAutoConfiguration {
 
     @Primary

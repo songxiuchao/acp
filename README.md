@@ -142,6 +142,8 @@ ext {
 > - 依赖 acp-spring-boot-starter
 > - 扩展支持 ftp、sftp 等协议服务端自动配置
 ### （二）快速开发 springboot 应用
+##### 全局说明
+> - 统一注入 pers.acp.spring.boot.interfaces.LogAdapter 进行日志记录
 ##### 1. 开发说明
 - （1）参考 test:testspringboot
 - （2）依赖 boot:acp-spring-boot-starter
@@ -151,7 +153,7 @@ ext {
 - （6）多数据源应用需要增加对应每个数据源的 Jpa 配置类，并创建对应数据源的 repo、entity 包，之后再在对应包中编写 repo 和 entity
 - （7）定时任务参考 test:testspringboot 模块 pers.acp.test.application.task.Task1，继承 pers.acp.spring.boot.base.BaseSpringBootScheduledTask 类，并在 yml 配置文件中增加对应执行规则
 - （8）自定义系统初始化任务，新增任务类，继承 pers.acp.spring.boot.base.BaseInitialization 类
-- （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.IListener 接口
+- （9）自定义可控制监听器，新增监听器类，实现 pers.acp.spring.boot.interfaces.Listener 接口
 - （10）参考 test:testspringboot 模块,pers.acp.test.application.test 包中有 tcp、udp 服务端开发demo，并在 application-dev.xml 中增加相应配置
 - （11）如有需要，可选择引入 acp-file、acp-message、acp-spring-boot-starter-ftp 等包
 ##### 2. 配置说明
@@ -370,7 +372,7 @@ http://127.0.0.1:5601
 ![Architecture diagram](doc/images/kibana.png)
 ### （三）组件开发
 ##### 全局说明
-> - 统一注入 pers.acp.spring.cloud.log.LogInstance 进行日志记录
+> - 统一注入 pers.acp.spring.boot.interfaces.LogAdapter 进行日志记录
 ##### 1. 可视化监控
 > - test:cloud:admin-server
 > - （1）无需改动代码

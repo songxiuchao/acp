@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import pers.acp.core.CommonTools;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 import pers.acp.spring.cloud.oauth.component.UserPasswordEncoder;
 import pers.acp.spring.cloud.oauth.domain.SecurityClientDetailsService;
 import pers.acp.spring.cloud.oauth.domain.SecurityUserDetailsService;
@@ -44,8 +45,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean(name = "customerClientDetailsService")
-    public ClientDetailsService clientDetailsService() {
-        return new SecurityClientDetailsService();
+    public ClientDetailsService clientDetailsService(LogAdapter log) {
+        return new SecurityClientDetailsService(log);
     }
 
     @Override

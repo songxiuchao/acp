@@ -10,14 +10,22 @@ import org.slf4j.MDC
  */
 class LogFactory {
 
-    private val logger: Logger
+    private var logger: Logger
 
-    private constructor(cls: Class<*>) {
+    private var isCls: Boolean
+
+    val stackIndex: Int
+
+    private constructor(cls: Class<*>, stackIndex: Int = 3) {
         logger = LoggerFactory.getLogger(cls)
+        this.stackIndex = stackIndex
+        isCls = true
     }
 
-    private constructor(name: String) {
+    private constructor(name: String, stackIndex: Int = 3) {
         logger = LoggerFactory.getLogger(name)
+        this.stackIndex = stackIndex
+        isCls = false
     }
 
     fun info(message: String?) {
@@ -98,8 +106,13 @@ class LogFactory {
     private fun setCustomerParams() {
         val stacks = Thread.currentThread().stackTrace
         var lineno = 0
-        if (stacks.size >= 4) {
-            lineno = stacks[3].lineNumber
+        var className = ""
+        if (stacks.size >= stackIndex + 1) {
+            lineno = stacks[stackIndex].lineNumber
+            className = stacks[stackIndex].className
+        }
+        if (isCls) {
+            logger = LoggerFactory.getLogger(className)
         }
         MDC.put("lineno", lineno.toString())
     }
@@ -107,13 +120,15 @@ class LogFactory {
     companion object {
 
         @JvmStatic
-        fun getInstance(cls: Class<*>): LogFactory {
-            return LogFactory(cls)
+        @JvmOverloads
+        fun getInstance(cls: Class<*>, stackIndex: Int = 3): LogFactory {
+            return LogFactory(cls, stackIndex)
         }
 
         @JvmStatic
-        fun getInstance(name: String): LogFactory {
-            return LogFactory(name)
+        @JvmOverloads
+        fun getInstance(name: String, stackIndex: Int = 3): LogFactory {
+            return LogFactory(name, stackIndex)
         }
     }
 

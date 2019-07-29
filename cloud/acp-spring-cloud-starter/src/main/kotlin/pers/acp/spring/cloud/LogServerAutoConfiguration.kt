@@ -1,4 +1,4 @@
-package pers.acp.spring.cloud.log
+package pers.acp.spring.cloud
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,11 +12,12 @@ import org.springframework.cloud.stream.config.BindingServiceProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.util.MimeTypeUtils
+import pers.acp.spring.cloud.conf.LogServerConfiguration
 import pers.acp.spring.cloud.log.consumer.DefaultLogProcess
 import pers.acp.spring.cloud.log.consumer.LogConsumer
 import pers.acp.spring.cloud.log.consumer.LogInput
 import pers.acp.spring.cloud.log.consumer.LogProcess
-import pers.acp.spring.cloud.conf.LogServerConfiguration
+import pers.acp.spring.cloud.log.LogConstant
 
 import javax.annotation.PostConstruct
 

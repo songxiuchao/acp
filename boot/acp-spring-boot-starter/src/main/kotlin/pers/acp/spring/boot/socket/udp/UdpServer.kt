@@ -7,6 +7,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel
 import pers.acp.core.interfaces.IDaemonService
 import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.conf.SocketListenerConfiguration
+import pers.acp.spring.boot.interfaces.LogAdapter
 import pers.acp.spring.boot.socket.base.ISocketServerHandle
 
 /**
@@ -16,13 +17,15 @@ class UdpServer
 /**
  * 构造函数
  *
+ * @param log                         日志适配器
  * @param port                        端口
  * @param socketListenerConfiguration 监听服务配置
  * @param socketServerHandle          接收报文处理对象
  */
-(private val port: Int, private val socketListenerConfiguration: SocketListenerConfiguration, private val socketServerHandle: ISocketServerHandle?) : IDaemonService, Runnable {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+(private val log: LogAdapter,
+ private val port: Int,
+ private val socketListenerConfiguration: SocketListenerConfiguration,
+ private val socketServerHandle: ISocketServerHandle?) : IDaemonService, Runnable {
 
     private val bossGroup: EventLoopGroup
 
@@ -38,7 +41,7 @@ class UdpServer
                         .option(ChannelOption.SO_BROADCAST, true)
                         .handler(object : ChannelInitializer<NioDatagramChannel>() {
                             override fun initChannel(ch: NioDatagramChannel) {
-                                ch.pipeline().addLast(UdpServerHandle(socketListenerConfiguration, socketServerHandle))
+                                ch.pipeline().addLast(UdpServerHandle(log, socketListenerConfiguration, socketServerHandle))
                             }
                         }).bind(port).sync().channel().closeFuture().sync()
             } catch (e: Exception) {

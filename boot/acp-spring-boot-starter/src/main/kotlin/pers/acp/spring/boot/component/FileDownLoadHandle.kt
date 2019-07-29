@@ -1,10 +1,12 @@
 package pers.acp.spring.boot.component
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import pers.acp.spring.boot.exceptions.ServerException
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -18,9 +20,8 @@ import java.net.URLEncoder
  * @since JDK 11
  */
 @Component
-class FileDownLoadHandle {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+class FileDownLoadHandle @Autowired
+constructor(private val log: LogAdapter) {
 
     @Throws(ServerException::class)
     @JvmOverloads

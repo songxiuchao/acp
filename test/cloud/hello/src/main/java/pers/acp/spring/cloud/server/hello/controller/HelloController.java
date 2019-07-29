@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pers.acp.spring.cloud.log.LogInstance;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,24 +17,24 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class HelloController {
 
-    private final LogInstance logInstance;
+    private final LogAdapter logAdapter;
 
     @Autowired
-    public HelloController(LogInstance logInstance) {
-        this.logInstance = logInstance;
+    public HelloController(LogAdapter logAdapter) {
+        this.logAdapter = logAdapter;
     }
 
     @GetMapping(value = "/hellor", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> hello(@RequestParam String name) {
         String respon = "hello response: name=" + name;
-        logInstance.info(respon);
+        logAdapter.info(respon);
         return ResponseEntity.ok(respon);
     }
 
     @GetMapping(value = "/hello", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> hello(HttpServletRequest request, @RequestParam String name) {
         String respon = "hello response: name=" + name;
-        logInstance.info(respon);
+        logAdapter.info(respon);
         return ResponseEntity.ok(respon);
     }
 

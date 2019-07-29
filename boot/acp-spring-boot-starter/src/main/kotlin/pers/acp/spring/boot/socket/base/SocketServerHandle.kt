@@ -8,6 +8,7 @@ import io.netty.util.ReferenceCountUtil
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.conf.SocketListenerConfiguration
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 import java.nio.charset.Charset
 
@@ -17,9 +18,9 @@ import java.nio.charset.Charset
  * @author zhang by 04/03/2019
  * @since JDK 11
  */
-abstract class SocketServerHandle(protected var socketListenerConfiguration: SocketListenerConfiguration, protected var socketServerHandle: ISocketServerHandle) : ChannelInboundHandlerAdapter() {
-
-    protected val log = LogFactory.getInstance(this.javaClass)
+abstract class SocketServerHandle(protected val log: LogAdapter,
+                                  protected var socketListenerConfiguration: SocketListenerConfiguration,
+                                  protected var socketServerHandle: ISocketServerHandle) : ChannelInboundHandlerAdapter() {
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         try {

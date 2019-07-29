@@ -3,7 +3,7 @@ package pers.acp.spring.boot.interfaces
 /**
  * Create by zhangbin on 2017-10-28 0:56
  */
-interface ITimerTaskScheduler {
+interface TimerTaskScheduler {
 
     /**
      * 定时器控制

@@ -6,6 +6,7 @@ import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.base.BaseInitialization
 import pers.acp.spring.boot.component.SystemControl
 import pers.acp.spring.boot.daemon.DaemonServiceManager
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 /**
  * 系统初始化
@@ -13,9 +14,9 @@ import pers.acp.spring.boot.daemon.DaemonServiceManager
  */
 @Component
 class SystemInitialization @Autowired
-constructor(private val systemControl: SystemControl, private val initServer: InitServer) : BaseInitialization() {
-
-    private val log = LogFactory.getInstance(this.javaClass)// 日志对象
+constructor(private val log: LogAdapter,
+            private val systemControl: SystemControl,
+            private val initServer: InitServer) : BaseInitialization() {
 
     override val name: String
         get() = "System Initialization"

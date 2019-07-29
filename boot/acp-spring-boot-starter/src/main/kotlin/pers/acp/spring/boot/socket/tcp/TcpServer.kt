@@ -9,7 +9,7 @@ import io.netty.handler.timeout.IdleStateHandler
 import pers.acp.core.interfaces.IDaemonService
 import pers.acp.spring.boot.socket.base.ISocketServerHandle
 import pers.acp.spring.boot.conf.SocketListenerConfiguration
-import pers.acp.core.log.LogFactory
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 import java.util.concurrent.TimeUnit
 
@@ -20,13 +20,16 @@ class TcpServer
 /**
  * 构造函数
  *
+ * @param log                         日志适配器
  * @param port                        端口
  * @param socketListenerConfiguration 监听服务配置
  * @param socketServerHandle          接收报文处理对象
  */
-(private val port: Int, private val socketListenerConfiguration: SocketListenerConfiguration, private val socketServerHandle: ISocketServerHandle?, private val messageDecoder: ByteToMessageDecoder?) : IDaemonService, Runnable {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+(private val log: LogAdapter,
+ private val port: Int,
+ private val socketListenerConfiguration: SocketListenerConfiguration,
+ private val socketServerHandle: ISocketServerHandle?,
+ private val messageDecoder: ByteToMessageDecoder?) : IDaemonService, Runnable {
 
     private val bossGroup: EventLoopGroup
 
@@ -55,7 +58,7 @@ class TcpServer
                                     if (socketListenerConfiguration.keepAlive) {
                                         this.addLast(IdleStateHandler(socketListenerConfiguration.idletime, socketListenerConfiguration.idletime, socketListenerConfiguration.idletime, TimeUnit.MILLISECONDS))
                                     }
-                                }.addLast(TcpServerHandle(socketListenerConfiguration, socketServerHandle))
+                                }.addLast(TcpServerHandle(log, socketListenerConfiguration, socketServerHandle))
                             }
                         }).bind(port).sync().channel().closeFuture().sync()
             } catch (e: Exception) {

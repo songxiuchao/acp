@@ -9,9 +9,10 @@ import org.springframework.scheduling.support.CronTrigger
 import org.springframework.stereotype.Component
 import pers.acp.spring.boot.base.BaseSpringBootScheduledAsyncTask
 import pers.acp.spring.boot.conf.ScheduleConfiguration
-import pers.acp.spring.boot.interfaces.ITimerTaskScheduler
+import pers.acp.spring.boot.interfaces.TimerTaskScheduler
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
+import pers.acp.spring.boot.interfaces.LogAdapter
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ScheduledFuture
 
@@ -24,9 +25,10 @@ import java.util.concurrent.ScheduledFuture
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 class TimerTaskScheduler @Autowired(required = false)
-constructor(properties: TaskSchedulingProperties, private val scheduleConfiguration: ScheduleConfiguration, private val baseSpringBootScheduledTaskMap: Map<String, BaseSpringBootScheduledAsyncTask>) : ITimerTaskScheduler {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+constructor(private val log: LogAdapter,
+            properties: TaskSchedulingProperties,
+            private val scheduleConfiguration: ScheduleConfiguration,
+            private val baseSpringBootScheduledTaskMap: Map<String, BaseSpringBootScheduledAsyncTask>) : TimerTaskScheduler {
 
     private val threadPoolTaskScheduler: ThreadPoolTaskScheduler = ThreadPoolTaskScheduler()
 
@@ -91,9 +93,9 @@ constructor(properties: TaskSchedulingProperties, private val scheduleConfigurat
     @Throws(InterruptedException::class)
     override fun controlSchedule(command: Int) {
         synchronized(this) {
-            if (command == ITimerTaskScheduler.START) {
+            if (command == TimerTaskScheduler.START) {
                 startSchedule()
-            } else if (command == ITimerTaskScheduler.STOP) {
+            } else if (command == TimerTaskScheduler.STOP) {
                 stopSchedule()
             }
         }

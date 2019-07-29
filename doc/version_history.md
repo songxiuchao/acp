@@ -2,7 +2,7 @@
 ##### v6.0.2
 > - [Upgrade] 调整 gradle 脚本
 > - [Upgrade] 优化部分代码
-> - [Upgrade] 优化统一异常处理，支持自定义及覆盖
+> - [Upgrade] acp-spring-boot-starter 中增加日志适配器，根据不同场景进行更换日志输出方式
 ##### v6.0.1
 > - [Upgrade] 优化 RestControllerAspect 切面日志处理
 > - [Upgrade] testspringboot 增加异步请求接口demo

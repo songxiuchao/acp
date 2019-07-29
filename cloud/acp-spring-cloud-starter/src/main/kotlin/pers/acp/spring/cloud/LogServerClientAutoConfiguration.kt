@@ -1,8 +1,10 @@
-package pers.acp.spring.cloud.log
+package pers.acp.spring.cloud
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.cloud.stream.annotation.EnableBinding
 import org.springframework.cloud.stream.config.BindingProperties
 import org.springframework.cloud.stream.config.BindingServiceConfiguration
@@ -10,10 +12,14 @@ import org.springframework.cloud.stream.config.BindingServiceProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.util.MimeTypeUtils
-import pers.acp.spring.cloud.log.producer.LogOutput
-import pers.acp.spring.cloud.log.producer.LogProducer
+import pers.acp.spring.boot.BootLogAutoConfiguration
+import pers.acp.spring.boot.interfaces.LogAdapter
 import pers.acp.spring.cloud.conf.LogServerClientConfiguration
 import pers.acp.spring.cloud.conf.LogServerConfiguration
+import pers.acp.spring.cloud.log.CloudLogAdapter
+import pers.acp.spring.cloud.log.producer.LogOutput
+import pers.acp.spring.cloud.log.producer.LogProducer
+import pers.acp.spring.cloud.log.LogConstant
 
 import javax.annotation.PostConstruct
 
@@ -25,7 +31,7 @@ import javax.annotation.PostConstruct
  */
 @Configuration
 @ConditionalOnExpression("'\${acp.cloud.log-server.client.enabled}'.equals('true')")
-@AutoConfigureBefore(BindingServiceConfiguration::class)
+@AutoConfigureBefore(BindingServiceConfiguration::class, BootLogAutoConfiguration::class)
 @EnableBinding(LogOutput::class)
 class LogServerClientAutoConfiguration @Autowired
 constructor(private val logServerConfiguration: LogServerConfiguration, private val logServerClientConfiguration: LogServerClientConfiguration, private val bindings: BindingServiceProperties) {
@@ -50,5 +56,10 @@ constructor(private val logServerConfiguration: LogServerConfiguration, private 
 
     @Bean
     fun logProducer(logOutput: LogOutput): LogProducer = LogProducer(logOutput)
+
+    @Bean
+    @ConditionalOnMissingBean(LogAdapter::class)
+    fun logAdapter(logServerClientConfiguration: LogServerClientConfiguration, objectMapper: ObjectMapper) =
+            CloudLogAdapter(logServerClientConfiguration, objectMapper)
 
 }
