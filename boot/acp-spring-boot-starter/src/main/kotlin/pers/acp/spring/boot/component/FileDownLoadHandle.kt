@@ -25,21 +25,30 @@ class FileDownLoadHandle {
     @Throws(ServerException::class)
     @JvmOverloads
     fun downLoadForWeb(request: HttpServletRequest, response: HttpServletResponse, path: String, isDelete: Boolean, allowPathRegexList: List<String>? = null) {
-        downLoadFile(request, response, CommonTools.getWebRootAbsPath() + path.replace("/", File.separator).replace("\\", File.separator), isDelete, allowPathRegexList)
+        var filePath = path.replace("/", File.separator).replace("\\", File.separator)
+        if (!filePath.startsWith(File.separator)) {
+            filePath = File.separator + filePath
+        }
+        val webRootPath = CommonTools.getWebRootAbsPath()
+        if (webRootPath != File.separator) {
+            filePath = webRootPath + filePath
+        }
+        downLoadFile(request, response, filePath, isDelete, allowPathRegexList)
     }
 
     @Throws(ServerException::class)
     fun downLoadFile(request: HttpServletRequest, response: HttpServletResponse, filePath: String, isDelete: Boolean, allowPathRegexList: List<String>?) {
+        val path = filePath.replace("/", File.separator).replace("\\", File.separator)
         val filterRegex: MutableList<String> = mutableListOf()
         if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
             filterRegex.addAll(mutableListOf(
-                    CommonTools.getWebRootAbsPath().replace("\\", "/") + "/files/tmp/.*",
-                    CommonTools.getWebRootAbsPath() + "/files/upload/.*",
-                    CommonTools.getWebRootAbsPath() + "/files/download/.*"))
+                    CommonTools.getWebRootAbsPath() + "${File.separator}files${File.separator}tmp${File.separator}.*",
+                    CommonTools.getWebRootAbsPath() + "${File.separator}files${File.separator}upload${File.separator}.*",
+                    CommonTools.getWebRootAbsPath() + "${File.separator}files${File.separator}download${File.separator}.*"))
         } else {
             filterRegex.addAll(allowPathRegexList)
         }
-        if (pathFilter(filterRegex, filePath)) {
+        if (pathFilter(filterRegex, path)) {
             var fis: InputStream? = null
             var toClient: OutputStream? = null
             try {
@@ -100,9 +109,9 @@ class FileDownLoadHandle {
      * @return true-允许下载 false-不允许下载
      */
     private fun pathFilter(filterRegex: List<String>, path: String): Boolean {
-        path.replace("\\", "/").apply {
+        path.apply {
             for (regex in filterRegex) {
-                if (CommonTools.regexPattern(regex, this)) {
+                if (CommonTools.regexPattern(regex.replace("\\", "/"), this.replace("\\", "/"))) {
                     return true
                 }
             }

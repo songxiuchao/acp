@@ -110,9 +110,7 @@ object CommonUtils {
             webRootPath.startsWith("jar") -> webRootPath = webRootPath.substring(10)
             webRootPath.startsWith("file") -> webRootPath = webRootPath.substring(6)
             else -> {
-                val classLoader = CommonUtils::class.java.classLoader
-                val url = classLoader.getResource("/")
-                url?.let {
+                CommonUtils::class.java.classLoader.getResource("/")?.let {
                     classPath = it.path
                     indexWebInf = classPath.indexOf("WEB-INF")
                     if (indexWebInf == -1) {
@@ -129,8 +127,8 @@ object CommonUtils {
         if (webRootPath.endsWith("/")) {
             webRootPath = webRootPath.substring(0, webRootPath.length - 1)
         }
-        webRootPath = webRootPath.replace("/", File.separator)
-        if (webRootPath.startsWith("\\")) {
+        webRootPath = webRootPath.replace("/", File.separator).replace("\\", File.separator)
+        if (webRootPath.startsWith(File.separator)) {
             webRootPath = webRootPath.substring(1)
         }
         if (webRootPath.contains("!")) {
@@ -141,8 +139,8 @@ object CommonUtils {
             webRootPath = File.separator
         } else {
             if (File.separator.equals("/", ignoreCase = true)) {
-                if (!webRootPath.startsWith("/")) {
-                    webRootPath = "/$webRootPath"
+                if (!webRootPath.startsWith(File.separator)) {
+                    webRootPath = File.separator + webRootPath
                 }
             }
         }
