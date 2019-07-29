@@ -37,7 +37,8 @@ class FileDownLoadHandle {
     }
 
     @Throws(ServerException::class)
-    fun downLoadFile(request: HttpServletRequest, response: HttpServletResponse, filePath: String, isDelete: Boolean, allowPathRegexList: List<String>?) {
+    @JvmOverloads
+    fun downLoadFile(request: HttpServletRequest, response: HttpServletResponse, filePath: String, isDelete: Boolean, allowPathRegexList: List<String>? = null) {
         val path = filePath.replace("/", File.separator).replace("\\", File.separator)
         val filterRegex: MutableList<String> = mutableListOf()
         if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
