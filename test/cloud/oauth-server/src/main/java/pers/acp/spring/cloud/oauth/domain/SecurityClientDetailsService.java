@@ -1,11 +1,12 @@
 package pers.acp.spring.cloud.oauth.domain;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Service;
-import pers.acp.core.log.LogFactory;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 
 import javax.annotation.PostConstruct;
 
@@ -16,9 +17,14 @@ import javax.annotation.PostConstruct;
 @Service
 public class SecurityClientDetailsService implements ClientDetailsService {
 
-    private final LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogAdapter log;
 
     private ClientDetailsService clientDetailsService = null;
+
+    @Autowired
+    public SecurityClientDetailsService(LogAdapter log) {
+        this.log = log;
+    }
 
     /**
      * 初始化客户端信息

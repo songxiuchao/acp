@@ -9,11 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pers.acp.spring.boot.exceptions.ServerException;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 import pers.acp.test.application.entity.primary.TableOne;
 import pers.acp.test.application.repo.primary.TableRepo;
 import pers.acp.core.CommonTools;
-import pers.acp.core.log.LogFactory;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.NotEmpty;
@@ -33,7 +32,7 @@ import java.util.concurrent.Callable;
 @Api("测试接口")
 public class TestController {
 
-    private final LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogAdapter log;
 
     private final TableRepo tableRepo;
 
@@ -49,7 +48,8 @@ public class TestController {
     private String s3;
 
     @Autowired
-    public TestController(TableRepo tableRepo, ObjectMapper mapper) {
+    public TestController(LogAdapter log, TableRepo tableRepo, ObjectMapper mapper) {
+        this.log = log;
         this.tableRepo = tableRepo;
         this.mapper = mapper;
     }

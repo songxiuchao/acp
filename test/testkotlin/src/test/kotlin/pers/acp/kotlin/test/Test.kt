@@ -21,4 +21,8 @@ fun main(args: Array<String>) {
 
     println(System.currentTimeMillis())
     println(Date().time)
+
+    val cls = Class.forName("com.fasterxml.jackson.module.kotlin.KotlinModule")
+    println(cls)
+    println(cls.canonicalName)
 }

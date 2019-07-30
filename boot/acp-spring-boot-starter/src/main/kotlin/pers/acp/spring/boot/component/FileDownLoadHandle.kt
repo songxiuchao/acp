@@ -1,10 +1,9 @@
 package pers.acp.spring.boot.component
 
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Component
 import pers.acp.spring.boot.exceptions.ServerException
 import pers.acp.core.CommonTools
-import pers.acp.core.log.LogFactory
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -17,10 +16,7 @@ import java.net.URLEncoder
  * @author zhangbin by 2018-1-21 1:30
  * @since JDK 11
  */
-@Component
-class FileDownLoadHandle {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+class FileDownLoadHandle(private val logAdapter: LogAdapter) {
 
     @Throws(ServerException::class)
     @JvmOverloads
@@ -61,7 +57,7 @@ class FileDownLoadHandle {
                 fis = BufferedInputStream(FileInputStream(file))
                 val buffer = ByteArray(fis.available())
                 if (fis.read(buffer) == -1) {
-                    log.error("file：$filename is empty")
+                    logAdapter.error("file：$filename is empty")
                 }
                 fis.close()
                 response.reset()
@@ -72,7 +68,7 @@ class FileDownLoadHandle {
                 toClient.write(buffer)
                 toClient.flush()
                 toClient.close()
-                log.debug("download file Success:$filename")
+                logAdapter.debug("download file Success:$filename")
                 if (isDelete) {
                     CommonTools.doDeleteFile(file, true)
                 }
@@ -81,7 +77,7 @@ class FileDownLoadHandle {
                     try {
                         fis.close()
                     } catch (ex: IOException) {
-                        log.error(ex.message, ex)
+                        logAdapter.error(ex.message, ex)
                     }
 
                 }
@@ -89,11 +85,11 @@ class FileDownLoadHandle {
                     try {
                         toClient.close()
                     } catch (ex: IOException) {
-                        log.error(ex.message, ex)
+                        logAdapter.error(ex.message, ex)
                     }
 
                 }
-                log.error(e.message, e)
+                logAdapter.error(e.message, e)
                 throw ServerException(e.message)
             }
 

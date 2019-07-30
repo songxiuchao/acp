@@ -5,23 +5,24 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pers.acp.spring.boot.base.BaseSpringBootScheduledAsyncTask;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 import pers.acp.test.application.repo.pg.TableTwoRepo;
 import pers.acp.test.application.repo.primary.TableRepo;
 import pers.acp.core.CommonTools;
-import pers.acp.core.log.LogFactory;
 
 @Component("task1")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class AsyncTask1 extends BaseSpringBootScheduledAsyncTask {
 
-    private final LogFactory log = LogFactory.getInstance(this.getClass());// 日志对象
+    private final LogAdapter log;
 
     private final TableRepo tableRepo;
 
     private final TableTwoRepo tableTwoRepo;
 
     @Autowired
-    public AsyncTask1(TableRepo tableRepo, TableTwoRepo tableTwoRepo) {
+    public AsyncTask1(LogAdapter log, TableRepo tableRepo, TableTwoRepo tableTwoRepo) {
+        this.log = log;
         this.tableRepo = tableRepo;
         this.tableTwoRepo = tableTwoRepo;
     }

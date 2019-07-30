@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.*
 import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.enums.ResponseCode
 import pers.acp.spring.boot.exceptions.ServerException
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 /**
  * @author zhangbin by 28/04/2018 13:06
  * @since JDK 11
  */
 @RestController
-class KotlinController(private val tableOneDomain: TableOneDomain) {
+class KotlinController(private val tableOneDomain: TableOneDomain, private val log: LogAdapter) {
 
     @GetMapping("/query", produces = [(MediaType.APPLICATION_JSON_UTF8_VALUE)])
     @Throws(ServerException::class, JpaObjectRetrievalFailureException::class)
@@ -47,7 +48,5 @@ class KotlinController(private val tableOneDomain: TableOneDomain) {
                 if (e !is ServerException) throw ServerException(ResponseCode.ServiceError)
                 throw e
             }
-
-    private val log: LogFactory = LogFactory.getInstance(this.javaClass)
 
 }

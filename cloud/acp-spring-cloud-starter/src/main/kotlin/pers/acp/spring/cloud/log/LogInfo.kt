@@ -1,9 +1,6 @@
 package pers.acp.spring.cloud.log
 
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.annotation.Scope
-import org.springframework.stereotype.Component
 import pers.acp.core.CommonTools
 
 import java.net.InetAddress
@@ -15,8 +12,6 @@ import java.net.UnknownHostException
  * @author zhangbin by 11/07/2018 13:34
  * @since JDK 11
  */
-@Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class LogInfo {
 
     @Value("\${server.address}")
