@@ -1,4 +1,4 @@
-package pers.acp.spring.cloud.conf
+package pers.acp.spring.cloud
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,6 +29,7 @@ import pers.acp.client.exceptions.HttpException
 import pers.acp.client.http.HttpClientBuilder
 import pers.acp.core.CommonTools
 import pers.acp.spring.boot.interfaces.LogAdapter
+import pers.acp.spring.cloud.conf.AcpCloudOauthConfiguration
 import pers.acp.spring.cloud.constant.CloudConfigurationOrder
 import pers.acp.spring.cloud.constant.RestPrefix
 

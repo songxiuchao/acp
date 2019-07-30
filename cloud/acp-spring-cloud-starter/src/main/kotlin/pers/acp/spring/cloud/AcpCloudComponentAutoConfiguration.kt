@@ -1,22 +1,24 @@
-package pers.acp.spring.cloud.conf
+package pers.acp.spring.cloud
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import feign.RequestInterceptor
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.*
 import org.springframework.http.HttpHeaders
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import pers.acp.core.CommonTools
+import pers.acp.spring.cloud.component.FeignHystrixConcurrencyStrategy
+import pers.acp.spring.cloud.error.AuthAccessDeniedHandler
+import pers.acp.spring.cloud.error.AuthExceptionEntryPoint
+import pers.acp.spring.cloud.log.LogInfo
 
 /**
- * Feign 请求拦截器配置
- *
- * @author zhangbin by 12/04/2018 10:13
+ * @author zhangbin by 2018-3-14 15:13
  * @since JDK 11
  */
 @Configuration
-class AcpCloudFeignOauthRequestInterceptorConfiguration {
+class AcpCloudComponentAutoConfiguration {
 
     /**
      * 自定义 Feign 请求拦截器，请求之前将 Oauth2 token 信息带入 Request 的 header 进行权限传递
@@ -39,5 +41,18 @@ class AcpCloudFeignOauthRequestInterceptorConfiguration {
             }
         }
     }
+
+    @Bean
+    fun feignHystrixConcurrencyStrategy() = FeignHystrixConcurrencyStrategy()
+
+    @Bean
+    fun authAccessDeniedHandler(objectMapper: ObjectMapper) = AuthAccessDeniedHandler(objectMapper)
+
+    @Bean
+    fun authExceptionEntryPoint(objectMapper: ObjectMapper) = AuthExceptionEntryPoint(objectMapper)
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    fun logInfo() = LogInfo()
 
 }
