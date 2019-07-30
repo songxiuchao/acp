@@ -1,7 +1,6 @@
 package pers.acp.spring.boot.conf
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
 
 /**
  * 核心配置信息
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component
  * @author zhang by 20/06/2019
  * @since JDK 11
  */
-@Component
 @ConfigurationProperties(prefix = "acp.core")
 class AcpCoreConfiguration {
 

@@ -1,8 +1,9 @@
 package pers.acp.spring.cloud.server.helloworld.hystrix;
 
 import feign.hystrix.FallbackFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pers.acp.core.log.LogFactory;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 import pers.acp.spring.cloud.server.helloworld.feign.HelloServer;
 
 /**
@@ -12,7 +13,12 @@ import pers.acp.spring.cloud.server.helloworld.feign.HelloServer;
 @Component
 public class HelloServerHystrix implements FallbackFactory<HelloServer> {
 
-    private final LogFactory log = LogFactory.getInstance(this.getClass());
+    private final LogAdapter log;
+
+    @Autowired
+    public HelloServerHystrix(LogAdapter log) {
+        this.log = log;
+    }
 
     @Override
     public HelloServer create(Throwable cause) {

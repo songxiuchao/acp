@@ -3,7 +3,6 @@ package pers.acp.spring.boot.tools
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
-import org.springframework.stereotype.Component
 import org.springframework.web.context.WebApplicationContext
 import pers.acp.core.log.LogFactory
 
@@ -11,7 +10,6 @@ import pers.acp.core.log.LogFactory
  * Create by zhangbin on 2017-8-11 9:45
  * spring-boot 获取bean工具组件
  */
-@Component
 class SpringBeanFactory : ApplicationContextAware {
 
     @Throws(BeansException::class)

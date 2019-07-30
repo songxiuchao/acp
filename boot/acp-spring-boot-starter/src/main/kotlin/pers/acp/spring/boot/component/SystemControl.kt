@@ -1,14 +1,10 @@
 package pers.acp.spring.boot.component
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.annotation.Scope
-import org.springframework.stereotype.Component
 import pers.acp.spring.boot.daemon.DaemonServiceManager
-import pers.acp.spring.boot.interfaces.IListener
-import pers.acp.spring.boot.interfaces.ITimerTaskScheduler
+import pers.acp.spring.boot.interfaces.Listener
+import pers.acp.spring.boot.interfaces.TimerTaskScheduler
 import pers.acp.core.interfaces.IDaemonService
-import pers.acp.core.log.LogFactory
+import pers.acp.spring.boot.interfaces.LogAdapter
 
 /**
  * 系统控制器
@@ -16,12 +12,9 @@ import pers.acp.core.log.LogFactory
  * @author zhangbin by 2018-1-20 21:24
  * @since JDK 11
  */
-@Component
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-class SystemControl @Autowired(required = false)
-constructor(private val listenerMap: Map<String, IListener>?, private val timerTaskScheduler: TimerTaskScheduler) : IDaemonService {
-
-    private val log = LogFactory.getInstance(this.javaClass)
+class SystemControl(private val logAdapter: LogAdapter,
+                    private val listenerMap: Map<String, Listener>?,
+                    private val timerTaskScheduler: TimerTaskScheduler) : IDaemonService {
 
     /**
      * 系统初始化
@@ -30,7 +23,7 @@ constructor(private val listenerMap: Map<String, IListener>?, private val timerT
         try {
             start()
         } catch (e: Exception) {
-            log.error(e.message, e)
+            this.logAdapter.error(e.message, e)
         }
 
         DaemonServiceManager.addService(this)
@@ -44,14 +37,14 @@ constructor(private val listenerMap: Map<String, IListener>?, private val timerT
     @Throws(Exception::class)
     fun start() {
         if (listenerMap != null && listenerMap.isNotEmpty()) {
-            log.info("start listener begin ...")
+            this.logAdapter.info("start listener begin ...")
             listenerMap.forEach { (key, listener) ->
-                log.info("开始启动监听：" + key + " 【" + listener.javaClass.canonicalName + "】")
+                this.logAdapter.info("开始启动监听：" + key + " 【" + listener.javaClass.canonicalName + "】")
                 listener.startListener()
             }
-            log.info("start listener finished!")
+            this.logAdapter.info("start listener finished!")
         }
-        timerTaskScheduler.controlSchedule(ITimerTaskScheduler.START)
+        timerTaskScheduler.controlSchedule(TimerTaskScheduler.START)
     }
 
     /**
@@ -60,16 +53,16 @@ constructor(private val listenerMap: Map<String, IListener>?, private val timerT
     fun stop() {
         try {
             if (listenerMap != null && listenerMap.isNotEmpty()) {
-                log.info("stop listener begin ...")
+                this.logAdapter.info("stop listener begin ...")
                 listenerMap.forEach { (key, listener) ->
-                    log.info("开始停止监听：" + key + " 【" + listener.javaClass.canonicalName + "】")
+                    this.logAdapter.info("开始停止监听：" + key + " 【" + listener.javaClass.canonicalName + "】")
                     listener.stopListener()
                 }
-                log.info("stop listener finished!")
+                this.logAdapter.info("stop listener finished!")
             }
-            timerTaskScheduler.controlSchedule(ITimerTaskScheduler.STOP)
+            timerTaskScheduler.controlSchedule(TimerTaskScheduler.STOP)
         } catch (e: Exception) {
-            log.error(e.message, e)
+            this.logAdapter.error(e.message, e)
         }
 
     }

@@ -1,7 +1,6 @@
 package pers.acp.spring.boot.conf
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
 
 /**
  * Controller 切面日志配置
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component
  * @author zhangbin by 14/04/2018 00:36
  * @since JDK 11
  */
-@Component
 @ConfigurationProperties(prefix = "acp.controller-aspect")
 class ControllerAspectConfiguration {
 
