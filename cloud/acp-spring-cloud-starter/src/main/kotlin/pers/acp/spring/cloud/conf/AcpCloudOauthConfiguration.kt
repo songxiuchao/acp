@@ -1,7 +1,6 @@
 package pers.acp.spring.cloud.conf
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
 
 /**
  * 鉴权相关配置
@@ -9,9 +8,8 @@ import org.springframework.stereotype.Component
  * @author zhang by 14/01/2019 17:30
  * @since JDK 11
  */
-@Component
 @ConfigurationProperties(prefix = "acp.cloud.oauth")
-class AcpOauthConfiguration {
+class AcpCloudOauthConfiguration {
 
     /**
      * 是否oauth服务，默认：false

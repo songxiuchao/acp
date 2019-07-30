@@ -18,7 +18,10 @@ import java.nio.CharBuffer
  * @author zhang by 04/03/2019
  * @since JDK 11
  */
-class TcpServerHandle internal constructor(log: LogAdapter, socketListenerConfiguration: SocketListenerConfiguration, socketServerHandle: ISocketServerHandle) : SocketServerHandle(log, socketListenerConfiguration, socketServerHandle) {
+class TcpServerHandle internal
+constructor(logAdapter: LogAdapter,
+            socketListenerConfiguration: SocketListenerConfiguration,
+            socketServerHandle: ISocketServerHandle) : SocketServerHandle(logAdapter, socketListenerConfiguration, socketServerHandle) {
 
     override fun beforeReadMessage(msg: Any): ByteBuf = msg as ByteBuf
 

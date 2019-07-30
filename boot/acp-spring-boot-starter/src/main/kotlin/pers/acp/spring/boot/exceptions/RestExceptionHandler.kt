@@ -1,7 +1,6 @@
 package pers.acp.spring.boot.exceptions
 
 import org.springframework.beans.TypeMismatchException
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -23,8 +22,7 @@ import javax.validation.ConstraintViolationException
  * Create by zhangbin on 2017-8-10 16:26
  */
 @ControllerAdvice
-class RestExceptionHandler @Autowired
-constructor(private val logAdapter: LogAdapter) : ResponseEntityExceptionHandler() {
+class RestExceptionHandler(private val logAdapter: LogAdapter) : ResponseEntityExceptionHandler() {
 
     private fun doLog(ex: Throwable) {
         logAdapter.error(ex.message, ex)

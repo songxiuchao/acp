@@ -6,11 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.context.request.async.DeferredResult
@@ -28,12 +24,9 @@ import java.util.concurrent.Callable
  * @since JDK 11
  */
 @Aspect
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
-class RestControllerAspect @Autowired
-constructor(private val controllerAspectConfiguration: ControllerAspectConfiguration,
-            private val objectMapper: ObjectMapper,
-            private val logAdapter: LogAdapter) {
+class RestControllerAspect(private val controllerAspectConfiguration: ControllerAspectConfiguration,
+                           private val objectMapper: ObjectMapper,
+                           private val logAdapter: LogAdapter) {
 
     private fun doLog(info: String?) {
         logAdapter.info(info)

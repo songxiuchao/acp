@@ -1,17 +1,12 @@
 package pers.acp.spring.boot.component
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.task.TaskSchedulingProperties
-import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.scheduling.support.CronTrigger
-import org.springframework.stereotype.Component
 import pers.acp.spring.boot.base.BaseSpringBootScheduledAsyncTask
 import pers.acp.spring.boot.conf.ScheduleConfiguration
 import pers.acp.spring.boot.interfaces.TimerTaskScheduler
 import pers.acp.core.CommonTools
-import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.interfaces.LogAdapter
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ScheduledFuture
@@ -22,13 +17,10 @@ import java.util.concurrent.ScheduledFuture
  * @author zhangbin by 2018-1-20 21:24
  * @since JDK 11
  */
-@Component
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-class TimerTaskScheduler @Autowired(required = false)
-constructor(private val log: LogAdapter,
-            properties: TaskSchedulingProperties,
-            private val scheduleConfiguration: ScheduleConfiguration,
-            private val baseSpringBootScheduledTaskMap: Map<String, BaseSpringBootScheduledAsyncTask>) : TimerTaskScheduler {
+class TimerTaskSchedulerCtrl(private val logAdapter: LogAdapter,
+                             properties: TaskSchedulingProperties,
+                             private val scheduleConfiguration: ScheduleConfiguration,
+                             private val baseSpringBootScheduledTaskMap: Map<String, BaseSpringBootScheduledAsyncTask>) : TimerTaskScheduler {
 
     private val threadPoolTaskScheduler: ThreadPoolTaskScheduler = ThreadPoolTaskScheduler()
 
@@ -57,7 +49,7 @@ constructor(private val log: LogAdapter,
                     scheduledTaskMap[key] = scheduledTask
                     threadPoolTaskScheduler.schedule(Runnable { scheduledTask.executeScheduledTask() }, CronTrigger(this))?.let {
                         futureMap[key] = it
-                        log.info("启动定时任务：" + scheduledTask.taskName + " 【" + this + "】 【" + scheduledTask.javaClass.canonicalName + "】")
+                        logAdapter.info("启动定时任务：" + scheduledTask.taskName + " 【" + this + "】 【" + scheduledTask.javaClass.canonicalName + "】")
                     }
                 }
             }
@@ -79,7 +71,7 @@ constructor(private val log: LogAdapter,
                 Thread.sleep(3000)
             }
             future?.cancel(true)
-            log.info("停止定时任务：" + scheduledTask.taskName + " 【" + scheduledTask.javaClass.canonicalName + "】")
+            logAdapter.info("停止定时任务：" + scheduledTask.taskName + " 【" + scheduledTask.javaClass.canonicalName + "】")
             iterator.remove()
         }
     }

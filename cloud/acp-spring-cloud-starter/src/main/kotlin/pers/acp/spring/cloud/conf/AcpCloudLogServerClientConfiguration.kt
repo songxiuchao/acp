@@ -1,7 +1,6 @@
 package pers.acp.spring.cloud.conf
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
 import pers.acp.spring.cloud.log.LogConstant
 
 /**
@@ -10,9 +9,8 @@ import pers.acp.spring.cloud.log.LogConstant
  * @author zhang by 14/01/2019 14:42
  * @since JDK 11
  */
-@Component
 @ConfigurationProperties(prefix = "acp.cloud.log-server.client")
-class LogServerClientConfiguration {
+class AcpCloudLogServerClientConfiguration {
 
     /**
      * 是否启用日志服务客户端，默认：false

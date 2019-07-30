@@ -16,7 +16,7 @@ import pers.acp.core.CommonTools
  * @since JDK 11
  */
 @Configuration
-class FeignOauthRequestInterceptorConfiguration {
+class AcpCloudFeignOauthRequestInterceptorConfiguration {
 
     /**
      * 自定义 Feign 请求拦截器，请求之前将 Oauth2 token 信息带入 Request 的 header 进行权限传递

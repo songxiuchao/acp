@@ -6,11 +6,8 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import io.netty.util.ReferenceCountUtil
 import pers.acp.core.CommonTools
-import pers.acp.core.log.LogFactory
 import pers.acp.spring.boot.conf.SocketListenerConfiguration
 import pers.acp.spring.boot.interfaces.LogAdapter
-
-import java.nio.charset.Charset
 
 /**
  * Socket 报文处理基类
@@ -18,7 +15,7 @@ import java.nio.charset.Charset
  * @author zhang by 04/03/2019
  * @since JDK 11
  */
-abstract class SocketServerHandle(protected val log: LogAdapter,
+abstract class SocketServerHandle(protected val logAdapter: LogAdapter,
                                   protected var socketListenerConfiguration: SocketListenerConfiguration,
                                   protected var socketServerHandle: ISocketServerHandle) : ChannelInboundHandlerAdapter() {
 
@@ -30,19 +27,19 @@ abstract class SocketServerHandle(protected val log: LogAdapter,
             } else {
                 byteBuf.toString(charset(socketListenerConfiguration.charset))
             }
-            log.debug("socket receive:$recvStr")
+            logAdapter.debug("socket receive:$recvStr")
             var responseStr = this.socketServerHandle.doResponse(recvStr)
             if (socketListenerConfiguration.responsable) {
                 responseStr = if (CommonTools.isNullStr(responseStr)) "" else responseStr
                 try {
                     doResponse(ctx, msg, responseStr)
-                    log.debug("socket return:$responseStr")
+                    logAdapter.debug("socket return:$responseStr")
                 } catch (e: Exception) {
-                    log.error(e.message, e)
+                    logAdapter.error(e.message, e)
                 }
             }
         } catch (e: Exception) {
-            log.error(e.message, e)
+            logAdapter.error(e.message, e)
         } finally {
             ReferenceCountUtil.release(msg)
             afterReadMessage(ctx)
@@ -71,7 +68,7 @@ abstract class SocketServerHandle(protected val log: LogAdapter,
     protected abstract fun afterSendMessage(ctx: ChannelHandlerContext)
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
-        log.error(cause.message, cause)
+        logAdapter.error(cause.message, cause)
         ctx.close()
     }
 

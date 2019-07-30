@@ -20,12 +20,12 @@ class TcpServer
 /**
  * 构造函数
  *
- * @param log                         日志适配器
+ * @param logAdapter                         日志适配器
  * @param port                        端口
  * @param socketListenerConfiguration 监听服务配置
  * @param socketServerHandle          接收报文处理对象
  */
-(private val log: LogAdapter,
+(private val logAdapter: LogAdapter,
  private val port: Int,
  private val socketListenerConfiguration: SocketListenerConfiguration,
  private val socketServerHandle: ISocketServerHandle?,
@@ -58,14 +58,14 @@ class TcpServer
                                     if (socketListenerConfiguration.keepAlive) {
                                         this.addLast(IdleStateHandler(socketListenerConfiguration.idletime, socketListenerConfiguration.idletime, socketListenerConfiguration.idletime, TimeUnit.MILLISECONDS))
                                     }
-                                }.addLast(TcpServerHandle(log, socketListenerConfiguration, socketServerHandle))
+                                }.addLast(TcpServerHandle(logAdapter, socketListenerConfiguration, socketServerHandle))
                             }
                         }).bind(port).sync().channel().closeFuture().sync()
             } catch (e: Exception) {
-                log.error(e.message, e)
+                logAdapter.error(e.message, e)
             }
         } else {
-            log.error("tcp listen server is stop,case by:response object is null[BaseSocketHandle]")
+            logAdapter.error("tcp listen server is stop,case by:response object is null[BaseSocketHandle]")
         }
     }
 

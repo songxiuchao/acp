@@ -1,3 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  pers.acp.spring.boot.AcpAutoConfiguration,\
-  pers.acp.spring.boot.BootLogAutoConfiguration
+  pers.acp.spring.boot.AcpPropertiesAutoConfiguration,\
+  pers.acp.spring.boot.AcpBootLogAutoConfiguration,\
+  pers.acp.spring.boot.AcpComponentAutoConfiguration,\
+  pers.acp.spring.boot.AcpSetUpAutoConfiguration

@@ -1,8 +1,9 @@
 ## 版本更新记录
-##### v6.0.2
+##### v6.1.0
 > - [Upgrade] 调整 gradle 脚本
 > - [Upgrade] 优化部分代码
-> - [Upgrade] acp-spring-boot-starter 中增加日志适配器，根据不同场景进行更换日志输出方式
+> - [Upgrade] 调整 acp-spring-boot-starter 及 acp-spring-cloud-starter 自动配置写法，去除 ComponentScan 包扫描
+> - [Upgrade] acp-spring-boot-starter 中增加日志适配器接口，根据不同场景（独立SpringBoot项目SpringCloud项目）进行更换日志输出方式，并在 acp-spring-boot-starter 及 acp-spring-cloud-starter 中分别实现了日志适配器
 ##### v6.0.1
 > - [Upgrade] 优化 RestControllerAspect 切面日志处理
 > - [Upgrade] testspringboot 增加异步请求接口demo

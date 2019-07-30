@@ -11,7 +11,7 @@ import pers.acp.spring.boot.interfaces.LogAdapter
  * @since JDK 11
  */
 @Configuration
-class BootLogAutoConfiguration {
+class AcpBootLogAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(LogAdapter::class)

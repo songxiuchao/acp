@@ -15,7 +15,10 @@ import pers.acp.spring.boot.socket.base.ISocketServerHandle
  * @author zhang by 04/03/2019
  * @since JDK 11
  */
-class UdpServerHandle internal constructor(log: LogAdapter, socketListenerConfiguration: SocketListenerConfiguration, socketServerHandle: ISocketServerHandle) : SocketServerHandle(log, socketListenerConfiguration, socketServerHandle) {
+class UdpServerHandle internal
+constructor(logAdapter: LogAdapter,
+            socketListenerConfiguration: SocketListenerConfiguration,
+            socketServerHandle: ISocketServerHandle) : SocketServerHandle(logAdapter, socketListenerConfiguration, socketServerHandle) {
 
     override fun beforeReadMessage(msg: Any): ByteBuf = (msg as DatagramPacket).content()
 
