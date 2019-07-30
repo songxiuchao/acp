@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import pers.acp.spring.boot.aspect.RestControllerAspect
 import pers.acp.spring.boot.component.FileDownLoadHandle
 import pers.acp.spring.boot.conf.ControllerAspectConfiguration
@@ -24,6 +25,7 @@ import pers.acp.spring.boot.tools.SpringBeanFactory
 class AcpComponentAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(SpringBeanFactory::class)
     fun springBeanFactory() = SpringBeanFactory()
 
     @Primary
@@ -43,9 +45,11 @@ class AcpComponentAutoConfiguration {
                              logAdapter: LogAdapter) = RestControllerAspect(controllerAspectConfiguration, objectMapper, logAdapter)
 
     @Bean
+    @ConditionalOnMissingBean(ResponseEntityExceptionHandler::class)
     fun restExceptionHandler(logAdapter: LogAdapter) = RestExceptionHandler(logAdapter)
 
     @Bean
+    @ConditionalOnMissingBean(FileDownLoadHandle::class)
     fun fileDownLoadHandle(logAdapter: LogAdapter) = FileDownLoadHandle(logAdapter)
 
 }

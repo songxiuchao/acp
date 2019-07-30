@@ -30,7 +30,7 @@ import javax.annotation.PostConstruct
  */
 @Configuration
 @ConditionalOnExpression("'\${acp.cloud.log-server.enabled}'.equals('true')")
-@AutoConfigureBefore(BindingServiceConfiguration::class, AcpBootLogAutoConfiguration::class)
+@AutoConfigureBefore(BindingServiceConfiguration::class)
 @EnableBinding(LogInput::class)
 class AcpCloudLogServerAutoConfiguration @Autowired
 constructor(private val acoCloudLogServerConfiguration: AcoCloudLogServerConfiguration, private val bindings: BindingServiceProperties) {
