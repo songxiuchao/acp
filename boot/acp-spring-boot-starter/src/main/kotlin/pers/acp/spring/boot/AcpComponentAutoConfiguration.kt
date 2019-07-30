@@ -34,8 +34,11 @@ class AcpComponentAutoConfiguration {
     @ConditionalOnBean(JacksonProperties::class)
     fun jacksonObjectMapper(jacksonProperties: JacksonProperties): ObjectMapper =
             PackageTools.buildJacksonObjectMapper(jacksonProperties).apply {
-                Class.forName("com.fasterxml.jackson.module.kotlin.KotlinModule")?.also {
-                    this.registerKotlinModule()
+                try {
+                    Class.forName("com.fasterxml.jackson.module.kotlin.KotlinModule")?.also {
+                        this.registerKotlinModule()
+                    }
+                } catch (e: Throwable) {
                 }
             }
 
