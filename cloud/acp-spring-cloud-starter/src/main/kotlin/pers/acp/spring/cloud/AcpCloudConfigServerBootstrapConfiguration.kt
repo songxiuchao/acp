@@ -1,4 +1,4 @@
-package pers.acp.spring.cloud.conf
+package pers.acp.spring.cloud
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
@@ -35,7 +35,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 @EnableConfigurationProperties
 @ConditionalOnNotWebApplication
 @ConditionalOnClass(ConfigClientProperties::class)
-class AcpConfigServerBootstrapConfiguration @Autowired
+class AcpCloudConfigServerBootstrapConfiguration @Autowired
 constructor(private val environment: ConfigurableEnvironment) {
 
     private val log = LogFactory.getInstance(this.javaClass)

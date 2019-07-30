@@ -10,8 +10,6 @@ import com.netflix.hystrix.strategy.eventnotifier.HystrixEventNotifier
 import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy
 import com.netflix.hystrix.strategy.properties.HystrixProperty
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import pers.acp.core.log.LogFactory
@@ -28,11 +26,9 @@ import java.util.concurrent.TimeUnit
  * @author zhangbin by 12/04/2018 14:28
  * @since JDK 11
  */
-@Component
-class FeignHystrixConcurrencyStrategy @Autowired
-constructor() : HystrixConcurrencyStrategy() {
+class FeignHystrixConcurrencyStrategy() : HystrixConcurrencyStrategy() {
 
-    private val log = LogFactory.getInstance(this.javaClass)
+    private val log: LogFactory = LogFactory.getInstance(this.javaClass)
 
     private var delegate: HystrixConcurrencyStrategy? = null
 

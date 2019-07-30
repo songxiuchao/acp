@@ -49,33 +49,38 @@ class DefaultLogProcess : LogProcess {
                 .append(logInfo.message)
         when (logLevel) {
             LogLevel.Debug -> {
-                logFactory.debug(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.debug(message.toString(), *logInfo.params.toTypedArray())
+                } else {
+                    logFactory.debug(message.toString(), logInfo.throwable)
                 }
             }
             LogLevel.Warn -> {
-                logFactory.warn(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.warn(message.toString(), *logInfo.params.toTypedArray())
+                } else {
+                    logFactory.warn(message.toString(), logInfo.throwable)
                 }
             }
             LogLevel.Error -> {
-                logFactory.error(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.error(message.toString(), *logInfo.params.toTypedArray())
+                } else {
+                    logFactory.error(message.toString(), logInfo.throwable)
                 }
             }
             LogLevel.Trace -> {
-                logFactory.trace(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.trace(message.toString(), *logInfo.params.toTypedArray())
+                } else {
+                    logFactory.trace(message.toString(), logInfo.throwable)
                 }
             }
             else -> {
-                logFactory.info(message.toString(), logInfo.throwable)
                 if (logInfo.params.isNotEmpty()) {
                     logFactory.info(message.toString(), *logInfo.params.toTypedArray())
+                } else {
+                    logFactory.info(message.toString(), logInfo.throwable)
                 }
             }
         }

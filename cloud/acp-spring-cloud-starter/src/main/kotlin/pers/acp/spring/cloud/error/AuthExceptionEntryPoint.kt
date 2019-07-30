@@ -1,12 +1,10 @@
 package pers.acp.spring.cloud.error
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
-import org.springframework.stereotype.Component
 import pers.acp.spring.boot.enums.ResponseCode
 import pers.acp.spring.boot.vo.ErrorVO
 
@@ -19,9 +17,7 @@ import java.io.IOException
  * @author zhang by 05/03/2019
  * @since JDK 11
  */
-@Component
-class AuthExceptionEntryPoint @Autowired
-constructor(private val objectMapper: ObjectMapper) : AuthenticationEntryPoint {
+class AuthExceptionEntryPoint(private val objectMapper: ObjectMapper) : AuthenticationEntryPoint {
 
     @Throws(IOException::class, ServletException::class)
     override fun commence(request: HttpServletRequest, response: HttpServletResponse, authException: AuthenticationException) {

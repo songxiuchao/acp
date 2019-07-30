@@ -1,4 +1,4 @@
-package pers.acp.spring.cloud.log
+package pers.acp.spring.cloud
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,11 +12,13 @@ import org.springframework.cloud.stream.config.BindingServiceProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.util.MimeTypeUtils
+import pers.acp.spring.boot.AcpBootLogAutoConfiguration
+import pers.acp.spring.cloud.conf.AcoCloudLogServerConfiguration
 import pers.acp.spring.cloud.log.consumer.DefaultLogProcess
 import pers.acp.spring.cloud.log.consumer.LogConsumer
 import pers.acp.spring.cloud.log.consumer.LogInput
 import pers.acp.spring.cloud.log.consumer.LogProcess
-import pers.acp.spring.cloud.conf.LogServerConfiguration
+import pers.acp.spring.cloud.log.LogConstant
 
 import javax.annotation.PostConstruct
 
@@ -30,24 +32,24 @@ import javax.annotation.PostConstruct
 @ConditionalOnExpression("'\${acp.cloud.log-server.enabled}'.equals('true')")
 @AutoConfigureBefore(BindingServiceConfiguration::class)
 @EnableBinding(LogInput::class)
-class LogServerAutoConfiguration @Autowired
-constructor(private val logServerConfiguration: LogServerConfiguration, private val bindings: BindingServiceProperties) {
+class AcpCloudLogServerAutoConfiguration @Autowired
+constructor(private val acoCloudLogServerConfiguration: AcoCloudLogServerConfiguration, private val bindings: BindingServiceProperties) {
 
     /**
      * 初始化日志消息消费者
      */
     @PostConstruct
     fun init() {
-        if (logServerConfiguration.enabled) {
+        if (acoCloudLogServerConfiguration.enabled) {
             if (this.bindings.bindings[LogConstant.INPUT] == null) {
                 this.bindings.bindings[LogConstant.INPUT] = BindingProperties()
             }
             this.bindings.bindings[LogConstant.INPUT]?.let {
                 if (it.destination == null || it.destination == LogConstant.INPUT) {
-                    it.destination = logServerConfiguration.destination
+                    it.destination = acoCloudLogServerConfiguration.destination
                 }
                 it.contentType = MimeTypeUtils.APPLICATION_JSON_VALUE
-                it.group = logServerConfiguration.groupId
+                it.group = acoCloudLogServerConfiguration.groupId
             }
         }
     }

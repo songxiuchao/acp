@@ -1,8 +1,10 @@
 package pers.acp.test.application.test;
 
 import io.netty.handler.timeout.IdleStateEvent;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import pers.acp.core.CommonTools;
+import pers.acp.spring.boot.interfaces.LogAdapter;
 import pers.acp.spring.boot.socket.base.ISocketServerHandle;
 import pers.acp.test.application.repo.primary.TableRepo;
 
@@ -13,15 +15,22 @@ import pers.acp.test.application.repo.primary.TableRepo;
 @Component("TestTcpHandle")
 public class TestTcpHandle implements ISocketServerHandle {
 
+    private final LogAdapter log;
+
     private final TableRepo tableRepo;
 
-    public TestTcpHandle(TableRepo tableRepo) {
+    public TestTcpHandle(LogAdapter log, TableRepo tableRepo) {
+        this.log = log;
         this.tableRepo = tableRepo;
     }
 
+    @NotNull
     @Override
-    public String doResponse(String recvStr) {
-        return CommonTools.objectToJson(tableRepo.findAll()).toString();
+    public String doResponse(@NotNull String recvStr) {
+        log.info("收到报文：" + recvStr);
+        String response = CommonTools.objectToJson(tableRepo.findAll()).toString();
+        log.info("返回：" + response);
+        return response;
     }
 
     @Override
