@@ -2,8 +2,6 @@ package pers.acp.spring.boot.enums
 
 import pers.acp.core.exceptions.EnumValueUndefinedException
 
-import java.util.HashMap
-
 /**
  * 响应编码
  * Create by zhangbin on 2017-8-8 17:40
