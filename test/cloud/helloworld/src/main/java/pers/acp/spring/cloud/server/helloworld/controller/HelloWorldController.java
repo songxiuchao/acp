@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pers.acp.client.exceptions.HttpException;
+import pers.acp.spring.boot.exceptions.ServerException;
 import pers.acp.spring.boot.interfaces.LogAdapter;
 import pers.acp.spring.boot.tools.IpTools;
 import pers.acp.spring.cloud.server.helloworld.feign.HelloServer;
@@ -43,10 +44,11 @@ public class HelloWorldController {
     }
 
     @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Object> helloWorld(@RequestBody String content) {
-        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content) + "; properties=" + properties;
-        logAdapter.info(respon);
-        return ResponseEntity.ok(respon);
+    public ResponseEntity<Object> helloWorld(@RequestBody String content) throws ServerException {
+        throw new ServerException("测试异常");
+//        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content) + "; properties=" + properties;
+//        logAdapter.info(respon);
+//        return ResponseEntity.ok(respon);
     }
 
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
