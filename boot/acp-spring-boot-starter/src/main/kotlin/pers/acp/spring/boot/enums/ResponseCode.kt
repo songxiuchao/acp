@@ -36,6 +36,7 @@ enum class ResponseCode(val value: Int, val description: String) {
             }
         }
 
+        @JvmStatic
         @Throws(EnumValueUndefinedException::class)
         fun getEnum(value: Int): ResponseCode {
             return if (map.containsKey(value)) {
