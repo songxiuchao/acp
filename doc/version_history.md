@@ -1,6 +1,8 @@
 ## 版本更新记录
-##### v6.x
+##### v6.1.1
 > - [Upgrade] 优化 gradle 脚本
+> - [Upgrade] acp-spring-cloud-starter 增加分布式锁接口
+> - [Upgrade] 增加基于分布式锁的请求防重注解 pers.acp.spring.cloud.annotation.AcpCloudDuplicateSubmission
 ##### v6.1.0
 > - [Upgrade] 调整 gradle 脚本
 > - [Upgrade] 优化部分代码
