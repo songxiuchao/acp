@@ -10,7 +10,7 @@ import org.aspectj.lang.reflect.MethodSignature
 import org.springframework.core.annotation.Order
 import pers.acp.core.security.MD5Utils
 import pers.acp.spring.boot.exceptions.ServerException
-import pers.acp.spring.cloud.annotation.DuplicateSubmission
+import pers.acp.spring.cloud.annotation.AcpCloudDuplicateSubmission
 import pers.acp.spring.cloud.lock.DistributedLock
 
 /**
@@ -41,7 +41,7 @@ class RestControllerRepeatAspect(private val distributedLock: DistributedLock, p
     fun doAround(pjp: ProceedingJoinPoint): Any {
         val signature = pjp.signature as MethodSignature
         val method = signature.method
-        val duplicateSubmission = method.getAnnotation(DuplicateSubmission::class.java)
+        val duplicateSubmission = method.getAnnotation(AcpCloudDuplicateSubmission::class.java)
         val key = getKey(signature.declaringTypeName + "." + method.name, duplicateSubmission.keyExpress, pjp.args)
         val expire = duplicateSubmission.expire
         try {
@@ -77,7 +77,7 @@ class RestControllerRepeatAspect(private val distributedLock: DistributedLock, p
             }
         }
         val keyValue = prefix + ":" + MD5Utils.encrypt(builder.toString())
-        return keyExpress.replace(DuplicateSubmission.defaultKeyExpress, keyValue)
+        return keyExpress.replace(AcpCloudDuplicateSubmission.defaultKeyExpress, keyValue)
     }
 
 }

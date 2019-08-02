@@ -7,7 +7,7 @@ package pers.acp.spring.cloud.annotation
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
-annotation class DuplicateSubmission(
+annotation class AcpCloudDuplicateSubmission(
         /**
          * key的表达式，默认"\[key\]"
          *
