@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v6.x
+> - [Upgrade] 优化 gradle 脚本
 ##### v6.1.0
 > - [Upgrade] 调整 gradle 脚本
 > - [Upgrade] 优化部分代码
