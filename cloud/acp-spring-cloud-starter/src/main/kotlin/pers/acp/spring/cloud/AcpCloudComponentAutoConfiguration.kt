@@ -3,16 +3,20 @@ package pers.acp.spring.cloud
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategy
 import feign.RequestInterceptor
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.*
 import org.springframework.http.HttpHeaders
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import pers.acp.core.CommonTools
+import pers.acp.spring.cloud.aspect.RestControllerRepeatAspect
 import pers.acp.spring.cloud.component.FeignHystrixConcurrencyStrategy
 import pers.acp.spring.cloud.error.AuthAccessDeniedHandler
 import pers.acp.spring.cloud.error.AuthExceptionEntryPoint
+import pers.acp.spring.cloud.lock.DistributedLock
 import pers.acp.spring.cloud.log.LogInfo
 
 /**
@@ -43,6 +47,12 @@ class AcpCloudComponentAutoConfiguration {
             }
         }
     }
+
+    @Bean
+    @ConditionalOnBean(DistributedLock::class)
+    @Autowired(required = false)
+    fun restControllerRepeatAspect(distributedLock: DistributedLock,
+                                   objectMapper: ObjectMapper) = RestControllerRepeatAspect(distributedLock, objectMapper)
 
     @Bean
     @ConditionalOnMissingBean(HystrixConcurrencyStrategy::class)
