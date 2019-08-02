@@ -226,4 +226,19 @@ configure(allprojects) {
         }
     }
 
+    def needUpLoadProject = {
+        return ["acp-core",
+                "acp-packet",
+                "acp-client",
+                "acp-file",
+                "acp-ftp",
+                "acp-message",
+                "acp-spring-boot-starter",
+                "acp-spring-boot-starter-ftp",
+                "acp-spring-cloud-starter"].toArray().contains("$project.name")
+    }
+
+    install.onlyIf { needUpLoadProject() }
+    uploadArchives.onlyIf { needUpLoadProject() }
+
 }
