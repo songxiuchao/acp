@@ -26,7 +26,7 @@ class RestControllerRepeatAspect(private val distributedLock: DistributedLock, p
     /**
      * 定义拦截规则
      */
-    @Pointcut(value = "execution(public * *(..)) && @annotation(pers.acp.spring.cloud.annotation.DuplicateSubmission)")
+    @Pointcut(value = "execution(public * *(..)) && @annotation(pers.acp.spring.cloud.annotation.AcpCloudDuplicateSubmission)")
     fun executeService() {
     }
 
