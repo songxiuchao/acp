@@ -613,10 +613,13 @@ object CommonUtils {
                     this.aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
                 }
             }
-            zipFile.addFiles(files, parameters)
+            if (files.isNotEmpty()) {
+                zipFile.addFiles(files, parameters)
+            }
             folds.forEach { fold -> zipFile.addFolder(fold, parameters) }
             if (deleteFile) {
                 files.forEach { file -> doDeleteFile(file) }
+                folds.forEach { file -> doDeleteFile(file) }
             }
             log.info("compress success")
             endTime = System.currentTimeMillis()
