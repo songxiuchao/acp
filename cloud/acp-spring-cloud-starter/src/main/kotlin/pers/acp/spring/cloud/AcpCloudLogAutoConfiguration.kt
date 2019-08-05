@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import pers.acp.spring.boot.AcpBootLogAutoConfiguration
-import pers.acp.spring.boot.component.BootLogAdapter
 import pers.acp.spring.boot.interfaces.LogAdapter
 import pers.acp.spring.cloud.conf.AcpCloudLogServerClientConfiguration
 import pers.acp.spring.cloud.log.CloudLogAdapter

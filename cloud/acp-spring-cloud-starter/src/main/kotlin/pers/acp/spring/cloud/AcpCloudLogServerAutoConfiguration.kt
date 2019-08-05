@@ -12,7 +12,6 @@ import org.springframework.cloud.stream.config.BindingServiceProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.util.MimeTypeUtils
-import pers.acp.spring.boot.AcpBootLogAutoConfiguration
 import pers.acp.spring.cloud.conf.AcoCloudLogServerConfiguration
 import pers.acp.spring.cloud.log.consumer.DefaultLogProcess
 import pers.acp.spring.cloud.log.consumer.LogConsumer
