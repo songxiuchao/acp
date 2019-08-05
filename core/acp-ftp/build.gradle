@@ -1,3 +1,4 @@
+group "${group}.core"
 versions += [
         ftpserver  : "1.1.1",
         sftp       : "2.2.0",
