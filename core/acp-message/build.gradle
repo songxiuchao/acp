@@ -1,3 +1,4 @@
+group "${group}.core"
 versions += [
         javax_mail: "1.4.7"
 ]

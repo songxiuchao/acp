@@ -1,3 +1,4 @@
+group "${group}.core"
 versions += [
         freemarker   : "2.3.28",
         flying_saucer: "9.1.18",

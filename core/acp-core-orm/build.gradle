@@ -1,3 +1,4 @@
+group "${group}.core"
 dependencies {
     compile project(":core:acp-core")
 }
