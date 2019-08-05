@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v6.x
+> - [Upgrade] 优化 gradle 脚本，每个模块重新设置 group
 ##### v6.1.1
 > - [Upgrade] 优化 gradle 脚本
 > - [Upgrade] acp-spring-cloud-starter 增加分布式锁接口
