@@ -1,6 +1,12 @@
 ## 版本更新记录
-##### v6.x
+##### v6.1.2
 > - [Upgrade] 优化 gradle 脚本，每个模块重新设置 group
+> - [Upgrade] 升级 Spring Boot 至 2.1.7.RELEASE
+> - [Upgrade] 升级依赖项
+>   - netty to "4.1.38.Final"
+>   - joda time to "2.10.3"
+>   - mysql-connector-java to "8.0.17"
+>   - postgresql to "42.2.6"
 ##### v6.1.1
 > - [Upgrade] 优化 gradle 脚本
 > - [Upgrade] acp-spring-cloud-starter 增加分布式锁接口
