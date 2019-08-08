@@ -3,7 +3,6 @@ package pers.acp.spring.cloud
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties
 import org.springframework.boot.autoconfigure.web.ServerProperties
@@ -56,42 +55,6 @@ constructor(private val logAdapter: LogAdapter,
             serverProperties: ServerProperties) : ResourceServerConfigurerAdapter() {
 
     private val contextPath: String = if (CommonTools.isNullStr(serverProperties.servlet.contextPath)) "" else serverProperties.servlet.contextPath
-
-    /**
-     * 获取服务配置信息
-     *
-     * @return ServerProperties
-     */
-    @Bean
-    @ConditionalOnMissingBean(ServerProperties::class)
-    fun serverProperties(): ServerProperties = ServerProperties()
-
-    /**
-     * oauth2 客户端配置
-     *
-     * @return OAuth2ClientProperties
-     */
-    @Bean
-    @ConditionalOnMissingBean(OAuth2ClientProperties::class)
-    fun oAuth2ClientProperties(): OAuth2ClientProperties = OAuth2ClientProperties()
-
-    /**
-     * 获取资源服务配置信息
-     *
-     * @return ResourceServerProperties
-     */
-    @Bean
-    @ConditionalOnMissingBean(ResourceServerProperties::class)
-    fun resourceServerProperties(): ResourceServerProperties = ResourceServerProperties()
-
-    /**
-     * feign客户端配置
-     *
-     * @return FeignHttpClientProperties
-     */
-    @Bean
-    @ConditionalOnMissingBean(FeignHttpClientProperties::class)
-    fun feignHttpClientProperties(): FeignHttpClientProperties = FeignHttpClientProperties()
 
     /**
      * 自定义负载均衡客户端

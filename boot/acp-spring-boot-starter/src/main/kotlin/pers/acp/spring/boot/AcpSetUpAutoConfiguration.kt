@@ -3,12 +3,10 @@ package pers.acp.spring.boot
 import io.netty.handler.codec.ByteToMessageDecoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.boot.autoconfigure.AutoConfigureOrder
 import org.springframework.boot.autoconfigure.task.TaskSchedulingProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
-import org.springframework.core.Ordered
 import pers.acp.spring.boot.base.BaseSpringBootScheduledAsyncTask
 import pers.acp.spring.boot.component.SystemControl
 import pers.acp.spring.boot.component.TimerTaskSchedulerCtrl
