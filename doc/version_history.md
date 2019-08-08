@@ -1,6 +1,7 @@
 ## 版本更新记录
 ##### v6.1.2
 > - [Upgrade] 优化 gradle 脚本，每个模块重新设置 group
+> - [Upgrade] 优化自动配置顺序
 > - [Upgrade] 升级 Spring Boot 至 2.1.7.RELEASE
 > - [Upgrade] 升级依赖项
 >   - netty to "4.1.38.Final"
