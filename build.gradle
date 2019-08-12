@@ -79,7 +79,7 @@ configure(allprojects) {
     }
 
     task clearPj(type: Delete) {
-        delete 'build', 'target', 'out'
+        delete 'release', 'build', 'target', 'out'
     }
 
     task copyJar(type: Copy) {
@@ -133,6 +133,16 @@ configure(allprojects) {
     }
 
     task release(type: Copy, dependsOn: [build, copyJar]) {
+    }
+
+    build {
+        doLast {
+            def fileName = "$project.name" + "-" + "$project.version" + ".jar"
+            copy {
+                from file("${buildDir}/libs/" + fileName)
+                into "$rootDir/release"
+            }
+        }
     }
 
     jar {
