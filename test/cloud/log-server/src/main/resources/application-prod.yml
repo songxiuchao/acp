@@ -26,6 +26,8 @@ info:
 # ===============================
 spring:
   cloud:
+    bus:
+      id: ${eureka.instance.instance-id}
     stream:
       default-binder: kafka
       kafka:
