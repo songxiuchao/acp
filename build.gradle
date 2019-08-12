@@ -135,20 +135,10 @@ configure(allprojects) {
     task release(type: Copy, dependsOn: [build, copyJar]) {
     }
 
-    build {
-        doLast {
-            def fileName = "$project.name" + "-" + "$project.version" + ".jar"
-            copy {
-                from file("${buildDir}/libs/" + fileName)
-                into "$rootDir/release"
-            }
-        }
-    }
-
     jar {
         dependsOn(copyJar)
         manifest {
-            attributes('Version': "${version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Kotlin': "${kotlinVersion}", 'Project': 'Acp')
+            attributes('Version': "${project.version}", 'Provider': "Gradle ${gradleVersion}", 'JDK': "${javaVersion}", 'Kotlin': "${kotlinVersion}", 'Project': 'Acp')
         }
     }
 
@@ -187,6 +177,16 @@ configure(allprojects) {
 
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'// no caching to maven repository
+    }
+
+    build {
+        doLast {
+            def fileName = "$project.name" + "-" + "$project.version" + ".jar"
+            copy {
+                from file("${buildDir}/libs/" + fileName)
+                into "$rootDir/release"
+            }
+        }
     }
 
     def generateGroupId = {
