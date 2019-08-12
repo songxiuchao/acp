@@ -79,7 +79,7 @@ configure(allprojects) {
     }
 
     task clearPj(type: Delete) {
-        delete 'build', 'target', 'out'
+        delete 'release', 'build', 'target', 'out'
     }
 
     task copyJar(type: Copy) {
