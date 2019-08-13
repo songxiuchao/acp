@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate
 import pers.acp.client.exceptions.HttpException
 import pers.acp.client.http.HttpClientBuilder
 import pers.acp.core.CommonTools
-import pers.acp.spring.boot.interfaces.LogAdapter
+import pers.acp.core.log.LogFactory
 import pers.acp.spring.cloud.conf.AcpCloudOauthConfiguration
 import pers.acp.spring.cloud.constant.CloudConfigurationOrder
 import pers.acp.spring.cloud.constant.RestPrefix
@@ -44,8 +44,7 @@ import java.util.ArrayList
 @EnableResourceServer
 @Order(CloudConfigurationOrder.resourceServerConfiguration)
 class AcpCloudResourceServerConfiguration @Autowired
-constructor(private val logAdapter: LogAdapter,
-            private val acpCloudOauthConfiguration: AcpCloudOauthConfiguration,
+constructor(private val acpCloudOauthConfiguration: AcpCloudOauthConfiguration,
             private val entryPointMap: Map<String, AuthenticationEntryPoint>,
             private val accessDeniedHandlerMap: Map<String, AccessDeniedHandler>,
             private val clientProperties: OAuth2ClientProperties,
@@ -53,6 +52,8 @@ constructor(private val logAdapter: LogAdapter,
             private val feignHttpClientProperties: FeignHttpClientProperties,
             private val objectMapper: ObjectMapper,
             serverProperties: ServerProperties) : ResourceServerConfigurerAdapter() {
+
+    private val log = LogFactory.getInstance(this.javaClass)
 
     private val contextPath: String = if (CommonTools.isNullStr(serverProperties.servlet.contextPath)) "" else serverProperties.servlet.contextPath
 
@@ -101,7 +102,7 @@ constructor(private val logAdapter: LogAdapter,
                 }
             })
         } catch (e: Exception) {
-            logAdapter.error(e.message, e)
+            log.error(e.message, e)
         }
         services.setCheckTokenEndpointUrl(resourceServerProperties.tokenInfoUri)
         services.setClientId(clientProperties.clientId)
@@ -125,7 +126,7 @@ constructor(private val logAdapter: LogAdapter,
                 if (!CommonTools.isNullStr(acpCloudOauthConfiguration.authExceptionEntryPoint)) {
                     resources.authenticationEntryPoint(entryPointMap[acpCloudOauthConfiguration.authExceptionEntryPoint])
                 } else {
-                    logAdapter.warn("Find more than one authenticationEntryPoint, please specify explicitly in the configuration 'acp.cloud.auth.auth-exception-entry-point'")
+                    log.warn("Find more than one authenticationEntryPoint, please specify explicitly in the configuration 'acp.cloud.auth.auth-exception-entry-point'")
                 }
             } else {
                 resources.authenticationEntryPoint(entryPointMap.entries.iterator().next().value)
@@ -137,7 +138,7 @@ constructor(private val logAdapter: LogAdapter,
                 if (!CommonTools.isNullStr(acpCloudOauthConfiguration.accessDeniedHandler)) {
                     resources.accessDeniedHandler(accessDeniedHandlerMap[acpCloudOauthConfiguration.accessDeniedHandler])
                 } else {
-                    logAdapter.warn("Find more than one accessDeniedHandler, please specify explicitly in the configuration 'acp.cloud.auth.access-denied-handler'")
+                    log.warn("Find more than one accessDeniedHandler, please specify explicitly in the configuration 'acp.cloud.auth.access-denied-handler'")
                 }
             } else {
                 resources.accessDeniedHandler(accessDeniedHandlerMap.entries.iterator().next().value)
@@ -156,7 +157,7 @@ constructor(private val logAdapter: LogAdapter,
         val permitAll = ArrayList<String>()
         val security = ArrayList<String>()
         if (acpCloudOauthConfiguration.resourceServer) {
-            logAdapter.info("resource server = true")
+            log.info("resource server = true")
             permitAll.add("$contextPath/error")
             permitAll.add("$contextPath/actuator")
             permitAll.add("$contextPath/actuator/**")
@@ -175,12 +176,12 @@ constructor(private val logAdapter: LogAdapter,
             acpCloudOauthConfiguration.resourceServerSecurityPath.forEach { path -> security.add(contextPath + path) }
             permitAll.add(contextPath + RestPrefix.Open + "/**")
         } else {
-            logAdapter.info("resource server = false")
+            log.info("resource server = false")
             permitAll.add("$contextPath/**")
         }
-        permitAll.forEach { uri -> logAdapter.info("permitAll uri: $uri") }
-        security.forEach { uri -> logAdapter.info("security uri: $uri") }
-        logAdapter.info("security uri: other any")
+        permitAll.forEach { uri -> log.info("permitAll uri: $uri") }
+        security.forEach { uri -> log.info("security uri: $uri") }
+        log.info("security uri: other any")
         // match 匹配的url，赋予全部权限（不进行拦截）
         http.csrf().disable().authorizeRequests()
                 .antMatchers(*security.toTypedArray()).authenticated()
