@@ -2,6 +2,7 @@
 ##### v6.x
 > - [Upgrade] 优化gradle脚本，build任务之后将打好的jar包放入项目根路径下的release目录
 > - [Upgrade] 优化自动配置，自动配置中不使用LogAdapter
+> - [Upgrade] HttpClientBuilder 增加 readTimeOut 配置
 ##### v6.1.2
 > - [Upgrade] 优化 gradle 脚本，每个模块重新设置 group
 > - [Upgrade] 优化自动配置顺序

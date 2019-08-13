@@ -30,7 +30,12 @@ class HttpClientBuilder {
     /**
      * 连接超时时间，单位毫秒
      */
-    private var timeOut = 60000
+    private var connectTimeOut = 60000
+
+    /**
+     * 读取超时时间，单位毫秒
+     */
+    private var readTimeOut = 60000
 
     /**
      * 链接空闲时间，单位毫秒
@@ -67,7 +72,12 @@ class HttpClientBuilder {
     }
 
     fun timeOut(timeOut: Int): HttpClientBuilder {
-        this.timeOut = timeOut
+        this.connectTimeOut = timeOut
+        return this
+    }
+
+    fun readTimeOut(readTimeOut: Int): HttpClientBuilder {
+        this.readTimeOut = readTimeOut
         return this
     }
 
@@ -116,7 +126,8 @@ class HttpClientBuilder {
      */
     @Throws(HttpException::class)
     fun build(): AcpClient = OkHttpClient.Builder()
-            .connectTimeout(timeOut.toLong(), TimeUnit.MILLISECONDS)
+            .connectTimeout(connectTimeOut.toLong(), TimeUnit.MILLISECONDS)
+            .readTimeout(readTimeOut.toLong(), TimeUnit.MILLISECONDS)
             .followRedirects(followRedirects)
             .followSslRedirects(followRedirects)
             .connectionPool(ConnectionPool(maxTotalConn, timeToLive, timeToLiveTimeUnit))
