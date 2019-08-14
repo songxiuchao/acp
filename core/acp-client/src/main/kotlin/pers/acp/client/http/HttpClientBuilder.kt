@@ -25,22 +25,27 @@ class HttpClientBuilder {
     /**
      * 最大链接数
      */
-    private var maxTotalConn = 1000
+    private var maxTotalConn = 1_000
 
     /**
      * 连接超时时间，单位毫秒
      */
-    private var connectTimeOut = 60000
+    private var connectTimeOut = 10_000
 
     /**
      * 读取超时时间，单位毫秒
      */
-    private var readTimeOut = 60000
+    private var readTimeOut = 60_000
+
+    /**
+     * 写超时时间，单位毫秒
+     */
+    private var writeTimeOut = 60_000
 
     /**
      * 链接空闲时间，单位毫秒
      */
-    private var timeToLive: Long = 900000
+    private var timeToLive = 300_000L
 
     /**
      * 时间单位
@@ -60,7 +65,7 @@ class HttpClientBuilder {
     /**
      * 请求失败时是否重试
      */
-    private var retryOnConnectionFailure = false
+    private var retryOnConnectionFailure = true
 
     private val httpInterceptorList: MutableList<HttpInterceptor> = mutableListOf()
 
@@ -71,13 +76,18 @@ class HttpClientBuilder {
         return this
     }
 
-    fun timeOut(timeOut: Int): HttpClientBuilder {
+    fun connectTimeOut(timeOut: Int): HttpClientBuilder {
         this.connectTimeOut = timeOut
         return this
     }
 
     fun readTimeOut(readTimeOut: Int): HttpClientBuilder {
         this.readTimeOut = readTimeOut
+        return this
+    }
+
+    fun writeTimeOut(writeTimeout: Int): HttpClientBuilder {
+        this.writeTimeOut = writeTimeout
         return this
     }
 
@@ -128,6 +138,7 @@ class HttpClientBuilder {
     fun build(): AcpClient = OkHttpClient.Builder()
             .connectTimeout(connectTimeOut.toLong(), TimeUnit.MILLISECONDS)
             .readTimeout(readTimeOut.toLong(), TimeUnit.MILLISECONDS)
+            .writeTimeout(writeTimeOut.toLong(), TimeUnit.MILLISECONDS)
             .followRedirects(followRedirects)
             .followSslRedirects(followRedirects)
             .connectionPool(ConnectionPool(maxTotalConn, timeToLive, timeToLiveTimeUnit))

@@ -69,7 +69,7 @@ constructor(private val acpCloudOauthConfiguration: AcpCloudOauthConfiguration,
     fun acpSpringCloudOauth2ClientRestTemplate(): RestTemplate =
             RestTemplate(OkHttp3ClientHttpRequestFactory(
                     HttpClientBuilder().maxTotalConn(feignHttpClientProperties.maxConnections)
-                            .timeOut(feignHttpClientProperties.connectionTimeout)
+                            .connectTimeOut(feignHttpClientProperties.connectionTimeout)
                             .timeToLive(feignHttpClientProperties.timeToLive)
                             .timeToLiveTimeUnit(feignHttpClientProperties.timeToLiveUnit)
                             .followRedirects(feignHttpClientProperties.isFollowRedirects)
