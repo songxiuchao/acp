@@ -1,4 +1,9 @@
 ## 版本更新记录
+##### v6.1.3
+> - [Upgrade] 优化gradle脚本，build任务之后将打好的jar包放入项目根路径下的release目录
+> - [Upgrade] 优化自动配置，自动配置中不使用LogAdapter
+> - [Upgrade] HttpClientBuilder 增加 readTimeOut 和 writeTimeOut 配置
+> - [Upgrade] HttpClientBuilder 中 retryOnConnectionFailure 默认改为 true，解决部分场景中连接失败的问题
 ##### v6.1.2
 > - [Upgrade] 优化 gradle 脚本，每个模块重新设置 group
 > - [Upgrade] 优化自动配置顺序
