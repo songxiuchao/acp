@@ -26,7 +26,7 @@ public class HelloWorldApplication {
     public RestTemplate restTemplate(FeignHttpClientProperties feignHttpClientProperties) throws HttpException {
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory(
                 new HttpClientBuilder().maxTotalConn(feignHttpClientProperties.getMaxConnections())
-                        .timeOut(feignHttpClientProperties.getConnectionTimeout())
+                        .connectTimeOut(feignHttpClientProperties.getConnectionTimeout())
                         .timeToLive(feignHttpClientProperties.getTimeToLive())
                         .timeToLiveTimeUnit(feignHttpClientProperties.getTimeToLiveUnit())
                         .followRedirects(feignHttpClientProperties.isFollowRedirects())
