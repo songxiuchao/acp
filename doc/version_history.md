@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v6.1.4
+> - [Upgrade] 升级 kotlin 至 1.3.50
 ##### v6.1.3
 > - [Upgrade] 优化gradle脚本，build任务之后将打好的jar包放入项目根路径下的release目录
 > - [Upgrade] 优化自动配置，自动配置中不使用LogAdapter
