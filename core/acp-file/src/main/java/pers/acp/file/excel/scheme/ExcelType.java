@@ -1,51 +1,19 @@
 package pers.acp.file.excel.scheme;
 
-import pers.acp.core.exceptions.EnumValueUndefinedException;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public enum ExcelType {
 
-    EXCEL_TYPE_XLS(".xls", 0),
+    EXCEL_TYPE_XLS("xls"),
 
-    EXCEL_TYPE_XLSX(".xlsx", 1);
+    EXCEL_TYPE_XLSX("xlsx");
 
     private String name;
 
-    private Integer value;
-
-    private static Map<Integer, ExcelType> map;
-
-    static {
-        map = new HashMap<>();
-        for (ExcelType type : values()) {
-            map.put(type.getValue(), type);
-        }
-    }
-
-    ExcelType(String name, Integer value) {
+    ExcelType(String name) {
         this.name = name.toLowerCase();
-        this.value = value;
-    }
-
-    public Integer getValue() {
-        return this.value;
     }
 
     public String getName() {
         return this.name;
-    }
-
-    public Boolean equals(Integer value) {
-        return this.value.equals(value);
-    }
-
-    public static ExcelType getEnum(Integer value) throws EnumValueUndefinedException {
-        if (map.containsKey(value)) {
-            return map.get(value);
-        }
-        throw new EnumValueUndefinedException(ExcelType.class, value + "");
     }
 
 }

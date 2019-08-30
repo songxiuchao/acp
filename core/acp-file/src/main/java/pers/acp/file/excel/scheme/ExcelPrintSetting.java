@@ -7,7 +7,7 @@ package pers.acp.file.excel.scheme;
  * @author zb
  * 
  */
-public final class PrintSetting {
+public final class ExcelPrintSetting {
 
 	private boolean isHorizontal = false;// 是否为横向，默认否
 
@@ -27,9 +27,9 @@ public final class PrintSetting {
 
 	private Object verticallyCenter = null;// 垂直居中 null不设置，true/false
 
-	private CellPoint printArea = null;// 打印区域 null不设置
+	private ExcelCellPointSetting printArea = null;// 打印区域 null不设置
 
-	private CellPoint printTitles = null;// 打印标题 null不设置
+	private ExcelCellPointSetting printTitles = null;// 打印标题 null不设置
 
 	public boolean isHorizontal() {
 		return isHorizontal;
@@ -103,19 +103,19 @@ public final class PrintSetting {
 		this.verticallyCenter = verticallyCenter;
 	}
 
-	public CellPoint getPrintArea() {
+	public ExcelCellPointSetting getPrintArea() {
 		return printArea;
 	}
 
-	public void setPrintArea(CellPoint printArea) {
+	public void setPrintArea(ExcelCellPointSetting printArea) {
 		this.printArea = printArea;
 	}
 
-	public CellPoint getPrintTitles() {
+	public ExcelCellPointSetting getPrintTitles() {
 		return printTitles;
 	}
 
-	public void setPrintTitles(CellPoint printTitles) {
+	public void setPrintTitles(ExcelCellPointSetting printTitles) {
 		this.printTitles = printTitles;
 	}
 }

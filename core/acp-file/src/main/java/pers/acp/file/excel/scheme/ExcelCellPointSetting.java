@@ -6,7 +6,7 @@ package pers.acp.file.excel.scheme;
  * @author zb
  * 
  */
-public final class CellPoint {
+public final class ExcelCellPointSetting {
 
 	private int firstCol = -1;
 
