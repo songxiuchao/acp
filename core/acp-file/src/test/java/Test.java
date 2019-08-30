@@ -1,3 +1,8 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+import pers.acp.file.excel.data.ExcelCellData;
+import pers.acp.file.excel.data.ExcelDataType;
+import pers.acp.file.excel.scheme.ExcelDataSetting;
+
 import java.io.*;
 
 /**
@@ -19,6 +24,16 @@ public class Test {
 //        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\WorkFile\\22.txt"), "gbk"));
 //        writer.write(content);
 //        writer.flush();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ExcelCellData data = new ExcelCellData();
+        data.setIndex(1);
+        data.setDataType(ExcelDataType.String);
+        data.setValue("123啊");
+        String json = objectMapper.writeValueAsString(data);
+        System.out.println(json);
+        ExcelCellData data1 = objectMapper.readValue(json, ExcelCellData.class);
+        System.out.println(data1);
     }
 
 }
