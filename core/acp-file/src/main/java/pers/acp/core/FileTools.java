@@ -1,6 +1,5 @@
 package pers.acp.core;
 
-import pers.acp.core.dbcon.ConnectionFactory;
 import pers.acp.file.FileOperation;
 import pers.acp.file.excel.data.ExcelCellData;
 import pers.acp.file.excel.scheme.ExcelDataSetting;
