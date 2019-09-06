@@ -20,7 +20,7 @@ import pers.acp.spring.cloud.lock.DistributedLock
  * @since JDK 11
  */
 @Aspect
-@Order(0)
+@Order(Int.MIN_VALUE)
 class RestControllerRepeatAspect(private val distributedLock: DistributedLock, private val objectMapper: ObjectMapper) {
 
     /**
