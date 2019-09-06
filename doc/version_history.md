@@ -1,7 +1,9 @@
 ## 版本更新记录
 ##### v6.1.5
-> - [Upgrade] 升级 gradle 至 5.6
+> - [Upgrade] 升级 gradle 至 5.6.2
 > - [Upgrade] 优化 acp-file 中 Excel 处理
+> - [Upgrade] 优化重复请求拦截处理
+> - [Upgrade] 优化Aspect执行顺序
 ##### v6.1.4
 > - [Upgrade] 升级 kotlin 至 1.3.50
 ##### v6.1.3
