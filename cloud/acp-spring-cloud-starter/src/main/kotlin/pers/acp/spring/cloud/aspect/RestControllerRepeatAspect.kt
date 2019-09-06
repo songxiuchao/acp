@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
 import org.aspectj.lang.reflect.MethodSignature
+import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import pers.acp.core.security.MD5Utils
 import pers.acp.spring.boot.exceptions.ServerException
@@ -20,7 +21,7 @@ import pers.acp.spring.cloud.lock.DistributedLock
  * @since JDK 11
  */
 @Aspect
-@Order(Int.MIN_VALUE)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 class RestControllerRepeatAspect(private val distributedLock: DistributedLock, private val objectMapper: ObjectMapper) {
 
     /**
