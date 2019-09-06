@@ -47,8 +47,11 @@ class RestControllerRepeatAspect(private val distributedLock: DistributedLock, p
         try {
             val response: Any
             if (distributedLock.getLock(key, key, expire)) {
-                response = pjp.proceed()
-                distributedLock.releaseLock(key, key)
+                try {
+                    response = pjp.proceed()
+                } finally {
+                    distributedLock.releaseLock(key, key)
+                }
             } else {
                 throw ServerException("请勿重复请求")
             }
