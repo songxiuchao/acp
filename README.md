@@ -44,7 +44,7 @@
     
 ## 一、环境要求及开发语言
 - java 1.8
-- gradle 5.6
+- gradle 5.6.2
 - kotlin 1.3.50
 
 ## 二、gradle 脚本配置及使用
