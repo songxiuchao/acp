@@ -20,7 +20,7 @@ import pers.acp.spring.cloud.lock.DistributedLock
  * @since JDK 11
  */
 @Aspect
-@Order(0)
+@Order(Int.MIN_VALUE)
 class RestControllerRepeatAspect(private val distributedLock: DistributedLock, private val objectMapper: ObjectMapper) {
 
     /**
@@ -47,8 +47,11 @@ class RestControllerRepeatAspect(private val distributedLock: DistributedLock, p
         try {
             val response: Any
             if (distributedLock.getLock(key, key, expire)) {
-                response = pjp.proceed()
-                distributedLock.releaseLock(key, key)
+                try {
+                    response = pjp.proceed()
+                } finally {
+                    distributedLock.releaseLock(key, key)
+                }
             } else {
                 throw ServerException("请勿重复请求")
             }
