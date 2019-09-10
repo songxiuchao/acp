@@ -1,4 +1,10 @@
 ## 版本更新记录
+##### v6.1.6
+> - [Upgrade] 升级 Spring Boot 至 2.1.8.RELEASE
+> - [Upgrade] acp-spring-cloud-starter 中增加配置类 AcpCloudMethodSecurityConfig，方法上 @PreAuthorize / @PostAuthorize 注解支持表达式 #oauth2.hasScope
+> - [Upgrade] core 中删除 acp-core-orm 模块
+> - [Upgrade] 升级依赖项
+>   - netty to "4.1.39.Final"
 ##### v6.1.5
 > - [Upgrade] 升级 gradle 至 5.6.2
 > - [Upgrade] 优化 acp-file 中 Excel 处理
