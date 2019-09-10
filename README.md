@@ -1,11 +1,11 @@
 # acp 
-###### v6.1.5 [版本更新日志](doc/version_history.md)
+###### v6.1.6 [版本更新日志](doc/version_history.md)
 - Application Construction Platform 应用构建平台
 - 该项目是用Kotlin和Java语言混编封装的脚手架。本人会密切关注业界最新动态，并使用最新技术持续更新优化。
 - 使用该脚手架可快速搭建基于Kotlin或Java语言的普通应用、SpringBoot应用和SpringCloud应用。
 
 ## 相关组件版本及官方文档
-- [Spring Boot 2.1.7.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Boot 2.1.8.RELEASE](https://projects.spring.io/spring-boot)
 - [Spring Cloud Greenwich.SR2](http://projects.spring.io/spring-cloud)
 
 ## 技术栈
@@ -87,7 +87,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.6 --distribution-type=all
+    gradlew wrapper --gradle-version=5.6.2 --distribution-type=all
 ``
 
 ## 三、工程说明
