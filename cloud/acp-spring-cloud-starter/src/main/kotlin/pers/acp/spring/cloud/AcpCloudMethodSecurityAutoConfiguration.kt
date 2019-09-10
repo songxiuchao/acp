@@ -12,6 +12,6 @@ import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecur
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class AcpCloudMethodSecurityConfig : GlobalMethodSecurityConfiguration() {
+class AcpCloudMethodSecurityAutoConfiguration : GlobalMethodSecurityConfiguration() {
     override fun createExpressionHandler() = OAuth2MethodSecurityExpressionHandler()
 }

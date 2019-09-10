@@ -43,7 +43,7 @@ import java.util.ArrayList
 @Configuration
 @EnableResourceServer
 @Order(CloudConfigurationOrder.resourceServerConfiguration)
-class AcpCloudResourceServerConfiguration @Autowired
+class AcpCloudResourceServerAutoConfiguration @Autowired
 constructor(private val acpCloudOauthConfiguration: AcpCloudOauthConfiguration,
             private val entryPointMap: Map<String, AuthenticationEntryPoint>,
             private val accessDeniedHandlerMap: Map<String, AccessDeniedHandler>,
