@@ -5,6 +5,7 @@
 > - [Upgrade] core 中删除 acp-core-orm 模块
 > - [Upgrade] 升级依赖项
 >   - netty to "4.1.39.Final"
+>   - kotlinx-coroutines-core to "1.3.1"
 ##### v6.1.5
 > - [Upgrade] 升级 gradle 至 5.6.2
 > - [Upgrade] 优化 acp-file 中 Excel 处理
