@@ -61,9 +61,7 @@ constructor(private val environment: ConfigurableEnvironment) {
      */
     private fun customerConfigClientRestTemplate(clientProperties: ConfigClientProperties): RestTemplate? {
         try {
-            if (clientProperties.requestReadTimeout < 0) {
-                throw IllegalStateException("Invalid Value for Read Timeout set.")
-            }
+            check(clientProperties.requestReadTimeout >= 0) { "Invalid Value for Read Timeout set." }
             val template = RestTemplate(OkHttp3ClientHttpRequestFactory(
                     HttpClientBuilder().maxTotalConn(environment.getProperty("feign.httpclient.max-connections", "1000").toInt())
                             .connectTimeOut(environment.getProperty("feign.httpclient.connection-timeout", "10000").toInt())
