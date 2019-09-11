@@ -7,7 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import pers.acp.spring.boot.vo.ErrorVO;
+import pers.acp.spring.boot.vo.ErrorVo;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        ErrorVO errorVO = new ErrorVO();
+        ErrorVo errorVO = new ErrorVo();
         Throwable cause = authException.getCause();
         if (cause instanceof InvalidTokenException) {
             errorVO.setError("无效的 token ");
