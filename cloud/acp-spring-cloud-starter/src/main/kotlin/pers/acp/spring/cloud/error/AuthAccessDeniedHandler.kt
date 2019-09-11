@@ -6,7 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.web.access.AccessDeniedHandler
 import pers.acp.spring.boot.enums.ResponseCode
-import pers.acp.spring.boot.vo.ErrorVO
+import pers.acp.spring.boot.vo.ErrorVo
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -20,7 +20,7 @@ class AuthAccessDeniedHandler(private val objectMapper: ObjectMapper) : AccessDe
 
     @Throws(IOException::class)
     override fun handle(request: HttpServletRequest, response: HttpServletResponse, accessDeniedException: AccessDeniedException) {
-        val errorVO = ErrorVO(
+        val errorVO = ErrorVo(
                 code = ResponseCode.AuthError.value,
                 error = "权限不足",
                 errorDescription = "权限不足"

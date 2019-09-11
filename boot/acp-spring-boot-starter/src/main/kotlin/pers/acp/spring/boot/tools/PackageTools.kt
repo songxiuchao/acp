@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonProperties
 import org.springframework.core.env.Environment
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import pers.acp.core.CommonTools
-import pers.acp.spring.boot.vo.ErrorVO
+import pers.acp.spring.boot.vo.ErrorVo
 import pers.acp.spring.boot.enums.ResponseCode
 
 /**
@@ -60,7 +60,7 @@ object PackageTools {
      * @return 响应报文JSON对象
      */
     @JvmStatic
-    fun buildErrorResponsePackage(responseCode: ResponseCode, msg: String?): ErrorVO {
+    fun buildErrorResponsePackage(responseCode: ResponseCode, msg: String?): ErrorVo {
         var message = msg
         if (CommonTools.isNullStr(message)) {
             message = responseCode.description
@@ -76,8 +76,8 @@ object PackageTools {
      * @return 响应报文JSON对象
      */
     @JvmStatic
-    fun buildErrorResponsePackage(code: Int, msg: String?): ErrorVO {
-        val errorVO = ErrorVO()
+    fun buildErrorResponsePackage(code: Int, msg: String?): ErrorVo {
+        val errorVO = ErrorVo()
         errorVO.code = code
         errorVO.error = msg
         errorVO.errorDescription = msg

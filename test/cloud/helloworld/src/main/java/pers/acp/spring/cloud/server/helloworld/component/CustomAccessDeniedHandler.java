@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-import pers.acp.spring.boot.vo.ErrorVO;
+import pers.acp.spring.boot.vo.ErrorVo;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ErrorVO errorVO = new ErrorVO();
+        ErrorVo errorVO = new ErrorVo();
         errorVO.setError("权限不足");
         errorVO.setErrorDescription("权限不足");
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
