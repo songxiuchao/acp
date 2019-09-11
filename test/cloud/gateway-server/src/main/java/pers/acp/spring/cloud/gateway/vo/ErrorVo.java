@@ -4,7 +4,7 @@ package pers.acp.spring.cloud.gateway.vo;
  * @author zhang by 27/12/2018 13:07
  * @since JDK 11
  */
-public class ErrorVO {
+public class ErrorVo {
 
     public String getError() {
         return error;
