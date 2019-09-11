@@ -6,7 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import pers.acp.spring.boot.enums.ResponseCode
-import pers.acp.spring.boot.vo.ErrorVO
+import pers.acp.spring.boot.vo.ErrorVo
 
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
@@ -21,7 +21,7 @@ class AuthExceptionEntryPoint(private val objectMapper: ObjectMapper) : Authenti
 
     @Throws(IOException::class, ServletException::class)
     override fun commence(request: HttpServletRequest, response: HttpServletResponse, authException: AuthenticationException) {
-        val errorVO = ErrorVO(
+        val errorVO = ErrorVo(
                 code = ResponseCode.AuthError.value,
                 error = "权限验证失败",
                 errorDescription = "权限验证失败"
