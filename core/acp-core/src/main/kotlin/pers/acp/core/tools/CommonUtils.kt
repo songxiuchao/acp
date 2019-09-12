@@ -553,7 +553,7 @@ object CommonUtils {
      * @return 协程任务 Deferred
      */
     fun executeTaskAsync(task: BaseAsyncTask) =
-            GlobalScope.async {
+            GlobalScope.async(Dispatchers.Unconfined) {
                 task.doExecute()
             }
 
@@ -564,7 +564,7 @@ object CommonUtils {
      * @return 协程任务 Deferred
      */
     fun executeTaskAsyncLazy(task: BaseAsyncTask) =
-            GlobalScope.async(start = CoroutineStart.LAZY) {
+            GlobalScope.async(context = Dispatchers.Unconfined, start = CoroutineStart.LAZY) {
                 task.doExecute()
             }
 
@@ -683,7 +683,7 @@ object CommonUtils {
             if (waitTime != null) {
                 time = waitTime
             }
-            GlobalScope.launch {
+            GlobalScope.launch(Dispatchers.Unconfined) {
                 log.info("ready delete file [" + file.absolutePath + "],waiting " + time / 1000 + " seconds")
                 delay(deleteFileWaitTime)
                 doDeleteFileOrDir(file)
