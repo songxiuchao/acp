@@ -3,6 +3,7 @@
 > - [Upgrade] 升级 Spring Boot 至 2.1.8.RELEASE
 > - [Upgrade] acp-spring-cloud-starter 中增加配置类 AcpCloudMethodSecurityConfig，方法上 @PreAuthorize / @PostAuthorize 注解支持表达式 #oauth2.hasScope
 > - [Upgrade] core 中删除 acp-core-orm 模块
+> - [Upgrade] 修改异步任务，默认使用无限制协程 Dispatchers.Unconfined
 > - [Upgrade] 升级依赖项
 >   - netty to "4.1.39.Final"
 >   - kotlinx-coroutines-core to "1.3.1"
