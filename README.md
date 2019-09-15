@@ -6,7 +6,7 @@
 
 ## 相关组件版本及官方文档
 - [Spring Boot 2.1.8.RELEASE](https://projects.spring.io/spring-boot)
-- [Spring Cloud Greenwich.SR2](http://projects.spring.io/spring-cloud)
+- [Spring Cloud Greenwich.SR3](http://projects.spring.io/spring-cloud)
 
 ## 技术栈
 - joda-time
