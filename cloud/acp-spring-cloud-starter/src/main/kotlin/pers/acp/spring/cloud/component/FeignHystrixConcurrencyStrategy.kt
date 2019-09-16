@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
  * @author zhangbin by 12/04/2018 14:28
  * @since JDK 11
  */
-class FeignHystrixConcurrencyStrategy() : HystrixConcurrencyStrategy() {
+class FeignHystrixConcurrencyStrategy : HystrixConcurrencyStrategy() {
 
     private val log: LogFactory = LogFactory.getInstance(this.javaClass)
 
@@ -67,7 +67,7 @@ class FeignHystrixConcurrencyStrategy() : HystrixConcurrencyStrategy() {
     }
 
     override fun <T> wrapCallable(callable: Callable<T>): Callable<T> =
-            WrappedCallable(callable, RequestContextHolder.getRequestAttributes()!!)
+            WrappedCallable(callable, RequestContextHolder.getRequestAttributes())
 
     override fun getThreadPool(threadPoolKey: HystrixThreadPoolKey,
                                corePoolSize: HystrixProperty<Int>,
@@ -85,7 +85,7 @@ class FeignHystrixConcurrencyStrategy() : HystrixConcurrencyStrategy() {
     override fun <T> getRequestVariable(rv: HystrixRequestVariableLifecycle<T>): HystrixRequestVariable<T> =
             this.delegate!!.getRequestVariable(rv)
 
-    private class WrappedCallable<T>(private val target: Callable<T>, private val requestAttributes: RequestAttributes) : Callable<T> {
+    private class WrappedCallable<T>(private val target: Callable<T>, private val requestAttributes: RequestAttributes?) : Callable<T> {
 
         @Throws(Exception::class)
         override fun call(): T {
