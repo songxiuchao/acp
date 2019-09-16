@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
  * @author zhangbin by 12/04/2018 14:28
  * @since JDK 11
  */
-class FeignHystrixConcurrencyStrategy() : HystrixConcurrencyStrategy() {
+class FeignHystrixConcurrencyStrategy : HystrixConcurrencyStrategy() {
 
     private val log: LogFactory = LogFactory.getInstance(this.javaClass)
 
