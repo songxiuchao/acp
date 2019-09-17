@@ -10,6 +10,7 @@
 >   - kotlinx-coroutines-core to "1.3.1"
 >   - commons-codec to "1.12"
 >   - slf4j to "1.7.28"
+> - [Fix] 修复 feign 请求开启 hystrix 时，出现 kotlin null 异常的问题
 ##### v6.1.5
 > - [Upgrade] 升级 gradle 至 5.6.2
 > - [Upgrade] 优化 acp-file 中 Excel 处理
