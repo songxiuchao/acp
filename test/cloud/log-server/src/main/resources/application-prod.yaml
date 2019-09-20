@@ -1,0 +1,84 @@
+debug: false
+server:
+  address: 127.0.0.1
+  port: 8780
+# ===============================
+# = Log To File Config
+# ===============================
+logging:
+  path: logs/log-server
+  pattern:
+    file: '[%date{yyyy-MM-dd HH:mm:ss.SSS}] [ %-5level] [%thread] %logger{96} [%X{lineno}] - %msg%n'
+  file: ${logging.path}/${spring.application.name}.log
+logging.file.max-size: 5MB
+logging.file.max-history: 30
+logging.level.com.alibaba.nacos.client.naming: warn
+info:
+  instance-id: ${eureka.instance.instance-id}
+# ===============================
+# = Spring Config
+# ===============================
+spring:
+  cloud:
+    nacos:
+      discovery:
+        ip: ${server.address}
+    bus:
+      id: ${eureka.instance.instance-id}
+    stream:
+      default-binder: kafka
+      kafka:
+        binder:
+          brokers: 127.0.0.1:9092
+#      bindings:
+#        log_output:
+#          binder: kafka
+#          consumer:
+#            headerMode: raw
+#          producer:
+#            headerMode: raw
+#          # topic
+#          destination: test-log
+#          group: log-server-group
+#          content-type: application/json
+#        # 与@StreamListener注解中的value一致，是绑定的渠道名
+#        log_input:
+#          binder: kafka
+#          consumer:
+#            headerMode: raw
+#          producer:
+#            headerMode: raw
+#          # topic
+#          destination: test-log
+#          group: log-server-group
+#          content-type: application/json
+###### 多个 kafka 时配置
+#      binders:
+#        kafka1:
+#          type: kafka
+#          environment:
+#            spring:
+#              cloud:
+#                stream:
+#                  kafka:
+#                    binder:
+#                      brokers: name87:9094
+#                      zkNodes: name85:2181,name86:2181,name87:2181/kafka0101
+#        kafka2:
+#          type: kafka
+#          environment:
+#            spring:
+#              cloud:
+#                stream:
+#                  kafka:
+#                    binder:
+#                      brokers: name85:9094
+#                      zkNodes: name85:2181,name86:2181,name87:2181/kafkatest0101
+# ===============================
+# = Security Config
+# ===============================
+security:
+  oauth2:
+    client:
+      client-id: client
+      client-secret: client

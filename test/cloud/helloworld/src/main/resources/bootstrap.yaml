@@ -1,0 +1,101 @@
+server:
+  tomcat:
+    max-threads: 1000
+    uri-encoding: UTF-8
+spring:
+  profiles:
+    active: prod
+  application:
+    name: atomic-helloworld
+  thymeleaf:
+    cache: false
+    # ==== zipkin 链路监控，需要时放开注释
+  zipkin:
+    #    base-url: http://localhost:9411/
+    sender:
+      type: kafka
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 039ae895-9974-42b7-aee9-cb882c24d6fa
+        cluster-name: ${spring.profiles.active}
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        namespace: 039ae895-9974-42b7-aee9-cb882c24d6fa
+        cluster-name: ${spring.profiles.active}
+        group: ${spring.profiles.active}
+info:
+  version: 1.0.0
+  app-name: ${spring.application.name}
+  tags:
+    environment: ${spring.profiles.active}
+  build:
+    author: zhangbin
+    active: ${spring.profiles.active}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+# ===============================
+# = Ribbon Config
+# ===============================
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+        loggerLevel: full
+  httpclient:
+    enabled: false
+    connection-timeout: ${feign.client.config.default.connectTimeout}
+    max-connections: 1000
+    time-to-live: 900
+    time-to-live-unit: seconds
+    follow-redirects: true
+  okhttp:
+    enabled: true
+  hystrix:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 11000
+ribbon:
+  # ribbon 缓存刷新时间
+  ServerListRefreshInterval: 3000
+  ReadTimeout: ${hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds}
+  ConnectTimeout: ${hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds}
+  okhttp:
+    enabled: true
+  eager-load:
+    enabled: true
+    clients: atomic-hello,atomic-world
+# ===============================
+# = Security Config
+# ===============================
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://server-oauth2/oauth/check_token
+# ===============================
+# = ACP Config
+# ===============================
+acp:
+  cloud:
+    log-server:
+      client:
+        enabled: true
+        log-type: HELLOWORLD
+    oauth:
+      resource-server-permit-all-path:
+        - /customer

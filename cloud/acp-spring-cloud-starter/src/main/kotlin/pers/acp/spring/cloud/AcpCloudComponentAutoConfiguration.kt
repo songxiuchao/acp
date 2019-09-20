@@ -1,12 +1,10 @@
 package pers.acp.spring.cloud
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategy
 import feign.RequestInterceptor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.*
 import org.springframework.http.HttpHeaders
 import org.springframework.web.context.request.RequestContextHolder
@@ -55,7 +53,6 @@ class AcpCloudComponentAutoConfiguration {
                                    objectMapper: ObjectMapper) = RestControllerRepeatAspect(distributedLock, objectMapper)
 
     @Bean
-    @ConditionalOnMissingBean(HystrixConcurrencyStrategy::class)
     fun feignHystrixConcurrencyStrategy() = FeignHystrixConcurrencyStrategy()
 
     @Bean

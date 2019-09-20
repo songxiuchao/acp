@@ -1,0 +1,49 @@
+server:
+  tomcat:
+    max-threads: 1000
+    uri-encoding: UTF-8
+spring:
+  profiles:
+    active: prod
+  application:
+    name: server-oauth2
+  thymeleaf:
+    cache: false
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 039ae895-9974-42b7-aee9-cb882c24d6fa
+        cluster-name: ${spring.profiles.active}
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        namespace: 039ae895-9974-42b7-aee9-cb882c24d6fa
+        cluster-name: ${spring.profiles.active}
+        group: ${spring.profiles.active}
+info:
+  version: 1.0.0
+  app-name: ${spring.application.name}
+  tags:
+    environment: ${spring.profiles.active}
+  build:
+    author: zhangbin
+    active: ${spring.profiles.active}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+# ===============================
+# = ACP Config
+# ===============================
+acp:
+  cloud:
+    oauth:
+      oauth-server: true
+    log-server:
+      client:
+        enabled: true
