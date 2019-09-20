@@ -22,7 +22,7 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
-        namespace: 039ae895-9974-42b7-aee9-cb882c24d6fa
+        namespace: fe8a0801-488d-4b3a-9a54-6ca4f2262b6c
         cluster-name: ${spring.profiles.active}
 info:
   version: 1.0.0
