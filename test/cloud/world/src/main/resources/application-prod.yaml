@@ -1,24 +1,18 @@
 debug: false
 server:
   address: 127.0.0.1
-  port: 9003
+  port: 9002
 # ===============================
 # = Log To File Config
 # ===============================
 logging:
-  path: logs/helloworld
+  path: logs/world
   pattern:
     file: '[%date{yyyy-MM-dd HH:mm:ss.SSS}] [ %-5level] [%thread] %logger{96} [%X{lineno}] - %msg%n'
   file: ${logging.path}/${spring.application.name}.log
 logging.file.max-size: 5MB
 logging.file.max-history: 30
-# ===============================
-# = Eureka Config
-# ===============================
-eureka:
-  instance:
-    ip-address: ${server.address}
-    instance-id: ${spring.application.name}(${server.address}:${server.port}):v${info.version}:${spring.profiles.active}
+logging.level.com.alibaba.nacos.client.naming: warn
 info:
   instance-id: ${eureka.instance.instance-id}
 # ===============================
@@ -29,9 +23,13 @@ spring:
     sampler:
       probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
   cloud:
+    nacos:
+      discovery:
+        ip: ${server.address}
     bus:
       id: ${eureka.instance.instance-id}
     stream:
+      default-binder: kafka
       kafka:
         binder:
           brokers: 127.0.0.1:9092

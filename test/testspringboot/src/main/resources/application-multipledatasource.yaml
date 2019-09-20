@@ -12,6 +12,7 @@ logging:
   file: ${logging.path}/${spring.application.name}.log
 logging.file.max-size: 5MB
 logging.file.max-history: 30
+logging.level.com.alibaba.nacos.client.naming: warn
 # ===============================
 # = Spring Config
 # ===============================
@@ -25,22 +26,34 @@ spring:
       ddl-auto: update
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-    properties:
-      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
   # ===============================
   # = DATA SOURCE
   # ===============================
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
-    username: root
-    password: test
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
+    primary:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
+      username: root
+      password: test
+      driver-class-name: com.mysql.cj.jdbc.Driver
       maximum-pool-size: 5
       minimum-idle: 5
-      pool-name: SpringBootHikariCP
+      pool-name: SpringBootHikariCPPrimary
       max-lifetime: 1765000
       read-only: false
+      data-source-properties.dialect: org.hibernate.dialect.MySQL8Dialect
+      data-source-properties.scanpackage: pers.acp.test.application.entity.primary
+    pg:
+      jdbc-url: jdbc:postgresql://localhost:5432/test?autoReconnect=true&zeroDateTimeBehavior=convertToNull
+      username: postgres
+      password: test
+      driver-class-name: org.postgresql.Driver
+      maximum-pool-size: 5
+      minimum-idle: 5
+      pool-name: SpringBootHikariCPPG
+      max-lifetime: 1765000
+      read-only: false
+      data-source-properties.dialect: org.hibernate.dialect.PostgreSQLDialect
+      data-source-properties.scanpackage:
   data:
     jpa:
       repositories:
