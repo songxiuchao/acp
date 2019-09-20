@@ -25,7 +25,7 @@ spring:
       discovery:
         ip: ${server.address}
     bus:
-      id: ${eureka.instance.instance-id}
+      id: ${spring.application.name}:${server.address}:${server.port}:v${info.version}:${spring.profiles.active}
     stream:
       default-binder: kafka
       kafka:
