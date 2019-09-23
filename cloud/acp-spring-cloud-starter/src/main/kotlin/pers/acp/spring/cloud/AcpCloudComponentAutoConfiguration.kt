@@ -11,7 +11,6 @@ import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import pers.acp.core.CommonTools
 import pers.acp.spring.cloud.aspect.RestControllerRepeatAspect
-import pers.acp.spring.cloud.component.FeignHystrixConcurrencyStrategy
 import pers.acp.spring.cloud.error.AuthAccessDeniedHandler
 import pers.acp.spring.cloud.error.AuthExceptionEntryPoint
 import pers.acp.spring.cloud.lock.DistributedLock
@@ -51,9 +50,6 @@ class AcpCloudComponentAutoConfiguration {
     @Autowired(required = false)
     fun restControllerRepeatAspect(distributedLock: DistributedLock,
                                    objectMapper: ObjectMapper) = RestControllerRepeatAspect(distributedLock, objectMapper)
-
-    @Bean
-    fun feignHystrixConcurrencyStrategy() = FeignHystrixConcurrencyStrategy()
 
     @Bean
     fun authAccessDeniedHandler(objectMapper: ObjectMapper) = AuthAccessDeniedHandler(objectMapper)
