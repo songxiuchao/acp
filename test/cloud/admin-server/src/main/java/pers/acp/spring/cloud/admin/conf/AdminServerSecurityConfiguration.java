@@ -39,13 +39,10 @@ public class AdminServerSecurityConfiguration extends WebSecurityConfigurerAdapt
                         adminContextPath + "/instances/**",
                         adminContextPath + "/actuator",
                         adminContextPath + "/actuator/**",
-                        adminContextPath + "/hystrix",
-                        adminContextPath + "/hystrix/**",
                         adminContextPath + "/login",
                         adminContextPath + "/error",
                         adminContextPath + "/webjars/**",
                         adminContextPath + "/notifications/**",
-                        adminContextPath + "/turbine.stream",
                         adminContextPath + "/proxy.stream").permitAll()
                 .anyRequest().authenticated()
                 .and()
