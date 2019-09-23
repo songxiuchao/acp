@@ -20,6 +20,8 @@
 - flying-saucer-pdf-itext5
 - swagger2
 - junit5
+- nacos
+- sentinel
 - spring-cloud
     - spring-boot
         - spring-aop
@@ -30,15 +32,10 @@
         - spring-boot-actuator
     - spring-data-redis-reactive
     - spring-boot-admin-server
-    - spring-cloud-netflix-eureka-server
-    - spring-cloud-netflix-eureka-client
     - spring-cloud-netflix-hystrix
-    - spring-cloud-netflix-dashboard
-    - spring-cloud-netflix-turbine
     - spring-cloud-gateway
     - spring-cloud-stream-binder-kafka
     - spring-cloud-openfeign
-    - spring-cloud-sleuth-zipkin
     - spring-cloud-bus-kafka
     
 ## 一、环境要求及开发语言
@@ -263,6 +260,7 @@ acp:
 | ./server.sh start     | 启动应用                |
 | ./server.sh stop      | 停止应用                |
 | ./server.sh restart   | 重启应用                |
+
 ## 五、开发 SpringCloud 应用
 引入 cloud 下相应模块包，demo 位于 cloud 下
 ### （一）模块说明
@@ -271,30 +269,12 @@ acp:
 - （1）自定义程序入口注解
 - （2）oauth2.0 资源服务配置、客户端服务配置及远程单点认证机制
 - （3）自定义 feign 并发策略、自定义 feign 请求拦截
-- （4）hystrix 断路器
-- （5）封装日志服务客户端，发送日志消息至 kafka
-- （6）zipkin 链路追踪客户端
-- （7）自定义 PropertySourceLocator，实现自定义配置中心客户端
+- （4）封装日志服务客户端，发送日志消息至 kafka
 ##### 2. test:cloud:admin-server 
-###### 2.1 可视化监控，监控服务状态、信息聚合
-|          url          |  描述                   |
-| --------------------- | ----------------------- | 
-| /                     | 后台监控管理首页        |
-| /hystrix              | 断路信息监控            |
-###### 2.2 zipkin 链路追踪
-- 服务端
-> 从SpringCloud2.0 以后，官方已经不支持自定义服务，官方只提供编译好的jar包供用户使用。可以自行使用多种方式部署zipkin服务，并采用elasticsearch作为zipkin的数据存储器。
-- 客户端（cloud中其他需要监控链路的服务，admin-server、eureka-server、gateway-server 除外）
-> - 依赖 cloud:acp-spring-cloud-starter
-##### 3. test:cloud:eureka-server 
-服务注册发现
-
-|          url          |  描述                   |
-| --------------------- | ----------------------- | 
-| /                     | 服务状态监控界面        |
-##### 4. test:cloud:gateway-server 
+监控界面
+##### 3. test:cloud:gateway-server 
 网关服务
-##### 5. test:cloud:oauth-server 
+##### 4. test:cloud:oauth-server 
 统一认证服务：token 存储于 Redis，user 及 client 信息可扩展配置
 
 |          url          |  描述                   |
@@ -311,51 +291,46 @@ acp:
 
 > 注：使用 authorization_code 方式时，认证请求时需要直接访问 oauth-server 不能通过 gateway
 
-##### 6. test:cloud:config-server
-配置服务，统一配置中心，从数据库读取配置信息
-##### 7. test:cloud:log-server
+##### 5. test:cloud:log-server
 日志服务，使用 kafka 作为日志消息队列
-##### 8. test:cloud:helloworld 
+##### 6. test:cloud:helloworld 
 原子服务，分别调用 hello 和 world
-##### 9. test:cloud:hello 
+##### 7. test:cloud:hello 
 原子服务
-##### 10. test:cloud:world 
+##### 8. test:cloud:world 
 原子服务
 ### （二）基础中间件环境搭建
-基础中间件包括：redis、zookeeper、kafka、kafka-manager、elasticsearch、kibana、logstash、zipkin、zipkin-dependencies、zoonavigator-api、zoonavigator-web、prometheus、grafana、setup_grafana_datasource
+基础中间件包括：redis、zookeeper、kafka、kafka-manager、elasticsearch、kibana、logstash、zoonavigator-api、zoonavigator-web、prometheus、grafana、setup_grafana_datasource
 > - 启动服务
 > 
 > 命令模式进入dockerfile目录，执行启动命令
 > ```bash
-> docker-compose -f docker-compose-base.yml up -d
+> docker-compose -f docker-compose-base.yaml up -d
 > ```
 > - 停止服务
 > 
 > 命令模式进入dockerfile目录，执行启动命令
 > ```bash
-> docker-compose -f docker-compose-base.yml stop
+> docker-compose -f docker-compose-base.yaml stop
 > ```
 > - 停止并删除容器实例
 > 
 > 命令模式进入dockerfile目录，执行启动命令
 > ```bash
-> docker-compose -f docker-compose-base.yml down
+> docker-compose -f docker-compose-base.yaml down
 > ```
-> - docker-compose 文件：cloud/dockerfile/docker-compose-base.yml
+> - docker-compose 文件：cloud/dockerfile/docker-compose-base.yaml
 
-##### 1. zipkin
-http://127.0.0.1:9411
-![Architecture diagram](doc/images/zipkin.png)
-##### 2. kafka-manager
+##### 1. kafka-manager
 http://127.0.0.1:9000
 ![Architecture diagram](doc/images/kafka-manager.png)
-##### 3. zoonavigator
+##### 2. zoonavigator
 http://127.0.0.1:8004
 ![Architecture diagram](doc/images/zoonavigator.png)
-##### 4. prometheus
+##### 3. prometheus
 http://127.0.0.1:9090
 ![Architecture diagram](doc/images/prometheus.png)
-##### 5. kibana
+##### 4. kibana
 http://127.0.0.1:5601
 ![Architecture diagram](doc/images/kibana.png)
 ### （三）组件开发
@@ -366,20 +341,11 @@ http://127.0.0.1:5601
 > - （1）无需改动代码
 > - （2）修改 yml 配置即可
 ![Architecture diagram](doc/images/admin-server.png)
-##### 2. 服务注册发现（支持高可用eureka集群）
-> - test:cloud:eureka-server
-> - （1）无需改动代码
-> - （2）修改 yml 配置即可
-##### 3. 统一配置管理
-> - test:cloud:config-server
-> - （1）依赖 cloud:acp-spring-cloud-starter
-> - （2）额外功能根据实际需求自定义
-> - （3）修改 yml 配置即可
-##### 4. 网关服务
+##### 2. 网关服务
 > - test:cloud:gateway-server
 > - （1）需自定义限流策略（需依赖 Redis）
 > - （2）修改 yml 进行路由配置；若没有 Redis 请不要配置限流策略
-##### 5. 认证服务
+##### 3. 认证服务
 > - test:cloud:oauth-server
 > - （1）依赖 cloud:acp-spring-cloud-starter，按需依赖 org.springframework.boot:spring-boot-starter-data-redis
 > - （2）入口类增加注解 @AcpCloudOauthServerApplication
@@ -394,7 +360,7 @@ http://127.0.0.1:5601
 > - （4）需定制用户（信息、角色、权限）初始化和查询方式 SecurityUserDetailsService，配置进 AuthorizationServerConfiguration
 > - （5）需定制客户端（信息）初始化和查询方式 SecurityClientDetailsService，配置进 AuthorizationServerConfiguration
 > - （6）token 持久化方式为 Redis，配置在 AuthorizationServerConfiguration；若没有 Redis 可根据注释持久化到内存，也可自行开发其他持久化方式
-##### 6. 日志服务（依赖 kafka）
+##### 4. 日志服务（依赖 kafka）
 > - （1）依赖 cloud:acp-spring-cloud-starter
 > - （2）入口类增加注解 @AcpCloudAtomApplication
 > - （3）如需自定义日志消息处理，新增Bean实现 pers.acp.spring.cloud.log.consumer.LogProcess 接口，并且增加 @Primary 注解
@@ -409,7 +375,7 @@ http://127.0.0.1:5601
 >       log-server:
 >         enabled: true #是否开启日志服务
 >   ```
-##### 7. 原子服务
+##### 5. 原子服务
 > - （1）依赖 cloud:acp-spring-cloud-starter
 > - （2）参考 四、开发 SpringBoot 应用
 > - （3）原子服务即 SpringBoot 应用，引入额外的 spring-cloud 包，并在 yml 中增加相应配置
