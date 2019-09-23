@@ -286,17 +286,6 @@ acp:
 > 从SpringCloud2.0 以后，官方已经不支持自定义服务，官方只提供编译好的jar包供用户使用。可以自行使用多种方式部署zipkin服务，并采用elasticsearch作为zipkin的数据存储器。
 - 客户端（cloud中其他需要监控链路的服务，admin-server、eureka-server、gateway-server 除外）
 > - 依赖 cloud:acp-spring-cloud-starter
-> - 增加 zipkin 相关配置
-> ```yaml
-> spring:
->   zipkin:
->     # base-url: http://localhost:9411/
->     sender:
->       type: kafka
->   sleuth:
->     sampler:
->       probability: 1 #样本采集量，默认为0.1，为了测试这里修改为1，正式环境一般使用默认值。
-> ```
 ##### 3. test:cloud:eureka-server 
 服务注册发现
 

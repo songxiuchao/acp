@@ -5,6 +5,7 @@
 > - [Upgrade] acp-spring-cloud-starter 中去除 spring-cloud-config 中心相关配置，调整 feignHystrixConcurrencyStrategy 实例化策略
 > - [Upgrade] Cloud 中删除 eureka-server 和 config-server
 > - [Upgrade] 修改 Cloud 中各服务的配置文件，增加 nacos 相关配置，规范文件扩展名
+> - [Upgrade] Cloud Hystrix 更换为 Sentinel
 ##### v6.1.6
 > - [Upgrade] 升级 Spring Boot 至 2.1.8.RELEASE
 > - [Upgrade] 升级 Spring Cloud 至 Greenwich.SR3

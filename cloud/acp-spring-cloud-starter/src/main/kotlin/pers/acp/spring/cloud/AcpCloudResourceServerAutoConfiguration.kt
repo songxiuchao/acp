@@ -168,7 +168,6 @@ constructor(private val acpCloudOauthConfiguration: AcpCloudOauthConfiguration,
             permitAll.add("$contextPath/swagger-ui.html")
             permitAll.add("$contextPath/webjars/**")
             permitAll.add("$contextPath/swagger-resources/configuration/ui")
-            permitAll.add("$contextPath/hystrix.stream")
             permitAll.add("$contextPath/oauth/authorize")
             permitAll.add("$contextPath/oauth/token")
             permitAll.add("$contextPath/oauth/error")
