@@ -1,0 +1,91 @@
+server:
+  tomcat:
+    max-threads: 1000
+    uri-encoding: UTF-8
+spring:
+  profiles:
+    active: prod
+  application:
+    name: atomic-world
+  thymeleaf:
+    cache: false
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: fe8a0801-488d-4b3a-9a54-6ca4f2262b6c
+        cluster-name: ${spring.profiles.active}
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        cluster-name: ${spring.cloud.nacos.discovery.cluster-name}
+        group: ${spring.profiles.active}
+info:
+  version: 1.0.0
+  app-name: ${spring.application.name}
+  ip-address: 127.0.0.1
+  server-port: 9002
+  tags:
+    environment: ${spring.profiles.active}
+  build:
+    author: zhangbin
+    active: ${spring.profiles.active}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+# ===============================
+# = Ribbon Config
+# ===============================
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+        loggerLevel: full
+  httpclient:
+    enabled: false
+    connection-timeout: ${feign.client.config.default.connectTimeout}
+    max-connections: 1000
+    time-to-live: 900
+    time-to-live-unit: seconds
+    follow-redirects: true
+  okhttp:
+    enabled: true
+  sentinel:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 11000
+ribbon:
+  # ribbon 缓存刷新时间
+  ServerListRefreshInterval: 3000
+  ReadTimeout: 11000
+  ConnectTimeout: 11000
+  okhttp:
+    enabled: true
+# ===============================
+# = Security Config
+# ===============================
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://server-oauth2/oauth/check_token
+# ===============================
+# = ACP Config
+# ===============================
+acp:
+  cloud:
+    log-server:
+      client:
+        enabled: true

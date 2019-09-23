@@ -45,10 +45,10 @@ public class HelloWorldController {
 
     @PostMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Object> helloWorld(@RequestBody String content) throws ServerException {
-        throw new ServerException("测试异常");
-//        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content) + "; properties=" + properties;
-//        logAdapter.info(respon);
-//        return ResponseEntity.ok(respon);
+//        throw new ServerException("测试异常");
+        String respon = helloServer.fromClient(content) + ";" + worldServer.fromClient(content) + "; properties=" + properties;
+        logAdapter.info(respon);
+        return ResponseEntity.ok(respon);
     }
 
     @GetMapping(value = "/helloworld", produces = MediaType.TEXT_PLAIN_VALUE)

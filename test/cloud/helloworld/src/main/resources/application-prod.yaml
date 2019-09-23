@@ -1,0 +1,36 @@
+server:
+  address: 127.0.0.1
+  port: 9003
+# ===============================
+# = Log To File Config
+# ===============================
+logging:
+  path: logs/helloworld
+  pattern:
+    file: '[%date{yyyy-MM-dd HH:mm:ss.SSS}] [ %-5level] [%thread] %logger{96} [%X{lineno}] - %msg%n'
+  file: ${logging.path}/${spring.application.name}.log
+logging.file.max-size: 5MB
+logging.file.max-history: 30
+logging.level.com.alibaba.nacos.client.naming: warn
+# ===============================
+# = Spring Config
+# ===============================
+spring:
+  cloud:
+    nacos:
+      discovery:
+        ip: ${server.address}
+    bus:
+      id: ${spring.application.name}:${server.address}:${server.port}:v${info.version}:${spring.profiles.active}
+    stream:
+      kafka:
+        binder:
+          brokers: 127.0.0.1:9092
+# ===============================
+# = Security Config
+# ===============================
+security:
+  oauth2:
+    client:
+      client-id: client
+      client-secret: client
