@@ -17,4 +17,5 @@ dependencies {
     compile project(":core:acp-ftp")
     compile project(":boot:acp-spring-boot-starter")
     kapt "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }

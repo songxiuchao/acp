@@ -18,6 +18,7 @@ dependencyManagement {
 dependencies {
     compile project(":boot:acp-spring-boot-starter")
     kapt "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     compile "org.springframework.cloud:spring-cloud-starter-oauth2"
     compile "org.springframework.cloud:spring-cloud-starter-stream-kafka"
