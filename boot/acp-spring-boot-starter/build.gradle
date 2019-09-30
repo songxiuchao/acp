@@ -15,11 +15,13 @@ dependencyManagement {
 dependencies {
     compile project(":core:acp-client")
 
+    kapt "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
     // spring boot
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-aop"
-    kapt "org.springframework.boot:spring-boot-configuration-processor"
 
     // Swagger2
     compile "io.springfox:springfox-swagger2:$versions.swagger"
