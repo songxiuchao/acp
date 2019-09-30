@@ -12,7 +12,7 @@ services:
   #    command: redis-server --requirepass ${pwd} --notify-keyspace-events Eglx
 
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: zookeeper
     hostname: zookeeper
     container_name: zookeeper
     restart: always
