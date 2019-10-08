@@ -101,39 +101,31 @@ ext {
 ##### 1. acp:acp-core 
 > - 核心包
 > - 封装了常用工具类，包括jdbc、配置文件解析（xml、properties）、加解密算法、线程池、定时任务、四则运算、json处理、字符串处理
-##### 2. acp:acp-core-orm
-> - 核心扩展包
-> - 依赖 acp:acp-core
-> - 自定义 ORM 组件；以 hibernate 的思想自己封装的组件，仅供娱乐，建议还是使用hibernate
-##### 3. acp:acp-packet
+##### 2. acp:acp-packet
 > - 通讯打解包组件
 > - 依赖 acp-core
 > - 封装了http数据包、iso8583报文、xml报文的打解包操作
-##### 4. acp:acp-client
+##### 3. acp:acp-client
 > - 客户端组件包
 > - 依赖 acp-packet
 > - 封装了http、https、tcp、udp的客户端
-##### 5. acp:acp-ftp
+##### 4. acp:acp-ftp
 > - 应用扩展组件
 > - 依赖 acp-core
 > - 封装支持 ftp/sftp 服务端及客户端
-##### 6. acp:acp-webservice
-> - 应用扩展组件
-> - 依赖 acp-core
-> - 封装支持 soap/webservice 服务端和客户端，以及soap消息的构建、解析
-##### 7. acp:acp-file
+##### 5. acp:acp-file
 > - 文件处理组件包
 > - 依赖 acp-core
 > - 封装了excel、pdf、word、html、freemarker模板文件的读写转换等操作
-##### 8. acp:acp-message
+##### 6. acp:acp-message
 > - 消息处理组件包
 > - 依赖 acp-core
 > - 封装了发送email
-##### 9. boot:acp-spring-boot-starter
+##### 7. boot:acp-spring-boot-starter
 > - springboot 应用扩展组件
 > - 依赖 acp-client
 > - 在 springboot 基础上整合大量底层功能，扩展支持 tcp、udp 等协议服务端配置；同时封装定时任务
-##### 10. boot:acp-spring-boot-starter-ftp
+##### 8. boot:acp-spring-boot-starter-ftp
 > - springboot 应用扩展组件
 > - 依赖 acp-spring-boot-starter
 > - 扩展支持 ftp、sftp 等协议服务端自动配置
