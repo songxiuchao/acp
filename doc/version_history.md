@@ -1,4 +1,10 @@
 ## 版本更新记录
+##### v6.2.1
+> - [Upgrade] 升级 Spring Boot 至 2.1.9.RELEASE
+> - [Upgrade] 升级依赖项
+>   - joda time to "2.10.4"
+>   - kotlinx-coroutines-core to "1.3.2"
+>   - Postgresql to "42.2.8"
 ##### v6.2.0
 > - [Upgrade] Cloud 服务注册发现中心更换为 Nacos
 > - [Upgrade] Cloud 配置更换为 Nacos
