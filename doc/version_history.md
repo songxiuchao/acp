@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v6.x
+> - [Upgrade] 修改 build.gradle，支持 junit5 自动化测试
 ##### v6.2.1
 > - [Upgrade] 升级 Spring Boot 至 2.1.9.RELEASE
 > - [Upgrade] 升级依赖项
