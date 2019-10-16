@@ -89,8 +89,9 @@ ext {
 ## 三、工程说明
 - doc目录下的files文件夹，当需要用到时放到打包后的jar同目录下即可
 - 工程全局默认使用 UTF-8 字符集
-- acp 目录下为所有核心模块
-- cloud 目录下为基于 Spring Cloud 的一整套组件模块
+- core 目录下为核心组件模块
+- boot 目录下为基于 Spring Boot 的自动配置组件模块
+- cloud 目录下为基于 Spring Cloud 的自动配置组件模块
 - gradle 目录下为相关配置文件
 - test 目录下为测试工程
 - swagger url : /swagger-ui.html

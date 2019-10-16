@@ -2,7 +2,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import okhttp3.Call;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
 import pers.acp.client.exceptions.HttpException;
 import pers.acp.client.http.HttpCallBack;
 import pers.acp.client.http.HttpClientBuilder;
@@ -19,7 +18,6 @@ import java.util.Map;
  */
 class TestHttp {
 
-    @Test
     void doTest() {
         try {
             doPost();
@@ -33,8 +31,7 @@ class TestHttp {
         }
     }
 
-    @Test
-    void doPost() throws HttpException {
+    private void doPost() throws HttpException {
         Map<String, String> map = new HashMap<>();
         map.put("grant_type", "client_credentials");
         map.put("client_id", "test");
@@ -49,8 +46,7 @@ class TestHttp {
         System.out.println("doPost -----> " + (System.currentTimeMillis() - begin));
     }
 
-    @Test
-    void doPostAsync() throws HttpException, InterruptedException {
+    private void doPostAsync() throws HttpException, InterruptedException {
         Map<String, String> map = new HashMap<>();
         map.put("grant_type", "client_credentials");
         map.put("client_id", "test");
@@ -79,8 +75,7 @@ class TestHttp {
         Thread.sleep(5000);
     }
 
-    @Test
-    void doPostString() throws HttpException {
+    private void doPostString() throws HttpException {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode body = mapper.createObjectNode();
         body.put("param1", "尼玛");
@@ -95,8 +90,7 @@ class TestHttp {
         System.out.println("doPostString -----> " + (System.currentTimeMillis() - begin));
     }
 
-    @Test
-    void doPostBytes() throws HttpException {
+    private void doPostBytes() throws HttpException {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode body = mapper.createObjectNode();
         body.put("param1", "尼玛");
@@ -111,8 +105,7 @@ class TestHttp {
         System.out.println("doPostBytes -----> " + (System.currentTimeMillis() - begin));
     }
 
-    @Test
-    void doGet() throws HttpException {
+    private void doGet() throws HttpException {
         Map<String, String> map = new HashMap<>();
         map.put("pwd", "password");
         long begin = System.currentTimeMillis();
@@ -125,8 +118,7 @@ class TestHttp {
         System.out.println("doGet -----> " + (System.currentTimeMillis() - begin));
     }
 
-    @Test
-    void doGetHttps() throws HttpException {
+    private void doGetHttps() throws HttpException {
         long begin = System.currentTimeMillis();
         ResponseResult responseResult = new HttpClientBuilder()
                 .disableSslValidation(true)
