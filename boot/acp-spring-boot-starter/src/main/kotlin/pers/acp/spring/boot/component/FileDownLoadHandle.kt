@@ -1,5 +1,6 @@
 package pers.acp.spring.boot.component
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import pers.acp.spring.boot.exceptions.ServerException
 import pers.acp.core.CommonTools
@@ -46,7 +47,7 @@ class FileDownLoadHandle(private val logAdapter: LogAdapter) {
             filterRegex.addAll(allowPathRegexList)
         }
         if (pathFilter(filterRegex, path)) {
-            var fis: InputStream? = null
+            var fis: RandomAccessFile? = null
             var toClient: OutputStream? = null
             try {
                 val file = File(filePath)
@@ -54,18 +55,45 @@ class FileDownLoadHandle(private val logAdapter: LogAdapter) {
                     throw ServerException("the file [$filePath] is not exists")
                 }
                 val filename = file.name
-                fis = BufferedInputStream(FileInputStream(file))
-                val buffer = ByteArray(fis.available())
-                if (fis.read(buffer) == -1) {
-                    logAdapter.error("file：$filename is empty")
-                }
-                fis.close()
                 response.reset()
                 response.contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
                 response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, request.characterEncoding))
-                response.setContentLength(file.length().toInt())
+                // 解析断点续传相关信息
+                response.setHeader("Accept-Ranges", "bytes")
+                val downloadSize = file.length()
+                var fromPos: Long = 0
+                var toPos: Long = 0
+                if (request.getHeader("Range") == null) {
+                    response.setContentLengthLong(downloadSize)
+                } else {
+                    response.status = HttpStatus.PARTIAL_CONTENT.value()
+                    val bytes = request.getHeader("Range").replace("bytes=", "")
+                    val ary = bytes.split("-")
+                    fromPos = ary[0].toLong()
+                    if (ary.size == 2) {
+                        toPos = ary[1].toLong()
+                    }
+                    val size = if (toPos > fromPos) {
+                        toPos - fromPos
+                    } else {
+                        downloadSize - fromPos
+                    }
+                    response.setContentLengthLong(size)
+                }
                 toClient = BufferedOutputStream(response.outputStream)
-                toClient.write(buffer)
+                fis = RandomAccessFile(file, "rw")
+                if (fromPos > 0) {
+                    fis.seek(fromPos)
+                }
+                val buffer = ByteArray(2048)
+                var count = 0 // 当前写到客户端的大小
+                var i = fis.read(buffer)
+                while (i != -1) {
+                    toClient.write(buffer, 0, i)
+                    count += i
+                    i = fis.read(buffer)
+                }
+                fis.close()
                 toClient.flush()
                 toClient.close()
                 logAdapter.debug("download file Success:$filename")
