@@ -21,7 +21,7 @@ object TestSimple {
         testDownLoad()
 
 //        val fold = "D:\\个人\\测试ftp"
-//        val files = File(fold).listFiles()?.map { file -> file.absolutePath } ?: listOf()
+//        val files = File(fold).listFiles()?.map { file -> file.canonicalPath } ?: listOf()
 //        CommonTools.filesToZip(files, "$fold\\testzip1.zip")
 //        CommonTools.filesToZip(files, "$fold\\testzip2.zip", password = "123")
 //        CommonTools.zipToFiles("$fold\\testzip1.zip", "$fold\\unzip1")

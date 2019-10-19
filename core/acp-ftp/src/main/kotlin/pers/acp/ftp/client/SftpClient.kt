@@ -224,8 +224,8 @@ class SftpClient : BaseClient {
                 }
                 createDirectory(remotePath)
             }
-            sftp!!.put(localFile.absolutePath, fileName, ChannelSftp.RESUME)
-            log.info("file:{" + localFile.absolutePath + "} is upload successful")
+            sftp!!.put(localFile.canonicalPath, fileName, ChannelSftp.RESUME)
+            log.info("file:{" + localFile.canonicalPath + "} is upload successful")
         } catch (e: Exception) {
             log.error(e.message, e)
         } finally {
