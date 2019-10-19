@@ -16,6 +16,7 @@ import pers.acp.file.word.WordType;
 import pers.acp.core.log.LogFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public final class FileTools {
         return fileName;
     }
 
-    private static String generateExcelResultFileName(ExcelType fileType, String fileName) {
+    private static String generateExcelResultFileName(ExcelType fileType, String fileName) throws IOException {
         fileName = formatFileName(fileName);
         String nowStr = generateNowTimeString();
         String resultFile;
@@ -55,7 +56,7 @@ public final class FileTools {
         return resultFile;
     }
 
-    private static String generatePDFResultFileName(String resultFileName) {
+    private static String generatePDFResultFileName(String resultFileName) throws IOException {
         resultFileName = formatFileName(resultFileName);
         String nowStr = generateNowTimeString();
         String resultFile;
@@ -145,7 +146,7 @@ public final class FileTools {
      * @param isDelete 是否删除word文件
      * @return 相对于webRoot路径
      */
-    public static String wordToHTML(String filePath, String foldPath, String basePath, boolean isDelete) {
+    public static String wordToHTML(String filePath, String foldPath, String basePath, boolean isDelete) throws IOException {
         if (CommonTools.isNullStr(filePath)) {
             filePath = "/files/tmp/html";
         }
@@ -184,7 +185,7 @@ public final class FileTools {
      * @param fileName     目标文件名
      * @return 相对于webRoot路径
      */
-    public static String exportToWordFromTemplate(WordType wordType, String templatePath, Map<String, Object> data, String fileName) {
+    public static String exportToWordFromTemplate(WordType wordType, String templatePath, Map<String, Object> data, String fileName) throws IOException {
         fileName = formatFileName(fileName);
         String nowStr = generateNowTimeString();
         String extName;
@@ -229,7 +230,7 @@ public final class FileTools {
      * @param isHorizontal 是否为横向
      * @return 相对于webRoot的文件位置
      */
-    public static String exportToExcelByDataSetting(ExcelType fileType, boolean isHorizontal, ExcelDataSetting excelDataSetting) {
+    public static String exportToExcelByDataSetting(ExcelType fileType, boolean isHorizontal, ExcelDataSetting excelDataSetting) throws IOException {
         String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String filename = generateExcelResultFileName(fileType, null);
         ExcelService es = new ExcelService();
@@ -245,7 +246,7 @@ public final class FileTools {
      * @param fileName         目标文件名
      * @return 相对于webRoot路径
      */
-    public static String exportToExcel(ExcelType fileType, List<ExcelSheetSetting> sheetSettingList, String fileName) {
+    public static String exportToExcel(ExcelType fileType, List<ExcelSheetSetting> sheetSettingList, String fileName) throws IOException {
         String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String resultFile = generateExcelResultFileName(fileType, fileName);
         ExcelService es = new ExcelService();
@@ -262,7 +263,7 @@ public final class FileTools {
      * @param fileName     生成的文件名
      * @return 相对于webRoot路径
      */
-    public static String exportToExcel(ExcelType fileType, String templatePath, Map<String, String> data, String fileName) {
+    public static String exportToExcel(ExcelType fileType, String templatePath, Map<String, String> data, String fileName) throws IOException {
         String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String resultFile = generateExcelResultFileName(fileType, fileName);
         ExcelService es = new ExcelService();
@@ -279,7 +280,7 @@ public final class FileTools {
      * @param fileName     生成的文件名
      * @return 相对于webRoot路径
      */
-    public static String exportToExcelFromTemplate(ExcelType fileType, String templatePath, Map<String, Object> data, String fileName) {
+    public static String exportToExcelFromTemplate(ExcelType fileType, String templatePath, Map<String, Object> data, String fileName) throws IOException {
         return exportToFileFromTemplate(templatePath, data, generateExcelResultFileName(fileType, fileName));
     }
 
@@ -289,7 +290,7 @@ public final class FileTools {
      * @param htmlStr html页面源码，必须完整
      * @return 相对于webRoot的文件位置
      */
-    public static String htmlToPDF(String htmlStr) {
+    public static String htmlToPDF(String htmlStr) throws IOException {
         return htmlToPDF(htmlStr, null);
     }
 
@@ -300,7 +301,7 @@ public final class FileTools {
      * @param fileName 文件名
      * @return 相对于webRoot的文件位置
      */
-    public static String htmlToPDF(String htmlStr, String fileName) {
+    public static String htmlToPDF(String htmlStr, String fileName) throws IOException {
         String resultFile = generatePDFResultFileName(fileName);
         PDFService pdfService = new PDFService();
         return pdfService.htmlToPDF(htmlStr, resultFile, null).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
@@ -314,7 +315,7 @@ public final class FileTools {
      * @param basePath     图片相对路径，为空则默认html文件所在路径
      * @return 相对于webRoot路径
      */
-    public static String htmlFileToPDF(String htmlFilePath, String fileName, String basePath, boolean isDelete) {
+    public static String htmlFileToPDF(String htmlFilePath, String fileName, String basePath, boolean isDelete) throws IOException {
         String webRootAdsPath = CommonTools.getWebRootAbsPath();
         String resultFile = generatePDFResultFileName(fileName);
         htmlFilePath = CommonTools.getAbsPath(htmlFilePath);
@@ -332,7 +333,7 @@ public final class FileTools {
             foldPath = basePath;
             basePath = webRootAdsPath;
         } else {
-            foldPath = htmlFile.getParentFile().getAbsolutePath();
+            foldPath = htmlFile.getParentFile().getCanonicalPath();
             basePath = foldPath;
         }
         PDFService pdfService = new PDFService();
@@ -352,7 +353,7 @@ public final class FileTools {
      * @param fileName     目标文件名称
      * @return 相对于webRoot路径
      */
-    public static String htmlToPDFFromTemplate(String templatePath, Map<String, Object> data, String fileName) {
+    public static String htmlToPDFFromTemplate(String templatePath, Map<String, Object> data, String fileName) throws IOException {
         String resultFile = generatePDFResultFileName(fileName);
         PDFService pdfService = new PDFService();
         return pdfService.htmlToPDFForTemplate(resultFile, templatePath, data).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
@@ -371,7 +372,7 @@ public final class FileTools {
      * @param left           左边距（单位磅）
      * @return PDF文件绝对路径
      */
-    public static String ImageToPDF(String[] imageFileNames, String resultFileName, int flag, boolean isHorizontal, float left, float right, float top, float bottom) {
+    public static String ImageToPDF(String[] imageFileNames, String resultFileName, int flag, boolean isHorizontal, float left, float right, float top, float bottom) throws IOException {
         String resultFile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
         return pdfService.ImageToPDF(imageFileNames, resultFile, flag, isHorizontal, left, right, top, bottom).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
@@ -386,7 +387,7 @@ public final class FileTools {
      * @param orientation    0-自动 1-纵向 2-横向
      * @return 相对于webRoot路径
      */
-    public static String PDFAddPageNumber(String pdfFilePath, String resultFileName, boolean isDeleteFile, int orientation) {
+    public static String PDFAddPageNumber(String pdfFilePath, String resultFileName, boolean isDeleteFile, int orientation) throws IOException {
         String resultFile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
         return pdfService.PDFAddPageEvent(pdfFilePath, resultFile, new PageNumberHandle(), isDeleteFile, orientation).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
@@ -401,7 +402,7 @@ public final class FileTools {
      * @param isDeleteFile   是否删除源文件
      * @return 相对于webRoot路径
      */
-    public static String PDFAddWaterMark(String pdfFilePath, String waterMarkPath, String resultFileName, boolean isDeleteFile) {
+    public static String PDFAddWaterMark(String pdfFilePath, String waterMarkPath, String resultFileName, boolean isDeleteFile) throws IOException {
         String resultFile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
         return pdfService.PDFAddWaterMark(pdfFilePath, waterMarkPath, resultFile, isDeleteFile).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
@@ -415,7 +416,7 @@ public final class FileTools {
      * @param isDeleteFile   是否删除源文件
      * @return 相对于webRoot路径
      */
-    public static String PDFEncrypt(String pdfFilePath, String resultFileName, boolean isDeleteFile) {
+    public static String PDFEncrypt(String pdfFilePath, String resultFileName, boolean isDeleteFile) throws IOException {
         String resultFile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
         return pdfService.PDFEncrypt(pdfFilePath, "", resultFile, true, null, PDFService.PDFOWNERPASSWORD, PermissionType.ALLOW_COPY.getValue() | PermissionType.ALLOW_PRINTING.getValue(), isDeleteFile).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");
@@ -429,7 +430,7 @@ public final class FileTools {
      * @param isDeleteFile   是否删除源文件
      * @return 相对于webRoot路径
      */
-    public static String PDFToMerge(String[] fileNames, String resultFileName, boolean isDeleteFile) {
+    public static String PDFToMerge(String[] fileNames, String resultFileName, boolean isDeleteFile) throws IOException {
         String resultFile = generatePDFResultFileName(resultFileName);
         PDFService pdfService = new PDFService();
         return pdfService.PDFToMerge(fileNames, resultFile, isDeleteFile).replace(CommonTools.getWebRootAbsPath(), "").replaceAll("\\\\", "/");

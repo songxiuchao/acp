@@ -46,11 +46,11 @@ class FileDownLoadHandle(private val logAdapter: LogAdapter) {
         } else {
             filterRegex.addAll(allowPathRegexList)
         }
-        if (pathFilter(filterRegex, path)) {
+        val file = File(path)
+        if (pathFilter(filterRegex, file.canonicalPath)) {
             var fis: RandomAccessFile? = null
             var toClient: OutputStream? = null
             try {
-                val file = File(filePath)
                 if (!file.exists()) {
                     throw ServerException("the file [$filePath] is not exists")
                 }

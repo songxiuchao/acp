@@ -115,9 +115,9 @@ public class FileOperation {
             out.flush();
             out.close();
             if (ResultPathFlag == 0) {
-                fileAbsPath = tmpFile.getAbsolutePath().replace(webRootAbsPath, "").replace(File.separator, "/");
+                fileAbsPath = tmpFile.getCanonicalPath().replace(webRootAbsPath, "").replace(File.separator, "/");
             } else {
-                fileAbsPath = tmpFile.getAbsolutePath().replace(File.separator, "/");
+                fileAbsPath = tmpFile.getCanonicalPath().replace(File.separator, "/");
             }
             if (isDelete) {
                 CommonTools.doDeleteFile(tmpFile, true);
@@ -145,16 +145,16 @@ public class FileOperation {
      *
      * @return 临时文件夹绝对路径
      */
-    public static String buildTmpDir() {
+    public static String buildTmpDir() throws IOException {
         String webRootAdsPath = CommonTools.getWebRootAbsPath();
         File file = new File(webRootAdsPath + File.separator + "files"
                 + File.separator + "tmp");
         if (!file.exists()) {
             if (!file.mkdirs()) {
-                log.error("mkdir failed : " + file.getAbsolutePath());
+                log.error("mkdir failed : " + file.getCanonicalPath());
             }
         }
-        return file.getAbsolutePath();
+        return file.getCanonicalPath();
     }
 
     /**
@@ -162,16 +162,16 @@ public class FileOperation {
      *
      * @return 模板文件夹绝对路径
      */
-    public static String buildTemplateDir() {
+    public static String buildTemplateDir() throws IOException {
         String webRootAdsPath = CommonTools.getWebRootAbsPath();
         File file = new File(webRootAdsPath + File.separator + "files"
                 + File.separator + "template");
         if (!file.exists()) {
             if (!file.mkdirs()) {
-                log.error("mkdir failed : " + file.getAbsolutePath());
+                log.error("mkdir failed : " + file.getCanonicalPath());
             }
         }
-        return file.getAbsolutePath();
+        return file.getCanonicalPath();
     }
 
 }

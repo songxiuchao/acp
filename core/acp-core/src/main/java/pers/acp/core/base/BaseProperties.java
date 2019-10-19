@@ -84,7 +84,7 @@ public abstract class BaseProperties extends Properties {
                     File file = new File(fileAdbPathName);
                     if (!file.getParentFile().exists()) {
                         if (!file.getParentFile().mkdirs()) {
-                            log.error("mkdirs failed : " + file.getParentFile().getAbsolutePath());
+                            log.error("mkdirs failed : " + file.getParentFile().getCanonicalPath());
                         }
                     }
                     if (!file.exists() && !file.createNewFile()) {
