@@ -74,10 +74,12 @@ class FileDownLoadHandle(private val logAdapter: LogAdapter) {
                         toPos = ary[1].toLong()
                     }
                     val size = if (toPos > fromPos) {
-                        toPos - fromPos
+                        toPos - fromPos + 1
                     } else {
+                        toPos = downloadSize - 1
                         downloadSize - fromPos
                     }
+                    response.addHeader("Content-Range", "bytes ${fromPos}-${toPos}/${downloadSize}")
                     response.setContentLengthLong(size)
                 }
                 toClient = BufferedOutputStream(response.outputStream)
