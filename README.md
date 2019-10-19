@@ -1,5 +1,5 @@
 # acp 
-###### v6.2.1 [版本更新日志](doc/version_history.md)
+###### v6.2.2 [版本更新日志](doc/version_history.md)
 - Application Construction Platform 应用构建平台
 - 该项目是用Kotlin和Java语言混编封装的脚手架。本人会密切关注业界最新动态，并使用最新技术持续更新优化。
 - 使用该脚手架可快速搭建基于Kotlin或Java语言的普通应用、SpringBoot应用和SpringCloud应用。
@@ -40,7 +40,7 @@
     
 ## 一、环境要求及开发语言
 - java 1.8
-- gradle 5.6.2
+- gradle 5.6.3
 - kotlin 1.3.50
 
 ## 二、gradle 脚本配置及使用
@@ -83,7 +83,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.6.2 --distribution-type=all
+    gradlew wrapper --gradle-version=5.6.3 --distribution-type=all
 ``
 
 ## 三、工程说明
