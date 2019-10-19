@@ -280,7 +280,7 @@ class FtpClient(hostname: String, port: Int, username: String, password: String)
                 ftpClient.logout()
                 ftpClient.disconnect()
                 if (uploadResult) {
-                    log.info("ftp download successFull{" + localFile.name + "}: " + localFile.absolutePath)
+                    log.info("ftp download successFull{" + localFile.name + "}: " + localFile.canonicalPath)
                 }
                 uploadResult
             } catch (e: Exception) {

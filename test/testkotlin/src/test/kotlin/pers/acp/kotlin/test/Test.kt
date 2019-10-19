@@ -2,6 +2,7 @@ package pers.acp.kotlin.test
 
 import org.apache.commons.text.CharacterPredicates
 import org.apache.commons.text.RandomStringGenerator
+import java.io.File
 import java.util.*
 
 /**
@@ -25,4 +26,12 @@ fun main(args: Array<String>) {
     val cls = Class.forName("com.fasterxml.jackson.module.kotlin.KotlinModule")
     println(cls)
     println(cls.canonicalName)
+
+    val path = "C:\\WorkFile\\IdeaProjects\\pers-acp\\acp-admin-cloud\\logs\\log-server"
+    val fileName = "..\\..\\log-server.log"
+    val file = File("$path\\$fileName")
+    println(file.exists())
+    println(file.absolutePath)
+    println(file.canonicalPath)
+    println(file.length())
 }

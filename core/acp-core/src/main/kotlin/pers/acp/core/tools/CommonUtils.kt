@@ -302,7 +302,7 @@ object CommonUtils {
         if (srcPath.startsWith(File.separator)) {
             srcPath = srcPath.substring(File.separator.length)
         }
-        return File(srcPath).absolutePath
+        return File(srcPath).canonicalPath
     }
 
     /**
@@ -585,7 +585,7 @@ object CommonUtils {
             val resultFileParent = File(resultFileName).parentFile
             if (!resultFileParent.exists()) {
                 if (!resultFileParent.mkdirs()) {
-                    log.error("mkdir failed : " + resultFileParent.absolutePath)
+                    log.error("mkdir failed : " + resultFileParent.canonicalPath)
                 }
             }
             val files: MutableList<File> = mutableListOf()
@@ -648,7 +648,7 @@ object CommonUtils {
             val resultFileParent = File(parentFold)
             if (!resultFileParent.exists()) {
                 if (!resultFileParent.mkdirs()) {
-                    log.error("mkdir failed : " + resultFileParent.absolutePath)
+                    log.error("mkdir failed : " + resultFileParent.canonicalPath)
                 }
             }
             val zipFile = if (password == null) {
@@ -684,7 +684,7 @@ object CommonUtils {
                 time = waitTime
             }
             GlobalScope.launch(Dispatchers.Unconfined) {
-                log.info("ready delete file [" + file.absolutePath + "],waiting " + time / 1000 + " seconds")
+                log.info("ready delete file [" + file.canonicalPath + "],waiting " + time / 1000 + " seconds")
                 delay(deleteFileWaitTime)
                 doDeleteFileOrDir(file)
             }
