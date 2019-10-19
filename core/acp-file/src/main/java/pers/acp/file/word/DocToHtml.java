@@ -75,7 +75,7 @@ class DocToHtml {
         File fold = new File(foldpath);
         if (!fold.exists() || !fold.isDirectory()) {
             if (!fold.mkdirs()) {
-                log.error("mkdirs failed : " + fold.getAbsolutePath());
+                log.error("mkdirs failed : " + fold.getCanonicalPath());
             }
         }
 
@@ -88,13 +88,13 @@ class DocToHtml {
         }
         if (!baseFold.exists() || !baseFold.isDirectory()) {
             if (!baseFold.mkdirs()) {
-                log.error("mkdirs failed : " + baseFold.getAbsolutePath());
+                log.error("mkdirs failed : " + baseFold.getCanonicalPath());
             }
         }
 
         List<Picture> pics = wordDocument.getPicturesTable().getAllPictures();
         for (Picture pic : pics) {
-            OutputStream out = new FileOutputStream(baseFold.getAbsolutePath() + File.separator + prefix + "_" + suffixMap.get(new String(pic.getContent()).replace(" ", "").length()));
+            OutputStream out = new FileOutputStream(baseFold.getCanonicalPath() + File.separator + prefix + "_" + suffixMap.get(new String(pic.getContent()).replace(" ", "").length()));
             pic.writeImageContent(out);
             out.close();
         }
@@ -117,6 +117,6 @@ class DocToHtml {
         osw.flush();
         out.close();
         osw.close();
-        return outFile.getAbsolutePath();
+        return outFile.getCanonicalPath();
     }
 }

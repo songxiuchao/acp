@@ -9,6 +9,7 @@ import pers.acp.core.log.LogFactory;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,12 +36,12 @@ public class FontLoader {
      *
      * @return 文件夹路径
      */
-    private static String getFontFold() {
+    private static String getFontFold() throws IOException {
         String path = CommonTools.getAbsPath(CommonTools.getFontFold());
         File fold = new File(path);
         if (!fold.exists()) {
             if (!fold.mkdirs()) {
-                log.error("mkdirs failed : " + fold.getAbsolutePath());
+                log.error("mkdirs failed : " + fold.getCanonicalPath());
             }
         }
         return path;
@@ -89,7 +90,7 @@ public class FontLoader {
                 for (File font : fonts) {
                     if (font.isFile()) {
                         if (!font.getName().toLowerCase().endsWith(".java") && !font.getName().toLowerCase().endsWith(".class")) {
-                            fontResolver.addFont(font.getAbsolutePath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                            fontResolver.addFont(font.getCanonicalPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                         }
                     }
                 }
@@ -108,7 +109,7 @@ public class FontLoader {
     public static BaseFont getSIMSUNFont() {
         try {
             File font = new File(getFontFold() + File.separator + "SIMSUN.TTC");
-            return BaseFont.createFont(font.getAbsolutePath() + ",1", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            return BaseFont.createFont(font.getCanonicalPath() + ",1", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return null;

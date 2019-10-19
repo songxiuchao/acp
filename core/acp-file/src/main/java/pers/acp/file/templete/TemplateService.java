@@ -21,7 +21,7 @@ public class TemplateService {
      * @param template 模板文件
      * @return [0]-模板所在文件夹，[1]-模板文件名
      */
-    private static String[] getTemplatePath(String template) {
+    private static String[] getTemplatePath(String template) throws IOException {
         String[] result = new String[2];
         String templatePath = template.replace("/", File.separator).replace("\\", File.separator);
         if (templatePath.contains(File.separator)) {
