@@ -22,7 +22,7 @@ import pers.acp.spring.cloud.conf.AcpCloudLogServerClientConfiguration
 class CloudLogAdapter(private val acpCloudLogServerClientConfiguration: AcpCloudLogServerClientConfiguration,
                       private val objectMapper: ObjectMapper) : LogAdapter {
 
-    private val log = LogFactory.getInstance(this.javaClass, 4)
+    private val log = LogFactory.getInstance(this.javaClass)
 
     private fun generateLogInfo(): LogInfo? {
         val logInfo = SpringBeanFactory.getBean(LogInfo::class.java)
