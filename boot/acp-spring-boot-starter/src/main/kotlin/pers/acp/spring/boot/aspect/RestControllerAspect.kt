@@ -31,10 +31,6 @@ class RestControllerAspect(private val controllerAspectConfiguration: Controller
                            private val objectMapper: ObjectMapper,
                            private val logAdapter: LogAdapter) {
 
-    private fun doLog(info: String?) {
-        logAdapter.info(info)
-    }
-
     /**
      * 定义拦截规则
      */
@@ -93,14 +89,14 @@ class RestControllerAspect(private val controllerAspectConfiguration: Controller
                         startLog.append("           - ").append(name).append("=").append(request.getParameter(name)).append("\n")
                     }
                     startLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                    doLog(startLog.toString())
-                    doLog(">>>>>>>>>> 处理开始...  [method: $method, uri: $uri]")
+                    logAdapter.info(startLog.toString())
+                    logAdapter.info(">>>>>>>>>> 处理开始...  [method: $method, uri: $uri]")
                 }
                 val processBegin = System.currentTimeMillis()
                 response = pjp.proceed()
                 if (!(response is WebAsyncTask<*> || response is Callable<*> || response is DeferredResult<*>)) {
                     if (needLog(controllerAspectConfiguration, uri)) {
-                        doLog(">>>>>>>>>> 处理结束! [method: $method, uri: $uri, 处理耗时: ${System.currentTimeMillis() - processBegin} 毫秒]")
+                        logAdapter.info(">>>>>>>>>> 处理结束! [method: $method, uri: $uri, 处理耗时: ${System.currentTimeMillis() - processBegin} 毫秒]")
                         response?.apply {
                             val endLog = StringBuilder("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
                             endLog.append("-----> response: ").append(this.toString()).append("\n")
@@ -119,12 +115,12 @@ class RestControllerAspect(private val controllerAspectConfiguration: Controller
                             }
                             endLog.append("      ┖---- body: \n").append(responseInfo).append("\n")
                             endLog.append("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-                            doLog(endLog.toString())
+                            logAdapter.info(endLog.toString())
                         }
-                        doLog("========== 请求结束! [method: $method, uri: $uri, 总耗时: ${System.currentTimeMillis() - beginTime} 毫秒]")
+                        logAdapter.info("========== 请求结束! [method: $method, uri: $uri, 总耗时: ${System.currentTimeMillis() - beginTime} 毫秒]")
                     }
                 } else {
-                    doLog(">>>>>>>>>> 进行异步处理...  [method: $method, uri: $uri]")
+                    logAdapter.info(">>>>>>>>>> 进行异步处理...  [method: $method, uri: $uri]")
                 }
             }
         }

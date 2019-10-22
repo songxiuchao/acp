@@ -5,6 +5,8 @@
 > - [Upgrade] 版本号升级为6.2.2
 > - [Upgrade] 升级 gradle 至 5.6.3
 > - [Upgrade] 规范文件绝对路径写法，使用canonicalPath
+> - [Upgrade] 优化 RestControllerAspect 日志
+> - [Fix] 修复CloudLogAdapter中调用类和行号获取不正确的问题
 ##### v6.2.1
 > - [Upgrade] 升级 Spring Boot 至 2.1.9.RELEASE
 > - [Upgrade] 升级依赖项
