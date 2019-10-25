@@ -15,11 +15,11 @@ annotation class AcpCloudDuplicateSubmission(
          */
         val keyExpress: String = defaultKeyExpress,
         /**
-         * 过期时间，单位毫秒，默认30秒
+         * 超时时间，单位毫秒，默认1秒
          *
          * @return 过期时间
          */
-        val expire: Long = 30000
+        val expire: Long = 1000
 ) {
     companion object {
         const val defaultKeyExpress = "[key]"
