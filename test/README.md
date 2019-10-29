@@ -10,4 +10,4 @@
 - Google 二次认证
 ## cloud
 - 使用 java 语言，引入脚手架开发的 spring cloud 应用群 demo
-- 使用 nacos 作为服务注册发现中心和配置中心，[配置信息](../doc/nacos_config_export_2019-09-20%2021_54_40.zip)自行导入 nacos
+- 使用 nacos 作为服务注册发现中心和配置中心，[配置信息](../doc/nacos_config_export_2019-10-18 23_34_49.zip)自行导入 nacos
