@@ -1,6 +1,7 @@
 ## 版本更新记录
 ##### v6.x
 > - [Upgrade] 修改防重请求验证时，获取分布式锁的默认超时时间为1秒
+> - [Upgrade] test中修改feign对应配置参数
 ##### v6.2.2
 > - [Upgrade] 修改 build.gradle，支持 junit5 自动化测试
 > - [Upgrade] 优化文件下载工具类，支持断点续传
