@@ -4,6 +4,7 @@
 > - [Upgrade] test中修改feign对应配置参数
 > - [Upgrade] 升级 Spring Boot 至 2.1.10.RELEASE
 > - [Upgrade] 升级 gradle 至 5.6.4
+> - [Upgrade] 去除 jaxb-runtime 依赖
 > - [Upgrade] 升级依赖项
 >   - junit5 to 5.5.2
 >   - joda time to 2.10.5

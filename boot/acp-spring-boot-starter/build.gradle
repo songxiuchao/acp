@@ -18,7 +18,6 @@ dependencies {
     kapt "org.springframework.boot:spring-boot-configuration-processor"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-    compile "org.glassfish.jaxb:jaxb-runtime:$versions.jaxb_runtime"
     // spring boot
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
