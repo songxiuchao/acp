@@ -1,7 +1,18 @@
 ## 版本更新记录
-##### v6.x
+##### v6.2.3
 > - [Upgrade] 修改防重请求验证时，获取分布式锁的默认超时时间为1秒
 > - [Upgrade] test中修改feign对应配置参数
+> - [Upgrade] 升级 Spring Boot 至 2.1.10.RELEASE
+> - [Upgrade] 升级 gradle 至 5.6.4
+> - [Upgrade] 升级依赖项
+>   - junit5 to 5.5.2
+>   - joda time to 2.10.5
+>   - commons-text to 1.8
+>   - slf4j to 1.7.29
+>   - jackson to 2.9.10
+>   - zip4j to 2.2.4
+>   - mysql to 8.0.18
+>   - netty to 4.1.43.Final
 ##### v6.2.2
 > - [Upgrade] 修改 build.gradle，支持 junit5 自动化测试
 > - [Upgrade] 优化文件下载工具类，支持断点续传
