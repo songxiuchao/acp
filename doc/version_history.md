@@ -1,10 +1,11 @@
 ## 版本更新记录
-##### v6.2.3
+##### v6.3.0
 > - [Upgrade] 修改防重请求验证时，获取分布式锁的默认超时时间为1秒
 > - [Upgrade] test中修改feign对应配置参数
 > - [Upgrade] 升级 Spring Boot 至 2.1.10.RELEASE
 > - [Upgrade] 升级 gradle 至 5.6.4
 > - [Upgrade] 去除 jaxb-runtime 依赖
+> - [Upgrade] 取消单独的jdk8分支，代码及工程配置统一
 > - [Upgrade] 升级依赖项
 >   - junit5 to 5.5.2
 >   - joda time to 2.10.5
