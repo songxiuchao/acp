@@ -4,7 +4,6 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
     }
 }
-apply plugin: 'kotlin-spring'
 apply plugin: "io.spring.dependency-management"
 dependencyManagement {
     imports {
@@ -14,8 +13,8 @@ dependencyManagement {
     }
 }
 dependencies {
-    compile project(":core:acp-ftp")
-    compile project(":boot:acp-spring-boot-starter")
+    api project(":core:acp-ftp")
+    api project(":boot:acp-spring-boot-starter")
     kapt "org.springframework.boot:spring-boot-configuration-processor"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }

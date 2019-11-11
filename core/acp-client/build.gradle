@@ -4,11 +4,11 @@ versions += [
         okhttp: "3.8.1"
 ]
 dependencies {
-    compile project(":core:acp-packet")
+    api project(":core:acp-packet")
 
     // tcp/udp
-    compile "io.netty:netty-all:$versions.netty"
+    api "io.netty:netty-all:$versions.netty"
 
     // http client
-    compile "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    api "com.squareup.okhttp3:okhttp:$versions.okhttp"
 }

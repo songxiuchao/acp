@@ -13,20 +13,17 @@ dependencyManagement {
     }
 }
 dependencies {
-    compile project(":core:acp-client")
+    api project(":core:acp-client")
 
     kapt "org.springframework.boot:spring-boot-configuration-processor"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     // spring boot
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-aop"
+    api "org.springframework.boot:spring-boot-starter-web"
+    api "org.springframework.boot:spring-boot-starter-actuator"
+    api "org.springframework.boot:spring-boot-starter-aop"
 
     // Swagger2
-    compile "io.springfox:springfox-swagger2:$versions.swagger"
-    compile "io.springfox:springfox-swagger-ui:$versions.swagger"
-
-    // log collection
-    compile "org.jolokia:jolokia-core"
+    api "io.springfox:springfox-swagger2:$versions.swagger"
+    api "io.springfox:springfox-swagger-ui:$versions.swagger"
 }

@@ -6,13 +6,13 @@ versions += [
         jsch       : "0.1.55"
 ]
 dependencies {
-    compile project(":core:acp-core")
+    api project(":core:acp-core")
     // ftp client
-    compile "commons-net:commons-net:$versions.commons_net"
+    api "commons-net:commons-net:$versions.commons_net"
     // sftp client
-    compile "com.jcraft:jsch:$versions.jsch"
+    api "com.jcraft:jsch:$versions.jsch"
     // ftp server
-    compile "org.apache.ftpserver:ftpserver-core:$versions.ftpserver"
+    api "org.apache.ftpserver:ftpserver-core:$versions.ftpserver"
     // sftp server
-    compile "org.apache.sshd:sshd-sftp:$versions.sftp"
+    api "org.apache.sshd:sshd-sftp:$versions.sftp"
 }
