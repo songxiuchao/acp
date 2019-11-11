@@ -40,7 +40,7 @@
     
 ## 一、环境要求及开发语言
 - java 1.8+
-- gradle 5.6.4
+- gradle 6.0
 - kotlin 1.3.50
 
 ## 二、gradle 脚本配置及使用
@@ -83,7 +83,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=5.6.4 --distribution-type=all
+    gradlew wrapper --gradle-version=6.0 --distribution-type=all
 ``
 
 ## 三、工程说明
