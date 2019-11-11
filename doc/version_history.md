@@ -6,6 +6,7 @@
 > - [Upgrade] 升级 gradle 至 6.0
 > - [Upgrade] 去除 jaxb-runtime 依赖
 > - [Upgrade] 取消单独的jdk8分支，代码及工程配置统一
+> - [Upgrade] 取消依赖 api "org.jolokia:jolokia-core"
 > - [Upgrade] 升级依赖项
 >   - junit5 to 5.5.2
 >   - joda time to 2.10.5

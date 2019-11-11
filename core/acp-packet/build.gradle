@@ -1,4 +1,4 @@
 group "${group}.core"
 dependencies {
-    compile project(":core:acp-core")
+    api project(":core:acp-core")
 }

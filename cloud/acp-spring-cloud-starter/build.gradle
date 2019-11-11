@@ -4,7 +4,6 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.spring_boot")
     }
 }
-apply plugin: 'kotlin-spring'
 apply plugin: "io.spring.dependency-management"
 dependencyManagement {
     imports {
@@ -16,20 +15,20 @@ dependencyManagement {
     }
 }
 dependencies {
-    compile project(":boot:acp-spring-boot-starter")
+    api project(":boot:acp-spring-boot-starter")
     kapt "org.springframework.boot:spring-boot-configuration-processor"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-    compile "org.springframework.cloud:spring-cloud-starter-oauth2"
-    compile "org.springframework.cloud:spring-cloud-starter-stream-kafka"
-    compile "org.springframework.cloud:spring-cloud-starter-bus-kafka"
+    api "org.springframework.cloud:spring-cloud-starter-oauth2"
+    api "org.springframework.cloud:spring-cloud-starter-stream-kafka"
+    api "org.springframework.cloud:spring-cloud-starter-bus-kafka"
     // monitor : 服务间调用、断路器、链路追踪
-    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
-    compile "io.github.openfeign:feign-okhttp"
+    api "org.springframework.cloud:spring-cloud-starter-openfeign"
+    api "io.github.openfeign:feign-okhttp"
     // 服务注册发现
-    compile "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
+    api "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
     // 配置中心
-    compile "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
-    compile "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel"
-    compile "com.alibaba.csp:sentinel-datasource-nacos"
+    api "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
+    api "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel"
+    api "com.alibaba.csp:sentinel-datasource-nacos"
 }

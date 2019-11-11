@@ -24,6 +24,6 @@ bootJar {
     }
 }
 dependencies {
-    compile project(":cloud:acp-spring-cloud-starter")
-    compile "net.logstash.logback:logstash-logback-encoder:$versions.logstash"
+    implementation project(":cloud:acp-spring-cloud-starter")
+    implementation "net.logstash.logback:logstash-logback-encoder:$versions.logstash"
 }

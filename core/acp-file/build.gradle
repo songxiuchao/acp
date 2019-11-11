@@ -8,24 +8,24 @@ versions += [
 ]
 
 dependencies {
-    compile project(":core:acp-core")
+    api project(":core:acp-core")
 
     // free marker
-    compile "org.freemarker:freemarker:$versions.freemarker"
+    api "org.freemarker:freemarker:$versions.freemarker"
 
     // pdf
-    compile "org.xhtmlrenderer:flying-saucer-pdf-itext5:$versions.flying_saucer"
-    compile "org.jsoup:jsoup:$versions.jsoup"
+    api "org.xhtmlrenderer:flying-saucer-pdf-itext5:$versions.flying_saucer"
+    api "org.jsoup:jsoup:$versions.jsoup"
 
     // batik
-    compile "org.apache.xmlgraphics:batik-anim:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-bridge:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-extension:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-svggen:$versions.batik"
-    compile "org.apache.xmlgraphics:batik-transcoder:$versions.batik"
+    api "org.apache.xmlgraphics:batik-anim:$versions.batik"
+    api "org.apache.xmlgraphics:batik-bridge:$versions.batik"
+    api "org.apache.xmlgraphics:batik-extension:$versions.batik"
+    api "org.apache.xmlgraphics:batik-svggen:$versions.batik"
+    api "org.apache.xmlgraphics:batik-transcoder:$versions.batik"
 
-    compile "org.apache.poi:poi:$versions.poi"
-    compile "org.apache.poi:poi-ooxml:$versions.poi"
-    compile "org.apache.poi:poi-scratchpad:$versions.poi"
+    api "org.apache.poi:poi:$versions.poi"
+    api "org.apache.poi:poi-ooxml:$versions.poi"
+    api "org.apache.poi:poi-scratchpad:$versions.poi"
 
 }

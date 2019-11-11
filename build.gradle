@@ -14,7 +14,10 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        maven { url "${mavenCentralUrl}" }
+        maven {
+            url = "${mavenCentralUrl}"
+            allowInsecureProtocol = true
+        }
         mavenCentral()
         jcenter()
     }
@@ -28,7 +31,7 @@ configure(allprojects) {
     apply plugin: 'kotlin-spring'
     apply plugin: 'kotlin-noarg'
     apply plugin: 'idea'
-    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
 
     apply from: "$rootDir/gradle/dependencies.gradle"
 
@@ -38,7 +41,10 @@ configure(allprojects) {
     buildscript {
         repositories {
             mavenLocal()
-            maven { url "${mavenCentralUrl}" }
+            maven {
+                url = "${mavenCentralUrl}"
+                allowInsecureProtocol = true
+            }
             mavenCentral()
             jcenter()
         }
@@ -46,20 +52,23 @@ configure(allprojects) {
 
     repositories {
         mavenLocal()
-        maven { url "${mavenCentralUrl}" }
+        maven {
+            url = "${mavenCentralUrl}"
+            allowInsecureProtocol = true
+        }
         mavenCentral()
         jcenter()
     }
 
     dependencies {
-        testCompile("org.junit.jupiter:junit-jupiter-engine:$versions.jupiter")
-        testCompile("org.junit.jupiter:junit-jupiter-api:$versions.jupiter")
-        testCompile("org.junit.platform:junit-platform-launcher:$versions.junit_platform")
-        testCompile "org.jetbrains.kotlin:kotlin-test"
-        testCompile "org.jetbrains.kotlin:kotlin-test-junit5"
-        compile "org.jetbrains.kotlin:kotlin-stdlib"
-        compile "org.jetbrains.kotlin:kotlin-reflect"
-        compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlin_coroutines"
+        testImplementation("org.junit.jupiter:junit-jupiter-engine:$versions.jupiter")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:$versions.jupiter")
+        testImplementation("org.junit.platform:junit-platform-launcher:$versions.junit_platform")
+        testImplementation "org.jetbrains.kotlin:kotlin-test"
+        testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib"
+        implementation "org.jetbrains.kotlin:kotlin-reflect"
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlin_coroutines"
     }
 
     kapt {
@@ -83,7 +92,7 @@ configure(allprojects) {
     }
 
     task copyJar(type: Copy) {
-        from(configurations.runtime)
+        from(configurations.runtimeClasspath)
         into('build/libs/dependencies')
     }
 
@@ -186,16 +195,6 @@ configure(allprojects) {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'// no caching to maven repository
     }
 
-    build {
-        doLast {
-            def fileName = "$project.name" + "-" + "$project.version" + ".jar"
-            copy {
-                from file("${buildDir}/libs/" + fileName)
-                into "$rootDir/release"
-            }
-        }
-    }
-
     def generateGroupId = {
         def groupId = "$project.group"
         if (project.parent != null) {
@@ -207,38 +206,28 @@ configure(allprojects) {
         return groupId
     }
 
-    // install to local repository
-    install {
-        dependsOn release
-        repositories.mavenInstaller {
-            def groupId = generateGroupId()
-            pom.version = "$project.version"
-            pom.artifactId = "$project.name"
-            pom.groupId = groupId
-            doLast {
-                println("install archive to local: group=$pom.groupId , artifact=$pom.artifactId , version=$pom.version")
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                //指定group/artifact/version信息
+                groupId generateGroupId()
+                artifactId project.name
+                version project.version
+                //打包类型 war: components.web jar: components.java
+                from components.java
+                artifact sourcesJar
             }
         }
-    }
-
-    // deploy to remote repository
-    uploadArchives {
-        dependsOn install
-        apply from: "$rootDir/gradle/deploy.gradle"
         repositories {
-            mavenDeployer {
-                // remote repository url
-                repository(url: mavenUploadUrl) {
-                    // loginName and password
-                    authentication(userName: mavenUserName, password: mavenPassword)
-                }
-                def groupId = generateGroupId()
-                pom.version = "$project.version"
-                pom.artifactId = "$project.name"
-                pom.groupId = groupId
-                doLast {
-                    println("deploy archive to remote : $mavenUploadUrl")
-                    println("group=$pom.groupId , artifact=$pom.artifactId , version=$pom.version")
+            maven {
+                apply from: "$rootDir/gradle/deploy.gradle"
+                //指定要上传的maven私服仓库
+                url = "$mavenUploadUrl"
+                allowInsecureProtocol = true
+                //认证用户和密码
+                credentials {
+                    username "$mavenUserName"
+                    password "$mavenPassword"
                 }
             }
         }
@@ -256,7 +245,11 @@ configure(allprojects) {
                 "acp-spring-cloud-starter"].toArray().contains("$project.name")
     }
 
-    install.onlyIf { needUpLoadProject() }
-    uploadArchives.onlyIf { needUpLoadProject() }
-
+    publish.onlyIf { needUpLoadProject() }
+    generateMetadataFileForMavenPublication.onlyIf { needUpLoadProject() }
+    generatePomFileForMavenPublication.onlyIf { needUpLoadProject() }
+    publishAllPublicationsToMavenRepository.onlyIf { needUpLoadProject() }
+    publishMavenPublicationToMavenLocal.onlyIf { needUpLoadProject() }
+    publishMavenPublicationToMavenRepository.onlyIf { needUpLoadProject() }
+    publishToMavenLocal.onlyIf { needUpLoadProject() }
 }
