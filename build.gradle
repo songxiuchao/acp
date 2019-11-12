@@ -71,14 +71,6 @@ allprojects {
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlin_coroutines"
     }
 
-    tasks.withType(JavaCompile) {
-        options.encoding = "${encoding}"
-    }
-    tasks.withType(Javadoc) {
-        options.encoding = "${encoding}"
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
-
     task clearPj(type: Delete) {
         delete 'release', 'build', 'target', 'out'
     }
@@ -123,11 +115,6 @@ allprojects {
         }
     }
 
-    java {
-        withJavadocJar()
-        withSourcesJar()
-    }
-
     task release(type: Copy, dependsOn: [build, copyJar]) {
     }
 
@@ -138,10 +125,16 @@ allprojects {
         }
     }
 
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     javadoc {
         options.charSet = "${encoding}"
         options.docEncoding = "${encoding}"
         options.encoding = "${encoding}"
+        options.addStringOption('Xdoclint:none', '-quiet')
     }
 
     compileJava {
@@ -188,7 +181,6 @@ allprojects {
                 version project.version
                 //打包类型 war: components.web jar: components.java
                 from components.java
-                artifact sourcesJar
             }
         }
         repositories {
