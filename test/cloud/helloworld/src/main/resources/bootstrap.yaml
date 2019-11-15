@@ -24,7 +24,7 @@ spring:
       datasource:
         nacos-degrade:
           nacos:
-            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            server-addr: ${spring.cloud.nacos.server-addr}
             data-id: ${spring.application.name}-${spring.profiles.active}-sentinel-degrade
             namespace: ${spring.cloud.nacos.discovery.namespace}
             group-id: ${spring.profiles.active}
