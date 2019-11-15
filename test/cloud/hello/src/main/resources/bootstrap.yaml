@@ -11,12 +11,11 @@ spring:
     cache: false
   cloud:
     nacos:
+      server-addr: 127.0.0.1:8848
       discovery:
-        server-addr: 127.0.0.1:8848
         namespace: fe8a0801-488d-4b3a-9a54-6ca4f2262b6c
         cluster-name: ${spring.profiles.active}
       config:
-        server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml
         namespace: ${spring.cloud.nacos.discovery.namespace}
         cluster-name: ${spring.cloud.nacos.discovery.cluster-name}
