@@ -42,8 +42,8 @@
     
 ## 一、环境要求及开发语言
 - java 1.8+
-- gradle 6.0
-- kotlin 1.3.50
+- gradle 6.0.1
+- kotlin 1.3.60
 
 ## 二、gradle 脚本配置及使用
 ### （一）配置文件
@@ -85,7 +85,7 @@ ext {
 
 ### （三）升级命令
 ``
-    gradlew wrapper --gradle-version=6.0 --distribution-type=all
+    gradlew wrapper --gradle-version=6.0.1 --distribution-type=all
 ``
 
 ## 三、工程说明
