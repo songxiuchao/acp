@@ -1,6 +1,7 @@
 ## 版本更新记录
 ##### v6.3.1
 > - [Upgrade] 升级 spring-cloud-alibaba 至 2.1.1.RELEASE
+> - [Upgrade] 升级 kotlin 至 1.3.60
 > - [Upgrade] 修改 cloud 测试模块中的 nacos 配置
 > - [Upgrade] 更新 Spring Cloud 至 Greenwich.SR4
 > - [Upgrade] junit5 降级至 5.3.2
