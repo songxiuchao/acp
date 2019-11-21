@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v6.x
+> - [Upgrade] 修改注释
 ##### v6.3.1
 > - [Upgrade] 升级 spring-cloud-alibaba 至 2.1.1.RELEASE
 > - [Upgrade] 升级 kotlin 至 1.3.60
