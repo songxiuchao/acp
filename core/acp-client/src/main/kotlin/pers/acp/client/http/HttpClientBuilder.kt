@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 class HttpClientBuilder {
 
     /**
-     * 是否禁用SSL证书验证
+     * 是否开启无效的SSL证书验证
      */
     private var disableSslValidation = false
 
