@@ -143,7 +143,7 @@ object XmlPacket {
         xStream.addPermission { type -> type == cls }
         xStream.processAnnotations(cls)
         xStream.autodetectAnnotations(true)
-        return xStream.fromXML(xmlStr) as T
+        return xStream.fromXML(xmlStr) as? T
     }
 
     /**

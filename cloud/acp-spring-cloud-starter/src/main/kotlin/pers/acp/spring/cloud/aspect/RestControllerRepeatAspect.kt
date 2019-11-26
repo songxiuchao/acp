@@ -45,22 +45,15 @@ class RestControllerRepeatAspect(private val distributedLock: DistributedLock, p
         val duplicateSubmission = method.getAnnotation(AcpCloudDuplicateSubmission::class.java)
         val key = getKey(signature.declaringTypeName + "." + method.name, duplicateSubmission.keyExpress, pjp.args)
         val expire = duplicateSubmission.expire
-        try {
-            val response: Any
-            if (distributedLock.getLock(key, key, expire)) {
-                try {
-                    response = pjp.proceed()
-                } finally {
-                    distributedLock.releaseLock(key, key)
-                }
-            } else {
-                throw ServerException("请勿重复请求")
+        return if (distributedLock.getLock(key, key, expire)) {
+            try {
+                pjp.proceed()
+            } finally {
+                distributedLock.releaseLock(key, key)
             }
-            return response
-        } catch (e: Exception) {
-            throw ServerException(e.message)
+        } else {
+            throw ServerException("请勿重复请求")
         }
-
     }
 
     private fun getKey(prefix: String, keyExpress: String, args: Array<Any>): String {
