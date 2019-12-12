@@ -1,10 +1,10 @@
 group "${group}.core"
 versions += [
-        freemarker   : "2.3.28",
+        freemarker   : "2.3.29",
         flying_saucer: "9.1.18",
         jsoup        : "1.12.1",
-        batik        : "1.11",
-        poi          : "4.1.0"
+        batik        : "1.12",
+        poi          : "4.1.1"
 ]
 
 dependencies {

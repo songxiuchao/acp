@@ -1,7 +1,15 @@
 ## 版本更新记录
-##### v6.x
+##### v6.3.3
 > - [Upgrade] 修改注释
 > - [Upgrade] 修改 test 中 feign 写法
+> - [Upgrade] 升级 Spring Boot 至 2.1.11.RELEASE
+> - [Upgrade] 升级 kotlin 至 1.3.61
+> - [Upgrade] 升级依赖项
+>   - zip4j to 2.2.7
+>   - sshd-sftp to 2.3.0
+>   - freemarker to 2.3.29
+>   - batik to 1.12
+>   - poi to 4.1.1
 ##### v6.3.2
 > - [Upgrade] 修改注释
 > - [Upgrade] 使用安全的方式进行泛型转换
