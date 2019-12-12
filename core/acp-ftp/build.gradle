@@ -1,7 +1,7 @@
 group "${group}.core"
 versions += [
         ftpserver  : "1.1.1",
-        sftp       : "2.2.0",
+        sftp       : "2.3.0",
         commons_net: "3.6",
         jsch       : "0.1.55"
 ]

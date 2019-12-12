@@ -63,7 +63,7 @@ class HttpClientBuilder {
     private var sslProtocolVersion = "SSL"
 
     /**
-     * 请求失败时是否重试
+     * 连接失败时是否重试
      */
     private var retryOnConnectionFailure = true
 

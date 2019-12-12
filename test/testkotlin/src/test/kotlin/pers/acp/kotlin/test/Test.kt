@@ -2,8 +2,11 @@ package pers.acp.kotlin.test
 
 import org.apache.commons.text.CharacterPredicates
 import org.apache.commons.text.RandomStringGenerator
+import org.springframework.expression.spel.standard.SpelExpressionParser
 import java.io.File
 import java.util.*
+import javax.script.ScriptEngineManager
+
 
 /**
  * Create by zhangbin on 2017-12-19 11:28
@@ -34,4 +37,8 @@ fun main(args: Array<String>) {
     println(file.absolutePath)
     println(file.canonicalPath)
     println(file.length())
+
+    val parser = SpelExpressionParser()
+    val exp = parser.parseExpression("canonicalPath")
+    println("Expression Value: ${exp.getValue(file)}")
 }
