@@ -29,7 +29,7 @@ import java.util.concurrent.Callable;
 @Validated
 @RestController
 @RequestMapping("/boot")
-@Api(tags = ["测试接口"])
+@Api(tags = {"测试接口"})
 public class TestController {
 
     private final LogAdapter log;
