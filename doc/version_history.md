@@ -1,4 +1,6 @@
 ## 版本更新记录
+##### v6.x
+> - [Upgrade] 修改@Api写法
 ##### v6.3.3
 > - [Upgrade] 修改注释
 > - [Upgrade] 修改 test 中 feign 写法
