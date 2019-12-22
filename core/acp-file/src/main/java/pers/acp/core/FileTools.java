@@ -71,26 +71,6 @@ public final class FileTools {
     }
 
     /**
-     * 获取文件中的内容
-     *
-     * @param filePath 文件绝对路径
-     * @return 内容
-     */
-    public static String getFileContent(String filePath) {
-        return FileOperation.getFileContent(filePath);
-    }
-
-    /**
-     * 获取文件扩展名
-     *
-     * @param fileName 文件名称
-     * @return 扩展名（小写）
-     */
-    public static String getFileExt(String fileName) {
-        return FileOperation.getFileExt(fileName);
-    }
-
-    /**
      * 十六进制字符串转图片文件
      *
      * @param HexString      十六进字符串
@@ -119,7 +99,7 @@ public final class FileTools {
             fileName = formatFileName(fileName);
             String nowStr = generateNowTimeString();
             String webRootAdsPath = CommonTools.getWebRootAbsPath();
-            String exName = getFileExt(templatePath);
+            String exName = CommonTools.getFileExt(templatePath);
             String resultFile;
             if (CommonTools.isNullStr(fileName)) {
                 resultFile = FileOperation.buildTmpDir() + File.separator + nowStr + exName;

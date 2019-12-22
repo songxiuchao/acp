@@ -21,7 +21,7 @@ class FileDownLoadHandle(private val logAdapter: LogAdapter) {
 
     @Throws(ServerException::class)
     @JvmOverloads
-    fun downLoadForWeb(request: HttpServletRequest, response: HttpServletResponse, path: String, isDelete: Boolean, allowPathRegexList: List<String>? = null) {
+    fun downLoadForWeb(request: HttpServletRequest, response: HttpServletResponse, path: String, allowPathRegexList: List<String>? = null, isDelete: Boolean = false, deleteWaitTime: Long? = null) {
         var filePath = path.replace("/", File.separator).replace("\\", File.separator)
         if (!filePath.startsWith(File.separator)) {
             filePath = File.separator + filePath
@@ -30,12 +30,12 @@ class FileDownLoadHandle(private val logAdapter: LogAdapter) {
         if (webRootPath != File.separator) {
             filePath = webRootPath + filePath
         }
-        downLoadFile(request, response, filePath, isDelete, allowPathRegexList)
+        downLoadFile(request, response, filePath, allowPathRegexList, isDelete, deleteWaitTime)
     }
 
     @Throws(ServerException::class)
     @JvmOverloads
-    fun downLoadFile(request: HttpServletRequest, response: HttpServletResponse, filePath: String, isDelete: Boolean, allowPathRegexList: List<String>? = null) {
+    fun downLoadFile(request: HttpServletRequest, response: HttpServletResponse, filePath: String, allowPathRegexList: List<String>? = null, isDelete: Boolean = false, deleteWaitTime: Long? = null) {
         val path = filePath.replace("/", File.separator).replace("\\", File.separator)
         val filterRegex: MutableList<String> = mutableListOf()
         if (allowPathRegexList == null || allowPathRegexList.isEmpty()) {
@@ -100,7 +100,7 @@ class FileDownLoadHandle(private val logAdapter: LogAdapter) {
                 toClient.close()
                 logAdapter.debug("download file Success:$filename")
                 if (isDelete) {
-                    CommonTools.doDeleteFile(file, true)
+                    CommonTools.doDeleteFile(file, true, deleteWaitTime)
                 }
             } catch (e: Exception) {
                 if (fis != null) {

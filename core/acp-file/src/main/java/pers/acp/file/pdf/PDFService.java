@@ -71,7 +71,7 @@ public final class PDFService {
      * @return PDF文件绝对路径
      */
     public String htmlFileToPDF(String htmlFilePath, String fileName, String basePath) {
-        return htmlToPDF(FileOperation.getFileContent(htmlFilePath), fileName, basePath);
+        return htmlToPDF(CommonTools.getFileContent(htmlFilePath), fileName, basePath);
     }
 
     /**

@@ -1,7 +1,7 @@
 package pers.acp.file.word;
 
 
-import pers.acp.file.FileOperation;
+import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
 public class WordService {
@@ -17,7 +17,7 @@ public class WordService {
      */
     public String wordToHTML(String filePath, String foldPath, String basePath) {
         try {
-            String ext = FileOperation.getFileExt(filePath);
+            String ext = CommonTools.getFileExt(filePath);
             switch (ext) {
                 case "doc": {
                     return DocToHtml.convert2Html(filePath, foldPath, basePath);

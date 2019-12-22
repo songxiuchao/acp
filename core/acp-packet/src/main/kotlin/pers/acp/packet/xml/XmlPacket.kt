@@ -142,6 +142,7 @@ object XmlPacket {
         XStream.setupDefaultSecurity(xStream)
         xStream.addPermission { type -> type == cls }
         xStream.processAnnotations(cls)
+        xStream.ignoreUnknownElements()
         xStream.autodetectAnnotations(true)
         return xStream.fromXML(xmlStr) as? T
     }

@@ -5,8 +5,6 @@ import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 
 public class FileOperation {
 
@@ -27,62 +25,6 @@ public class FileOperation {
         } catch (Exception e) {
             log.error("Get file baseURL is failed");
             return null;
-        }
-    }
-
-    /**
-     * 获取文件中的内容
-     *
-     * @param filePath 文件绝对路径
-     * @return 内容
-     */
-    public static String getFileContent(String filePath) {
-        FileInputStream fis = null;
-        FileChannel channel = null;
-        try {
-            StringBuilder buff = new StringBuilder();
-            fis = new FileInputStream(filePath);
-            channel = fis.getChannel();
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-            while (true) {
-                int size = channel.read(buffer);
-                if (size == -1) {
-                    break;
-                }
-                byte[] bt = buffer.array();
-                buff.append(new String(bt, 0, size, CommonTools.getDefaultCharset()));
-                buffer.clear();
-            }
-            return buff.toString();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
-        } finally {
-            try {
-                if (channel != null) {
-                    channel.close();
-                }
-                if (fis != null) {
-                    fis.close();
-                }
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-    }
-
-    /**
-     * 获取文件扩展名
-     *
-     * @param fileName 文件名称
-     * @return 扩展名（小写）
-     */
-
-    public static String getFileExt(String fileName) {
-        if (fileName.lastIndexOf(".") > -1) {
-            return fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        } else {
-            return "";
         }
     }
 

@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import pers.acp.file.FileOperation;
 import pers.acp.core.CommonTools;
 import pers.acp.core.log.LogFactory;
 import pers.acp.file.excel.data.ExcelCellData;
@@ -48,8 +47,8 @@ public final class ExcelService {
         if (CommonTools.isNullStr(templatePath)) {
             return "";
         }
-        String disFix = FileOperation.getFileExt(filename);
-        String tempFix = FileOperation.getFileExt(templatePath);
+        String disFix = CommonTools.getFileExt(filename);
+        String tempFix = CommonTools.getFileExt(templatePath);
         if (disFix.equals(tempFix)) {
             Workbook wb;
             try {
@@ -111,8 +110,8 @@ public final class ExcelService {
         if (CommonTools.isNullStr(templatePath)) {
             return "";
         }
-        String disFix = FileOperation.getFileExt(filename);
-        String tempFix = FileOperation.getFileExt(templatePath);
+        String disFix = CommonTools.getFileExt(filename);
+        String tempFix = CommonTools.getFileExt(templatePath);
         if (disFix.equals(tempFix)) {
             Workbook wb;
             try {
@@ -205,7 +204,7 @@ public final class ExcelService {
         if (CommonTools.isNullStr(filename)) {
             return "";
         }
-        String fileType = FileOperation.getFileExt(filename);
+        String fileType = CommonTools.getFileExt(filename);
         File file = new File(filename);
         Workbook wb;
         try {
@@ -247,7 +246,7 @@ public final class ExcelService {
      */
     public String createExcelFile(String fileName, List<ExcelSheetSetting> excelSheetSettingList) {
         SheetData sheetData = new SheetData();
-        String fileType = FileOperation.getFileExt(fileName);
+        String fileType = CommonTools.getFileExt(fileName);
         Workbook wb;
         if (CommonTools.isNullStr(fileName)) {
             return "";
@@ -311,7 +310,7 @@ public final class ExcelService {
         File excelFile;
         File f = new File(filePath);
         String fileName = f.getName();
-        String prefix = FileOperation.getFileExt(fileName);
+        String prefix = CommonTools.getFileExt(fileName);
         if (prefix.equals(ExcelType.EXCEL_TYPE_XLSX.getName()) || prefix.equals(ExcelType.EXCEL_TYPE_XLS.getName())) {
             Workbook wb;
             excelFile = new File(filePath);

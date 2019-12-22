@@ -8,26 +8,27 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import kotlinx.coroutines.*
-import org.apache.commons.lang3.StringUtils
-import org.apache.commons.text.CharacterPredicates
-import org.apache.commons.text.RandomStringGenerator
-import org.joda.time.DateTime
 import net.lingala.zip4j.ZipFile
-import pers.acp.core.conf.AcpProperties
-import pers.acp.core.log.LogFactory
-import pers.acp.core.task.BaseAsyncTask
-import pers.acp.core.task.timer.Calculation
-
-import java.io.*
-import java.net.URLDecoder
-import java.util.Properties
-import java.util.UUID
-import java.util.regex.Pattern
 import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.AesKeyStrength
 import net.lingala.zip4j.model.enums.CompressionLevel
 import net.lingala.zip4j.model.enums.CompressionMethod
 import net.lingala.zip4j.model.enums.EncryptionMethod
+import org.apache.commons.lang3.StringUtils
+import org.apache.commons.text.CharacterPredicates
+import org.apache.commons.text.RandomStringGenerator
+import org.joda.time.DateTime
+import pers.acp.core.conf.AcpProperties
+import pers.acp.core.log.LogFactory
+import pers.acp.core.task.BaseAsyncTask
+import pers.acp.core.task.timer.Calculation
+import java.io.*
+import java.net.URLDecoder
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.charset.Charset
+import java.util.*
+import java.util.regex.Pattern
 
 
 /**
@@ -83,13 +84,105 @@ object CommonUtils {
      * 初始化系统配置文件
      */
     private fun initSystemProperties() {
-        try {
-            pps = pps ?: AcpProperties.getInstance()
+        pps = try {
+            pps ?: AcpProperties.getInstance()
         } catch (e: Exception) {
             log.error("load acp.properties failed!")
-            pps = null
+            null
         }
     }
+
+    /**
+     * 获取文件中的内容
+     *
+     * @param filePath 文件绝对路径
+     * @return 内容
+     */
+    fun getFileContent(filePath: String, charset: String): String? {
+        var fis: FileInputStream? = null
+        var channel: FileChannel? = null
+        return try {
+            val buff = StringBuilder()
+            fis = FileInputStream(filePath)
+            channel = fis.channel
+            val buffer = ByteBuffer.allocate(1024)
+            while (true) {
+                val size = channel.read(buffer)
+                if (size == -1) {
+                    break
+                }
+                val bt = buffer.array()
+                buff.append(String(bt, 0, size, Charset.forName(charset)))
+                buffer.clear()
+            }
+            buff.toString()
+        } catch (e: java.lang.Exception) {
+            log.error(e.message, e)
+            null
+        } finally {
+            try {
+                channel?.close()
+                fis?.close()
+            } catch (e: IOException) {
+                log.error(e.message, e)
+            }
+        }
+    }
+
+    /**
+     * 内容写入文件
+     * @param filePath 文件路径
+     * @param content 内容
+     * @param append 是否追加写入
+     */
+    fun contentWriteToFile(filePath: String, content: ByteArray, append: Boolean): File? {
+        val tmpFile = File(filePath)
+        val fold = tmpFile.parentFile
+        if (!fold.exists() && !fold.mkdirs()) {
+            log.error("mkdir field：" + fold.canonicalFile)
+            return null
+        }
+        contentWriteToFile(tmpFile, content, append)
+        return tmpFile
+    }
+
+    /**
+     * 内容写入文件
+     * @param file 文件
+     * @param content 内容
+     * @param append 是否追加写入
+     */
+    fun contentWriteToFile(file: File, content: ByteArray, append: Boolean) {
+        var out: FileOutputStream? = null
+        var channel: FileChannel? = null
+        try {
+            out = FileOutputStream(file, append)
+            channel = out.channel
+            channel.write(ByteBuffer.wrap(content))
+        } catch (e: Exception) {
+            log.error(e.message, e)
+        } finally {
+            try {
+                channel?.close()
+                out?.close()
+            } catch (e: IOException) {
+                log.error(e.message, e)
+            }
+        }
+    }
+
+    /**
+     * 获取文件扩展名
+     *
+     * @param fileName 文件名称
+     * @return 扩展名（小写）
+     */
+    fun getFileExt(fileName: String): String =
+            if (fileName.lastIndexOf(".") > -1) {
+                fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase()
+            } else {
+                ""
+            }
 
     /**
      * 获取 WebRoot 绝对路径
