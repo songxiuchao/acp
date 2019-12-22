@@ -14,6 +14,7 @@ import pers.acp.core.tools.CommonUtils
 
 import java.io.File
 import java.io.InputStream
+import java.nio.charset.Charset
 
 /**
  * @author zhang by 10/07/2019
@@ -27,6 +28,38 @@ object CommonTools {
     @JvmStatic
     fun initTools(deleteFileWaitTime: Long, absPathPrefix: String, userPathPrefix: String, fontPath: String) =
             CommonUtils.init(deleteFileWaitTime, absPathPrefix, userPathPrefix, fontPath)
+
+    @JvmStatic
+    @JvmOverloads
+    fun getFileContent(filePath: String, charset: String? = null): String? =
+            CommonUtils.getFileContent(filePath, charset ?: getDefaultCharset())
+
+    @JvmStatic
+    @JvmOverloads
+    fun contentWriteToFile(filePath: String, content: String, charset: String? = null, append: Boolean = false): File? =
+            CommonUtils.contentWriteToFile(filePath, content.toByteArray(Charset.forName(charset
+                    ?: getDefaultCharset())), append)
+
+    @JvmStatic
+    @JvmOverloads
+    fun contentWriteToFile(filePath: String, content: ByteArray, append: Boolean = false): File? =
+            CommonUtils.contentWriteToFile(filePath, content, append)
+
+    @JvmStatic
+    @JvmOverloads
+    fun contentWriteToFile(file: File, content: String, charset: String? = null, append: Boolean = false) =
+            CommonUtils.contentWriteToFile(file, content.toByteArray(Charset.forName(charset
+                    ?: getDefaultCharset())), append)
+
+    @JvmStatic
+    @JvmOverloads
+    fun contentWriteToFile(file: File, content: ByteArray, append: Boolean = false) =
+            CommonUtils.contentWriteToFile(file, content, append)
+
+    @JvmStatic
+    fun getFileExt(fileName: String): String {
+        return CommonUtils.getFileExt(fileName)
+    }
 
     @JvmStatic
     fun getFontFold(): String = CommonUtils.fontPath

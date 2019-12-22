@@ -1,4 +1,10 @@
 ## 版本更新记录
+##### v6.3.4
+> - [Upgrade] 修改@Api写法
+> - [Upgrade] 读取文件内容方法，放入CommonTools中
+> - [Upgrade] CommonTools 中增加写入文件的方法
+> - [Upgrade] FileDownLoadHandle 支持自定义延迟删除文件等待时间参数，单位毫秒
+> - [Upgrade] 优化xml转bean，忽略未知属性
 ##### v6.3.3
 > - [Upgrade] 修改注释
 > - [Upgrade] 修改 test 中 feign 写法
