@@ -2,6 +2,7 @@ package pers.acp.packet.xml
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.thoughtworks.xstream.XStream
 import com.thoughtworks.xstream.io.naming.NoNameCoder
 import com.thoughtworks.xstream.io.xml.DomDriver
@@ -230,7 +231,7 @@ object XmlPacket {
                 info.put("isCDATA", false)
             }
         }
-        result.set(element.name, info)
+        result.set<ObjectNode>(element.name, info)
         return result
     }
 

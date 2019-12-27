@@ -1,6 +1,8 @@
 package pers.acp.packet.http
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import pers.acp.core.CommonTools
 import pers.acp.core.log.LogFactory
 import pers.acp.packet.xml.XmlPacket
@@ -103,18 +105,16 @@ object HttpPacket {
         val json = mapper.createObjectNode()
         val info = mapper.createObjectNode()
         val children = mapper.createArrayNode()
-        params.forEach { (key, value) ->
-            run {
-                val member = mapper.createObjectNode()
-                member.put("value", value)
-                member.put("isCDATA", true)
-                val element = mapper.createObjectNode()
-                element.set(key, member)
-                children.add(element)
-            }
+        params.forEach { entry ->
+            val member = mapper.createObjectNode()
+            member.put("value", entry.value)
+            member.put("isCDATA", true)
+            val element = mapper.createObjectNode()
+            element.set<ObjectNode>(entry.key, member)
+            children.add(element)
         }
-        info.set("children", children)
-        json.set(rootName, info)
+        info.set<ArrayNode>("children", children)
+        json.set<ObjectNode>(rootName, info)
         return XmlPacket.jsonToXml(json, clientCharset, isIndent)
     }
 
