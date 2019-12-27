@@ -27,7 +27,7 @@ class AuthExceptionEntryPoint(private val objectMapper: ObjectMapper) : Authenti
                 errorDescription = "权限验证失败"
         )
         response.status = HttpStatus.UNAUTHORIZED.value()
-        response.contentType = MediaType.APPLICATION_JSON_UTF8_VALUE
+        response.contentType = MediaType.APPLICATION_JSON_VALUE
         objectMapper.writeValue(response.outputStream, errorVO)
     }
 }

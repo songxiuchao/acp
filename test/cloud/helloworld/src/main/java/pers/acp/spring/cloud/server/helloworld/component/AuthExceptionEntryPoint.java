@@ -39,7 +39,7 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
             errorVO.setError("访问此资源需要完全的身份验证");
             errorVO.setErrorDescription("访问此资源需要完全的身份验证");
         }
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         objectMapper.writeValue(response.getOutputStream(), errorVO);
     }
 }

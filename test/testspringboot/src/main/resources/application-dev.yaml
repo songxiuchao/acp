@@ -9,7 +9,7 @@ logging:
     file: '[%date{yyyy-MM-dd HH:mm:ss.SSS}] [ %-5level] [%thread] %logger{96} [%X{lineno}] - %msg%n'
   file:
     path: logs/testspringboot
-    name: ${logging.path}/${spring.application.name}.log
+    name: ${logging.file.path}/${spring.application.name}.log
     max-size: 5MB
     max-history: 30
   level:
@@ -41,7 +41,6 @@ spring:
       #      pool-name: SpringBootHikariCPPrimary
       #      max-lifetime: 1765000
       #      read-only: false
-      data-source-properties.dialect: org.hibernate.dialect.MySQL8Dialect
       data-source-properties.scanpackage: pers.acp.test.application.entity.primary
     pg:
       jdbc-url: jdbc:postgresql://[::1]:5432/test?autoReconnect=true&zeroDateTimeBehavior=convertToNull
@@ -53,7 +52,6 @@ spring:
       #      pool-name: SpringBootHikariCPPG
       #      max-lifetime: 1765000
       #      read-only: false
-      data-source-properties.dialect: org.hibernate.dialect.PostgreSQL95Dialect
       data-source-properties.scanpackage: pers.acp.test.application.entity.pg
   data:
     jpa:

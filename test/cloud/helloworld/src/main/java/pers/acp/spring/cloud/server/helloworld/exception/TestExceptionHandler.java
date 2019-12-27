@@ -61,7 +61,7 @@ public class TestExceptionHandler extends RestExceptionHandler {
             responseCode = ResponseCode.OtherError;
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .body(PackageTools.buildErrorResponsePackage(responseCode, ex.getMessage()));
     }
 

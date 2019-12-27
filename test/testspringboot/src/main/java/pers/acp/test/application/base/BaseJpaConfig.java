@@ -29,7 +29,6 @@ public class BaseJpaConfig {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-        jpaProperties.getProperties().put("hibernate.dialect", hikariDataSource.getDataSourceProperties().getProperty("dialect"));
         em.setJpaPropertyMap(hibernateProperties.determineHibernateProperties(jpaProperties.getProperties(), new HibernateSettings()));
         return em;
     }

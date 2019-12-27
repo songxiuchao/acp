@@ -32,7 +32,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         ErrorVo errorVO = new ErrorVo();
         errorVO.setError("权限不足");
         errorVO.setErrorDescription("权限不足");
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         objectMapper.writeValue(response.getOutputStream(), errorVO);
     }
 

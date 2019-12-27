@@ -360,7 +360,7 @@ http://127.0.0.1:5601
 > - （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
 > -     a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
 > -     b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender
-> -     c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.path 一致，方便统一管理
+> -     c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.file.path 一致，方便统一管理
 > - （5）增加配置
 >   ```yaml
 >   acp:

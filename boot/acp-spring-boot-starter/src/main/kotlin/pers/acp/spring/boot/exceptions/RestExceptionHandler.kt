@@ -49,7 +49,7 @@ class RestExceptionHandler(private val logAdapter: LogAdapter) : ResponseEntityE
                 ResponseCode.OtherError
             }.let {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                         .body(PackageTools.buildErrorResponsePackage(it, ex.message))
             }
 
@@ -68,7 +68,7 @@ class RestExceptionHandler(private val logAdapter: LogAdapter) : ResponseEntityE
                 val errorMsg = StringBuilder()
                 it.forEach { error -> errorMsg.append(error.defaultMessage).append(";") }
                 ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                         .body(PackageTools.buildErrorResponsePackage(ResponseCode.InvalidParameter, errorMsg.toString()))
             }
 
@@ -84,7 +84,7 @@ class RestExceptionHandler(private val logAdapter: LogAdapter) : ResponseEntityE
     override fun handleMissingServletRequestParameter(ex: MissingServletRequestParameterException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
         doLog(ex)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .body(PackageTools.buildErrorResponsePackage(ResponseCode.InvalidParameter, ex.message))
     }
 
@@ -100,7 +100,7 @@ class RestExceptionHandler(private val logAdapter: LogAdapter) : ResponseEntityE
     override fun handleTypeMismatch(ex: TypeMismatchException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
         doLog(ex)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .body(PackageTools.buildErrorResponsePackage(ResponseCode.InvalidParameter, ex.message))
     }
 
@@ -117,7 +117,7 @@ class RestExceptionHandler(private val logAdapter: LogAdapter) : ResponseEntityE
     override fun handleExceptionInternal(ex: Exception, body: Any?, headers: HttpHeaders?, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
         doLog(ex)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .body(PackageTools.buildErrorResponsePackage(ResponseCode.OtherError, ex.message))
     }
 
