@@ -427,3 +427,5 @@ http://127.0.0.1:5601
 >    ```
 ## 六、打包为 docker 镜像
 自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
+
+## 七、[Sentinel 动态数据源配置](doc/sentinel.md)
