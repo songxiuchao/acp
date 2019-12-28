@@ -1,10 +1,13 @@
 ## 版本更新记录
-##### v6.x
+##### v6.4.0
 > - [Upgrade] 升级 Spring Boot 至 2.2.2.RELEASE
 > - [Upgrade] 更新 Spring Cloud 至 Hoxton.SR1
 > - [Upgrade] 修改application.yaml中logging配置
 > - [Upgrade] 去除application.yaml中对hibernate.dialect方言的显示配置
 > - [Upgrade] MediaType.APPLICATION_JSON_UTF8_VALUE 替换为 MediaType.APPLICATION_JSON_VALUE
+> - [Upgrade] 修改test依赖
+> - [Upgrade] cloud中使用spring-cloud-loadbalancer替换ribbon
+> - [Upgrade] cloud中修改feign相关配置
 > - [Upgrade] 升级依赖项
 >   - jupiter to 5.5.2
 >   - junit_platform to 1.5.2

@@ -31,23 +31,3 @@ management:
   endpoint:
     health:
       show-details: always
-# ===============================
-# = Ribbon Config
-# ===============================
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000
-ribbon:
-  # ribbon 缓存刷新时间
-  ServerListRefreshInterval: 3000
-  ReadTimeout: ${hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds}
-  ConnectTimeout: ${hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds}
-  okhttp:
-    enabled: true
-  eager-load:
-    enabled: true
-    clients: server-oauth2,atomic-helloworld,atomic-hello
