@@ -10,6 +10,9 @@ spring:
   thymeleaf:
     cache: false
   cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
     nacos:
       server-addr: 127.0.0.1:8848
       discovery:
@@ -47,12 +50,11 @@ management:
     health:
       show-details: always
 # ===============================
-# = Ribbon Config
+# = Feign Config
 # ===============================
 feign:
   httpclient:
     enabled: false
-    connection-timeout: ${ribbon.ConnectTimeout}
     max-connections: 1000
     time-to-live: 900
     time-to-live-unit: seconds
@@ -64,17 +66,9 @@ feign:
   client:
     config:
       default:
+        connect-timeout: 10000
+        read-timeout: 10000
         loggerLevel: full
-ribbon:
-  # ribbon 缓存刷新时间
-  ServerListRefreshInterval: 3000
-  ReadTimeout: 10000
-  ConnectTimeout: 10000
-  okhttp:
-    enabled: true
-  eager-load:
-    enabled: true
-    clients: atomic-hello,atomic-world
 # ===============================
 # = Security Config
 # ===============================

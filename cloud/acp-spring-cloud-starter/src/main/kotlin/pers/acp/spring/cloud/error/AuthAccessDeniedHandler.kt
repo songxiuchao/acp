@@ -26,7 +26,7 @@ class AuthAccessDeniedHandler(private val objectMapper: ObjectMapper) : AccessDe
                 errorDescription = "权限不足"
         )
         response.status = HttpStatus.FORBIDDEN.value()
-        response.contentType = MediaType.APPLICATION_JSON_UTF8_VALUE
+        response.contentType = MediaType.APPLICATION_JSON_VALUE
         objectMapper.writeValue(response.outputStream, errorVO)
     }
 

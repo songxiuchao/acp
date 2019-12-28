@@ -38,7 +38,7 @@ public class TestController {
 
     private final ObjectMapper mapper;
 
-    @Value("${logging.path}")
+    @Value("${logging.file.path}")
     private String s1;
 
     @Value("${spring.thymeleaf.cache}")
@@ -61,7 +61,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "测试 rest 接口1", notes = "返回数据库中记录")
-    @RequestMapping(value = "/rest1/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/rest1/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TableOne>> post1(@PathVariable String name,
                                                 @ApiParam(value = "pwd", required = true) @NotEmpty(message = "pwd不能为空") @RequestParam String pwd) {
         log.info("name1:" + name + ",pwd1:" + pwd);
@@ -74,7 +74,7 @@ public class TestController {
     }
 
     @ApiIgnore
-    @RequestMapping(value = "/rest2/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/rest2/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> post2(@PathVariable String name, @RequestParam String pwd) {
         log.info("name2:" + name + ",pwd2:" + pwd);
         log.info(CommonTools.getWebRootAbsPath());
@@ -84,7 +84,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "测试 rest 接口2", notes = "返回字符串")
-    @RequestMapping(value = "/rest2", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/rest2", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> post2(@ApiParam(value = "str", required = true) @NotEmpty(message = "str不能为空") @RequestBody String str) {
         log.info("str:" + str);
         log.info(CommonTools.getWebRootAbsPath());
@@ -94,7 +94,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "测试 rest 接口", notes = "参数为Map<String, Object>")
-    @RequestMapping(value = "/map", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/map", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> postMap(@RequestBody Map<String, Object> body) throws IOException {
         log.info("params:");
         body.forEach((key, value) -> log.info("key=" + key + " value=" + value));
@@ -102,7 +102,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "测试 rest 接口", notes = "参数为Map<String, Object>")
-    @RequestMapping(value = "/mapform", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/mapform", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> postMapForm(@RequestParam Map<String, Object> body) throws IOException {
         log.info("params:");
         body.forEach((key, value) -> log.info("key=" + key + " value=" + value));
@@ -111,7 +111,7 @@ public class TestController {
 
 
     @ApiOperation(value = "测试异步 rest 接口", notes = "返回字符串")
-    @RequestMapping(value = "/restasync", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/restasync", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Callable<Object> postAsync(@ApiParam(value = "str", required = true) @NotEmpty(message = "str不能为空") @RequestBody String str) {
         System.out.println("外部线程：" + Thread.currentThread().getName());
         return () -> {

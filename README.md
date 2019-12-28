@@ -1,12 +1,12 @@
 # acp 
-###### v6.3.4 [版本更新日志](doc/version_history.md)
+###### v6.4.0 [版本更新日志](doc/version_history.md)
 - Application Construction Platform 应用构建平台
 - 该项目是用Kotlin和Java语言混编封装的脚手架。本人会密切关注业界最新动态，并使用最新技术持续更新优化。
 - 使用该脚手架可快速搭建基于Kotlin或Java语言的普通应用、SpringBoot应用和SpringCloud应用。
 - 从v6.3.0开始，取消单独的jdk8分支，代码及工程配置统一，默认使用java11编译，如需编译java1.8版本，只需修改[gradle.properties](gradle.properties)中的javaVersion配置
 ## 相关组件版本及官方文档
-- [Spring Boot 2.1.11.RELEASE](https://projects.spring.io/spring-boot)
-- [Spring Cloud Greenwich.SR4](http://projects.spring.io/spring-cloud)
+- [Spring Boot 2.2.2.RELEASE](https://projects.spring.io/spring-boot)
+- [Spring Cloud Hoxton.SR1](http://projects.spring.io/spring-cloud)
 - [Spring Cloud Alibaba 2.1.1.RELEASE](https://github.com/alibaba/spring-cloud-alibaba)
 
 ## 技术栈
@@ -360,7 +360,7 @@ http://127.0.0.1:5601
 > - （4）根据各服务配置的日志类型（默认为"ALL"），在 logback-spring.xml 中参照 ALL 和 ALL-LOGSTASH 进行配置
 > -     a. 配置两个 appender（一个输出到本地文件，一个输出到logstash；单独配置的目的是为了将不同类型的日志写入不同名称的文件并在elasticsearch中创建不同的索引）
 > -     b. 之后再配置一个 logger （name属性为某个日志类型）,包含之前配置的两个 appender
-> -     c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.path 一致，方便统一管理
+> -     c. 强烈建议 logback-spring.xml 中配置的本地日志文件路径需与 yml 中的 logging.file.path 一致，方便统一管理
 > - （5）增加配置
 >   ```yaml
 >   acp:
@@ -427,3 +427,5 @@ http://127.0.0.1:5601
 >    ```
 ## 六、打包为 docker 镜像
 自行编写 Dockerfile，使用命令单独执行或使用 docker-compose 批量执行，请自行百度
+
+## 七、[Sentinel 动态数据源配置](doc/sentinel.md)

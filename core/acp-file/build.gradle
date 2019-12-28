@@ -1,7 +1,7 @@
 group "${group}.core"
 versions += [
         freemarker   : "2.3.29",
-        flying_saucer: "9.1.18",
+        flying_saucer: "9.1.19",
         jsoup        : "1.12.1",
         batik        : "1.12",
         poi          : "4.1.1"

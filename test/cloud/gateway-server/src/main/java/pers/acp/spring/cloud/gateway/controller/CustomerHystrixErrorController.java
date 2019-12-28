@@ -20,7 +20,7 @@ public class CustomerHystrixErrorController {
      *
      * @return ResponseEntity
      */
-    @RequestMapping(value = "/hystrixhandle", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/hystrixhandle", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Object>> hystrixHandle() {
         ErrorVo errorVO = new ErrorVo();
         errorVO.setCode(400);

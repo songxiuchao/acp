@@ -19,7 +19,7 @@ import pers.acp.spring.boot.interfaces.LogAdapter
 @RestController
 class KotlinController(private val tableOneDomain: TableOneDomain, private val log: LogAdapter) {
 
-    @GetMapping("/query", produces = [(MediaType.APPLICATION_JSON_UTF8_VALUE)])
+    @GetMapping("/query", produces = [(MediaType.APPLICATION_JSON_VALUE)])
     @Throws(ServerException::class, JpaObjectRetrievalFailureException::class)
     fun doQuery(@RequestParam name: String): ResponseEntity<TableOne> =
             try {
@@ -37,7 +37,7 @@ class KotlinController(private val tableOneDomain: TableOneDomain, private val l
                 throw e
             }
 
-    @PostMapping("/add", produces = [(MediaType.APPLICATION_JSON_UTF8_VALUE)])
+    @PostMapping("/add", produces = [(MediaType.APPLICATION_JSON_VALUE)])
     @Throws(ServerException::class, JpaObjectRetrievalFailureException::class)
     fun doAdd(@RequestBody tableOne: TableOne): ResponseEntity<TableOne> =
             try {
