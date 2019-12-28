@@ -50,7 +50,7 @@ management:
     health:
       show-details: always
 # ===============================
-# = Ribbon Config
+# = Feign Config
 # ===============================
 feign:
   httpclient:
