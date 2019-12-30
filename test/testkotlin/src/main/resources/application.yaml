@@ -9,6 +9,9 @@ spring:
     name: testkotlin
   thymeleaf:
     cache: false
+logging:
+  pattern:
+    file: '[%date{yyyy-MM-dd HH:mm:ss.SSS}] [ %-5level] [%thread] %logger{96} [%X{lineno}] - %msg%n'
 info:
   version: 1.0.0
   app-name: ${spring.application.name}
