@@ -20,7 +20,6 @@
 >   - mssqljdbc to 7.4.1.jre8
 >   - spring boot admin to 2.2.1
 >   - flying_saucer to 9.1.19
->   - netty to 4.1.44.Final
 >   - okhttp to 3.12.0
 ##### v6.3.4
 > - [Upgrade] 修改@Api写法
