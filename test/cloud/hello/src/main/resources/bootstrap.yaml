@@ -11,6 +11,8 @@ spring:
     cache: false
   cloud:
     loadbalancer:
+      cache:
+        ttl: 5s
       ribbon:
         enabled: false
     nacos:
